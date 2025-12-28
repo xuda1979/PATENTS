@@ -10,9 +10,9 @@
 
 | Parameter | Value |
 |-----------|-------|
-| Search Date | December 2024 |
+| Search Date | December 2025 |
 | Databases Searched | USPTO, EPO, WIPO, CNIPA, Google Patents, IEEE Xplore, IACR ePrint |
-| Search Period | 2008-2024 |
+| Search Period | 2008-2025 |
 | Languages | English, Chinese |
 
 ### Keywords Used / 使用的关键词
@@ -20,7 +20,7 @@
 **English:**
 - Falcon signature, threshold signature, lattice cryptography
 - Post-quantum cryptography, NTRU, MPC signature
-- Distributed Gaussian sampling, FFT secret sharing
+- Distributed Gaussian sampling, NTT secret sharing
 - Cross-chain bridge security, quantum-safe blockchain
 
 **Chinese:**
@@ -81,8 +81,9 @@
 | Approach | Generic FHE-based | Falcon-specific optimization |
 | Efficiency | High overhead from FHE | Low overhead arithmetic sharing |
 | Communication | Depends on FHE scheme | O(1) rounds |
+| Sampling | Generic sampling | **Distributed Gaussian Convolution** |
 
-**Distinction**: While Boneh et al. provide a generic framework, the present invention offers a direct, efficient construction specifically optimized for Falcon without relying on heavyweight FHE.
+**Distinction**: While Boneh et al. provide a generic framework for threshold cryptosystems using Fully Homomorphic Encryption (FHE), they do not address the specific challenge of **Distributed Gaussian Sampling** required by Falcon. Their generic approach would require running the complex Gaussian sampling algorithm *inside* the FHE engine, which is computationally prohibitive. The present invention solves this via the novel "Variance-Preserving Aggregation" technique (Claim 1.c) and "Collaborative Rejection Sampling" (Claim 1.d), which avoids FHE entirely for the sampling phase.
 
 ---
 
@@ -152,7 +153,7 @@
 - Arithmetic secret sharing foundation
 - Communication complexity O(n) for general operations
 
-**Distinction**: The present invention leverages FFT linearity to achieve zero-communication FFT computation, a specific optimization not present in general SPDZ.
+**Distinction**: The present invention leverages NTT linearity to achieve zero-communication NTT computation, a specific optimization not present in general SPDZ.
 
 ---
 
@@ -237,15 +238,15 @@
 
 ## Novelty Analysis / 新颖性分析
 
-### Innovation A: Arithmetic-Shared FFT Protocol
+### Innovation A: Arithmetic-Shared NTT Protocol
 
 | Search Result | Disclosed? | Analysis |
 |---------------|-----------|----------|
-| USPTO patents | No | No prior art discloses FFT sharing exploiting linearity for Falcon |
+| USPTO patents | No | No prior art discloses NTT sharing exploiting linearity for Falcon |
 | Academic papers | Partially | Linear homomorphism known, but not applied to Falcon threshold |
 | Chinese patents | No | No relevant disclosure found |
 
-**Conclusion**: **NOVEL** - The specific application of FFT linearity to enable zero-communication distributed Falcon operations is not disclosed in prior art.
+**Conclusion**: **NOVEL** - The specific application of NTT linearity to enable zero-communication distributed Falcon operations is not disclosed in prior art.
 
 ---
 
@@ -404,5 +405,5 @@
 
 ---
 
-*Report Prepared: December 2024*
+*Report Prepared: December 2025*
 *Disclaimer: This report is for informational purposes and does not constitute legal advice. Patent counsel should be consulted for formal freedom-to-operate and patentability opinions.*

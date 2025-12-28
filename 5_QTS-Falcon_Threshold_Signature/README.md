@@ -3,7 +3,7 @@
 This folder contains a comprehensive, **mathematically rigorous** patent package for a **quantum-secure threshold signature** scheme based on the **lattice-based Falcon** signature algorithm (NIST PQC Standard), with a focus on **cross-chain bridge** use cases and **formal security proofs**.
 
 > **Note**: The ASCII figures inside the drafts are **placeholders**. Formal patent drawings must be prepared before filing.  
-> **Version 2.0 Enhancements**: Added rigorous mathematical foundations, formal security proofs, expanded claims (45+), and statistical validation framework.
+> **Version 2.0 Enhancements**: Added rigorous mathematical foundations, formal security proofs, expanded claims (35+), and statistical validation framework.
 
 ---
 
@@ -16,7 +16,7 @@ This folder contains a comprehensive, **mathematically rigorous** patent package
 ├── 摘要_中文.md                  # Chinese abstract
 ├── patent_draft.md              # English-style application draft [ENHANCED w/ Formal Theorems]
 ├── abstract_EN.md               # English abstract
-├── claims_EN.md                 # English claims [EXPANDED: 45+ Claims]
+├── claims_EN.md                 # English claims [EXPANDED: 35+ Claims]
 ├── technical_specification.md   # Deep technical spec [RIGOROUS MATHEMATICAL PROOFS]
 ├── drawings_specification.md    # Drawing list + requirements
 ├── prior_art_report.md          # Prior art analysis
@@ -31,7 +31,7 @@ The invention provides a **threshold (t,n) signing system** that produces **stan
 
 ### Key Mathematical Innovations:
 
-1. **Zero-Communication NTT**: Distributed polynomial operations using linearity of FFT/NTT over the ring R_q = Z_q[X]/(X^n+1), achieving communication complexity O(0) for transforms.
+1. **Zero-Communication NTT**: Distributed polynomial operations using linearity of NTT over the ring R_q = Z_q[X]/(X^n+1), achieving communication complexity O(0) for transforms.
 
 2. **Proven Gaussian Aggregation**: Each party samples from D_{σ/√n,R}, and the aggregate follows exact distribution D_{σ,R} with statistical distance < 2^{-λ} from ideal.
 
@@ -41,7 +41,7 @@ The invention provides a **threshold (t,n) signing system** that produces **stan
 
 ## 🔑 Core Innovations (Detailed)
 
-### Innovation 1: Arithmetic-Shared FFT/NTT with Zero Communication
+### Innovation 1: Arithmetic-Shared NTT with Zero Communication
 - **Theorem**: NTT(Σ[f]_i) = Σ NTT([f]_i) preserves secret sharing structure
 - **Result**: Polynomial multiplication without inter-party communication during NTT phase
 - **Complexity**: O(n log n) local computation, O(0) communication for transforms
@@ -216,11 +216,11 @@ These documents contain proprietary technical information intended for patent fi
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0 | Dec 2024 | Initial draft |
-| 1.1 | Dec 2024 | Added experimental data, prior art report |
-| 1.2 | Dec 2024 | Enhanced security proofs, added drawing specs |
-| 1.3 | Dec 2024 | Comprehensive filing checklist, applicant forms |
-| **2.0** | **Dec 2024** | **Major Enhancement**: Rigorous mathematical foundations, formal security proofs (EUF-CMA, t-Privacy, Robustness), expanded claims (45+), statistical validation framework, formal theorems with proofs |
+| 1.0 | Dec 2025 | Initial draft |
+| 1.1 | Dec 2025 | Added experimental data, prior art report |
+| 1.2 | Dec 2025 | Enhanced security proofs, added drawing specs |
+| 1.3 | Dec 2025 | Comprehensive filing checklist, applicant forms |
+| **2.0** | **Dec 2025** | **Major Enhancement**: Rigorous mathematical foundations, formal security proofs (EUF-CMA, t-Privacy, Robustness), expanded claims (45+), statistical validation framework, formal theorems with proofs |
 
 ---
 
@@ -236,6 +236,6 @@ This patent package represents a **first-of-its-kind** threshold signature schem
 
 ---
 
-*Generated: December 2024*  
-*Last Updated: December 2024*  
+*Generated: December 2025*  
+*Last Updated: December 2025*  
 *Version: 2.0 (Enhanced)*

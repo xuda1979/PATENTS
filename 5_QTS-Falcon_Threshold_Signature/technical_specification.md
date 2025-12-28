@@ -555,7 +555,7 @@ The D-KeyGen protocol is enhanced with:
 - **ZKP for Gaussian Sampling**: After step 1, each party proves that their sample is from the correct distribution using the PoCGS protocol.
 - **ZKP for Beaver Triple Generation**: Before using Beaver triples, parties prove the correctness of their shares using the Sacrifice technique.
 
-**Complexity**: The addition of ZKPs increases the complexity, but this is mitigated by the use of amortized proofs (batching) and efficient OT extensions.
+**Complexity**: The addition of ZKPs increases the complexity, but this is mitigated by the use of amortized proofs (batching) and efficient OT extensions. **To maintain full quantum security, the base OTs for these extensions are instantiated using Kyber-KEM or a similar PQC primitive.**
 
 ---
 

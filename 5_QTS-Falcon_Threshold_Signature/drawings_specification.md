@@ -43,7 +43,7 @@ Shows the complete threshold Falcon signature system architecture with source ch
 | 133 | Share [f]₃ | 分片 [f]₃ |
 | 13n | Share [f]ₙ | 分片 [f]ₙ |
 | 140 | MPC Coordination Module | MPC协调模块 |
-| 141 | Arithmetic-Shared FFT Unit | 算术共享FFT单元 |
+| 141 | Arithmetic-Shared NTT Unit | 算术共享NTT单元 |
 | 142 | Collaborative Rejection Sampling Unit | 协同纠偏采样单元 |
 | 143 | Signature Aggregation Unit | 签名聚合单元 |
 | 150 | Output Signature (r, s) | 输出签名 (r, s) |
@@ -89,7 +89,7 @@ Shows the complete threshold Falcon signature system architecture with source ch
 |  |  +------------------------------------------+  |    |
 |  |  |  MPC Coordination Module [140]           |  |    |
 |  |  |  +------------+ +-------------+ +------+ |  |    |
-|  |  |  |Arith-FFT   | |Collab Reject| |Sig   | |  |    |
+|  |  |  |Arith-NTT   | |Collab Reject| |Sig   | |  |    |
 |  |  |  |Unit [141]  | |Sample [142] | |Agg   | |  |    |
 |  |  |  +------------+ +-------------+ |[143] | |  |    |
 |  |  +------------------------------------------+  |    |
@@ -462,5 +462,5 @@ Three sub-diagrams showing: (A) Node Addition, (B) Node Revocation, (C) Offline 
 ---
 
 *Document Version: 1.0*
-*Created: December 2024*
-*Last Updated: December 2024*
+*Created: December 2025*
+*Last Updated: December 2025*

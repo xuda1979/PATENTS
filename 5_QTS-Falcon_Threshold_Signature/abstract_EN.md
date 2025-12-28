@@ -10,7 +10,7 @@
 
 **Technical Problem**: Existing cross-chain bridges using elliptic curve threshold signatures are vulnerable to quantum computing attacks. Furthermore, distributed implementation of the Falcon algorithm faces discrete Gaussian sampling challenges and O(n) communication complexity.
 
-**Technical Solution**: A quantum-secure threshold signature system comprising: a distributed key generation module for generating secret-shared NTRU trapdoor portions among multiple nodes via secure multi-party computation; an arithmetic-shared FFT computation module utilizing FFT linearity for zero-communication distributed polynomial operations; a collaborative rejection sampling module reducing communication rounds from O(n) to O(1) through a pre-check commitment mechanism; and a signature aggregation module outputting NIST Falcon-compliant digital signatures.
+**Technical Solution**: A quantum-secure threshold signature system comprising: a distributed key generation module for generating secret-shared NTRU trapdoor portions among multiple nodes via secure multi-party computation; an arithmetic-shared NTT computation module utilizing NTT linearity for zero-communication distributed polynomial operations; a collaborative rejection sampling module reducing communication rounds from O(n) to O(1) through a pre-check commitment mechanism; and a signature aggregation module outputting NIST Falcon-compliant digital signatures.
 
 **Technical Effects**: Compared to existing Dilithium threshold schemes, signature length is reduced by approximately 3.6 times (~666 bytes vs ~2420 bytes), blockchain gas costs are reduced by approximately 72%, dynamic node management is supported, while maintaining quantum-resistant security properties.
 
