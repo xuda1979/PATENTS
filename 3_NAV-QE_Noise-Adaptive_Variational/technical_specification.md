@@ -147,10 +147,11 @@ Where:
 - $\eta_i$: Measurement error for qubit $i$
 
 **Dimensionality**: For $n$ qubits with $m$ two-qubit gate pairs:
-$$\dim(\mathbf{f}) = 3n + m + \binom{n}{2} + n = 4n + m + \frac{n(n-1)}{2}$$
+$$\dim(\mathbf{f}) = 2n \text{ (T1, T2)} + n \text{ (1q gates)} + m \text{ (2q gates)} + \binom{n}{2} \text{ (crosstalk)} + n \text{ (readout)}$$
+$$\dim(\mathbf{f}) = 4n + m + \frac{n(n-1)}{2}$$
 
 For a 27-qubit processor with 100 two-qubit gates:
-$$\dim(\mathbf{f}) \approx 108 + 100 + 351 + 27 = 586$$
+$$\dim(\mathbf{f}) = 4(27) + 100 + \frac{27 \times 26}{2} = 108 + 100 + 351 = 559$$
 
 ---
 
@@ -420,6 +421,12 @@ def extract_entropy(noise_profile):
         entropies.append(h_min)
     
     total_entropy = sum(entropies)
+    
+    # Formal Min-Entropy Bound:
+    # H_min(X) >= -log2( max_{x} Pr[X=x] )
+    # For Gaussian noise parameter theta ~ N(mu, sigma^2) discretized with precision delta:
+    # H_min(theta) approx log2(sigma * sqrt(2*pi) / delta)
+    
     return total_entropy
 ```
 

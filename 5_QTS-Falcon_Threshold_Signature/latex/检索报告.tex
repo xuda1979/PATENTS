@@ -1,0 +1,122 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{面向量子计算网络的抗量子攻击节点协同认证系统及方法} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.01.12} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明面向量子计算网络中多节点协同认证的安全需求。随着分布式量子计算、量子云计算的发展，量子计算节点间的安全通信和身份认证面临双重挑战：(1) 必须抵御量子计算机对传统密码的攻击（Shor算法可破解RSA/ECC）；(2) 分布式架构要求密钥管理具备容错性。本发明采用NIST标准后量子算法Falcon的门限签名方案，可应用于量子计算集群节点认证、量子-经典混合计算环境安全通道建立、分布式量子计算任务可信调度等场景。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 二、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 量子计算网络, 节点认证, 抗量子攻击
+(2) Falcon签名, 门限签名, 格密码
+(3) 后量子密码学, NTRU格, 多方安全计算
+(4) 分布式高斯采样, 量子-经典混合计算
+
+\textbf{外文检索关键词：}
+(1) Quantum computing network, node authentication, quantum-resistant
+(2) Falcon signature, threshold signature, lattice cryptography
+(3) Post-quantum cryptography, NTRU lattice, MPC signature
+(4) Distributed Gaussian sampling, quantum-classical hybrid computing
+
+% 三、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{Falcon: Fast-Fourier Lattice-based Compact Signatures over NTRU} \newline NIST PQC Round 3 Submission, 2020 \newline Fouque, P.A., et al. \\
+\hline
+2 & A (基础技术) & \textbf{Threshold Cryptosystems From Threshold Fully Homomorphic Encryption} \newline CRYPTO 2018 \newline Boneh, D., et al. \\
+\hline
+3 & Y (相关技术) & \textbf{Sharing the LUOV: Threshold Post-Quantum Signatures} \newline IMA 2019 \newline Cozzo, D. \& Smart, N.P. \\
+\hline
+4 & Y (相关技术) & \textbf{Fast Multiparty Threshold ECDSA with Fast Trustless Setup} \newline CCS 2018 \newline Gennaro, R. \& Goldfeder, S. \\
+\hline
+\end{longtable}
+
+% 四、分析评述
+\section*{三、分析评述}
+
+\textbf{1. 与文献1 (Falcon 标准) 的对比分析：}
+文献1定义了标准的 Falcon 签名算法，但其设计仅面向单签名者，未涉及多方计算环境下的私钥分片与协作签名。本发明在文献1的基础上，创新性地提出了适用于分布式环境的参数生成与采样方法，解决了标准 Falcon 无法直接应用于门限场景的问题。
+
+\textbf{2. 与文献2 (门限 FHE) 的对比分析：}
+文献2提出了基于全同态加密构造门限密码系统的通用框架。虽然提供了理论上的可行性，但全同态加密由于涉及复杂的密文计算，其计算和通信开销巨大，并不适合对签名速度有实时性要求的场景。相比之下，本发明直接针对 Falcon 算法的格结构设计分布式协议，避免了全同态加密的昂贵开销，实现了轻量级、低延迟的量子安全签名。
+
+\textbf{3. 与文献3 (门限 Dilithium/LUOV) 的对比分析：}
+文献3虽然涉及了后量子门限签名，但其针对的是 Dilithium 等其他格算法，或者通信开销较大 (O(n))。本发明针对 Falcon 特有的 NTRU 结构，利用 NTT 线性性和 Beaver 三元组预处理，实现了 O(1) 的常数轮次通信，在效率上显著优于文献3的通用方法。
+
+\textbf{4. 与文献4 (门限 ECDSA) 的对比分析：}
+文献4是目前主流的门限签名方案，但基于椭圆曲线离散对数问题，不具备抗量子攻击能力。本发明填补了量子安全领域的门限签名空白，提供了与现有系统相当的效率但更高的安全性。
+
+% 五、检索结论
+\section*{四、检索结论}
+
+经检索，未发现与本申请全部技术特征相同的现有技术。本申请提出的基于 Falcon 算法的门限签名系统，特别是结合了分布式高斯采样与常数轮次范数验证的方案，具有显著的新颖性和创造性。
+
+\end{document}

@@ -2,7 +2,7 @@
 
 ## 1. Abstract
 
-This invention discloses a dynamic cryptographic communication protocol that enhances resilience against quantum computer attacks and cryptanalytic breakthroughs by rapidly cycling through multiple post-quantum mathematical hard-problem bases during a single communication session. Inspired by frequency hopping in radio communications, the protocol implements temporal synchronization allowing communicating parties to seamlessly switch between distinct cryptographic foundations—including Module-Learning With Errors (M-LWE), NTRU, code-based, and other post-quantum constructions—without requiring full re-handshaking. A pre-shared hopping schedule, derived deterministically from an initial secure key exchange, coordinates switching times and algorithm sequences between endpoints. This "cryptographic frequency hopping" approach ensures that even if an adversary develops methods to break one algorithm or captures encrypted traffic for future quantum decryption ("Store Now, Decrypt Later" attacks), only fragments encrypted under that specific algorithm are compromised, preserving overall session confidentiality through algorithm diversity.
+This invention discloses a dynamic cryptographic communication protocol that enhances resilience against quantum computer attacks and cryptanalytic breakthroughs by utilizing "Cryptographic Frequency Hopping" not just in time, but across mathematical foundations and network paths. The system enables "Micro-fragmentation" of encrypted sessions, where algorithms switch potentially at the packet level, rendering "Store Now, Decrypt Later" (SNDL) attacks computationally infeasible as an adversary must simultaneously break lattice-based, code-based, isogeny-based, and multivariate primitives to reconstruct a single coherent message. A "Cognitive Adaptation Engine" monitors network entropy and threat indicators (e.g., latency anomalies) to dynamically adjust hopping frequency and algorithm selection in real-time. Furthermore, the protocol supports "Spatial Hopping," distributing encrypted fragments across multiple physical network paths (e.g., 5G, Wi-Fi, Satellite), forcing an attacker to achieve global network omniscience.
 
 ---
 
@@ -11,10 +11,10 @@ This invention discloses a dynamic cryptographic communication protocol that enh
 The present invention relates to cryptographic communications and post-quantum cryptography, and more particularly to:
 
 - Protocol design for quantum-resistant communications
-- Algorithm agility and dynamic cryptographic adaptation
-- Temporal synchronization in distributed cryptographic systems
-- Defense against "Store Now, Decrypt Later" (SNDL) attacks
-- Multi-algorithm key encapsulation and authenticated encryption
+- "Cryptographic Agility" and "Orthogonal Security" enforcement
+- Cognitive networking and threat-adaptive encryption
+- Defense against "Store Now, Decrypt Later" (SNDL) and side-channel attacks
+- Multi-algorithm key encapsulation and spatial transport dispersion
 
 ---
 
@@ -24,23 +24,24 @@ The present invention relates to cryptographic communications and post-quantum c
 
 The advent of quantum computing poses an existential threat to current public-key cryptographic systems. While post-quantum cryptography (PQC) algorithms offer resistance, the security landscape faces several challenges:
 
-1. **Algorithm Uncertainty**: No PQC algorithm has withstood decades of cryptanalysis; unexpected weaknesses may emerge
-2. **SNDL Attacks**: Adversaries can store encrypted traffic today for decryption once quantum computers become available
-3. **Static Vulnerabilities**: Current protocols use single algorithms throughout sessions, creating concentrated attack targets
-4. **Migration Complexity**: Transitioning between algorithms typically requires full session re-establishment
+1. **Algorithm Uncertainty**: No PQC algorithm has withstood decades of cryptanalysis; unexpected weaknesses may emerge.
+2. **SNDL Attacks**: Adversaries can store encrypted traffic today for decryption once quantum computers become available.
+3. **Static Vulnerabilities**: Current protocols use single algorithms throughout sessions, creating concentrated attack targets.
+4. **Migration Complexity**: Transitioning between algorithms typically requires full session re-establishment.
+5. **Side-Channel Leaks**: Long-term usage of a single key/algo increases the signal-to-noise ratio for power/timing analysis.
 
 ### 3.2 Limitations of Existing Approaches
 
 | Approach | Limitation |
 |----------|------------|
 | Static PQC | Single point of failure; entire session at risk |
-| Hybrid Classical/PQ | Still single PQ algorithm per session |
-| Algorithm migration | Requires re-handshaking; high latency |
-| Algorithm combiners | Increased overhead; all algorithms used simultaneously |
+| Hybrid Classical/PQ | Still single PQ algorithm per session; adds overhead without diversity |
+| Algorithm migration | Requires re-handshaking; high latency; no protection within session |
+| Algorithm combiners | Increased overhead; all algorithms used simultaneously, not distinctively |
 
 ### 3.3 Technical Opportunity
 
-Frequency hopping in radio communications demonstrates that rapidly switching between different channels can provide robust protection against jamming and interception. This principle can be applied to cryptographic algorithm selection, distributing encrypted data across multiple independent mathematical foundations.
+Frequency hopping in radio communications demonstrates that rapidly switching between different channels can provide robust protection against jamming and interception. This invention extends this principle to the "Logical Layer" (Mathematic Hopping) and "Spatial Layer" (Path Hopping).
 
 ---
 
@@ -48,51 +49,55 @@ Frequency hopping in radio communications demonstrates that rapidly switching be
 
 ### 4.1 Core Innovation
 
-The invention implements cryptographic frequency hopping by:
+The invention implements "Cryptographic Frequency Hopping" by:
 
-1. **Establishing** a master session key and synchronized hopping schedule during initial handshake
-2. **Rotating** through multiple mathematically-independent PQC algorithms during the session
-3. **Synchronizing** transitions using pre-computed schedules with overlap windows
-4. **Adapting** hopping frequency based on real-time threat indicators
+1.  **Micro-Fragmentation**: Breaking the session into granular units (time-blocks, packets, or bytes), each protected by a different mathematical foundation.
+2.  **Orthogonal Security**: Enforcing that sequential hops utilize mathematically independent hard problems (e.g., Lattice $\to$ Code $\to$ Isogeny), ensuring no single mathematical breakthrough compromises adjacent fragments.
+3.  **Cognitive Adaptation**: Using an AI-driven or heuristic engine to sense threat levels (e.g., detecting timing analysis) and automatically triggering "Paranoid Mode" (increasing hop rate and algorithm weight).
+4.  **Spatial Dispersion**: Splitting the encrypted stream across multiple physical interfaces (MPTCP/QUIC), preventing single-link interception.
 
 ### 4.2 System Architecture
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                      DLHP Communication                         │
+│                      DLHP Cognitive System                      │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│   Node A                                          Node B        │
+│   Node A (Sender)                                 Node B        │
 │  ┌──────────────────┐                    ┌──────────────────┐  │
-│  │ Algorithm Library│                    │ Algorithm Library│  │
-│  │ ┌────┐┌────┐┌──┐ │                    │ ┌────┐┌────┐┌──┐ │  │
-│  │ │LWE ││NTRU││MC│ │                    │ │LWE ││NTRU││MC│ │  │
-│  │ └────┘└────┘└──┘ │                    │ └────┘└────┘└──┘ │  │
+│  │ Cognitive Engine │                    │ Cognitive Engine │  │
+│  │ (Threat Sensor)  │                    │ (Threat Sensor)  │  │
+│  └────────┬─────────┘                    └────────┬─────────┘  │
+│           │ Controls                              │ Controls   │
+│           ▼                                       ▼            │
+│  ┌──────────────────┐                    ┌──────────────────┐  │
+│  │ Schedule Mutator │                    │ Schedule Mutator │  │
+│  │ (Jitter/Entropy) │                    │ (Jitter/Entropy) │  │
 │  └────────┬─────────┘                    └────────┬─────────┘  │
 │           │                                       │            │
-│  ┌────────▼─────────┐                    ┌────────▼─────────┐  │
-│  │ Temporal Sync    │                    │ Temporal Sync    │  │
-│  │ Hopping Schedule │──────Synced───────│ Hopping Schedule │  │
+│           ▼                                       ▼            │
+│  ┌──────────────────┐                    ┌──────────────────┐  │
+│  │ Orthogonal Lib   │                    │ Orthogonal Lib   │  │
+│  │[Lattice][Code]...│                    │[Lattice][Code]...│  │
 │  └────────┬─────────┘                    └────────┬─────────┘  │
 │           │                                       │            │
-│           └───────────┬───────────────────────────┘            │
-│                       │                                        │
-│                       ▼                                        │
-│           ┌─────────────────────────┐                          │
-│           │   Encrypted Channel     │                          │
-│           │ [Algo1][Algo2][Algo3].. │                          │
-│           └─────────────────────────┘                          │
-│                                                                 │
+│           ▼ [Split]                               ▼ [Merge]    │
+│  ┌────────────────────────────────────────────────────┐        │
+│  │   Spatial Dispersion (Multi-Path Transport)        │        │
+│  │ ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │        │
+│  │ │ Path 1 (5G)  │  │ Path 2 (WiFi)│  │Path 3 (Sat)│ │        │
+│  │ │ [Algo: LWE]  │  │ [Algo: Code] │  │[Algo: ISO] │ │        │
+│  │ └──────────────┘  └──────────────┘  └────────────┘ │        │
+│  └────────────────────────────────────────────────────┘        │
 └────────────────────────────────────────────────────────────────┘
 ```
 
 ### 4.3 Key Innovations
 
-1. **Seamless Transition**: Switch algorithms without session interruption or re-handshaking
-2. **Deterministic Synchronization**: Both endpoints independently compute identical schedules
-3. **Overlap Windows**: Accommodate clock drift during transitions
-4. **Threat Adaptation**: Adjust hopping frequency based on threat level
-5. **Algorithm Independence**: Ensure algorithms are based on distinct mathematical foundations
+1.  **Seamless Transition**: Switch algorithms packet-by-packet without handshake overhead.
+2.  **Deterministic vs. Evolving**: Schedule generation starts deterministic but evolves based on shared environmental entropy (e.g., channel noise), making the schedule unpredictable to outsiders.
+3.  **Overlap Windows**: Accommodate clock drift during transitions.
+4.  **Threat Adaptation**: Adjust hopping frequency based on threat level.
 
 ---
 
@@ -194,21 +199,17 @@ A dynamic cryptographic communication system comprising:
 
 (a) a first communication node and a second communication node, each configured to establish secure communication over a network;
 
-(b) a post-quantum algorithm library at each node, said library comprising a plurality of mathematically distinct hard-problem-based cryptographic constructions including at least:
-   - (i) a first lattice-based construction utilizing Module-Learning With Errors (M-LWE);
-   - (ii) a second lattice-based construction utilizing NTRU polynomials;
-   - (iii) a code-based construction utilizing error-correcting codes; and
-   - (iv) optionally, an isogeny-based or hash-based construction;
+(b) a cryptographic primitive library at each node, said library comprising a plurality of mathematically distinct cryptographic constructions utilizing different underlying mathematical hard problems;
 
 (c) a temporal synchronization module at each node configured to:
-   - (i) derive a shared hopping schedule from an initial key exchange;
+   - (i) derive a shared hopping schedule from an initial secret;
    - (ii) maintain synchronized time references between nodes;
    - (iii) determine algorithm switching points based on said hopping schedule;
 
 (d) a protocol state machine at each node configured to:
-   - (i) execute cryptographic operations using a currently active algorithm;
-   - (ii) transition to a subsequent algorithm at synchronized switching points;
-   - (iii) maintain session continuity during transitions without re-handshaking;
+   - (i) execute cryptographic operations using a currently active algorithm from said library;
+   - (ii) transition to a subsequent, mathematically distinct algorithm at synchronized switching points defined by the hopping schedule;
+   - (iii) maintain session continuity during transitions without requiring a full handshake negotiation;
 
 (e) a key derivation module configured to derive algorithm-specific session keys from a master session key.
 
@@ -266,25 +267,35 @@ A method for adaptive hopping frequency adjustment comprising:
 
 (d) applying adjusted frequency to subsequent hopping intervals while maintaining schedule determinism.
 
+#### Claim 5: Method Claim - Data Fragmentation Strategy
+
+A method for mitigating "Store Now, Decrypt Later" (SNDL) attacks comprising:
+
+(a) fragmenting a contiguous data stream into a plurality of discrete time-slots;
+
+(b) assigning a different cryptographic algorithm from the library to each sequential time-slot based on the hopping schedule;
+
+(c) ensuring that no single mathematical hard problem protects more than a predetermined percentage of the total session data;
+
+(d) whereby the compromise of any single underlying mathematical problem yields only non-contiguous fragments of the plaintext data, preventing reconstruction of the complete session context.
+
 ### Dependent Claims
 
-#### Claims 5-10: Algorithm Library Variations
+#### Claims 6-10: Algorithm Library Variations
 
-**Claim 5.** The system of Claim 1, wherein the lattice-based construction utilizing M-LWE is ML-KEM (Kyber) as standardized by NIST.
+**Claim 6.** The system of Claim 1, wherein the cryptographic primitives include at least one lattice-based construction and at least one code-based construction, ensuring protection against attacks targeting specific lattice vulnerabilities.
 
-**Claim 6.** The system of Claim 1, wherein the code-based construction is Classic McEliece or BIKE.
+**Claim 7.** The system of Claim 1, wherein the algorithm library is updateable via secure over-the-air (OTA) updates to include new cryptographic primitives as they are standardized.
 
-**Claim 7.** The system of Claim 1, wherein the algorithm library further comprises a symmetric algorithm (AES-256-GCM) used for bulk data encryption, with post-quantum algorithms employed for key encapsulation.
+**Claim 8.** The system of Claim 1, wherein the algorithm library further comprises a symmetric algorithm (AES-256-GCM) used for bulk data encryption, with the dynamic hopping algorithms employed for frequent re-keying or key encapsulation.
 
-**Claim 8.** The system of Claim 1, wherein the algorithm library comprises at least three mathematically independent constructions based on distinct hard problems.
+**Claim 9.** The system of Claim 1, wherein the algorithm library comprises at least three mathematically independent constructions based on distinct hard problems (e.g., Lattice, Code, Isogeny, Multivariate, Hash-based).
 
-**Claim 9.** The system of Claim 1, further comprising a hash-based signature scheme for authentication continuity across algorithm transitions.
-
-**Claim 10.** The system of Claim 1, wherein algorithm selection probability is weighted based on current security strength assessments.
+**Claim 10.** The system of Claim 1, further comprising a hash-based signature scheme for authentication continuity across algorithm transitions.
 
 #### Claims 11-15: Synchronization Refinements
 
-**Claim 11.** The method of Claim 3, wherein the deterministic algorithm for deriving the hopping sequence is HKDF with SHA3-256.
+**Claim 11.** The system of Claim 1, wherein the temporal synchronization module implements an "overlap window" during algorithm transitions, wherein the receiving node is configured to accept decryption attempts using both the current algorithm and the immediate next algorithm for a defined duration, thereby tolerating network jitter and clock drift.
 
 **Claim 12.** The method of Claim 3, wherein the bounded drift tolerance is configurable between 100 milliseconds and 10 seconds.
 

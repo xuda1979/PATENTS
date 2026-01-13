@@ -21,7 +21,10 @@ The specification covers:
 
 ### 1.3 Design Philosophy
 
-DLHP applies the proven concept of frequency hopping from radio communications to cryptographic algorithm selection. Just as frequency hopping thwarts jammers by never staying on one frequency long enough to be effectively targeted, DLHP thwarts cryptanalysts by never encrypting enough data under one algorithm to make cryptanalysis worthwhile.
+DLHP applies the proven concept of frequency hopping from radio communications to cryptographic algorithm selection. However, it extends this significantly through "Cryptographic Micro-fragmentation" and "Cognitive Adaptation."
+1.  **Micro-fragmentation:** Instead of hopping potentially every minute, the system can hop **per-packet** or **per-block**, rendering "Store Now, Decrypt Later" useless as reassembling a coherent stream requires breaking thousands of different keys and algorithms.
+2.  **Cognitive Adaptation:** The protocol is not static; it "breathes" based on network conditions and threat levels, tightening security (increasing hop rate) when under stress.
+3.  **Orthogonal Security:** The system mathematically enforces diversity, ensuring that consecutive algorithms rely on fundamentally different hard problems (e.g., strictly alternating Lattice -> Code -> Isogeny -> Hash).
 
 ---
 
@@ -31,7 +34,7 @@ DLHP applies the proven concept of frequency hopping from radio communications t
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        DLHP Node                                │
+│                    DLHP Cognitive Node                          │
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │              Application Layer Interface                │   │
@@ -40,31 +43,28 @@ DLHP applies the proven concept of frequency hopping from radio communications t
 │  ┌───────────────────────────▼─────────────────────────────┐   │
 │  │              Protocol State Machine                      │   │
 │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐   │   │
-│  │  │ INITIAL  │ │ ACTIVE   │ │TRANSITION│ │ CLOSED   │   │   │
+│  │  │ INITIAL  │ │ ACTIVE   │ │TRANSITION│ │ PARANOID │   │   │
 │  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘   │   │
+│  └──────────┬────────────────┬─────────────────────────────┘   │
+│             │                │                                  │
+│  ┌──────────▼──────────┐  ┌──▼─────────────────────────────┐   │
+│  │ Cognitive Threat    │  │ Synchronization & Scheduling    │   │
+│  │ Analyzer (AI/ML)    │──▶ Schedule Mutator (Jitter/Ent)  │   │
+│  └─────────────────────┘  └──────────┬─────────────────────┘   │
+│                                      │                          │
+│  ┌───────────────────────────────────▼─────────────────────┐   │
+│  │              Orthogonal Algorithm Selector              │   │
+│  │  [Enforces Math Distance: Lattice != Lattice]           │   │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ │   │
+│  │  │ ML-KEM │ │  NTRU  │ │McEliece│ │SQIsign │ │SPHINCS+│ │   │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘ └────────┘ │   │
 │  └───────────────────────────┬─────────────────────────────┘   │
 │                              │                                  │
 │  ┌───────────────────────────▼─────────────────────────────┐   │
-│  │              Temporal Synchronization Module             │   │
+│  │          Multi-Path Transport Dispersion (MPTD)          │   │
 │  │  ┌───────────┐ ┌───────────┐ ┌───────────┐              │   │
-│  │  │ Clock Sync│ │ Schedule  │ │ Transition│              │   │
-│  │  │ Engine    │ │ Generator │ │ Timer     │              │   │
-│  │  └───────────┘ └───────────┘ └───────────┘              │   │
-│  └───────────────────────────┬─────────────────────────────┘   │
-│                              │                                  │
-│  ┌───────────────────────────▼─────────────────────────────┐   │
-│  │              Post-Quantum Algorithm Library              │   │
-│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐           │   │
-│  │  │ ML-KEM │ │  NTRU  │ │McEliece│ │  BIKE  │           │   │
-│  │  │(Kyber) │ │        │ │        │ │        │           │   │
-│  │  └────────┘ └────────┘ └────────┘ └────────┘           │   │
-│  └───────────────────────────┬─────────────────────────────┘   │
-│                              │                                  │
-│  ┌───────────────────────────▼─────────────────────────────┐   │
-│  │              Key Management Module                       │   │
-│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐              │   │
-│  │  │ Master Key│ │ KDF Engine│ │ Key Store │              │   │
-│  │  │ Exchange  │ │           │ │           │              │   │
+│  │  │   Path A  │ │   Path B  │ │   Path C  │              │   │
+│  │  │ (Lattice) │ │ (Code)    │ │ (Isogeny) │              │   │
 │  │  └───────────┘ └───────────┘ └───────────┘              │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
@@ -118,17 +118,18 @@ DLHP applies the proven concept of frequency hopping from radio communications t
 | HQC-256 | QC | Round 4 | Level 5 | 7,245 bytes |
 | FrodoKEM-976 | Plain LWE | Round 3 Alt | Level 3 | 31,296 bytes |
 
-### 3.2 Algorithm Independence Requirements
+### 3.2 Algorithm Independence Requirements (Orthogonal Security)
 
-For effective algorithm diversity, the library must include algorithms based on at least three mathematically independent hard problems:
+For effective algorithm diversity, the library enforces "Orthogonal Security". It calculates a `Math_Distance(AlgoA, AlgoB)` metric. Transitions with distance 0 (e.g., Kyber -> Dilithium, both lattice) are deprioritized or banned in "High-Security" mode.
 
 | Hard Problem Class | Representatives | Independence |
 |-------------------|-----------------|--------------|
 | Structured Lattices | ML-KEM, NTRU | Related but distinct |
 | Unstructured Lattices | FrodoKEM | Independent of structured |
 | Coding Theory | McEliece, BIKE, HQC | Independent of lattices |
-| Isogenies | SIKE (broken), SQIsign | Independent (currently limited) |
-| Hash-based (signatures) | SPHINCS+, SLH-DSA | Independent (conservative) |
+| Isogenies | SQIsign | Independent (Algebraic Geometry) |
+| Hash-based | SPHINCS+, SLH-DSA | Independent (Reliant only on Hash pre-image) |
+| Multivariate | Rainbow, GEMSS | Independent (Polynomial systems) |
 
 ### 3.3 Algorithm Interface
 
@@ -165,25 +166,38 @@ class PQAlgorithm(Protocol):
 
 ---
 
-## 4. Temporal Synchronization
+## 4. Temporal & Spatial Synchronization
 
-### 4.1 Time Model
+### 4.1 Granularity Modes
 
-```
-Timeline:
-┌───────────┬───────────┬───────────┬───────────┬───────────┐
-│  Algo 1   │  Algo 2   │  Algo 3   │  Algo 1   │  Algo 2   │
-│           │           │           │           │           │
-└───────────┴───────────┴───────────┴───────────┴───────────┘
-t₀          t₁          t₂          t₃          t₄          t
+DLHP supports three modes of operation defined by the `granularity` parameter in the handshake:
 
-Where:
-- t₀ = session epoch (initial handshake completion)
-- tᵢ - tᵢ₋₁ = hopping interval (configurable, default 60 seconds)
-- Algorithm at time t: A[⌊(t - t₀) / interval⌋ mod n]
-```
+| Mode | Hopping Event | Use Case |
+|------|--------------|----------|
+| **Macro (Time)** | Every $T$ seconds (e.g., 60s) | Low-power IoT, high-latency links |
+| **Micro (Block)** | Every $N$ KB of data transferred | High-bandwidth datacenter links |
+| **Nano (Packet)** | Every single Transport Packet | Top-secret/Military comms (Paranoid Mode) |
 
-### 4.2 Epoch Establishment
+### 4.2 Cognitive Schedule Mutation
+
+The schedule is not purely deterministic; it is "Cognitive".
+- **Input:** $ThreatScore (0.0 - 1.0)$ derived from packet loss, jitter anomalies, or IDS alerts.
+- **Effect:**
+    - If $ThreatScore < 0.3$: Use `Macro` mode.
+    - If $ThreatScore > 0.7$: Switch to `Nano` mode + `Multi-Path` dispersion.
+
+### 4.3 Multi-Path Transport Dispersion (MPTD)
+
+In environments with multiple uplinks (e.g., 5G + WiFi + Satellite), DLHP splits the logical stream:
+- **Packet $i$** -> Encrypted with **Lattice** -> Sent via **5G**
+- **Packet $i+1$** -> Encrypted with **Code** -> Sent via **WiFi**
+- **Packet $i+2$** -> Encrypted with **Isogeny** -> Sent via **Satellite**
+
+This creates "Spatial Orthogonality," meaning an attacker utilizing SNDL must capture **ALL** physical paths simultaneously AND break **ALL** mathematical algorithms.
+
+---
+
+## 5. Protocol Specification
 
 During initial handshake:
 
@@ -194,7 +208,7 @@ Node A                                      Node B
    │                                           │
    │◀── ServerHello (timestamp_B, Δ_est) ─────│
    │                                           │
-   │    epoch = (timestamp_A + timestamp_B) / 2 + RTT/4
+   │    epoch = (timestamp_A + timestamp_B) / 2 + RTT/2
    │                                           │
 ```
 
@@ -235,6 +249,14 @@ def generate_hopping_schedule(
     
     return schedule
 ```
+
+### 4.3 Hopping Schedule Security
+
+**Theorem (Schedule Unpredictability)**: If the hopping schedule is generated by a cryptographically secure pseudorandom function (PRF) $F_k$ keyed with the master secret $k$, then for any adversary $\mathcal{A}$ without knowledge of $k$, the probability of correctly predicting the algorithm $A_{t+1}$ at time $t+1$ given the history of algorithms $\{A_0, ..., A_t\}$ is negligible:
+
+$$|\Pr[\mathcal{A}(\{A_i\}_{i=0}^t) = A_{t+1}] - \frac{1}{|\mathcal{L}|}| \leq \text{Adv}_{F}^{\text{PRF}}(\mathcal{A})$$
+
+where $|\mathcal{L}|$ is the size of the algorithm library. This ensures that an attacker cannot preemptively target the next algorithm in the sequence.
 
 ### 4.4 Transition Overlap Window
 

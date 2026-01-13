@@ -376,7 +376,7 @@ K_final = HKDF-Expand(
 
 $$\text{Adv}^{\text{KEM}}_{\text{QCH-KEM}}(\mathcal{A}) \leq \text{Adv}^{\text{MLWE}}(\mathcal{A}) + \text{Adv}^{\text{QKD}}(\mathcal{A})$$
 
-**Interpretation**: An adversary must break both the MLWE assumption (PQC) and the QKD protocol to recover the session key. In the random oracle model, the key combination is secure as long as either component provides security.
+**Interpretation**: This additive bound represents a conservative security guarantee. In the Random Oracle Model (ROM), the key combination function acts as a robust combiner, ensuring that the session key remains secure as long as at least one of the input keys ($K_{PQC}$ or $K_{QKD}$) remains indistinguishable from random. The additive form arises from the sequence of game hops used in the security reduction, where we replace one key component with a random value, and then the other.
 
 ### 6.3 Forward Secrecy
 

@@ -5,13 +5,13 @@
 
 ## English Abstract (150 words)
 
-A dynamic cryptographic communication protocol that enhances resilience against quantum computer attacks and cryptanalytic breakthroughs by rapidly cycling through multiple post-quantum mathematical hard-problem bases during a single communication session. The protocol implements temporal synchronization allowing communicating parties to seamlessly switch between distinct cryptographic foundations—including Module-Learning With Errors (M-LWE), NTRU, code-based, and isogeny-based constructions—without requiring full re-handshaking. A pre-shared hopping schedule, derived from an initial secure key exchange, determines switching times and algorithm sequences. The system incorporates threat-level adaptive hopping frequency adjustment, enabling faster switching under elevated threat conditions. This "cryptographic frequency hopping" approach ensures that even if an adversary develops methods to break one algorithm or captures portions of encrypted traffic for later quantum decryption ("Store Now, Decrypt Later" attacks), only fragments encrypted under that specific algorithm are compromised, preserving overall session confidentiality through algorithm diversity.
+A dynamic cognitive cryptographic communication protocol that enhances resilience against quantum computer attacks by implementing "Cryptographic Frequency Hopping" and "Micro-fragmentation." The system rapidly cycles through multiple mathematically distinct post-quantum primitives (lattice, code, isogeny) during a single communication session, potentially at the packet level. An integrated "Cognitive Threat Analyzer" monitors network conditions to dynamically adjust hopping frequency and algorithm selection, triggering "Paranoid Mode" under high-threat conditions. Furthermore, the protocol supports "Spatial Dispersion," ensuring that fragments encrypted with different algorithms are routed over different physical network paths. This ensures that even if an adversary achieves a breakthrough in one mathematical field (e.g., lattices) or intercepts a specific link, they recover only disconnected non-contiguous data fragments, rendering "Store Now, Decrypt Later" attacks computationally infeasible.
 
 ---
 
 ## 中文摘要 (Chinese Abstract)
 
-本发明公开了一种动态密码通信协议，通过在单次通信会话期间快速循环切换多种后量子数学困难问题基础，增强对量子计算机攻击和密码分析突破的抵御能力。该协议实现时间同步，允许通信双方在不同密码基础之间无缝切换——包括模格学习含误差(M-LWE)、NTRU、基于编码和基于同源的构造——而无需完整的重新握手。从初始安全密钥交换导出的预共享跳变计划决定切换时间和算法序列。系统集成威胁级别自适应跳变频率调整，在威胁升高条件下实现更快切换。这种"密码频率跳变"方法确保即使攻击者开发出破解某一算法的方法或截获加密流量部分用于后续量子解密（"现存后解"攻击），也只有使用该特定算法加密的片段被泄露，通过算法多样性保护整体会话机密性。
+本发明公开了一种动态认知密码通信协议，通过实施"密码频率跳变"和"微碎片化"技术，增强对量子计算机攻击的抵御能力。该系统在单次通信会话期间（甚至在数据包级别）快速循环切换多种数学上截然不同的后量子原语（格、编码、同源）。集成的"认知威胁分析器"监控网络状况，动态调整跳变频率和算法选择，在由威胁情况下触发"偏执模式"。此外，该协议支持"空间离散化"，确保使用不同算法加密的片段通过不同的物理网络路径传输。这种方法确保即使攻击者在某一数学领域（如格理论）取得突破或截获特定链路，也只能恢复不连续的非相连数据片段，从而使"现存后解"攻击在计算上不可行。
 
 ---
 
@@ -19,21 +19,21 @@ A dynamic cryptographic communication protocol that enhances resilience against 
 
 **English Keywords:**
 - Post-quantum cryptography
-- Frequency hopping
-- Algorithm agility
-- Lattice-based cryptography
+- Cryptographic Agility
+- Micro-fragmentation
+- Cognitive Security
 - Store Now Decrypt Later
-- Temporal synchronization
-- NTRU, LWE, code-based
+- Spatial Hopping
+- Orthogonal Security
 
 **中文关键词:**
 - 后量子密码学
-- 频率跳变
-- 算法敏捷性
-- 格基密码学
+- 密码敏捷性
+- 微碎片化
+- 认知安全
 - 现存后解
-- 时间同步
-- NTRU、LWE、编码基
+- 空间跳变
+- 正交安全
 
 ---
 

@@ -117,8 +117,21 @@ $$D_{\sigma, R}(x) = \frac{\rho_\sigma(x)}{\sum_{y \in R} \rho_\sigma(y)}, \quad
 **Theorem 2.2 (Convolution Theorem for Discrete Gaussians)**: Let $[z]_1, \ldots, [z]_n$ be independent samples where $[z]_i \sim D_{\sigma_i, R}$. Then:
 $$z = \sum_{i=1}^{n} [z]_i \sim D_{\sigma, R} + \epsilon(\lambda)$$
 where $\sigma^2 = \sum_{i=1}^{n} \sigma_i^2$ and $\epsilon(\lambda)$ is a negligible statistical error bounded by:
-$$\epsilon(\lambda) \leq n \cdot \exp\left(-\frac{\pi \eta_\varepsilon(R)^2}{\min_i \sigma_i^2}\right)$$
-with $\eta_\varepsilon(R)$ being the smoothing parameter of $R$.
+$$2n \cdot e^{-\pi \cdot (\min \sigma_i / \eta_\epsilon(R))^2}$$
+
+**Enhancement: Distributed Flooding for Trapdoor Privacy**:
+While the scaled parameter $\sigma_i = \sigma/\sqrt{n}$ ensures the final sum is correct, an individual share $[z]_i$ might leak information about $[t]_i$ (the trapdoor share) if the variance is too small. To mitigate this without ZKPs, we apply a **Flooding Technique**:
+1.  Target noise level $\sigma_{flood} \geq 2^\lambda \cdot  \|[t]_i\|_\infty$.
+2.  Each party adds a flooding term $[e]_i \leftarrow D_{\sigma_{flood}, R}$.
+3.  The final result masks the trapdoor contribution statistically.
+4.  *Note:* This requires larger parameters or a "smudging" lemma application, which is compatible with the "Hash-and-Sign" variant of Falcon used in distributed settings (as opposed to the recursive sampler which is strictly sequential).
+
+**Proof Sketch**:
+1.  By independence, the convolution of Gaussians yields a Gaussian with summed variances.
+2.  The discretization error is bounded using the smoothing parameter.
+3.  For $\sigma_i \geq \eta_\varepsilon(R)$, the statistical distance is negligible. □
+
+with $\eta_\varepsilon(\mathbb{Z}^n)$ being the smoothing parameter of the integer lattice $\mathbb{Z}^n$.
 
 **Proof Sketch**: 
 1. By independence, the convolution of Gaussians yields a Gaussian with summed variances.

@@ -260,11 +260,13 @@ Expected CHSH value: $S = 2\sqrt{2} \approx 2.828$
 
 ### 4.3 Statistical Confidence
 
-For $n$ Bell test pairs, the standard error is:
-$$\sigma_S = \frac{2\sqrt{2}}{\sqrt{n}}$$
+For $n$ Bell test pairs, the variance of the CHSH estimator $S$ is given by:
+$$\text{Var}(S) = \frac{1}{n} \sum_{a,b} \text{Var}(E(a,b)) \approx \frac{4}{n} (1 - E(a,b)^2)$$
 
-Required sample size for confidence level $c$:
-$$n \geq \left(\frac{2\sqrt{2} \cdot z_c}{S_{obs} - 2}\right)^2$$
+For the optimal quantum state where $E(a,b) \approx 1/\sqrt{2}$, the variance simplifies to $\text{Var}(S) \approx \frac{4}{n}$.
+
+Required sample size for confidence level $c$ (where $z_c$ is the Z-score):
+$$n \geq \frac{4 \cdot z_c^2}{(S_{obs} - 2)^2}$$
 
 **Example:** For 99% confidence that $S > 2$:
 - With perfect entanglement ($S_{obs} = 2.828$): $n \geq 33$ pairs
