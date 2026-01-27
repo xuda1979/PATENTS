@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+% pdfLaTeX defaults to UTF-8 in modern LaTeX; keep this file UTF-8 encoded.
+\usepackage{amsmath, amssymb}
+\usepackage{longtable}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\geometry{a4paper, margin=1in}
+
+% Consistent formatting for identifiers used across specs/proofs.
+\newcommand{\id}[1]{\textsf{#1}}
+\newcommand{\field}[1]{\mathrm{#1}}
+
+\date{\today}
+
+\begin{document}
+
+\begin{center}
+{\LARGE Mathematical Notation and Symbol Definitions\\[0.2em]Dynamic Multi-Primitive Cryptographic Hopping Protocol (DMP-CHP) (DLHP)\par}
+\vspace{0.6em}
+{\large \today\par}
+\end{center}
+
+\section{List of Symbols}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{p{0.18\textwidth} p{0.77\textwidth}}
+\hline
+\textbf{Symbol} & \textbf{Definition} \\
+\hline
+$\mathcal{M}$ & The space of all possible plaintext messages. \\
+$\mathcal{C}$ & The space of all possible ciphertexts. \\
+$m$ & A specific plaintext message, $m \in \mathcal{M}$. \\
+$S$ & A random variable representing the secret (message). \\
+$\id{SeqID}$ & Integrity-protected monotonic sequence identifier for a protected unit (e.g., packet). \\
+$\id{GhostSeqID}$ & Monotonic sequence identifier reserved for decoy protected units (stateful counter stored at a node). \\
+$n$ & The total number of shares generated in the Holographic Entropy Dispersion (HED) scheme. \\
+$k$ & The reconstruction threshold for the HED scheme. \\
+$s_i$ & The $i$-th share of the secret, $i \in \{1, \dots, n\}$. \\
+$\Lambda$ & The Cryptographic Orthogonality Library, $\Lambda = \{\mathcal{A}_1, \dots, \mathcal{A}_N\}$. \\
+$\mathcal{A}_t$ & The active cryptographic algorithm at time step $t$. \\
+$\mathcal{H}(\cdot)$ & A cryptographic hash function (modeled as a Random Oracle). \\
+$\text{PUF}(c)$ & The response of a Physical Unclonable Function to challenge $c$. \\
+$K_{master}$ & Master secret material established during the initial handshake (e.g., from a KEM shared secret). \\
+$K_{\field{session}}$ & Session secret used for per-protected-unit derivation and protection (derived from $K_{master}$). \\
+$K_{hop}$ & Derived key used specifically for generating or ratcheting the hopping schedule (derived from $K_{\field{session}}$ and optionally device binding such as PUF/TEE). \\
+$\text{Hard}(\mathcal{A})$ & The underlying mathematical hard problem of algorithm $\mathcal{A}$. \\
+$\text{Class}(\mathcal{A})$ & Hard-problem class label for algorithm $\mathcal{A}$ (e.g., structured lattice, code-based, isogeny-based). \\
+$H(X)$ & Shannon entropy of random variable $X$. \\
+$H(X|Y)$ & Conditional entropy of $X$ given $Y$. \\
+$\theta_{threat}$ & The dynamic parameter vector representing the current threat level. \\
+$\mathcal{E}_{env}$ & The environmental entropy collected from network jitter/noise. \\
+$\pi^*$ & The optimal policy derived by the Federated Reinforcement Learning agent. \\
+$\mathbb{F}_q$ & A finite field of order $q$. \\
+\hline
+\end{longtable}
+
+\end{document}

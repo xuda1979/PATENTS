@@ -1,8 +1,10 @@
-# Patent Draft: Dynamic Lattice-Hopping Protocol (DLHP)
+# Patent Draft: Dynamic Multi-Primitive Cryptographic Hopping Protocol (DMP-CHP)
+
+*Also referred to herein as the Dynamic Lattice-Hopping Protocol (DLHP).* 
 
 ## 1. Abstract
 
-This invention discloses a dynamic cryptographic communication protocol that enhances resilience against quantum computer attacks and cryptanalytic breakthroughs by utilizing "Cryptographic Frequency Hopping" not just in time, but across mathematical foundations and network paths. The system enables "Micro-fragmentation" of encrypted sessions, where algorithms switch potentially at the packet level, rendering "Store Now, Decrypt Later" (SNDL) attacks computationally infeasible as an adversary must simultaneously break lattice-based, code-based, isogeny-based, and multivariate primitives to reconstruct a single coherent message. A "Cognitive Adaptation Engine" monitors network entropy and threat indicators (e.g., latency anomalies) to dynamically adjust hopping frequency and algorithm selection in real-time. Furthermore, the protocol supports "Spatial Hopping," distributing encrypted fragments across multiple physical network paths (e.g., 5G, Wi-Fi, Satellite), forcing an attacker to achieve global network omniscience.
+This invention discloses a dynamic cryptographic communication protocol that can improve resilience against cryptanalytic advances, including post-quantum threats, by utilizing cryptographic "hopping" not just in time but across mathematical hard-problem classes and (optionally) network paths. The system enables micro-fragmentation of encrypted sessions in which protected units (e.g., packets, records, blocks, or shares) may be protected under different cryptographic constructions over time, thereby limiting exposure if any single algorithm is later compromised. In some embodiments, the protocol further applies threshold splitting (e.g., $(k,n)$ secret sharing or erasure coding) such that reconstruction of a payload requires at least $k$ independently protected shares. A cognitive adaptation engine may monitor network conditions and threat indicators (e.g., latency anomalies) to adjust hopping frequency and algorithm selection. Furthermore, the protocol can support "spatial hopping" or transport dispersion by distributing protected units across multiple physical network paths (e.g., 5G, Wi-Fi, satellite), thereby increasing the difficulty of complete traffic capture.
 
 ---
 
@@ -41,7 +43,7 @@ The advent of quantum computing poses an existential threat to current public-ke
 
 ### 3.3 Technical Opportunity
 
-Frequency hopping in radio communications demonstrates that rapidly switching between different channels can provide robust protection against jamming and interception. This invention extends this principle to the "Logical Layer" (Mathematic Hopping) and "Spatial Layer" (Path Hopping).
+Frequency hopping in radio communications demonstrates that rapidly switching between different channels can provide resilience against jamming and interception. This invention extends this principle to the logical layer (mathematical hopping) and, in some embodiments, to the spatial layer (path hopping).
 
 ---
 
@@ -52,9 +54,11 @@ Frequency hopping in radio communications demonstrates that rapidly switching be
 The invention implements "Cryptographic Frequency Hopping" by:
 
 1.  **Micro-Fragmentation**: Breaking the session into granular units (time-blocks, packets, or bytes), each protected by a different mathematical foundation.
-2.  **Orthogonal Security**: Enforcing that sequential hops utilize mathematically independent hard problems (e.g., Lattice $\to$ Code $\to$ Isogeny), ensuring no single mathematical breakthrough compromises adjacent fragments.
-3.  **Cognitive Adaptation**: Using an AI-driven or heuristic engine to sense threat levels (e.g., detecting timing analysis) and automatically triggering "Paranoid Mode" (increasing hop rate and algorithm weight).
-4.  **Spatial Dispersion**: Splitting the encrypted stream across multiple physical interfaces (MPTCP/QUIC), preventing single-link interception.
+2.  **Holographic Data Reconstruction**: Using threshold splitting (e.g., secret sharing or erasure coding) where fragments are encrypted with disparate algorithms. This can require an attacker to compromise multiple independently protected shares to reconstruct a payload.
+3.  **Active Decoy Defense**: In some embodiments, injecting decoy packets that mimic characteristics of legitimate traffic and decrypt to noise or non-operative content, thereby increasing adversary collection and processing burden.
+4.  **Orthogonal Security**: Enforcing that sequential hops utilize mathematically independent hard problems (e.g., Lattice $\to$ Code $\to$ Isogeny), ensuring no single mathematical breakthrough compromises adjacent fragments.
+5.  **Cognitive Adaptation**: Using an AI-driven or heuristic engine to sense threat levels (e.g., detecting timing analysis) and automatically triggering "Paranoid Mode" (increasing hop rate and algorithm weight).
+6.  **Spatial Dispersion**: Splitting the encrypted stream across multiple physical interfaces (MPTCP/QUIC), preventing single-link interception.
 
 ### 4.2 System Architecture
 
@@ -129,8 +133,18 @@ Output:
 
 Algorithm:
   for i in range(max_transitions):
-    okm = HKDF(master_secret, "DLHP-HOP" || i)
+      okm = HKDF(master_secret, "DMP-CHP-HOP" || i)
     schedule[i] = okm mod len(algorithm_ids)
+
+In a sequence-based (stateless) mode suitable for packetized transports, each protected unit is labeled with an authenticated monotonic sequence identifier (SeqID). The sender and receiver independently derive algorithm selection and per-unit keying material from the SeqID without requiring per-packet chaining state, thereby tolerating packet loss and out-of-order delivery.
+
+Example stateless derivation:
+
+   seed = HMAC(master_secret, "HOP" || SeqID || ModeSalt)
+   idx  = BigInt(seed[0:4]) mod len(algorithm_ids)
+   k_pkt = HKDF(seed, "KEYGEN")
+
+The SeqID is authenticated as associated data (or equivalently integrity-protected) to prevent an attacker from forcing selection of a chosen algorithm.
 ```
 
 #### Phase 3: Synchronized Communication
@@ -164,6 +178,12 @@ Sender:  │  Use Algo_old  │  Use Algo_new   │
          │                │                  │
 Receiver:│  Accept both, identify from header │
          │                                    │
+
+Replay protection is enforced by rejecting protected units with duplicate SeqID values within a replay window, and by rejecting SeqID values outside an acceptance window after a confirmed transition.
+
+The header includes at least: session identifier, SeqID, mode identifier, and algorithm identifier (or sufficient information for the receiver to compute and validate a derived algorithm identifier).
+
+Orthogonality enforcement may be implemented by prohibiting adjacent protected units from using algorithms within the same hard-problem class, and by retrying schedule derivation (e.g., incrementing SeqID for selection only, while preserving a transmitted canonical SeqID) until the next selected algorithm satisfies the orthogonality constraint.
 ```
 
 ### 5.4 Key Hierarchy
@@ -191,185 +211,15 @@ Keys   Keys   Keys
 
 ## 6. Claims
 
-### Independent Claims
+This document is a narrative draft. The authoritative claim text and numbering are maintained in:
 
-#### Claim 1: System Claim
+- `claims_EN.md` (authoritative claim set)
+- `patent_consolidated.md` (integrated spec + claims package)
 
-A dynamic cryptographic communication system comprising:
+To avoid inconsistencies, this file intentionally does not duplicate the full claim text.
 
-(a) a first communication node and a second communication node, each configured to establish secure communication over a network;
-
-(b) a cryptographic primitive library at each node, said library comprising a plurality of mathematically distinct cryptographic constructions utilizing different underlying mathematical hard problems;
-
-(c) a temporal synchronization module at each node configured to:
-   - (i) derive a shared hopping schedule from an initial secret;
-   - (ii) maintain synchronized time references between nodes;
-   - (iii) determine algorithm switching points based on said hopping schedule;
-
-(d) a protocol state machine at each node configured to:
-   - (i) execute cryptographic operations using a currently active algorithm from said library;
-   - (ii) transition to a subsequent, mathematically distinct algorithm at synchronized switching points defined by the hopping schedule;
-   - (iii) maintain session continuity during transitions without requiring a full handshake negotiation;
-
-(e) a key derivation module configured to derive algorithm-specific session keys from a master session key.
-
-#### Claim 2: Method Claim - Communication
-
-A method for secure dynamic cryptographic communication comprising:
-
-(a) establishing an initial secure session between a first node and a second node using a first post-quantum key encapsulation mechanism;
-
-(b) deriving a master session key and a hopping schedule from said initial key exchange, wherein the hopping schedule specifies:
-   - (i) an ordered sequence of cryptographic algorithms to employ;
-   - (ii) timing intervals for each algorithm's active period;
-   - (iii) transition parameters for seamless switching;
-
-(c) encrypting communication data using a currently active algorithm from the sequence;
-
-(d) at predetermined switching points defined by the hopping schedule, transitioning to a next algorithm in the sequence, comprising:
-   - (i) deriving algorithm-specific keys from the master session key;
-   - (ii) initializing the next algorithm's cryptographic context;
-   - (iii) marking transition boundaries in the data stream;
-
-(e) repeating steps (c) and (d) throughout the communication session, thereby distributing encrypted data across multiple distinct mathematical hard-problem bases.
-
-#### Claim 3: Method Claim - Synchronization
-
-A method for synchronizing cryptographic algorithm transitions between communication nodes comprising:
-
-(a) during initial handshake, exchanging time reference information and establishing a common epoch;
-
-(b) deriving a pseudo-random hopping sequence from shared secret material using a deterministic algorithm, wherein both nodes independently compute identical sequences;
-
-(c) maintaining local clocks with bounded drift tolerance;
-
-(d) computing current algorithm index as a function of elapsed time since epoch and the hopping sequence;
-
-(e) implementing transition windows with overlap periods to accommodate clock skew, wherein:
-   - (i) the receiving node accepts data encrypted under both current and adjacent algorithms during overlap;
-   - (ii) the sending node transitions at the midpoint of the overlap window;
-
-(f) optionally, exchanging periodic heartbeat messages to verify synchronization.
-
-#### Claim 4: Method Claim - Adaptive Hopping
-
-A method for adaptive hopping frequency adjustment comprising:
-
-(a) monitoring threat indicators including at least one of:
-   - (i) known cryptanalytic advances published against employed algorithms;
-   - (ii) network anomaly detection suggesting active attack;
-   - (iii) policy-based security level requirements;
-   - (iv) available computational resources;
-
-(b) computing an adjusted hopping frequency based on threat indicators, wherein higher threat levels result in more frequent algorithm switching;
-
-(c) communicating hopping frequency adjustments to peer nodes through in-band signaling;
-
-(d) applying adjusted frequency to subsequent hopping intervals while maintaining schedule determinism.
-
-#### Claim 5: Method Claim - Data Fragmentation Strategy
-
-A method for mitigating "Store Now, Decrypt Later" (SNDL) attacks comprising:
-
-(a) fragmenting a contiguous data stream into a plurality of discrete time-slots;
-
-(b) assigning a different cryptographic algorithm from the library to each sequential time-slot based on the hopping schedule;
-
-(c) ensuring that no single mathematical hard problem protects more than a predetermined percentage of the total session data;
-
-(d) whereby the compromise of any single underlying mathematical problem yields only non-contiguous fragments of the plaintext data, preventing reconstruction of the complete session context.
-
-### Dependent Claims
-
-#### Claims 6-10: Algorithm Library Variations
-
-**Claim 6.** The system of Claim 1, wherein the cryptographic primitives include at least one lattice-based construction and at least one code-based construction, ensuring protection against attacks targeting specific lattice vulnerabilities.
-
-**Claim 7.** The system of Claim 1, wherein the algorithm library is updateable via secure over-the-air (OTA) updates to include new cryptographic primitives as they are standardized.
-
-**Claim 8.** The system of Claim 1, wherein the algorithm library further comprises a symmetric algorithm (AES-256-GCM) used for bulk data encryption, with the dynamic hopping algorithms employed for frequent re-keying or key encapsulation.
-
-**Claim 9.** The system of Claim 1, wherein the algorithm library comprises at least three mathematically independent constructions based on distinct hard problems (e.g., Lattice, Code, Isogeny, Multivariate, Hash-based).
-
-**Claim 10.** The system of Claim 1, further comprising a hash-based signature scheme for authentication continuity across algorithm transitions.
-
-#### Claims 11-15: Synchronization Refinements
-
-**Claim 11.** The system of Claim 1, wherein the temporal synchronization module implements an "overlap window" during algorithm transitions, wherein the receiving node is configured to accept decryption attempts using both the current algorithm and the immediate next algorithm for a defined duration, thereby tolerating network jitter and clock drift.
-
-**Claim 12.** The method of Claim 3, wherein the bounded drift tolerance is configurable between 100 milliseconds and 10 seconds.
-
-**Claim 13.** The method of Claim 3, wherein overlap periods are calculated as a function of measured network latency and clock drift history.
-
-**Claim 14.** The method of Claim 3, further comprising NTP or PTP time synchronization protocols to minimize clock drift.
-
-**Claim 15.** The method of Claim 3, wherein transition boundaries are marked using authenticated sequence numbers resistant to replay attacks.
-
-#### Claims 16-20: Session Management
-
-**Claim 16.** The method of Claim 2, wherein algorithm-specific keys are derived using:
-$$K_i = \text{HKDF}(K_{master}, \text{algorithm\_id} \| \text{epoch} \| i)$$
-where $i$ is the algorithm transition index.
-
-**Claim 17.** The method of Claim 2, wherein session continuity is maintained by preserving authenticated encryption state across transitions.
-
-**Claim 18.** The method of Claim 2, further comprising periodic re-keying within each algorithm's active period.
-
-**Claim 19.** The method of Claim 2, wherein the hopping schedule includes algorithm-specific parameter variations (security levels, polynomial degrees).
-
-**Claim 20.** The method of Claim 2, further comprising logging transition events for forensic analysis.
-
-#### Claims 21-25: Security Enhancements
-
-**Claim 21.** The system of Claim 1, further comprising a secure enclave or trusted execution environment for storing the master session key and hopping schedule.
-
-**Claim 22.** The method of Claim 4, wherein threat indicators include real-time feeds from cryptographic advisory services.
-
-**Claim 23.** The system of Claim 1, wherein algorithm transition is triggered by either temporal schedule or detection of potential compromise, whichever occurs first.
-
-**Claim 24.** The method of Claim 2, wherein the initial key exchange employs a hybrid classical/post-quantum mechanism for defense in depth.
-
-**Claim 25.** The system of Claim 1, further comprising algorithm health monitoring that removes compromised algorithms from the rotation schedule.
-
-#### Claims 26-30: Implementation Variations
-
-**Claim 26.** The system of Claim 1, implemented within a Transport Layer Security (TLS) extension.
-
-**Claim 27.** The system of Claim 1, implemented within an Internet Protocol Security (IPsec) framework.
-
-**Claim 28.** The system of Claim 1, wherein the communication nodes are Internet of Things (IoT) devices with constrained resources, and algorithm selection is optimized for computational efficiency.
-
-**Claim 29.** The system of Claim 1, wherein the communication occurs over satellite links with high latency, and overlap windows are extended accordingly.
-
-**Claim 30.** The system of Claim 1, integrated with quantum key distribution (QKD) for initial key establishment, with DLHP providing algorithmic diversity for post-QKD encryption.
-- (d) at predetermined switching points, transitioning to the next scheduled algorithm while maintaining session continuity;
-- (e) repeating encryption and transition throughout the session.
-
-**Claim 3.** A method for temporal synchronization of algorithm transitions comprising:
-- (a) exchanging timing information during handshake to establish a common epoch;
-- (b) deriving identical hopping sequences independently at each endpoint;
-- (c) implementing transition windows with overlap to accommodate clock drift;
-- (d) identifying active algorithm from packet headers during overlap periods.
-
-**Claim 4.** A method for adaptive security comprising:
-- (a) monitoring threat indicators including cryptanalytic advances and network anomalies;
-- (b) computing adjusted hopping frequency based on threat level;
-- (c) communicating frequency adjustments to peer nodes;
-- (d) applying adjusted frequency while maintaining schedule determinism.
-
-### Dependent Claims
-
-**Claim 5.** The system of Claim 1, wherein the algorithm library includes ML-KEM, NTRU, and a code-based algorithm.
-
-**Claim 6.** The method of Claim 2, wherein the hopping schedule is derived using HKDF with SHA3-256.
-
-**Claim 7.** The method of Claim 3, wherein overlap windows are 2 seconds in duration.
-
-**Claim 8.** The system of Claim 1, implemented as an extension to TLS 1.3.
-
-**Claim 9.** The method of Claim 4, wherein threat level 10 triggers minimum 5-second hopping intervals.
-
-**Claim 10.** The system of Claim 1, wherein the algorithm library comprises at least four distinct algorithms.
+\
+*End of Claims section.*
 
 ---
 

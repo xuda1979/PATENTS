@@ -1,11 +1,11 @@
 # Abstract
-# Dynamic Lattice-Hopping Protocol (DLHP)
+# Dynamic Multi-Primitive Cryptographic Hopping Protocol (DMP-CHP) (also referred to as DLHP)
 
 ---
 
 ## English Abstract (150 words)
 
-A dynamic cognitive cryptographic communication protocol that enhances resilience against quantum computer attacks by implementing "Cryptographic Frequency Hopping" and "Micro-fragmentation." The system rapidly cycles through multiple mathematically distinct post-quantum primitives (lattice, code, isogeny) during a single communication session, potentially at the packet level. An integrated "Cognitive Threat Analyzer" monitors network conditions to dynamically adjust hopping frequency and algorithm selection, triggering "Paranoid Mode" under high-threat conditions. Furthermore, the protocol supports "Spatial Dispersion," ensuring that fragments encrypted with different algorithms are routed over different physical network paths. This ensures that even if an adversary achieves a breakthrough in one mathematical field (e.g., lattices) or intercepts a specific link, they recover only disconnected non-contiguous data fragments, rendering "Store Now, Decrypt Later" attacks computationally infeasible.
+A secure communication protocol is disclosed for improving resilience to cryptanalytic advances, including post-quantum threats, by dynamically varying cryptographic protection across a sequence of protected units (e.g., packets, records, blocks, or shares). The protocol derives, for each protected unit, an algorithm selection and corresponding per-unit keying material as a deterministic function of at least a session secret and an integrity-protected monotonic sequence identifier, thereby tolerating packet loss and out-of-order delivery without per-unit chaining state. In some embodiments, consecutive protected units are protected using algorithms from different mathematical hard-problem classes under an enforced orthogonality constraint. In some embodiments, key establishment uses one or more key encapsulation mechanisms (KEMs) to refresh seed material, while payload protection uses one or more data encapsulation mechanisms (DEMs) with frequent re-keying. Optional embodiments include threshold splitting (e.g., secret sharing or erasure coding) to require reconstruction from a threshold of shares, transport dispersion over multiple network paths, schedule adaptation based on measured network conditions, and hardware binding via a physical unclonable function.
 
 ---
 

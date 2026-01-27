@@ -1,5 +1,5 @@
 # Patent Drawing Specifications
-# Dynamic Lattice-Hopping Protocol (DLHP)
+# Dynamic Multi-Primitive Cryptographic Hopping Protocol (DMP-CHP) (also referred to as DLHP)
 
 ---
 
