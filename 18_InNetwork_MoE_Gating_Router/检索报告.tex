@@ -1,0 +1,128 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{一种具备内生门控计算的混合专家模型片上网络路由器及方法} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.04.02} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明面向混合专家模型（MoE）推理场景的通信与调度瓶颈。MoE 通过门控网络对每个 token 动态选择少量专家执行计算，理论上具备更高的参数效率与吞吐潜力；但在硬件实现中，门控决策、token-to-expert 分发、片上网络拥塞与权重预取之间的串行依赖与软件调度开销会显著降低实际加速效果。本发明通过在 NoC 路由器内生执行门控相关的轻量计算与预测路由、并触发 DMA 前瞻预取，以减少流水线空泡与软件控制开销，提升 MoE 推理吞吐与能效。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 一、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 混合专家模型, MoE, 条件计算, 门控网络, 专家选择, Top-k 路由 \\
+(2) 片上网络, NoC 路由器, 虚通道, 拥塞控制, 自适应路由, 预测路由 \\
+(3) In-Network Computing, 在网计算, 路由器内计算, 轻量点积, 门控下沉 \\
+(4) 预取, DMA 前瞻预取, 权重分块, 缓存命中, 流水线空泡
+
+\textbf{外文检索关键词：}
+(1) Mixture-of-Experts, MoE, conditional computation, gating network, top-k routing \\
+(2) Network-on-Chip, NoC router, adaptive routing, congestion-aware arbitration \\
+(3) in-network computing, in-router compute, on-path computation, dot-product engine \\
+(4) lookahead prefetch, DMA prefetch, expert weight prefetch, pipeline stall reduction
+
+% 二、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer} \newline ICLR 2017 \newline Shazeer, N., et al. \\
+\hline
+2 & A (基础技术) & \textbf{Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity} \newline 2021 (ArXiv/JMLR 方向) \newline Fedus, W., Zoph, B., Shazeer, N. \\
+\hline
+3 & A (基础技术) & \textbf{GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding} \newline ICML 2021 \newline Lepikhin, D., et al. \\
+\hline
+4 & Y (相关技术) & \textbf{Principles and Practices of Interconnection Networks} \newline 教材/专著 \newline Dally, W.J., Towles, B. (2004) \\
+\hline
+5 & Y (相关技术) & \textbf{Network-on-Chip Router Microarchitecture and Congestion-Aware Routing} \newline NoC 路由/仲裁/流控方向代表性研究综述或论文（可在正式检索中替换为具体专利/论文） \\
+\hline
+6 & Y (相关技术) & \textbf{In-Network/On-Path Computing for Data Movement Reduction} \newline 在网计算/路由器内计算方向代表性研究（可在正式检索中替换为具体专利/论文） \\
+\hline
+\end{longtable}
+
+% 三、分析评述
+\section*{三、分析评述}
+
+\textbf{1. 与文献1（MoE 稀疏门控层）对比分析：}
+文献1提出了稀疏门控 MoE 层的基本思想与门控选择机制，重点在模型结构与训练/推理的算法层面。其并未针对硬件片上网络的数据面转发过程进行门控计算下沉，更未提出在路由器内生完成门控相关点积计算、预测路由与 DMA 前瞻预取的微架构设计。本申请提案在 MoE 算法基础之上，将“门控决策与通信控制”固化到 NoC 路由器层，实现同窗口融合，属于从算法到硬件的数据流重构。
+
+\textbf{2. 与文献2/3（MoE 工程化与分片）对比分析：}
+文献2/3面向大规模 MoE 的工程化落地，侧重于简化路由、负载均衡与并行分片策略，以提升训练/推理效率。但其主要优化点仍在软件/系统层（如并行分片、路由规则、批处理策略），对 NoC 路由器硬件仅提出带宽与通信需求，并未提出在路由器内部执行门控近似点积、拥塞感知预测路由，以及基于门控结果触发的权重分块预取机制。本申请提案在硬件层解决“门控-搬运-执行”的串行依赖问题，减少软件同步与等待。
+
+\textbf{3. 与文献4（互连网络基础）对比分析：}
+文献4总结了互连网络与 NoC 的路由、仲裁、流控等基础方法，适用于通用确定目的地的通信负载。MoE 的 token-to-expert 流量具备动态稀疏与突发热点特征，且目的地由门控计算产生而非预先确定。本申请提案的创新点在于：在数据包行进路径上引入门控相关的内生计算，使路由器可在转发过程中推导目的地并进行预测性拥塞规避，并进一步触发前瞻预取以隐藏存储延迟，超出传统 NoC 路由器的功能边界。
+
+\textbf{4. 与文献5/6（NoC 拥塞与在网计算方向）对比分析：}
+现有 NoC 拥塞控制与自适应路由研究可降低热点，但通常假设目的地已知；在网计算研究通常面向归约、过滤、简单算子融合等数据面操作。针对 MoE 门控路由，本申请提案提出“门控近似点积 + Top-k 选择 + 预测路由 + 预取触发”的一体化路由器微架构，使其直接服务于 MoE 条件路由与权重搬运，是面向特定 AI 推理工作负载的 Algorithm-to-Silicon 落地。
+
+% 四、检索结论
+\section*{四、检索结论}
+
+基于上述关键词与公开文献的初步比对，未发现与本申请提案在同一层级上同时具备以下组合特征的现有技术：在 NoC 路由器内生执行门控相关轻量点积计算并完成 Top-k 专家选择、结合拥塞感知预测路由进行 token-to-expert 分发、并依据门控结果触发 DMA 前瞻预取与分块管理，从而显著减少 MoE 推理中的流水线空泡与软件调度开销。
+
+建议在正式检索中进一步面向以下方向补强证据链：AI 加速器 NoC 的专利族、在网计算/路由器内算子融合专利、面向稀疏/条件计算的硬件路由与预取相关专利。整体判断本申请提案具有较强的新颖性与创造性基础。
+
+\end{document}
