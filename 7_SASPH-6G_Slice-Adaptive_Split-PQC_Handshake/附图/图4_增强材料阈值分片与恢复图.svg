@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850">
+  <rect x="0" y="0" width="1200" height="850" fill="#ffffff"/>
+
+  <rect x="60" y="320" width="220" height="120" fill="none" stroke="#000000" stroke-width="3"/>
+  <text x="170" y="375" font-size="30" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">增强密钥材料</text>
+  <text x="170" y="410" font-size="28" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">Krein</text>
+
+  <rect x="360" y="290" width="260" height="180" fill="none" stroke="#000000" stroke-width="3"/>
+  <text x="490" y="350" font-size="26" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">预处理</text>
+  <text x="490" y="388" font-size="20" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">全有或全无变换</text>
+  <text x="490" y="418" font-size="20" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">秘密共享 / 纠删编码</text>
+
+  <rect x="700" y="120" width="380" height="520" fill="none" stroke="#000000" stroke-width="3"/>
+  <text x="890" y="165" font-size="28" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">增强片段集合</text>
+  <text x="890" y="200" font-size="22" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">总数 n，恢复阈值 t</text>
+
+  <rect x="760" y="235" width="260" height="55" fill="none" stroke="#000000" stroke-width="2"/>
+  <text x="890" y="270" font-size="22" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">r1  后续握手报文</text>
+
+  <rect x="760" y="315" width="260" height="55" fill="none" stroke="#000000" stroke-width="2"/>
+  <text x="890" y="350" font-size="22" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">r2  控制报文</text>
+
+  <rect x="760" y="395" width="260" height="55" fill="none" stroke="#000000" stroke-width="2"/>
+  <text x="890" y="430" font-size="22" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">r3  首批业务报文</text>
+
+  <rect x="760" y="475" width="260" height="55" fill="none" stroke="#000000" stroke-width="2"/>
+  <text x="890" y="510" font-size="22" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">... 多路径子流 ...</text>
+
+  <rect x="760" y="555" width="260" height="55" fill="none" stroke="#000000" stroke-width="2"/>
+  <text x="890" y="590" font-size="22" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">rn  其他承载路径</text>
+
+  <rect x="360" y="640" width="300" height="120" fill="none" stroke="#000000" stroke-width="3"/>
+  <text x="510" y="695" font-size="26" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">阈值恢复</text>
+  <text x="510" y="730" font-size="20" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">任意达到 t 个有效片段即可恢复</text>
+
+  <rect x="780" y="680" width="220" height="90" fill="none" stroke="#000000" stroke-width="3"/>
+  <text x="890" y="735" font-size="28" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">导出 Kfinal</text>
+
+  <line x1="280" y1="380" x2="360" y2="380" stroke="#000000" stroke-width="3"/>
+  <polygon points="360,380 344,372 344,388" fill="#000000"/>
+
+  <line x1="620" y1="380" x2="700" y2="380" stroke="#000000" stroke-width="3"/>
+  <polygon points="700,380 684,372 684,388" fill="#000000"/>
+
+  <line x1="760" y1="610" x2="620" y2="670" stroke="#000000" stroke-width="3"/>
+  <polygon points="620,670 632,655 639,670" fill="#000000"/>
+  <text x="690" y="655" font-size="20" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">达到 t 个有效片段</text>
+
+  <line x1="660" y1="700" x2="780" y2="725" stroke="#000000" stroke-width="3"/>
+  <polygon points="780,725 764,715 761,731" fill="#000000"/>
+</svg>

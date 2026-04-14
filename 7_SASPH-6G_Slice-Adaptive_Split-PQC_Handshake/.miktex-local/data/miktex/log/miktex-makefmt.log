@@ -1,0 +1,29 @@
+2026-03-27 09:44:02,682+0800 INFO  miktex-makefmt - this process (34564) started by miktex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-makefmt.exe --engine=xetex --dest-name=xelatex --no-dump xelatex.ini --enable-installer --miktex-disable-maintenance --miktex-disable-diagnose
+2026-03-27 09:44:02,682+0800 INFO  miktex-makefmt - running on Windows 10.0.26200
+2026-03-27 09:44:02,694+0800 WARN  miktex-makefmt - security risk: running with elevated privileges
+2026-03-27 09:44:02,703+0800 INFO  miktex-makefmt - installing package miktex-xetex triggered by tex/latex/latexconfig\xelatex.ini
+2026-03-27 09:44:02,707+0800 INFO  miktex-makefmt.packagemanager - going to download https://api2.miktex.org/repositories/634f96d0c059a51b3f3b4f3d7cbc5101
+2026-03-27 09:44:03,469+0800 INFO  miktex-makefmt - mpm: starting package maintenance...
+2026-03-27 09:44:03,469+0800 INFO  miktex-makefmt - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:03,469+0800 INFO  miktex-makefmt - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:04,427+0800 WARN  miktex-makefmt.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2026-03-27 09:44:04,428+0800 WARN  miktex-makefmt.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2026-03-27 09:44:04,429+0800 WARN  miktex-makefmt.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2026-03-27 09:44:04,433+0800 WARN  miktex-makefmt.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2026-03-27 09:44:04,918+0800 INFO  miktex-makefmt - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:04,918+0800 INFO  miktex-makefmt - mpm: going to download 2089 bytes
+2026-03-27 09:44:04,918+0800 INFO  miktex-makefmt - mpm: going to install 3 file(s) (1 package(s))
+2026-03-27 09:44:05,558+0800 INFO  miktex-makefmt.packagemanager - installing package miktex-xetex
+2026-03-27 09:44:05,559+0800 INFO  miktex-makefmt - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/miktex-xetex.tar.lzma...
+2026-03-27 09:44:05,560+0800 INFO  miktex-makefmt.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/miktex-xetex.tar.lzma
+2026-03-27 09:44:06,156+0800 INFO  miktex-makefmt - mpm: 0.00 MB, 0.03 Mbit/s
+2026-03-27 09:44:06,166+0800 INFO  miktex-makefmt - mpm: extracting files from miktex-xetex.tar.lzma...
+2026-03-27 09:44:06,742+0800 INFO  miktex-makefmt.core - start process: miktex fontmaps configure
+2026-03-27 09:44:07,647+0800 INFO  makefmt - found input file: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\tex\latex\latexconfig\xelatex.ini
+2026-03-27 09:44:07,650+0800 INFO  makefmt - Creating the xelatex format file...
+2026-03-27 09:44:07,652+0800 INFO  makefmt - Running miktex-xetex.exe...
+2026-03-27 09:44:07,652+0800 INFO  makefmt - running: miktex-xetex.exe --miktex-enable-installer --miktex-disable-maintenance --miktex-disable-diagnose --interaction=nonstopmode --initialize --halt-on-error --alias=xelatex --job-name=xelatex --enable-etex xelatex.ini
+2026-03-27 09:44:07,652+0800 INFO  miktex-makefmt.core - start process: miktex-xetex.exe --miktex-enable-installer --miktex-disable-maintenance --miktex-disable-diagnose --interaction=nonstopmode --initialize --halt-on-error --alias=xelatex --job-name=xelatex --enable-etex xelatex.ini
+2026-03-27 09:45:01,629+0800 INFO  makefmt - Installing C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\data\miktex\log\makefmt\xelatex\2026-03-27-09-44-07.log...
+2026-03-27 09:45:01,635+0800 INFO  makefmt - Installing C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\data\miktex/data/le/xetex\xelatex.fmt...
+2026-03-27 09:45:01,651+0800 INFO  miktex-makefmt - this process (34564) finishes with exit code 0

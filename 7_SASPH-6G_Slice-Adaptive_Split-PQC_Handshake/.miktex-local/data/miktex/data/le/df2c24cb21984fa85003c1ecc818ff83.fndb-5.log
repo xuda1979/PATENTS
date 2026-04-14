@@ -1,0 +1,6 @@
++babel.tpm;tpm/packages;babel
++geometry.tpm;tpm/packages;geometry
++dvipdfmx-unsafe.cfg;dvipdfm/config;miktex-dvipdfmx
++dvipdfmx.cfg.template;dvipdfm/config;miktex-dvipdfmx
++dvipdfmx.unx.cfg;dvipdfm/config;miktex-dvipdfmx
++dvipdfmx.win.cfg;dvipdfm/config;miktex-dvipdfmx

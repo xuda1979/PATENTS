@@ -1,0 +1,50 @@
+2026-03-27 14:13:15,806+0800 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4)
+2026-03-27 14:13:15,807+0800 INFO  initexmf - this process (30904) started by powershell in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\miktex\bin\x64\initexmf.exe --set-config-value=[MPM]AutoCheckUpdates=0
+2026-03-27 14:13:15,807+0800 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2026-03-27 14:13:15,807+0800 INFO  initexmf - Setting config value: [MPM]AutoCheckUpdates=0
+2026-03-27 14:13:15,858+0800 INFO  initexmf - this process (30904) finishes with exit code 0
+2026-03-27 14:13:16,062+0800 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4)
+2026-03-27 14:13:16,062+0800 INFO  initexmf - this process (35436) started by powershell in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\miktex\bin\x64\initexmf.exe --set-config-value=[MPM]AutoUpdate=0
+2026-03-27 14:13:16,062+0800 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2026-03-27 14:13:16,062+0800 INFO  initexmf - Setting config value: [MPM]AutoUpdate=0
+2026-03-27 14:13:16,117+0800 INFO  initexmf - this process (35436) finishes with exit code 0
+2026-03-27 14:13:16,368+0800 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4)
+2026-03-27 14:13:16,369+0800 INFO  initexmf - this process (40784) started by powershell in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\miktex\bin\x64\initexmf.exe --enable-installer
+2026-03-27 14:13:16,369+0800 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2026-03-27 14:13:16,423+0800 INFO  initexmf - this process (40784) finishes with exit code 0
+2026-03-27 14:16:34,717+0800 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4)
+2026-03-27 14:16:34,717+0800 INFO  initexmf - this process (37148) started by powershell in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\miktex\bin\x64\initexmf.exe --set-config-value=[MPM]AutoCheckUpdates=0
+2026-03-27 14:16:34,717+0800 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2026-03-27 14:16:34,717+0800 INFO  initexmf - Setting config value: [MPM]AutoCheckUpdates=0
+2026-03-27 14:16:34,719+0800 ERROR initexmf.core - Отказано в доступе.
+
+2026-03-27 14:16:34,719+0800 ERROR initexmf.core - Function: RegCreateKeyExW
+2026-03-27 14:16:34,719+0800 ERROR initexmf.core - Result: 5
+2026-03-27 14:16:34,719+0800 ERROR initexmf.core - Data: path="Software\MiKTeX.org\MiKTeX\2.9\MPM"
+2026-03-27 14:16:34,719+0800 ERROR initexmf.core - Source: Libraries\MiKTeX\Core\win\winRegistry.cpp:207
+2026-03-27 14:16:34,759+0800 FATAL initexmf - Windows API error 5: Отказано в доступе.
+
+2026-03-27 14:16:34,759+0800 FATAL initexmf - Info: path="Software\MiKTeX.org\MiKTeX\2.9\MPM"
+2026-03-27 14:16:34,759+0800 FATAL initexmf - Source: Libraries\MiKTeX\Core\win\winRegistry.cpp
+2026-03-27 14:16:34,759+0800 FATAL initexmf - Line: 207
+2026-03-27 14:16:34,760+0800 INFO  initexmf - this process (37148) finishes with exit code 1
+2026-03-27 14:16:34,939+0800 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4)
+2026-03-27 14:16:34,939+0800 INFO  initexmf - this process (34596) started by powershell in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\miktex\bin\x64\initexmf.exe --set-config-value=[MPM]AutoUpdate=0
+2026-03-27 14:16:34,939+0800 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2026-03-27 14:16:34,939+0800 INFO  initexmf - Setting config value: [MPM]AutoUpdate=0
+2026-03-27 14:16:34,941+0800 ERROR initexmf.core - Отказано в доступе.
+
+2026-03-27 14:16:34,942+0800 ERROR initexmf.core - Function: RegCreateKeyExW
+2026-03-27 14:16:34,942+0800 ERROR initexmf.core - Result: 5
+2026-03-27 14:16:34,942+0800 ERROR initexmf.core - Data: path="Software\MiKTeX.org\MiKTeX\2.9\MPM"
+2026-03-27 14:16:34,942+0800 ERROR initexmf.core - Source: Libraries\MiKTeX\Core\win\winRegistry.cpp:207
+2026-03-27 14:16:35,009+0800 FATAL initexmf - Windows API error 5: Отказано в доступе.
+
+2026-03-27 14:16:35,009+0800 FATAL initexmf - Info: path="Software\MiKTeX.org\MiKTeX\2.9\MPM"
+2026-03-27 14:16:35,009+0800 FATAL initexmf - Source: Libraries\MiKTeX\Core\win\winRegistry.cpp
+2026-03-27 14:16:35,009+0800 FATAL initexmf - Line: 207
+2026-03-27 14:16:35,010+0800 INFO  initexmf - this process (34596) finishes with exit code 1
+2026-03-27 14:16:35,197+0800 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4)
+2026-03-27 14:16:35,198+0800 INFO  initexmf - this process (40608) started by powershell in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\miktex\bin\x64\initexmf.exe --enable-installer
+2026-03-27 14:16:35,198+0800 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2026-03-27 14:16:35,238+0800 INFO  initexmf - this process (40608) finishes with exit code 0

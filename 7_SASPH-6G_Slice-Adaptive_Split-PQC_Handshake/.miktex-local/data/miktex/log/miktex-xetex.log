@@ -1,0 +1,194 @@
+2026-03-27 09:44:07,968+0800 INFO  miktex-xetex - this process (38436) started by miktex-makefmt in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\temp\mik81599 with command line: miktex-xetex.exe --miktex-enable-installer --miktex-disable-maintenance --miktex-disable-diagnose --interaction=nonstopmode --initialize --halt-on-error --alias=xelatex --job-name=xelatex --enable-etex xelatex.ini
+2026-03-27 09:44:07,968+0800 INFO  miktex-xetex - running on Windows 10.0.26200
+2026-03-27 09:44:07,978+0800 WARN  miktex-xetex - security risk: running with elevated privileges
+2026-03-27 09:44:07,978+0800 INFO  miktex-xetex - this is MiKTeX-XETEX 4.15.0 (0.999997) (MiKTeX 25.4)
+2026-03-27 09:44:07,981+0800 INFO  miktex-xetex - allowing known shell commands
+2026-03-27 09:44:08,066+0800 INFO  miktex-xetex - installing package ltxbase triggered by tex/latex/base\latex.ltx
+2026-03-27 09:44:08,070+0800 INFO  miktex-xetex.packagemanager - going to download https://api2.miktex.org/repositories/634f96d0c059a51b3f3b4f3d7cbc5101
+2026-03-27 09:44:08,841+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:08,841+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:08,841+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:09,713+0800 WARN  miktex-xetex.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2026-03-27 09:44:09,713+0800 WARN  miktex-xetex.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2026-03-27 09:44:09,713+0800 WARN  miktex-xetex.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2026-03-27 09:44:09,714+0800 WARN  miktex-xetex.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2026-03-27 09:44:10,098+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:10,099+0800 INFO  miktex-xetex - mpm: going to download 260722 bytes
+2026-03-27 09:44:10,099+0800 INFO  miktex-xetex - mpm: going to install 169 file(s) (1 package(s))
+2026-03-27 09:44:10,772+0800 INFO  miktex-xetex.packagemanager - installing package ltxbase
+2026-03-27 09:44:10,773+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/ltxbase.tar.lzma...
+2026-03-27 09:44:10,773+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/ltxbase.tar.lzma
+2026-03-27 09:44:12,238+0800 INFO  miktex-xetex - mpm: 0.26 MB, 1.42 Mbit/s
+2026-03-27 09:44:12,247+0800 INFO  miktex-xetex - mpm: extracting files from ltxbase.tar.lzma...
+2026-03-27 09:44:13,163+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:14,390+0800 INFO  miktex-xetex - installing package l3kernel triggered by tex/latex/l3kernel\expl3.ltx
+2026-03-27 09:44:14,390+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:14,390+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:14,390+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:14,692+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:14,693+0800 INFO  miktex-xetex - mpm: going to download 189256 bytes
+2026-03-27 09:44:14,693+0800 INFO  miktex-xetex - mpm: going to install 24 file(s) (1 package(s))
+2026-03-27 09:44:15,157+0800 INFO  miktex-xetex.packagemanager - installing package l3kernel
+2026-03-27 09:44:15,157+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/l3kernel.tar.lzma...
+2026-03-27 09:44:15,157+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/l3kernel.tar.lzma
+2026-03-27 09:44:16,098+0800 INFO  miktex-xetex - mpm: 0.19 MB, 1.61 Mbit/s
+2026-03-27 09:44:16,108+0800 INFO  miktex-xetex - mpm: extracting files from l3kernel.tar.lzma...
+2026-03-27 09:44:16,713+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:17,660+0800 INFO  miktex-xetex - installing package cm triggered by fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:44:17,660+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:17,660+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:17,660+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:17,964+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:17,964+0800 INFO  miktex-xetex - mpm: going to download 105735 bytes
+2026-03-27 09:44:17,965+0800 INFO  miktex-xetex - mpm: going to install 201 file(s) (1 package(s))
+2026-03-27 09:44:18,408+0800 INFO  miktex-xetex.packagemanager - installing package cm
+2026-03-27 09:44:18,409+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/cm.tar.lzma...
+2026-03-27 09:44:18,409+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/cm.tar.lzma
+2026-03-27 09:44:19,223+0800 INFO  miktex-xetex - mpm: 0.11 MB, 1.04 Mbit/s
+2026-03-27 09:44:19,231+0800 INFO  miktex-xetex - mpm: extracting files from cm.tar.lzma...
+2026-03-27 09:44:20,038+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:21,076+0800 INFO  miktex-xetex - installing package unicode-data triggered by tex/generic/unicode-data\GraphemeBreakProperty.txt
+2026-03-27 09:44:21,077+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:21,077+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:21,077+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:21,505+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:21,505+0800 INFO  miktex-xetex - mpm: going to download 317985 bytes
+2026-03-27 09:44:21,505+0800 INFO  miktex-xetex - mpm: going to install 19 file(s) (1 package(s))
+2026-03-27 09:44:22,190+0800 INFO  miktex-xetex.packagemanager - installing package unicode-data
+2026-03-27 09:44:22,191+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/unicode-data.tar.lzma...
+2026-03-27 09:44:22,191+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/unicode-data.tar.lzma
+2026-03-27 09:44:23,271+0800 INFO  miktex-xetex - mpm: 0.32 MB, 2.36 Mbit/s
+2026-03-27 09:44:23,280+0800 INFO  miktex-xetex - mpm: extracting files from unicode-data.tar.lzma...
+2026-03-27 09:44:23,973+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:31,789+0800 INFO  miktex-xetex - installing package lm triggered by tex/latex/lm\ts1lmr.fd
+2026-03-27 09:44:31,789+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:31,789+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:31,789+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:32,079+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:32,079+0800 INFO  miktex-xetex - mpm: going to download 13559745 bytes
+2026-03-27 09:44:32,079+0800 INFO  miktex-xetex - mpm: going to install 1094 file(s) (1 package(s))
+2026-03-27 09:44:32,614+0800 INFO  miktex-xetex.packagemanager - installing package lm
+2026-03-27 09:44:32,614+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/lm.tar.lzma...
+2026-03-27 09:44:32,614+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/lm.tar.lzma
+2026-03-27 09:44:34,812+0800 INFO  miktex-xetex - mpm: 13.56 MB, 49.35 Mbit/s
+2026-03-27 09:44:34,846+0800 INFO  miktex-xetex - mpm: extracting files from lm.tar.lzma...
+2026-03-27 09:44:37,591+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:39,688+0800 INFO  miktex-xetex - installing package latex-fonts triggered by fonts/tfm/public/latex-fonts\line10.tfm
+2026-03-27 09:44:39,688+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:39,688+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:39,688+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:40,094+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:40,094+0800 INFO  miktex-xetex - mpm: going to download 18674 bytes
+2026-03-27 09:44:40,094+0800 INFO  miktex-xetex - mpm: going to install 55 file(s) (1 package(s))
+2026-03-27 09:44:40,727+0800 INFO  miktex-xetex.packagemanager - installing package latex-fonts
+2026-03-27 09:44:40,727+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/latex-fonts.tar.lzma...
+2026-03-27 09:44:40,727+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/latex-fonts.tar.lzma
+2026-03-27 09:44:41,152+0800 INFO  miktex-xetex - mpm: 0.02 MB, 0.35 Mbit/s
+2026-03-27 09:44:41,161+0800 INFO  miktex-xetex - mpm: extracting files from latex-fonts.tar.lzma...
+2026-03-27 09:44:41,806+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:42,797+0800 INFO  miktex-xetex - installing package atveryend triggered by tex/latex/atveryend\atveryend.sty
+2026-03-27 09:44:42,797+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:42,797+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:42,797+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:43,092+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:43,092+0800 INFO  miktex-xetex - mpm: going to download 1386 bytes
+2026-03-27 09:44:43,092+0800 INFO  miktex-xetex - mpm: going to install 2 file(s) (1 package(s))
+2026-03-27 09:44:43,614+0800 INFO  miktex-xetex.packagemanager - installing package atveryend
+2026-03-27 09:44:43,614+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/atveryend.tar.lzma...
+2026-03-27 09:44:43,614+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/atveryend.tar.lzma
+2026-03-27 09:44:43,825+0800 INFO  miktex-xetex - mpm: 0.00 MB, 0.05 Mbit/s
+2026-03-27 09:44:43,833+0800 INFO  miktex-xetex - mpm: extracting files from atveryend.tar.lzma...
+2026-03-27 09:44:44,343+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:45,329+0800 INFO  miktex-xetex - installing package atbegshi triggered by tex/generic/atbegshi\atbegshi.sty
+2026-03-27 09:44:45,330+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:45,330+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:45,330+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:45,631+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:45,631+0800 INFO  miktex-xetex - mpm: going to download 4977 bytes
+2026-03-27 09:44:45,631+0800 INFO  miktex-xetex - mpm: going to install 2 file(s) (1 package(s))
+2026-03-27 09:44:46,148+0800 INFO  miktex-xetex.packagemanager - installing package atbegshi
+2026-03-27 09:44:46,149+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/atbegshi.tar.lzma...
+2026-03-27 09:44:46,149+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/atbegshi.tar.lzma
+2026-03-27 09:44:46,373+0800 INFO  miktex-xetex - mpm: 0.00 MB, 0.18 Mbit/s
+2026-03-27 09:44:46,382+0800 INFO  miktex-xetex - mpm: extracting files from atbegshi.tar.lzma...
+2026-03-27 09:44:46,924+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:48,225+0800 INFO  miktex-xetex - installing package knuth-lib triggered by tex/generic/knuth-lib\null.tex
+2026-03-27 09:44:48,225+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:48,225+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:48,225+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:48,541+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:48,541+0800 INFO  miktex-xetex - mpm: going to download 42741 bytes
+2026-03-27 09:44:48,541+0800 INFO  miktex-xetex - mpm: going to install 26 file(s) (1 package(s))
+2026-03-27 09:44:49,073+0800 INFO  miktex-xetex.packagemanager - installing package knuth-lib
+2026-03-27 09:44:49,074+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/knuth-lib.tar.lzma...
+2026-03-27 09:44:49,074+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/knuth-lib.tar.lzma
+2026-03-27 09:44:49,605+0800 INFO  miktex-xetex - mpm: 0.04 MB, 0.64 Mbit/s
+2026-03-27 09:44:49,613+0800 INFO  miktex-xetex - mpm: extracting files from knuth-lib.tar.lzma...
+2026-03-27 09:44:50,194+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:51,177+0800 INFO  miktex-xetex - installing package babel triggered by tex/generic/babel\hyphen.cfg
+2026-03-27 09:44:51,178+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:51,178+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:51,178+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:51,592+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:51,593+0800 INFO  miktex-xetex - mpm: going to download 250266 bytes
+2026-03-27 09:44:51,593+0800 INFO  miktex-xetex - mpm: going to install 1042 file(s) (1 package(s))
+2026-03-27 09:44:52,430+0800 INFO  miktex-xetex.packagemanager - installing package babel
+2026-03-27 09:44:52,431+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/babel.tar.lzma...
+2026-03-27 09:44:52,431+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/babel.tar.lzma
+2026-03-27 09:44:53,460+0800 INFO  miktex-xetex - mpm: 0.25 MB, 1.95 Mbit/s
+2026-03-27 09:44:53,475+0800 INFO  miktex-xetex - mpm: extracting files from babel.tar.lzma...
+2026-03-27 09:44:56,942+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:44:58,512+0800 INFO  miktex-xetex - installing package latex-firstaid triggered by tex/latex/firstaid\latex2e-first-aid-for-external-files.ltx
+2026-03-27 09:44:58,512+0800 INFO  miktex-xetex - mpm: starting package maintenance...
+2026-03-27 09:44:58,512+0800 INFO  miktex-xetex - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 09:44:58,512+0800 INFO  miktex-xetex - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 09:44:58,902+0800 INFO  miktex-xetex - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 09:44:58,903+0800 INFO  miktex-xetex - mpm: going to download 5434 bytes
+2026-03-27 09:44:58,903+0800 INFO  miktex-xetex - mpm: going to install 4 file(s) (1 package(s))
+2026-03-27 09:44:59,553+0800 INFO  miktex-xetex.packagemanager - installing package latex-firstaid
+2026-03-27 09:44:59,553+0800 INFO  miktex-xetex - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/latex-firstaid.tar.lzma...
+2026-03-27 09:44:59,553+0800 INFO  miktex-xetex.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/latex-firstaid.tar.lzma
+2026-03-27 09:44:59,768+0800 INFO  miktex-xetex - mpm: 0.01 MB, 0.20 Mbit/s
+2026-03-27 09:44:59,778+0800 INFO  miktex-xetex - mpm: extracting files from latex-firstaid.tar.lzma...
+2026-03-27 09:45:00,384+0800 INFO  miktex-xetex.core - start process: miktex fontmaps configure
+2026-03-27 09:45:01,512+0800 INFO  miktex-xetex - this process (38436) finishes with exit code 0
+2026-03-27 09:45:01,546+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr7.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr5.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/latex-fonts\lcirclew10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/latex-fonts\lcircle10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmsy7.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmmi7.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmsy5.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmmi10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmsy10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmmi5.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/latex-fonts\line10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmex10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,547+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/cm\cmr10.tfm
+2026-03-27 09:45:01,548+0800 WARN  miktex-xetex.core - still open: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install\fonts/tfm/public/latex-fonts\linew10.tfm

@@ -1,0 +1,159 @@
+2026-03-27 14:15:45,055+0800 INFO  miktex-dvipdfmx - this process (32864) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 检索报告.pdf
+2026-03-27 14:15:45,055+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 14:15:45,062+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 14:15:45,067+0800 INFO  miktex-dvipdfmx - installing package miktex-dvipdfmx triggered by dvipdfmx/config\dvipdfmx.win.cfg
+2026-03-27 14:15:45,069+0800 INFO  miktex-dvipdfmx.packagemanager - going to download https://api2.miktex.org/repositories/634f96d0c059a51b3f3b4f3d7cbc5101
+2026-03-27 14:15:45,808+0800 INFO  miktex-dvipdfmx - mpm: starting package maintenance...
+2026-03-27 14:15:45,809+0800 INFO  miktex-dvipdfmx - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 14:15:45,809+0800 INFO  miktex-dvipdfmx - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 14:15:46,474+0800 WARN  miktex-dvipdfmx.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2026-03-27 14:15:46,474+0800 WARN  miktex-dvipdfmx.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2026-03-27 14:15:46,474+0800 WARN  miktex-dvipdfmx.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2026-03-27 14:15:46,476+0800 WARN  miktex-dvipdfmx.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2026-03-27 14:15:46,796+0800 INFO  miktex-dvipdfmx - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 14:15:46,796+0800 INFO  miktex-dvipdfmx - mpm: going to download 5049 bytes
+2026-03-27 14:15:46,796+0800 INFO  miktex-dvipdfmx - mpm: going to install 5 file(s) (1 package(s))
+2026-03-27 14:15:47,265+0800 INFO  miktex-dvipdfmx.packagemanager - installing package miktex-dvipdfmx
+2026-03-27 14:15:47,266+0800 INFO  miktex-dvipdfmx - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/miktex-dvipdfmx.tar.lzma...
+2026-03-27 14:15:47,267+0800 INFO  miktex-dvipdfmx.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/miktex-dvipdfmx.tar.lzma
+2026-03-27 14:15:47,886+0800 INFO  miktex-dvipdfmx - mpm: 0.01 MB, 0.07 Mbit/s
+2026-03-27 14:15:47,893+0800 INFO  miktex-dvipdfmx - mpm: extracting files from miktex-dvipdfmx.tar.lzma...
+2026-03-27 14:15:48,356+0800 INFO  miktex-dvipdfmx.core - start process: miktex fontmaps configure
+2026-03-27 14:15:49,281+0800 INFO  miktex-dvipdfmx - installing package dvipdfmx triggered by fonts/map/dvipdfmx\ckx.map
+2026-03-27 14:15:49,281+0800 INFO  miktex-dvipdfmx - mpm: starting package maintenance...
+2026-03-27 14:15:49,281+0800 INFO  miktex-dvipdfmx - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 14:15:49,281+0800 INFO  miktex-dvipdfmx - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 14:15:49,608+0800 INFO  miktex-dvipdfmx - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 14:15:49,608+0800 INFO  miktex-dvipdfmx - mpm: going to download 21946 bytes
+2026-03-27 14:15:49,608+0800 INFO  miktex-dvipdfmx - mpm: going to install 5 file(s) (1 package(s))
+2026-03-27 14:15:50,081+0800 INFO  miktex-dvipdfmx.packagemanager - installing package dvipdfmx
+2026-03-27 14:15:50,082+0800 INFO  miktex-dvipdfmx - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/dvipdfmx.tar.lzma...
+2026-03-27 14:15:50,082+0800 INFO  miktex-dvipdfmx.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/dvipdfmx.tar.lzma
+2026-03-27 14:15:50,492+0800 INFO  miktex-dvipdfmx - mpm: 0.02 MB, 0.43 Mbit/s
+2026-03-27 14:15:50,500+0800 INFO  miktex-dvipdfmx - mpm: extracting files from dvipdfmx.tar.lzma...
+2026-03-27 14:15:50,989+0800 INFO  miktex-dvipdfmx.core - start process: miktex fontmaps configure
+2026-03-27 14:15:51,921+0800 INFO  miktex-dvipdfmx - installing package glyphlist triggered by fonts/map/glyphlist\texglyphlist.txt
+2026-03-27 14:15:51,921+0800 INFO  miktex-dvipdfmx - mpm: starting package maintenance...
+2026-03-27 14:15:51,921+0800 INFO  miktex-dvipdfmx - mpm: installation directory: C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake\.miktex-local\install
+2026-03-27 14:15:51,921+0800 INFO  miktex-dvipdfmx - mpm: package repository: https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/
+2026-03-27 14:15:52,219+0800 INFO  miktex-dvipdfmx - mpm: package repository digest: ab6e9323859369ef15ad44621ef5298b
+2026-03-27 14:15:52,219+0800 INFO  miktex-dvipdfmx - mpm: going to download 24978 bytes
+2026-03-27 14:15:52,219+0800 INFO  miktex-dvipdfmx - mpm: going to install 4 file(s) (1 package(s))
+2026-03-27 14:15:52,747+0800 INFO  miktex-dvipdfmx.packagemanager - installing package glyphlist
+2026-03-27 14:15:52,748+0800 INFO  miktex-dvipdfmx - mpm: downloading https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/glyphlist.tar.lzma...
+2026-03-27 14:15:52,748+0800 INFO  miktex-dvipdfmx.packagemanager - going to download https://mirror.truenetwork.ru/CTAN/systems/win32/miktex/tm/packages/glyphlist.tar.lzma
+2026-03-27 14:15:53,181+0800 INFO  miktex-dvipdfmx - mpm: 0.02 MB, 0.46 Mbit/s
+2026-03-27 14:15:53,189+0800 INFO  miktex-dvipdfmx - mpm: extracting files from glyphlist.tar.lzma...
+2026-03-27 14:15:53,713+0800 INFO  miktex-dvipdfmx.core - start process: miktex fontmaps configure
+2026-03-27 14:15:54,931+0800 INFO  miktex-dvipdfmx - this process (32864) finishes with exit code 0
+2026-03-27 14:15:54,934+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 14:20:49,478+0800 INFO  miktex-dvipdfmx - this process (40816) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 交底书.pdf
+2026-03-27 14:20:49,478+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 14:20:49,484+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 14:20:49,936+0800 INFO  miktex-dvipdfmx - this process (40816) finishes with exit code 0
+2026-03-27 14:20:49,936+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 14:20:51,242+0800 INFO  miktex-dvipdfmx - this process (39848) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 交底书.pdf
+2026-03-27 14:20:51,242+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 14:20:51,248+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 14:20:51,633+0800 INFO  miktex-dvipdfmx - this process (39848) finishes with exit code 0
+2026-03-27 14:20:51,634+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 14:20:52,967+0800 INFO  miktex-dvipdfmx - this process (39756) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 检索报告.pdf
+2026-03-27 14:20:52,967+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 14:20:52,976+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 14:20:53,421+0800 INFO  miktex-dvipdfmx - this process (39756) finishes with exit code 0
+2026-03-27 14:20:53,422+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 14:20:54,885+0800 INFO  miktex-dvipdfmx - this process (5640) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 检索报告.pdf
+2026-03-27 14:20:54,885+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 14:20:54,891+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 14:20:55,209+0800 INFO  miktex-dvipdfmx - this process (5640) finishes with exit code 0
+2026-03-27 14:20:55,210+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 15:56:17,369+0800 INFO  miktex-dvipdfmx - this process (14952) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 权利要求书.pdf
+2026-03-27 15:56:17,369+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 15:56:17,380+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 15:56:17,873+0800 INFO  miktex-dvipdfmx - this process (14952) finishes with exit code 0
+2026-03-27 15:56:17,886+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 15:56:20,019+0800 INFO  miktex-dvipdfmx - this process (12972) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 权利要求书.pdf
+2026-03-27 15:56:20,019+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 15:56:20,030+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 15:56:20,429+0800 INFO  miktex-dvipdfmx - this process (12972) finishes with exit code 0
+2026-03-27 15:56:20,431+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 15:56:22,229+0800 INFO  miktex-dvipdfmx - this process (28680) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 摘要.pdf
+2026-03-27 15:56:22,229+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 15:56:22,238+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 15:56:22,307+0800 INFO  miktex-dvipdfmx - this process (28680) finishes with exit code 0
+2026-03-27 15:56:22,308+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 15:56:24,195+0800 INFO  miktex-dvipdfmx - this process (38260) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 摘要.pdf
+2026-03-27 15:56:24,196+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 15:56:24,210+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 15:56:24,312+0800 INFO  miktex-dvipdfmx - this process (38260) finishes with exit code 0
+2026-03-27 15:56:24,314+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 17:45:12,546+0800 INFO  miktex-dvipdfmx - this process (40528) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 说明书.pdf
+2026-03-27 17:45:12,546+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 17:45:12,555+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 17:45:12,965+0800 INFO  miktex-dvipdfmx - this process (40528) finishes with exit code 0
+2026-03-27 17:45:12,967+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-27 17:45:14,435+0800 INFO  miktex-dvipdfmx - this process (40560) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 说明书.pdf
+2026-03-27 17:45:14,435+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-27 17:45:14,442+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-27 17:45:14,828+0800 INFO  miktex-dvipdfmx - this process (40560) finishes with exit code 0
+2026-03-27 17:45:14,829+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:22,631+0800 INFO  miktex-dvipdfmx - this process (18820) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 交底书.pdf
+2026-03-28 14:30:22,632+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:22,639+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:23,194+0800 INFO  miktex-dvipdfmx - this process (18820) finishes with exit code 0
+2026-03-28 14:30:23,210+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:24,734+0800 INFO  miktex-dvipdfmx - this process (36352) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 交底书.pdf
+2026-03-28 14:30:24,734+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:24,741+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:25,170+0800 INFO  miktex-dvipdfmx - this process (36352) finishes with exit code 0
+2026-03-28 14:30:25,172+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:26,942+0800 INFO  miktex-dvipdfmx - this process (11976) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 检索报告.pdf
+2026-03-28 14:30:26,942+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:26,951+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:27,375+0800 INFO  miktex-dvipdfmx - this process (11976) finishes with exit code 0
+2026-03-28 14:30:27,376+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:28,913+0800 INFO  miktex-dvipdfmx - this process (36464) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 检索报告.pdf
+2026-03-28 14:30:28,913+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:28,921+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:29,360+0800 INFO  miktex-dvipdfmx - this process (36464) finishes with exit code 0
+2026-03-28 14:30:29,361+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:30,880+0800 INFO  miktex-dvipdfmx - this process (33876) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 权利要求书.pdf
+2026-03-28 14:30:30,880+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:30,889+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:31,155+0800 INFO  miktex-dvipdfmx - this process (33876) finishes with exit code 0
+2026-03-28 14:30:31,156+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:32,652+0800 INFO  miktex-dvipdfmx - this process (13656) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 权利要求书.pdf
+2026-03-28 14:30:32,653+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:32,661+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:32,990+0800 INFO  miktex-dvipdfmx - this process (13656) finishes with exit code 0
+2026-03-28 14:30:32,991+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:35,262+0800 INFO  miktex-dvipdfmx - this process (37880) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 权利要求书_审查稳版.pdf
+2026-03-28 14:30:35,262+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:35,273+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:35,666+0800 INFO  miktex-dvipdfmx - this process (37880) finishes with exit code 0
+2026-03-28 14:30:35,668+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:38,112+0800 INFO  miktex-dvipdfmx - this process (5592) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 权利要求书_审查稳版.pdf
+2026-03-28 14:30:38,112+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:38,124+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:38,522+0800 INFO  miktex-dvipdfmx - this process (5592) finishes with exit code 0
+2026-03-28 14:30:38,524+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:40,422+0800 INFO  miktex-dvipdfmx - this process (37488) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 摘要.pdf
+2026-03-28 14:30:40,423+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:40,435+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:40,502+0800 INFO  miktex-dvipdfmx - this process (37488) finishes with exit code 0
+2026-03-28 14:30:40,503+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:41,882+0800 INFO  miktex-dvipdfmx - this process (35172) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 摘要.pdf
+2026-03-28 14:30:41,882+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:41,890+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:41,956+0800 INFO  miktex-dvipdfmx - this process (35172) finishes with exit code 0
+2026-03-28 14:30:41,957+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:43,824+0800 INFO  miktex-dvipdfmx - this process (39812) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 说明书.pdf
+2026-03-28 14:30:43,824+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:43,842+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:44,561+0800 INFO  miktex-dvipdfmx - this process (39812) finishes with exit code 0
+2026-03-28 14:30:44,563+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
+2026-03-28 14:30:46,810+0800 INFO  miktex-dvipdfmx - this process (6584) started by xelatex in directory C:\Users\Lenovo\patents\7_SASPH-6G_Slice-Adaptive_Split-PQC_Handshake with command line: miktex-dvipdfmx.exe --miktex-enable-installer -q -E -o 说明书.pdf
+2026-03-28 14:30:46,810+0800 INFO  miktex-dvipdfmx - running on Windows 10.0.26200
+2026-03-28 14:30:46,819+0800 WARN  miktex-dvipdfmx - security risk: running with elevated privileges
+2026-03-28 14:30:47,265+0800 INFO  miktex-dvipdfmx - this process (6584) finishes with exit code 0
+2026-03-28 14:30:47,266+0800 ERROR miktex-dvipdfmx - major issue: So far, you have not checked for MiKTeX updates.
