@@ -1,0 +1,122 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{基于注意力语义感知的静默KV缓存淘汰与原位压缩的方法、装置、芯片及介质} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.04.02} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明不涉及量子计算。本字段与其标题沿用模板格式，按模板要求保留。对应到本发明的技术背景为：大模型推理的关键瓶颈正在从算术计算转向显存墙、数据调度与软件开销。KV Cache 的容量与带宽消耗决定了长上下文与多会话并发能力。现有方案多依赖软件侧统计、淘汰与压缩，带来额外 kernel、同步点与尾延迟抖动。本发明通过在硬件侧旁路获取注意力分数并维护 token 热度衰减计数器，实现 KV Cache 的静默淘汰与原位压缩，对上层框架透明，适用于云端与端侧推理加速器。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 二、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 注意力分数, 旁路获取, 总线窃听, 语义感知
+(2) KV缓存, KV Cache, 长上下文, 显存墙
+(3) 静默淘汰, 后台回收, 透明重映射, 语义页表
+(4) 原位压缩, 量化打包, 按需解压, 内存控制器
+
+\textbf{外文检索关键词：}
+(1) attention score snooping, semantic-aware memory management, Semantic-MMU
+(2) KV cache eviction, long context, transformer inference, memory wall
+(3) silent eviction, background reclamation, transparent remapping, semantic page table
+(4) in-place compression, quantization packing, on-demand decompression, memory controller
+
+% 三、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness} \newline arXiv/开源实现 \newline Dao, T. 等 \\
+\hline
+2 & A (基础技术) & \textbf{vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention} \newline arXiv/开源实现 \newline Kwon, W. 等 \\
+\hline
+3 & Y (相关技术) & \textbf{StreamingLLM: Efficient Streaming Language Models with Attention Sinks} \newline arXiv/开源实现 \newline Xiao, G. 等 \\
+\hline
+4 & Y (相关技术) & \textbf{Memory Compression / Unified Virtual Memory (UVM) in GPU/Accelerator Systems} \newline GPU/加速器公开白皮书与学术论文（综述类） \newline 多来源 \\
+\hline
+\end{longtable}
+
+% 四、分析评述
+\section*{三、分析评述}
+
+\textbf{1. 与文献1（FlashAttention）对比分析：}
+文献1从 IO 视角优化注意力计算的数据搬运与算子融合，降低访存开销并提升吞吐，但其主要聚焦于注意力算子本身，并未提供一种基于注意力语义对 KV Cache 进行生命周期管理（热度统计、静默淘汰、原位压缩与透明重映射）的硬件机制。本发明将注意力分数作为“语义信号”下沉到内存管理层，实现对 KV 的后台回收与压缩，目标不同且互补。
+
+\textbf{2. 与文献2（PagedAttention/vLLM）对比分析：}
+文献2提出分页式 KV 管理以减少碎片并提升服务效率，但其页表维护、回收策略与一定程度的决策仍依赖软件与运行时，且难以避免在压力场景下的同步与尾延迟抖动。本发明在硬件侧旁路获取注意力分数并维护热度衰减计数器，能够在不改变上层框架的情况下静默执行回收与压缩，减少软件参与并提升尾延迟稳定性。
+
+\textbf{3. 与文献3（StreamingLLM/Attention Sinks）对比分析：}
+文献3通过算法层策略在长序列流式推理中保持关键 token 并丢弃部分历史信息，属于软件侧的语义启发式方法。该类方法通常需要框架/运行时支持，并可能引入精度或行为差异。本发明的语义信号来自模型真实注意力分数（或其统计量），并在硬件内存管理层实现淘汰与压缩，对上层透明且可配置回退策略，能够在更广泛模型与框架下落地。
+
+\textbf{4. 与文献4（内存压缩/UVM）对比分析：}
+文献4涉及通用的内存压缩、统一虚拟内存与分层存储管理，通常基于地址与访问局部性进行策略决策，缺乏针对 Transformer 语义（注意力分数）的专用输入通路与 token 级热度衰减机制。本发明提出注意力旁路获取、token 热度表、静默淘汰与语义页表等组合，使内存管理与模型语义闭环，更适用于大模型推理工作负载。
+
+% 五、检索结论
+\section*{四、检索结论}
+
+经检索，未发现与本申请全部技术特征相同的现有技术。本申请提出的“注意力分数旁路获取 + 硬件热度衰减计数器 + KV 静默淘汰回收 + 原位压缩/按需解压 + 透明重映射一致性保障”的组合方案，能够在不改变上层推理框架编程模型的前提下显著降低软件开销与尾延迟抖动，具有显著的新颖性与创造性。
+
+\end{document}
