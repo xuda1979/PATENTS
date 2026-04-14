@@ -1,0 +1,250 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array,tabularx}
+\usepackage{enumitem,hyperref,fancyhdr,xcolor,setspace}
+\usepackage{ragged2e}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & 量子-经典异构光纤网络的动态波分复用与路由控制方法 \\
+        \hline
+        \textbf{申报单位} & 研究院 \\
+        \hline
+        \textbf{检索人} & Codex（依据公开专利与论文资料整理） \\
+        \hline
+        \textbf{审核人} & 待补充 \\
+        \hline
+        \textbf{检索日期} & 2026.03.26 \\
+        \hline
+        \textbf{相关项目} & 量子保密通信网络与现网光传送网融合部署相关研究 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算/量子通信的关联说明：}
+本申请针对的是 QKD 等量子通信信号与经典高速业务在同一根光纤中的共纤传输问题。其核心矛盾来自经典光功率引起的拉曼散射和串扰会淹没极弱的单光子量子信号，因此属于量子保密通信网络工程化部署中的基础关键技术。
+}}
+
+\section*{一、发明名称}
+
+量子-经典异构光纤网络的动态波分复用与路由控制方法
+
+\section*{二、使用的中文与外文检索词}
+
+\textbf{中文检索词：}
+\begin{enumerate}[label=(\arabic*)]
+    \item 量子密钥分发，共纤传输，经典光，量子光，拉曼散射；
+    \item 波分复用，波长分配，动态波长，量子波长，保护带；
+    \item 光路由，路由控制，ROADM，WSS，软件定义光网络；
+    \item 时间窗，门控探测，时隙调度，时间滤波；
+    \item 纠错编码，LDPC，密钥率，QBER，自适应控制。
+\end{enumerate}
+
+\textbf{英文检索词：}
+\begin{enumerate}[label=(\arabic*)]
+    \item quantum key distribution, coexistence, classical channels, quantum channels, Raman noise;
+    \item WDM, wavelength assignment, dynamic wavelength allocation, quantum wavelength;
+    \item routing control, ROADM, WSS, software-defined optical network, SDN;
+    \item emission time window, detector gating, time scheduling, temporal filtering;
+    \item adaptive error correction, secure key rate, QBER, noise-aware control.
+\end{enumerate}
+
+\textbf{检索数据库与范围：}
+\begin{itemize}[leftmargin=2em]
+    \item 专利数据库：Google Patents、USPTO、WIPO、CNIPA 公开信息；
+    \item 论文数据库：Physical Review、Optica/OSA、IEEE、Nature 系列公开论文信息；
+    \item 检索时间范围：2000年1月1日至2026年3月26日；
+    \item 检索目标：重点筛查“QKD over WDM”“quantum-classical coexistence”“dynamic wavelength/routing control”等相关公开方案。
+\end{itemize}
+
+\section*{三、相关专利文献}
+
+\textbf{P1．US7826749B2，Method and system for quantum key distribution over multi-user WDM network with wavelength routing}
+
+公开内容要点：该文献公开了在多用户 WDM 网络中通过波长路由承载量子密钥分发业务，解决的是量子业务在多用户波分网络中的接入与路由问题。
+
+与本申请的相关性：属于\textbf{量子业务与 WDM 网络结合}的早期核心文献，可视为最接近背景之一。
+
+与本申请的主要差异：该文献重点在于量子业务进入 WDM 网络的\textbf{结构性可行性}，未公开基于实时噪声感知的\textbf{在线波长切换、时间窗调度、纠错联动和路径重规划闭环}。
+
+\vspace{0.5em}
+\textbf{P2．US8050566B2，System and methods for quantum key distribution over WDM links}
+
+公开内容要点：该文献公开了在 WDM 链路上传输 QKD 信号的系统方案，侧重于量子信号与经典链路的并存实现。
+
+与本申请的相关性：属于\textbf{量子-经典共纤}方向的重要基础文献。
+
+与本申请的主要差异：该文献没有将\textbf{路由、量子波长、时间窗与纠错配置}作为统一决策变量，也未形成基于运行期遥测信息的跨层控制平面。
+
+\vspace{0.5em}
+\textbf{P3．CN115913527B，一种经典光和量子光协同传输的纤芯及波长分配方法}
+
+公开内容要点：该文献针对经典光与量子光协同传输中的纤芯/波长分配问题提出优化方案，核心仍然是资源规划。
+
+与本申请的相关性：其关注点与本申请最接近，即共同面向经典光与量子光协同承载。
+
+与本申请的主要差异：该文献偏向\textbf{静态或准静态的分配规则}，未公开面向现网业务波动的\textbf{在线噪声感知 + 动态重构}机制，也未公开量子发射时间窗和纠错编码联动调度。
+
+\vspace{0.5em}
+\textbf{P4．US20210119787A1，Quantum key distribution and management in passive optical networks}
+
+公开内容要点：该文献公开了在 PON 网络中部署 QKD 与管理量子密钥的方案。
+
+与本申请的相关性：说明现有技术已经探索把量子业务叠加到现网接入光网络。
+
+与本申请的主要差异：该文献关注接入架构和密钥管理，不涉及面向 DWDM/ROADM 现网的\textbf{动态共纤噪声治理与跨层控制}。
+
+\section*{四、相关非专利文献}
+
+\textbf{N1．K. A. Patel 等，Coexistence of High-Bit-Rate Quantum Key Distribution and Data on Optical Fiber，Physical Review X，2012-11-20}
+
+相关性：该论文明确指出量子信号与经典数据信号共纤时会受到噪声光子污染，并通过时间滤波降低噪声影响，是本申请“时间窗控制”背景的重要文献。
+
+差异点：其重点在于\textbf{物理层实验验证}和时间滤波效果，并未涉及广域网络中的动态路由、动态波长和纠错联动。
+
+\vspace{0.5em}
+\textbf{N2．Yuan Cao 等，Resource Assignment Strategy in Optical Networks Integrated With Quantum Key Distribution，JOCN，2017}
+
+相关性：该论文提出了 QKD 融合光网络中的资源分配与 RWTA 思路，是本申请“联合路由/波长/时隙”背景的重要参考。
+
+差异点：该论文属于\textbf{静态规划或离线启发式分配}，没有引入基于实时拉曼噪声与 QBER 的在线闭环控制。
+
+\vspace{0.5em}
+\textbf{N3．Yuan Cao 等，Time-Scheduled Quantum Key Distribution Over WDM Networks，Journal of Lightwave Technology，2018-08-15}
+
+相关性：该论文进一步把时间调度引入 WDM 网络中的 QKD 资源安排，与本申请在“时间维度参与调度”上较为接近。
+
+差异点：该论文仍然更偏向\textbf{网络层静态资源安排}，未把实时光噪声感知、量子波长迁移、路径重规划、探测门控和纠错配置统一进同一在线控制回路。
+
+\section*{五、特征对比分析}
+
+为便于判断本申请的新颖性，归纳本申请的五项核心特征如下：
+\begin{enumerate}[label=F\arabic*.]
+    \item 量子链路的链路段-波长-时间窗三级噪声感知；
+    \item 路由、量子波长和发射时间窗的联合求解；
+    \item 基于实测/预测 QBER 与密钥率的在线重配置触发；
+    \item 量子探测门控与纠错参数联动调节；
+    \item 面向 ROADM/OTN/QKD 设备的闭环执行架构。
+\end{enumerate}
+
+\renewcommand{\arraystretch}{1.3}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{|L{1.1cm}|L{1.55cm}|L{1.55cm}|L{1.55cm}|L{1.55cm}|L{1.55cm}|X|}
+\hline
+\textbf{文献} & \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} & \textbf{F5} & \textbf{结论} \\
+\hline
+P1 & 否 & 部分覆盖（波长路由） & 否 & 否 & 否 & 仅公开 WDM 中量子业务路由，缺少在线闭环 \\
+\hline
+P2 & 否 & 部分覆盖（共纤链路） & 否 & 否 & 否 & 偏向链路共存实现，未公开跨层联合控制 \\
+\hline
+P3 & 否 & 部分覆盖（分配规则） & 否 & 否 & 否 & 接近资源规划，但未公开时间窗和纠错联动 \\
+\hline
+P4 & 否 & 否 & 否 & 否 & 否 & 更关注接入网络中的密钥分发与管理 \\
+\hline
+N1 & 部分覆盖（物理层噪声） & 否 & 否 & 部分覆盖（时间滤波） & 否 & 论文验证共纤与时间滤波，不是网络控制方案 \\
+\hline
+N2/N3 & 否或部分覆盖 & 部分覆盖 & 否 & 否 & 否 & 主要是离线资源分配，不是现网在线闭环 \\
+\hline
+\end{tabularx}
+\normalsize
+\setlength{\tabcolsep}{6pt}
+
+\section*{六、检索结论}
+
+综合截至\textbf{2026年3月26日}检索到的公开专利和论文资料，可以得出以下初步结论：
+\begin{enumerate}[label=(\arabic*)]
+    \item 现有技术已经公开了\textbf{量子与经典信号共纤传输}、\textbf{QKD 融合 WDM 网络}以及\textbf{静态或离线的波长/时隙资源分配}；
+    \item 现有技术中也存在对\textbf{时间滤波}、\textbf{拉曼噪声抑制}和\textbf{链路结构规划}的探索；
+    \item 但尚未检索到与本申请\textbf{“链路段-波长-时间窗实时噪声感知 + 路由/波长/时间窗/纠错联合决策 + 现网 ROADM/OTN/QKD 闭环执行”}完全相同或实质等同的公开方案。
+\end{enumerate}
+
+因此，本申请相对于现有公开技术，具备较强的新颖性挖掘空间。后续撰写权利要求时，建议重点突出：
+\begin{itemize}[leftmargin=2em]
+    \item 噪声感知模型的维度与触发逻辑；
+    \item 联合决策变量的完整性；
+    \item 在线平滑迁移与重叠保护机制；
+    \item 与现网控制面的兼容接口。
+\end{itemize}
+
+\section*{七、最接近现有技术认定与撰写建议}
+
+结合本次检索结果，建议将\textbf{P3（CN115913527B）}认定为最接近的中文现有技术背景，将\textbf{P1（US7826749B2）}认定为最接近的国际专利背景，两者与本申请共同处于“量子与经典业务协同承载”的同一技术方向，但仍未公开本申请的核心组合特征。
+
+\subsection*{（一）最近似现有技术的确定与对比口径}
+
+P3 与本申请在“经典光与量子光共纤协同承载”这一主线最为接近，但其更偏向\textbf{资源分配/规划}，对现网运行期的闭环控制涉及较少。为便于代理人撰写创造性意见与权利要求书，本报告建议以 P3 作为创造性对比的主引用，并以 P1/P2/N3/N1 分别作为“网络路由背景”“共纤链路背景”“时间维度背景”“物理层噪声背景”的辅助引用。
+
+\subsection*{（二）差异特征（区别特征）归纳}
+
+相对于 P3，本申请的差异特征可归纳为：
+\begin{enumerate}[label=(D\arabic*)]
+    \item \textbf{链路段-波长-时间窗三级噪声感知与定位}：以三维粒度对噪声与量子链路质量进行实时感知与定位，而非仅给出静态/准静态分配规则。
+    \item \textbf{路由/波长/时间窗/门控/纠错的联合决策}：将量子路由、量子波长、发射时间窗、探测门控参数与纠错配置作为统一决策变量进行联合求解，并考虑对经典业务的扰动代价。
+    \item \textbf{基于预测指标的在线触发与闭环重构}：以预测 $QBER$ 与预测安全密钥率是否越限作为触发条件，执行在线重配置，并用实测反馈对模型与权重进行自适应修正。
+    \item \textbf{平滑迁移的重叠保护与回滚机制}：在波长迁移/路径迁移窗口期保持新旧配置重叠保护，并在重构失败或效果不达标时触发回滚与短期禁用列表，以提高现网可用性与稳定性。
+    \item \textbf{面向 ROADM/OTN/QKD 设备协同的闭环执行架构与审计输出}：明确控制器/编排器与现网控制面的接口交互、执行回执与审计记录输出，形成“可测---可算---可控---可审计”的工程闭环。
+\end{enumerate}
+
+\subsection*{（三）可专利性判断（初步）}
+
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{新颖性（初步）}：在本报告检索范围内，尚未发现单一公开文本同时公开上述 D1--D5 的组合特征，尤其是“三级噪声感知 + 联合决策 + 在线触发 + 重叠保护/回滚 + 现网闭环执行”的整体方案。
+    \item \textbf{创造性（初步）}：即便将 P3 与 N3（时间调度）以及 N1（物理层噪声实验）进行组合，也仍缺少把运行期遥测、预测建模、分层重配置（先协议层后光层再路由）、以及平滑迁移/回滚整合为可部署控制平面的动机与实现路径。该体系化闭环所带来的技术效果（在业务波动下维持密钥率、降低对暗纤的依赖、降低对经典业务扰动）可作为创造性论证主线。
+    \item \textbf{审查风险点}：可能出现的否定路径包括“离线 RWTA + 时间调度 + 常规 SDN 控制”的泛化组合。建议在权利要求中把\textbf{触发判据（预测 $QBER$/$R_{\mathrm{sec}}$）、噪声张量/热力图、分层优先级、重叠保护与回滚}写成可执行限定，以抵御泛化解释。
+\end{enumerate}
+
+\subsection*{（四）撰写与规避建议（增强版）}
+
+后续正式撰写权利要求时，建议重点规避以下两类写法：
+\begin{enumerate}[label=(\arabic*)]
+    \item 不宜仅写成“对量子信道动态选择波长或路由”，否则容易被静态资源分配或一般性网络控制文献覆盖；
+    \item 不宜仅写成“检测噪声后调整参数”，否则容易被物理层一般反馈控制方案削弱新颖性。
+\end{enumerate}
+
+建议优先强调以下组合限定（建议作为独立权利要求骨架或关键从属限定）：
+\begin{enumerate}[label=(\arabic*)]
+    \item 链路段-波长-时间窗三级噪声感知；
+    \item 路由、量子波长、发射时间窗、探测门控和纠错参数的联合求解；
+    \item 基于预测 QBER 或预测密钥率的触发逻辑；
+    \item 新旧配置重叠保护与平滑迁移执行机制；
+    \item 面向 ROADM/OTN/QKD 设备协同的控制平面实现。
+\end{enumerate}
+
+为提高布局稳健性并降低被“部分删除特征”绕开的风险，建议采用\textbf{一组主权利要求 + 多组并列从属分支}的写法，例如：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{主权利要求（方法/系统）}覆盖“三级噪声感知 + 触发判据 + 联合决策 + 闭环执行（含重叠保护/回滚）”；
+    \item \textbf{从属分支1（偏时域）}强调时间窗与经典业务空闲间隙对齐的调度策略、门控相位与门宽自适应；
+    \item \textbf{从属分支2（偏纠错）}强调纠错码率、块长、重传门限与 $QBER$ 分布联动的自适应策略；
+    \item \textbf{从属分支3（偏现网接口）}强调与 ROADM/OTN 遥测与指令接口的交互流程、执行回执与审计输出；
+    \item \textbf{从属分支4（偏稳定性）}强调分层优先级、最小驻留时间、切换滞回与候选动作禁用列表等抗震荡机制。
+\end{enumerate}
+
+\end{document}
