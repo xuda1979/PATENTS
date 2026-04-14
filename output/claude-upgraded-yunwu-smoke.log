@@ -1,0 +1,126 @@
+2026-04-14T04:07:45.702Z [DEBUG] MDM settings load completed in 4ms
+2026-04-14T04:07:45.742Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: C:\Program Files\ClaudeCode\managed-settings.json
+2026-04-14T04:07:45.744Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: C:\Users\Lenovo\patents\.claude\settings.json
+2026-04-14T04:07:45.744Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: C:\Users\Lenovo\patents\.claude\settings.local.json
+2026-04-14T04:07:45.746Z [DEBUG] CA certs: Config fallback - globalEnv keys: , settingsEnv keys: none
+2026-04-14T04:07:45.750Z [DEBUG] [init] configureGlobalMTLS starting
+2026-04-14T04:07:45.751Z [DEBUG] [init] configureGlobalMTLS complete
+2026-04-14T04:07:45.751Z [DEBUG] [init] configureGlobalAgents starting
+2026-04-14T04:07:45.752Z [DEBUG] CA certs: stores=bundled,system, extraCertsPath=undefined
+2026-04-14T04:07:45.753Z [DEBUG] [init] configureGlobalAgents complete
+2026-04-14T04:07:45.835Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2026-04-14T04:07:45.837Z [DEBUG] Error log sink initialized
+2026-04-14T04:07:45.861Z [DEBUG] Preserving file permissions: 100666
+2026-04-14T04:07:45.861Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.20908.1776139665860
+2026-04-14T04:07:45.862Z [DEBUG] Temp file written successfully, size: 8834 bytes
+2026-04-14T04:07:45.863Z [DEBUG] Applied original permissions to temp file
+2026-04-14T04:07:45.863Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.20908.1776139665860 to C:\Users\Lenovo\.claude.json
+2026-04-14T04:07:45.864Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-14T04:07:45.870Z [DEBUG] Preserving file permissions: 100666
+2026-04-14T04:07:45.870Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.20908.1776139665870
+2026-04-14T04:07:45.871Z [DEBUG] Temp file written successfully, size: 8860 bytes
+2026-04-14T04:07:45.872Z [DEBUG] Applied original permissions to temp file
+2026-04-14T04:07:45.872Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.20908.1776139665870 to C:\Users\Lenovo\.claude.json
+2026-04-14T04:07:45.872Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-14T04:07:45.880Z [DEBUG] [claudeai-mcp] No access token
+2026-04-14T04:07:45.881Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-04-14T04:07:45.890Z [DEBUG] installed_plugins.json doesn't exist, returning empty V2 object
+2026-04-14T04:07:45.891Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-04-14T04:07:45.893Z [DEBUG] [STARTUP] Running setup()...
+2026-04-14T04:07:45.900Z [DEBUG] Loading skills from: managed=C:\Program Files\ClaudeCode\.claude\skills, user=C:\Users\Lenovo\.claude\skills, project=[]
+2026-04-14T04:07:45.903Z [DEBUG] Error log sink initialized
+2026-04-14T04:07:46.588Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2026-04-14T04:07:46.619Z [DEBUG] Total plugin skills loaded: 0
+2026-04-14T04:07:46.620Z [DEBUG] Total plugin commands loaded: 0
+2026-04-14T04:07:46.626Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-04-14T04:07:46.636Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\Lenovo\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2026-04-14T04:07:46.638Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Program Files\ClaudeCode\.claude\agents: IO error for operation on C:\Program Files\ClaudeCode\.claude\agents: The system cannot find the path specified. (os error 3)
+), 0 results
+2026-04-14T04:07:46.639Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Users\Lenovo\.claude\commands: IO error for operation on C:\Users\Lenovo\.claude\commands: The system cannot find the file specified. (os error 2)
+), 0 results
+2026-04-14T04:07:46.640Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Program Files\ClaudeCode\.claude\commands: IO error for operation on C:\Program Files\ClaudeCode\.claude\commands: The system cannot find the path specified. (os error 3)
+), 0 results
+2026-04-14T04:07:46.641Z [DEBUG] Loaded 0 unique skills (0 unconditional, 0 conditional, managed: 0, user: 0, project: 0, additional: 0, legacy commands: 0)
+2026-04-14T04:07:46.642Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills, 9 bundled skills, 0 builtin plugin skills
+2026-04-14T04:07:46.648Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Users\Lenovo\.claude\agents: IO error for operation on C:\Users\Lenovo\.claude\agents: The system cannot find the file specified. (os error 2)
+), 0 results
+2026-04-14T04:07:46.650Z [DEBUG] Total plugin agents loaded: 0
+2026-04-14T04:07:46.658Z [DEBUG] [STARTUP] setup() completed in 765ms
+2026-04-14T04:07:46.658Z [DEBUG] Cleared CA certificates cache
+2026-04-14T04:07:46.659Z [DEBUG] Cleared mTLS configuration cache
+2026-04-14T04:07:46.659Z [DEBUG] Cleared proxy agent cache
+2026-04-14T04:07:46.659Z [DEBUG] CA certs: stores=bundled,system, extraCertsPath=undefined
+2026-04-14T04:07:46.663Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-04-14T04:07:46.664Z [DEBUG] [ToolSearch:optimistic] disabled: ANTHROPIC_BASE_URL=https://api.yunwu.ai is not a first-party Anthropic host. Set ENABLE_TOOL_SEARCH=true (or auto / auto:N) if your proxy forwards tool_reference blocks.
+2026-04-14T04:07:46.750Z [DEBUG] [STARTUP] Commands and agents loaded in 87ms
+2026-04-14T04:07:46.750Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-04-14T04:07:46.751Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-04-14T04:07:46.751Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-04-14T04:07:46.752Z [DEBUG] Starting background startup prefetches
+2026-04-14T04:07:46.753Z [DEBUG] [Bootstrap] Skipped: Nonessential traffic disabled
+2026-04-14T04:07:46.753Z [DEBUG] [STARTUP] MCP configs resolved in 11ms (awaited at +872ms)
+2026-04-14T04:07:46.757Z [DEBUG] Total LSP servers loaded: 0
+2026-04-14T04:07:46.757Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2026-04-14T04:07:46.757Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-04-14T04:07:46.757Z [DEBUG] LSP manager initialized with 0 servers
+2026-04-14T04:07:46.759Z [DEBUG] Cleared CA certificates cache
+2026-04-14T04:07:46.759Z [DEBUG] Cleared mTLS configuration cache
+2026-04-14T04:07:46.759Z [DEBUG] Cleared proxy agent cache
+2026-04-14T04:07:46.760Z [DEBUG] CA certs: stores=bundled,system, extraCertsPath=undefined
+2026-04-14T04:07:46.761Z [DEBUG] LSP server manager initialized successfully
+2026-04-14T04:07:46.762Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-04-14T04:07:46.782Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:46.786Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-04-14T04:07:46.786Z [DEBUG] [3P telemetry] isTelemetryEnabled=false (CLAUDE_CODE_ENABLE_TELEMETRY=0)
+2026-04-14T04:07:46.815Z [DEBUG] [auto-mode] hasAutoModeOptIn=false skipAutoPermissionPrompt: user=undefined local=undefined flag=undefined policy=undefined
+2026-04-14T04:07:46.816Z [DEBUG] [auto-mode] verifyAutoModeGateAccess: enabledState=opt-in disabledBySettings=false model=claude-opus-4-6 modelSupported=true disableFastModeBreakerFires=false carouselAvailable=false canEnterAuto=true
+2026-04-14T04:07:46.817Z [DEBUG] [auto-mode] verifyAutoModeGateAccess setAvailable: true -> false
+2026-04-14T04:07:46.842Z [DEBUG] Plugin autoupdate: skipped (auto-updater disabled)
+2026-04-14T04:07:46.858Z [DEBUG] [ScheduledTasks] scheduler start() — enabled=false, hasTasks=false
+2026-04-14T04:07:46.859Z [DEBUG] installPluginsForHeadless: starting
+2026-04-14T04:07:46.859Z [DEBUG] installPluginsForHeadless: no marketplaces declared
+2026-04-14T04:07:46.867Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-04-14T04:07:46.876Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.105.216; cc_entrypoint=sdk-cli; cch=00000;
+2026-04-14T04:07:46.877Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:46.880Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:46.884Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-04-14T04:07:46.884Z [DEBUG] [API:auth] OAuth token check starting
+2026-04-14T04:07:46.948Z [DEBUG] [API:auth] OAuth token check complete
+2026-04-14T04:07:46.950Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:46.960Z [DEBUG] [API REQUEST] /v1/messages source=generate_session_title
+2026-04-14T04:07:46.969Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Program Files\ClaudeCode\.claude\output-styles: IO error for operation on C:\Program Files\ClaudeCode\.claude\output-styles: The system cannot find the path specified. (os error 3)
+), 0 results
+2026-04-14T04:07:46.971Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Users\Lenovo\.claude\plugins\cache: IO error for operation on C:\Users\Lenovo\.claude\plugins\cache: The system cannot find the file specified. (os error 2)
+), 0 results
+2026-04-14T04:07:46.971Z [DEBUG] rg error (signal=null, code=2, stderr: rg: C:\Users\Lenovo\.claude\output-styles: IO error for operation on C:\Users\Lenovo\.claude\output-styles: The system cannot find the file specified. (os error 2)
+), 0 results
+2026-04-14T04:07:46.972Z [DEBUG] Total plugin output styles loaded: 0
+2026-04-14T04:07:46.995Z [DEBUG] Watching for changes in setting files C:\Users\Lenovo\.claude\settings.json...
+2026-04-14T04:07:47.011Z [DEBUG] Git remote URL: https://github.com/xuda1979/PATENTS
+2026-04-14T04:07:47.013Z [DEBUG] Parsed repository: github.com/xuda1979/PATENTS from URL: https://github.com/xuda1979/PATENTS
+2026-04-14T04:07:47.053Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-04-14T04:07:47.054Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-04-14T04:07:47.056Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-04-14T04:07:47.058Z [DEBUG] Sending 5 skills via attachment (initial, 5 total sent)
+2026-04-14T04:07:47.059Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-04-14T04:07:47.060Z [WARN] [3P telemetry] Event dropped (no event logger initialized): user_prompt
+2026-04-14T04:07:47.076Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:47.082Z [DEBUG] autocompact: tokens=594 threshold=167000 effectiveWindow=180000
+2026-04-14T04:07:47.085Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-04-14T04:07:47.143Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.105.216; cc_entrypoint=sdk-cli; cch=00000;
+2026-04-14T04:07:47.147Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:47.149Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:47.151Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-04-14T04:07:47.152Z [DEBUG] [API:auth] OAuth token check starting
+2026-04-14T04:07:47.154Z [DEBUG] [API:auth] OAuth token check complete
+2026-04-14T04:07:47.156Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:47.162Z [DEBUG] [API REQUEST] /v1/messages source=sdk
+2026-04-14T04:07:49.637Z [DEBUG] Stream started - received first chunk
+2026-04-14T04:07:51.588Z [DEBUG] Stream started - received first chunk
+2026-04-14T04:07:52.512Z [DEBUG] Fast mode unavailable: Fast mode is not available in the Agent SDK
+2026-04-14T04:07:52.529Z [DEBUG] LSP server manager shut down successfully
+2026-04-14T04:07:53.109Z [DEBUG] Failed to check metrics opt-out status: Request failed with status code 403
+2026-04-14T04:07:53.110Z [DEBUG] Metrics export disabled by organization setting
+2026-04-14T04:07:53.110Z [DEBUG] BigQuery metrics exporter flush complete
+2026-04-14T04:07:53.111Z [DEBUG] BigQuery metrics exporter flush complete
+2026-04-14T04:07:53.111Z [DEBUG] BigQuery metrics exporter shutdown complete
