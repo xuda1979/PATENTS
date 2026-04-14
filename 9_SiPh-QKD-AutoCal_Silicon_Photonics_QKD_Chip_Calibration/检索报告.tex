@@ -1,0 +1,258 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array,tabularx}
+\usepackage{enumitem,hyperref,fancyhdr,xcolor,setspace}
+\usepackage{ragged2e}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & 基于硅基光电集成的微型化 QKD 芯片封装与校准技术 \\
+        \hline
+        \textbf{申报单位} & 研究院 \\
+        \hline
+        \textbf{检索人} & Codex（依据公开专利与论文资料整理） \\
+        \hline
+        \textbf{审核人} & 待补充 \\
+        \hline
+        \textbf{检索日期} & 2026.03.26 \\
+        \hline
+        \textbf{相关项目} & 量子通信芯片化与终端级集成相关研究 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算/量子通信的关联说明：}
+本申请针对的是芯片级 QKD 设备的封装与稳定校准问题。它并不直接解决量子算法，而是解决量子态制备和检测在微型终端中的可工程化问题，属于量子保密通信硬件落地过程中的关键支撑技术。
+}}
+
+\section*{一、发明名称}
+
+基于硅基光电集成的微型化 QKD 芯片封装与校准技术
+
+\section*{二、使用的中文与外文检索词}
+
+\textbf{中文检索词：}
+\begin{enumerate}[label=(\arabic*)]
+    \item 硅光，硅基光电集成，QKD 芯片，量子密钥分发芯片；
+    \item 片上校准，自校准，参考波导，微环反馈，波长锁定；
+    \item 温度补偿，应力补偿，封装应力，终端发热，振动稳定；
+    \item DV-QKD，CV-QKD，干涉稳定，量子态调制，监测光路。
+\end{enumerate}
+
+\textbf{英文检索词：}
+\begin{enumerate}[label=(\arabic*)]
+    \item silicon photonics, chip-based QKD, integrated photonic QKD;
+    \item self-calibration, reference waveguide, wavelength locking, photonic integrated circuit;
+    \item temperature compensation, stress compensation, package-induced drift;
+    \item DV-QKD, CV-QKD, stable quantum key distribution, feedback control.
+\end{enumerate}
+
+\textbf{检索数据库与范围：}
+\begin{itemize}[leftmargin=2em]
+    \item 专利数据库：Google Patents、EPO、USPTO、CNIPA 公开信息；
+    \item 论文数据库：Nature Communications、Nature Photonics、Optica、Optics Express；
+    \item 检索时间范围：2015年1月1日至2026年3月26日；
+    \item 检索重点：芯片级 QKD、硅光稳定化、片上参考结构、温漂反馈和封装协同。
+\end{itemize}
+
+\section*{三、相关专利文献}
+
+\textbf{P1．EP3269077B1，Chip-based quantum key distribution}
+
+公开内容要点：围绕芯片级 QKD 实现展开，是芯片化量子密钥分发方向的重要专利文献。
+
+与本申请的相关性：说明芯片化 QKD 架构本身已有公开。
+
+与本申请的主要差异：该文献重点在于\textbf{QKD 芯片架构}，尚未针对手机等微型终端中的温度、应力和校准干扰问题提出系统化封装-反馈一体方案。
+
+\vspace{0.5em}
+\textbf{P2．US20160352515A1，Apparatus and methods for quantum key distribution}
+
+公开内容要点：属于 QKD 装置级方案，覆盖量子密钥分发系统结构。
+
+与本申请的相关性：可作为芯片/装置级 QKD 背景专利。
+
+与本申请的主要差异：未公开\textbf{差分参考波导、静默时隙校准、温应力联合解耦补偿和微型终端封装协同设计}这一组组合特征。
+
+\vspace{0.5em}
+\textbf{P3．US20230393335A1，Photonic integrated circuit design for plug-and-play measurement device independent-quantum key distribution}
+
+公开内容要点：关注 MDI-QKD 场景下的光子集成电路设计。
+
+与本申请的相关性：属于集成光子 QKD 芯片设计方向，技术距离较近。
+
+与本申请的主要差异：该文献更偏向协议相关集成设计，而非针对终端环境下的温漂/应力/封装协同校准问题。
+
+\vspace{0.5em}
+\textbf{P4．CN116243503A，一种硅光子微环波长反馈控制系统及其控制方法}
+
+公开内容要点：公开了硅光微环的波长反馈控制思路。
+
+与本申请的相关性：体现了通用硅光芯片对温漂反馈的常见技术路线。
+
+与本申请的主要差异：该文献面向\textbf{通用微环稳定化}，未结合 QKD 业务时隙、参考光污染约束、量子态调制误差和微型封装应力问题。
+
+\section*{四、相关非专利文献}
+
+\textbf{N1．P. Sibson 等，Chip-based quantum key distribution，Nature Communications，2017-01-13}
+
+相关性：该论文展示了芯片级 QKD 的可行性，是本申请最重要的技术背景之一。
+
+差异点：其重点在于芯片化 QKD 证明与实验，不是面向微型终端环境的封装与自校准技术。
+
+\vspace{0.5em}
+\textbf{N2．G. Zhang 等，An integrated silicon photonic chip platform for continuous-variable quantum key distribution，Nature Photonics，2019-08-12}
+
+相关性：该论文说明 CV-QKD 也已进入硅光集成阶段，与本申请“同时兼容 DV/CV”背景高度相关。
+
+差异点：其重点在集成 CV-QKD 平台，不涉及终端热扰动和封装应力联合补偿。
+
+\vspace{0.5em}
+\textbf{N3．Wei Geng 等，Stable quantum key distribution using a silicon photonic transceiver，Optics Express，2019-09-30}
+
+相关性：该论文明确指出硅光 QKD 收发器在温度相关稳定性方面存在挑战，并提出反馈改进，是最接近本申请背景的论文之一。
+
+差异点：该论文主要是\textbf{稳定性反馈验证}，未公开片上差分参考波导、静默校准时隙与封装协同设计的组合方案。
+
+\vspace{0.5em}
+\textbf{N4．Xingyuan Xu 等，Self-calibrating programmable photonic integrated circuits，Nature Photonics，2022-07-07}
+
+相关性：该论文公开了可编程 PIC 的自校准思路，说明片上参考路径和快速校准算法具有可行性。
+
+差异点：其面向通用可编程 PIC，不针对量子态业务的低功率约束、参考光污染风险和终端封装干扰场景。
+
+\section*{五、特征对比分析}
+
+本申请可归纳为以下五项核心特征：
+\begin{enumerate}[label=F\arabic*.]
+    \item \textbf{主光路-参考光路差分共模布局}：参考路径与主光路在版图与热环境上尽量共模，通过差分观测抑制共模扰动；
+    \item \textbf{温度与应力联合感知并解耦补偿}：同时引入温度与应力相关观测量，估计漂移来源并分别补偿；
+    \item \textbf{静默时隙校准机制}：在 QKD 超级帧/业务帧中嵌入短时校准窗，避免持续参考光污染量子探测窗口；
+    \item \textbf{封装-电路-控制协同闭环}：封装低应力结构、片上传感、反馈执行器与本地控制 ASIC 构成短闭环以适配终端快速扰动；
+    \item \textbf{面向 DV/CV 统一平台}：稳定化与校准抽象为与协议弱耦合的通用机制，可复用到 DV-QKD 与 CV-QKD 形态。
+\end{enumerate}
+
+\renewcommand{\arraystretch}{1.3}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{|L{1.4cm}|L{1.7cm}|L{1.7cm}|L{1.7cm}|L{1.7cm}|L{1.7cm}|X|}
+\hline
+\textbf{文献} & \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} & \textbf{F5} & \textbf{结论} \\
+\hline
+P1 & 否 & 否 & 否 & 否 & 否 & 公开芯片级 QKD，但未覆盖本申请的终端级自校准闭环与封装协同特征 \\
+\hline
+P2 & 否 & 否 & 否 & 否 & 否 & 装置级 QKD 背景文献，距离本申请较远 \\
+\hline
+P3 & 否 & 否 & 否 & 部分覆盖（集成芯片） & 否 & 关注集成 QKD 电路设计，但非终端稳定校准方案 \\
+\hline
+P4 & 否 & 部分覆盖（温漂反馈） & 否 & 否 & 否 & 通用硅光反馈方案，不面向 QKD 业务时隙约束与封装应力漂移 \\
+\hline
+N1/N2 & 否 & 否 & 否 & 部分覆盖（集成平台） & 否 & 证明芯片级 QKD 可行，但不涉及本申请的终端级稳定化与封装协同细节 \\
+\hline
+N3 & 否 & 部分覆盖（温度反馈） & 否 & 否 & 否 & 接近稳定化背景，但未公开“静默时隙 + 应力解耦 + 封装协同短闭环”的组合方案 \\
+\hline
+N4 & 部分覆盖（参考路径） & 部分覆盖（自校准） & 否 & 否 & 否 & 面向通用 PIC，不针对 QKD 低功率约束与终端封装应力环境 \\
+\hline
+\end{tabularx}
+\normalsize
+\setlength{\tabcolsep}{6pt}
+
+\section*{六、检索结论}
+
+综合截至\textbf{2026年3月26日}公开的专利与论文资料，可以得出以下初步结论：
+\begin{enumerate}[label=(\arabic*)]
+    \item 芯片级 QKD、硅光稳定化与通用 PIC 自校准都已有较多公开技术基础；
+    \item 但尚未检索到与本申请\textbf{“差分参考波导 + 温应力联合解耦补偿 + 静默时隙校准 + 封装-反馈协同”}完全相同或实质等同的公开方案；
+    \item 本申请聚焦的是\textbf{量子通信芯片的终端级可商用稳定化方案}，专利布局空间较大。
+\end{enumerate}
+
+后续权利要求建议重点压缩到以下方向：
+\begin{itemize}[leftmargin=2em]
+    \item 参考波导与主光路布局；
+    \item 静默时隙校准流程；
+    \item 温度/应力联合状态估计与控制量求解；
+    \item 微型终端封装结构与控制 ASIC 协同。
+\end{itemize}
+
+\section*{七、最接近现有技术认定与撰写建议}
+
+结合本次检索结果，建议将\textbf{P1（EP3269077B1）}和\textbf{N1（Chip-based quantum key distribution）}认定为最接近的芯片级 QKD 背景，将\textbf{P4（CN116243503A）}和\textbf{N4（Self-calibrating programmable photonic integrated circuits）}认定为最接近的通用硅光稳定化背景。上述文献分别覆盖“芯片级 QKD 可行性”和“通用硅光自校准”，但未形成本申请的终端级组合方案。
+
+进一步地，若后续权利要求以“终端级微型模组/装置”作为独立权利要求主线，建议优先以\textbf{P1/N1}作为最近似现有技术；若以“自校准控制方法/控制系统”作为主线，可将\textbf{N4}作为最近似现有技术（其公开自校准 PIC 的参考路径与算法框架），再突出本申请对 QKD 业务时隙约束、参考污染抑制、温应力解耦与封装协同的改进。
+
+后续正式撰写时，建议避免把发明点仅表述为：
+\begin{enumerate}[label=(\arabic*)]
+    \item 对硅光芯片进行温度补偿；
+    \item 在 QKD 芯片中增加参考光路；
+    \item 对可编程 PIC 做自校准。
+\end{enumerate}
+
+建议集中强调以下组合限定：
+\begin{enumerate}[label=(\arabic*)]
+    \item 主光路与参考波导的差分共模布局；
+    \item 温度与应力的联合感知和解耦估计；
+    \item 嵌入 QKD 超级帧的静默校准时隙；
+    \item 面向手机、手表等微型终端的低应力封装结构；
+    \item 光子芯片、控制 ASIC 和反馈执行器的协同闭环。
+\end{enumerate}
+
+\section*{八、最近似现有技术对比、区别技术特征与创造性论证要点}
+
+\textbf{（一）以 P1/N1 作为最近似现有技术的论证主线（装置/模组类权利要求）}
+
+P1/N1 公开了芯片级 QKD 的基本架构与可行性，但未给出面向手机等终端的稳定校准工程方案。相对于 P1/N1，本申请的\textbf{区别技术特征}可概括为：
+\begin{enumerate}[label=(\arabic*)]
+    \item 设置与主光路尽量共模的\textbf{参考波导/参考路径}并用于差分观测，以提高对温漂与应力漂移的可观测性；
+    \item 同时引入温度与应力相关传感/观测量，执行\textbf{温应力联合估计与解耦补偿}；
+    \item 在 QKD 业务帧内设置\textbf{静默校准时隙}，以低占空比参考注入实现校准与业务共存，抑制参考光对量子探测的污染风险；
+    \item 将\textbf{封装低应力结构}与\textbf{本地控制 ASIC+执行器}形成短闭环协同设计，以适配终端快速热扰动、振动/弯折与装配残余应力。
+\end{enumerate}
+
+上述区别特征产生的\textbf{技术效果}包括：提高漂移来源可分辨性、降低校准对量子业务的干扰、缩短反馈时延并增强在终端工况下的稳定性与可商用性。由此可形成的\textbf{客观技术问题}可表述为：在微型终端复杂热/力扰动条件下，如何在不污染量子态探测窗口的前提下，实现硅光 QKD 芯片长期稳定工作与快速自校准。
+
+\textbf{创造性要点}：P1/N1 主要关注 QKD 芯片架构与实验可行性，缺乏将封装应力漂移、终端快速热扰动与 QKD 低功率探测窗口约束纳入统一闭环的技术启示；将通用 PIC 的自校准思路简单迁移到 QKD 终端场景，仍会面临参考注入污染与封装应力不可观测等关键障碍。本申请通过“差分参考可观测性 + 温应力解耦 + 静默时隙校准 + 封装/控制协同短闭环”的组合解决上述障碍，具有整体性与协同效果，具备较强创造性论证空间。
+
+\textbf{（二）以 N4 作为最近似现有技术的论证主线（校准控制方法类权利要求）}
+
+N4 公开通用可编程 PIC 的自校准框架，但其未针对 QKD 的业务时隙、低光子数探测窗口与终端封装应力扰动场景。本申请可进一步强调：校准时序与参考注入隔离方式（静默时隙、门控）、温应力联合观测与解耦、以及封装结构作为闭环一部分的协同设计，从而将“通用自校准”限定为“面向 QKD 终端可商用的自校准闭环”。
+
+\section*{九、撰写策略与权利要求布局建议（面向代理人交稿）}
+
+为提高授权概率并便于后续分案/延续布局，建议采用“装置+方法+封装结构+程序”的组合布局，并对特征进行层次化抽象：
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{独立权利要求1（模组/装置）}：限定光子芯片（主光路+参考路径+监测单元）、执行器（加热器/相位调节/衰减/开关等）、控制单元（本地 ASIC/控制器）与封装低应力结构的组合关系，并突出短闭环与终端适配。
+    \item \textbf{独立权利要求2（方法）}：限定静默时隙校准的时序流程（业务时隙与校准时隙编排、参考注入控制、观测量获取、状态估计、反馈更新）以及触发逻辑（事件触发/阈值触发/多时间尺度控制）。
+    \item \textbf{独立权利要求3（封装结构）}：限定对称固定/低 CTE 基座/应力释放槽或柔性连接梁/光学 I/O 对准保持结构等，使封装成为校准体系的一部分，而非单纯“外壳”。
+    \item \textbf{从属权利要求（兜底点）}：参考隔离（波分/时分/门控）、传感器类型（温度计/应变计/参考微环/参考 MZI）、控制算法抽象（状态估计与反馈更新，不限于某一算法名）、适用协议（DV/CV/MDI）与终端事件接口（充电/射频高功率/跌落检测）。
+\end{itemize}
+
+撰写表述上建议：对“静默时隙”“参考路径”“差分共模布局”“温应力解耦”等术语给出可落地但不收窄的定义；避免将核心点写成“温度补偿/加参考光路/自校准”这类通用表述；强调本申请对\textbf{QKD 业务约束与终端封装扰动}的针对性改进及其协同技术效果。
+
+\end{document}
