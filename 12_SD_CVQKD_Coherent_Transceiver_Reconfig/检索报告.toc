@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}检索参数 / Search Parameters}{3}{}%
+\contentsline {subsection}{\numberline {1.1}使用的关键词 / Keywords Used}{3}{}%
+\contentsline {section}{\numberline {2}A类：基础性现有技术 / Category A: Foundational Prior Art}{3}{}%
+\contentsline {subsection}{\numberline {2.1}A1. CV-QKD 协议基础}{3}{}%
+\contentsline {subsection}{\numberline {2.2}A2. CV-QKD 收发器专利}{3}{}%
+\contentsline {subsection}{\numberline {2.3}A3. 量子密钥服务消费端}{3}{}%
+\contentsline {section}{\numberline {3}B类：相关应用现有技术 / Category B: Related Application Prior Art}{4}{}%
+\contentsline {subsection}{\numberline {3.1}B1. 标准相干模块的可编程性}{4}{}%
+\contentsline {subsection}{\numberline {3.2}B2. 片上或器件化 CV-QKD}{4}{}%
+\contentsline {subsection}{\numberline {3.3}B3. 量子与经典共纤}{4}{}%
+\contentsline {section}{\numberline {4}C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}{4}{}%
+\contentsline {subsection}{\numberline {4.1}C1. 噪声与信息协调}{4}{}%
+\contentsline {subsection}{\numberline {4.2}C2. 模块管理与 KMS 对接}{4}{}%
+\contentsline {section}{\numberline {5}D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}{5}{}%
+\contentsline {subsection}{\numberline {5.1}D1. 维护窗或低负载注钥}{5}{}%
+\contentsline {subsection}{\numberline {5.2}D2. 审计与 KPI 暴露}{5}{}%
+\contentsline {section}{\numberline {6}E类：专利检索结果 / Category E: Patent Search Results}{5}{}%
+\contentsline {subsection}{\numberline {6.1}USPTO 检索结果}{5}{}%
+\contentsline {subsection}{\numberline {6.2}EPO 检索结果}{5}{}%
+\contentsline {subsection}{\numberline {6.3}CNIPA 检索结果}{5}{}%
+\contentsline {section}{\numberline {7}新颖性分析 / Novelty Analysis}{6}{}%
+\contentsline {subsection}{\numberline {7.1}创新点 A：标准相干模块量子模式}{6}{}%
+\contentsline {subsection}{\numberline {7.2}创新点 B：模块内关键流程固件化}{6}{}%
+\contentsline {subsection}{\numberline {7.3}创新点 C：资源编排复用}{6}{}%
+\contentsline {subsection}{\numberline {7.4}创新点 D：密钥交付接口}{6}{}%
+\contentsline {subsection}{\numberline {7.5}创新点 E：标定与回切}{6}{}%
+\contentsline {subsection}{\numberline {7.6}创新点 F：外显能力位与取证接口}{6}{}%
+\contentsline {section}{\numberline {8}可专利性评估 / Patentability Assessment}{6}{}%
+\contentsline {section}{\numberline {9}权利要求差异化矩阵 / Claim Differentiation Matrix}{7}{}%
+\contentsline {section}{\numberline {10}关键区别特征 / Key Distinguishing Features}{7}{}%
+\contentsline {section}{\numberline {11}建议申请策略 / Recommended Filing Strategy}{7}{}%
+\contentsline {section}{\numberline {12}结论 / Conclusion}{8}{}%

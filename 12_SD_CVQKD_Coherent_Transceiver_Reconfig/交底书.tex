@@ -1,0 +1,175 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{setspace}
+\usetikzlibrary{positioning,arrows.meta}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+\title{\textbf{发明专利技术交底书}\\[0.5em]\Large 基于标准相干光收发模块底层 DSP 固件重构的软件定义连续变量量子通信系统及方法}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{发明名称}
+基于标准相干光收发模块底层 DSP 固件重构的软件定义连续变量量子通信系统及方法。
+
+\textbf{英文名称}: Software Defined Continuous-Variable Quantum Communication System and Method Based on DSP Firmware Reconfiguration of Standard Coherent Optical Transceivers.
+
+\section{申请人信息}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+申请人名称 & 待补充 \\
+\hline
+申请人类型 & 企业或研究机构，待补充 \\
+\hline
+国籍或注册地 & 待补充 \\
+\hline
+通讯地址 & 待补充 \\
+\hline
+联系人及电话 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{发明人信息}
+\subsection{第一发明人}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+姓名 & 待补充 \\
+\hline
+工作单位 & 待补充 \\
+\hline
+联系电话 & 待补充 \\
+\hline
+电子邮箱 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{技术领域}
+本申请涉及量子通信、连续变量量子密钥分发、相干光通信、可插拔相干光模块、DSP 固件控制和密钥管理接口，尤其涉及利用现有相干光收发模块的光前端和数字处理资源，通过固件重构切换到量子模式。
+
+\section{背景技术}
+\subsection{现有技术的局限性}
+现有 CV-QKD 工程化部署通常依赖专用量子设备和独立运维体系，导致资本开支和运维开支较高。数据中心与骨干网已经普遍部署相干光链路，但这些模块的 DSP、告警和管理接口面向经典通信，缺少直接输出量子密钥的能力。
+
+\subsection{相关技术路线与工程瓶颈}
+CV-QKD 在协议层需要高斯调制、参数估计、信息协调和隐私放大，在硬件层需要本振、相干接收和平衡检测。标准相干收发模块在光电前端与这些需求存在较高重合，但现有工程实现通常未把“模块固件级重构、量子模式调度和密钥交付接口”闭环打通。
+
+\subsection{审查中可能关注的现有技术边界}
+公开资料已经分别覆盖 CV-QKD 专利、相干光模块固件升级方案以及量子密钥向现网加密系统交付的方案，但尚未发现将标准相干光收发模块作为统一载体，在其底层 DSP 内实现 CV-QKD 关键流程并输出可审计密钥的系统性公开。
+
+\section{发明内容}
+\subsection{发明目的}
+本申请的目的在于，在不更换或尽量少更换现有相干光硬件的前提下，使标准相干光模块通过固件升级进入量子模式，按需执行 CV-QKD 的调制、测量、参数估计、纠错、隐私放大和密钥输出，从而形成可被现网加密设备直接消费的量子密钥能力。
+
+\subsection{技术方案}
+\subsubsection{创新点 A：标准相干模块的量子模式固件切换}
+在模块 DSP 内新增量子模式状态机与控制路径，使发送端和接收端可在经典模式与量子模式之间切换，并在维护窗、低负载时段或指定资源片段内运行 CV-QKD。
+
+\subsubsection{创新点 B：模块内 CV-QKD 关键流程固件化}
+将高斯调制、相干测量后处理、散粒噪声标定、参数估计、信息协调与隐私放大纳入模块内固件链路，而不再完全依赖外部盒式量子设备。
+
+\subsubsection{创新点 C：量子与经典资源编排复用}
+通过模式切换条件、时间窗、频谱片段或备用通道规则，把量子密钥生成与经典通信资源调度统一纳入模块管理面和网管编排体系。
+
+\subsubsection{创新点 D：密钥交付与可审计管理接口}
+在模块外管理接口上增加密钥导出、密钥池水位、参数估计 KPI、告警与审计日志，使量子密钥能直接对接 MACsec、IPsec、OTN 加密或云 KMS。
+
+\subsubsection{创新点 E：工程级标定与回切机制}
+模块在进入量子模式前执行散粒噪声标定和链路健康检测，若参数不满足阈值则自动回切至经典模式，保证链路稳定性。
+
+\subsubsection{创新点 F：面向产品侵权取证的外显能力位}
+通过固件能力位、管理字段、模式切换日志、密钥输出事件和 KPI 指标，使产品实施本申请方案时存在可被检测和留痕的接口层证据。
+
+\section{附图说明}
+图1示出基于标准相干光模块的软件定义连续变量量子通信系统架构。图2示出相干模块在量子模式下的切换、标定、注钥与回切流程。
+
+\section{具体实施方式}
+\subsection{系统架构}
+系统由两端支持量子模式的标准相干收发模块、站点级 Key Agent 或 KMS 代理、网管编排系统以及下游链路加密设备构成。模块内部完成光电采样和固件化量子处理，模块外部完成密钥消费、审计与集中运维。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1cm]
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm] (a) {标准相干模块 A};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, right=of a] (b) {模块内量子模式 DSP};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, right=of b] (c) {Key Agent 或 KMS};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, below=of b] (d) {标准相干模块 B};
+\draw[->, thick] (a) -- (b);
+\draw[->, thick] (b) -- (c);
+\draw[->, thick] (b) -- (d);
+\draw[->, thick] (d) -| (c);
+\end{tikzpicture}
+\caption{图1 基于标准相干光模块的软件定义连续变量量子通信系统架构}
+\end{figure}
+
+\subsection{实施步骤}
+\subsubsection{实施例 1：数据中心互联维护窗注钥}
+两机房之间已有相干链路，通过网管在夜间维护窗下发量子模式启用指令。模块先做散粒噪声标定，再执行弱高斯调制与相干测量后处理，并把生成密钥写入站点级 Key Agent，由后者在白天高峰期注入 MACsec 或 IPsec。
+
+\subsubsection{实施例 2：运营商城域链路的分时复用}
+当城域链路负载较低时，模块按策略切换到量子模式，在指定时间片内生成密钥；负载回升时自动恢复经典承载，实现量子密钥服务的弹性启停。
+
+\subsubsection{实施例 3：失败回退与参数重标定}
+若模块检测到标定异常、链路噪声超标、纠错失败率升高或密钥输出水位不足，则触发重新标定或直接回切经典模式，并将异常事件上报网管。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm]
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm] (s1) {网管下发量子模式策略};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s1] (s2) {模块执行标定并切换 DSP 链路};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s2] (s3) {生成密钥并导出到 Key Agent};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s3] (s4) {维护窗结束后回切经典模式};
+\draw[->, thick] (s1) -- (s2);
+\draw[->, thick] (s2) -- (s3);
+\draw[->, thick] (s3) -- (s4);
+\end{tikzpicture}
+\caption{图2 相干模块量子模式切换与注钥流程示意图}
+\end{figure}
+
+\section{技术效果}
+\subsection{安全效果}
+本申请通过把 CV-QKD 关键流程固件化到标准相干模块中，减少外置量子设备依赖，使量子密钥服务与现网承载链路天然对齐。相对于单独部署专用设备，本申请更有利于控制接口面和运维面的一致性。
+
+\subsection{产业化与经济可行性}
+该方案复用现有相干光硬件和运维体系，适合云厂商、运营商和设备商以固件升级或模块 SKU 升级方式逐步导入量子密钥能力。商业价值集中在软件许可、模块溢价、运维平台和密钥服务接口。
+
+\subsection{可取证性与实施稳定性}
+侵权取证时，可通过模块管理接口的量子模式能力位、模式切换日志、参数估计 KPI、密钥导出事件、Key Agent 拉取记录和网管策略配置证明是否实施。回切机制和标定状态机提升了工程可控性。
+
+\section{权利要求书}
+\subsection{独立权利要求}
+\begin{itemize}
+\item 一种软件定义连续变量量子通信方法，其特征在于，在标准相干光收发模块的底层 DSP 中执行量子模式切换，并在该模式下完成连续变量量子密钥分发关键流程。
+\item 所述关键流程包括至少一项高斯调制、相干测量后处理、散粒噪声标定、参数估计、信息协调、隐私放大和密钥导出。
+\item 一种相干光通信系统，包括支持量子模式的相干模块、Key Agent 或 KMS 代理和下游加密设备。
+\item 网管可根据时间窗、负载或策略触发模块进入量子模式或回切经典模式。
+\end{itemize}
+
+\subsection{从属权利要求}
+\begin{itemize}
+\item 量子模式在维护窗或低负载时段启用。
+\item 模块在进入量子模式前执行散粒噪声标定与链路健康检测。
+\item 密钥导出接口对接 MACsec、IPsec、OTN 加密或云 KMS 中的至少一种。
+\item 模块上报量子模式 KPI、告警和日志用于审计。
+\end{itemize}
+
+\section{说明书摘要}
+本申请公开了一种基于标准相干光收发模块底层 DSP 固件重构的软件定义连续变量量子通信系统及方法。该方案利用标准相干模块的光电前端与数字处理资源，在底层固件中实现量子模式切换、高斯调制、参数估计、信息协调、隐私放大和密钥导出，并通过 Key Agent 或 KMS 接口把密钥交付给现网加密设备。核心创新在于“标准模块载体、DSP 固件量子模式、现网编排和密钥导出闭环”的统一设计。
+\end{document}

@@ -1,0 +1,145 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{现有技术检索报告}
+\fancyfoot[C]{\thepage}
+\title{\textbf{现有技术检索报告}\\[0.5em]\Large 基于标准相干光收发模块底层 DSP 固件重构的软件定义连续变量量子通信系统及方法}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{检索参数 / Search Parameters}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+检索日期 & 2026年3月31日 \\
+\hline
+数据库 & Google Patents、USPTO、WIPO、EPO、公开论文数据库 \\
+\hline
+关键词 & CV-QKD、coherent transceiver DSP、quantum key delivery to KMS、software defined optical transceiver \\
+\hline
+\end{tabular}
+
+\subsection{使用的关键词 / Keywords Used}
+\begin{itemize}
+\item 英文关键词：CV-QKD coherent receiver，coherent transceiver DSP firmware，quantum key delivery to KMS，software defined optical transceiver。
+\item 中文关键词：连续变量量子密钥分发，相干光模块 DSP 固件，量子密钥交付，软件定义相干收发模块，量子模式切换。
+\end{itemize}
+
+\section{A类：基础性现有技术 / Category A: Foundational Prior Art}
+\subsection{A1. CV-QKD 协议基础}
+公开论文已经较充分地覆盖 CV-QKD 的高斯调制、参数估计、信息协调和隐私放大流程，但没有把这些流程固化到标准相干光模块的底层 DSP 中。
+
+\subsection{A2. CV-QKD 收发器专利}
+EP3741078A1、US20200213105A1 等专利公开了 CV-QKD 收发器或装置的专用实现结构，但通常以专用量子设备为中心，而非标准相干模块。
+
+\subsection{A3. 量子密钥服务消费端}
+量子密钥向现网加密系统或 KMS 交付的需求明确存在，但现有资料通常将密钥源置于独立量子设备，而非标准相干模块内部。
+
+\section{B类：相关应用现有技术 / Category B: Related Application Prior Art}
+\subsection{B1. 标准相干模块的可编程性}
+相干光模块 DSP 固件升级、调制格式可编程和模块管理接口扩展已经是成熟方向，但其对象主要是经典调制解调算法，不涉及量子模式。
+
+\subsection{B2. 片上或器件化 CV-QKD}
+片上 CV-QKD 和量子收发器方向说明 QKD 与集成光子平台结合已知，但未公开基于标准相干模块管理面的可编排复用。
+
+\subsection{B3. 量子与经典共纤}
+量子与经典信号在同一光纤共存已经有较多研究和专利布局，但这些公开一般不把“标准相干模块 DSP 固件重构”作为核心实施边界。
+
+\section{C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}
+\subsection{C1. 噪声与信息协调}
+公开文献充分说明信息协调和后处理是 CV-QKD 落地关键，但尚未公开其在标准相干模块固件内的产品化实现。
+
+\subsection{C2. 模块管理与 KMS 对接}
+现网管理接口和 KMS 对接方案可以作为本申请的工程基础，但现有方案通常不直接控制量子模式切换和模块内密钥生成。
+
+\section{D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}
+\subsection{D1. 维护窗或低负载注钥}
+利用维护窗或低负载时段进行注钥符合运营实践，但公开资料中尚未见与标准相干模块量子模式直接绑定的完整方案。
+
+\subsection{D2. 审计与 KPI 暴露}
+通信设备的 KPI 和审计日志管理成熟，但将量子模式能力位、散粒噪声标定结果和密钥导出事件一起暴露给网管的做法未见系统公开。
+
+\section{E类：专利检索结果 / Category E: Patent Search Results}
+\subsection{USPTO 检索结果}
+代表性结果包括 US20200213105A1（CV-QKD device and method）和 US9906311B1（Transceivers and receivers for QKD）。其相似度主要落在量子装置层或量子收发器层，未覆盖标准相干模块的固件级闭环。
+
+\subsection{EPO 检索结果}
+代表性结果包括 EP3741078A1（Transmitter and receiver for CV-QKD）和 EP3335368B1（On-chip CV-QKD system）。这些公开更接近专用器件或专用平台实现。
+
+\subsection{CNIPA 检索结果}
+国内公开中可检出连续变量量子通信装置和安全防护方向，但未见将标准相干光模块作为统一实施载体的清晰公开。
+
+\section{新颖性分析 / Novelty Analysis}
+\subsection{创新点 A：标准相干模块量子模式}
+可编程 DSP 和 CV-QKD 分别已知，但未见二者在标准相干模块内部被直接耦合成量子模式。
+
+\subsection{创新点 B：模块内关键流程固件化}
+CV-QKD 流程本身已知，但其在模块固件级落地并与管理面接口打通未见同构公开。
+
+\subsection{创新点 C：资源编排复用}
+共纤和分时复用已有公开，但未见以标准相干模块模式切换为核心的现网编排。
+
+\subsection{创新点 D：密钥交付接口}
+量子密钥服务消费端已知，但密钥源直接位于标准相干模块内部未见公开。
+
+\subsection{创新点 E：标定与回切}
+标定和故障回退在通信设备中常见，但针对量子模式的专门闭环未检出。
+
+\subsection{创新点 F：外显能力位与取证接口}
+现有 CV-QKD 文献很少强调产品侵权取证接口，本申请把能力位、日志和 KPI 作为产品证据链的一部分。
+
+\section{可专利性评估 / Patentability Assessment}
+\begin{itemize}
+\item 新颖性：较强。未发现单一公开同时覆盖标准相干模块载体、DSP 固件量子模式和密钥交付闭环。
+\item 创造性：中。需要应对“可编程 DSP + CV-QKD + KMS”组合式对比。
+\item 实用性：明确。适合数据中心互联和运营商城域链路的增量升级。
+\item 公开充分：可补强。建议补充标定流程、回切状态机和接口字段定义。
+\end{itemize}
+
+\section{权利要求差异化矩阵 / Claim Differentiation Matrix}
+\begin{tabular}{|p{2.8cm}|p{3.8cm}|p{3.8cm}|p{2.8cm}|}
+\hline
+特征 & 本申请 & 相邻技术 & 差异 \\
+\hline
+硬件载体 & 标准相干光模块 & 专用量子收发器 & 复用现网硬件资源 \\
+\hline
+实现层级 & 模块底层 DSP 固件 & 外置盒式设备或专用芯片 & 改动边界更贴近现网升级 \\
+\hline
+运维接口 & KPI、审计与 KMS 导出 & 实验系统接口 & 可直接纳入网管 \\
+\hline
+工作模式 & 量子与经典可切换 & 固定量子设备 & 按需启停，兼顾业务承载 \\
+\hline
+\end{tabular}
+
+\section{关键区别特征 / Key Distinguishing Features}
+\begin{enumerate}
+\item 把标准相干光模块而非专用量子设备作为实施载体。
+\item 在模块底层 DSP 固件中执行 CV-QKD 关键流程。
+\item 将量子模式切换和现网编排统一到管理接口。
+\item 把密钥导出、KPI 与审计日志作为产品化接口的一部分。
+\item 提供标定失败回切与证据留痕机制。
+\end{enumerate}
+
+\section{建议申请策略 / Recommended Filing Strategy}
+\begin{enumerate}
+\item 主权利要求锁定“标准相干模块、DSP 固件量子模式、密钥导出”三件套。
+\item 从属权利要求覆盖标定、维护窗、KPI 字段、回切机制与下游加密对接。
+\item 视客户对象拆分为云厂商版本、运营商版本和模块厂商版本。
+\item 避免笼统声称“纯软件即可实现全部量子硬件能力”，应限定为复用重合硬件架构。
+\end{enumerate}
+
+\section{结论 / Conclusion}
+综合检索显示，CV-QKD 专利与可编程相干模块技术均较成熟，但尚未发现将标准相干光模块作为统一载体、在其底层 DSP 内完成 CV-QKD 关键流程并通过管理面向现网加密系统导出密钥的完整公开方案。本申请具备明显的系统整合特征，但创造性论证必须突出实施边界和现网接口，而非泛泛强调“软件定义”。
+\end{document}
