@@ -1,0 +1,145 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{现有技术检索报告}
+\fancyfoot[C]{\thepage}
+\title{\textbf{现有技术检索报告}\\[0.5em]\Large 基于新能源汽车复合充电线缆暗通道的离线量子密钥物理注入与 V2G 动态调度方法、系统及装置}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{检索参数 / Search Parameters}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+检索日期 & 2026年3月31日 \\
+\hline
+数据库 & Google Patents、USPTO、WIPO、EPO、IACR ePrint、公开论文数据库 \\
+\hline
+关键词 & EV charging PQC、ISO 15118 security、optical channel charging cable、V2G key management \\
+\hline
+\end{tabular}
+
+\subsection{使用的关键词 / Keywords Used}
+\begin{itemize}
+\item 英文关键词：EV charging PQC，ISO 15118 security，optical channel charging cable，V2G key management，offline key provisioning vehicle。
+\item 中文关键词：电动汽车充电安全，ISO 15118 密钥管理，充电线缆光纤通道，V2G 密钥预算，离线密钥注入。
+\end{itemize}
+
+\section{A类：基础性现有技术 / Category A: Foundational Prior Art}
+\subsection{A1. EV 充电抗量子迁移}
+QuantumCharge 等工作说明 EV 充电长期安全和抗量子迁移需求真实存在，但采用 PQC 和 HSM 扩展 ISO 15118，并未公开量子密钥离线注入。
+
+\subsection{A2. 车桩连接器与线缆结构}
+充电连接器和线缆结构的专利很多，说明在连接器中加入附加通道具有产品基础，但未公开独立光学暗通道用于量子密钥生成。
+
+\subsection{A3. 电网场景量子通信需求}
+电网与工业控制场景对量子安全密钥存在需求，但一般为固定站点间部署，不覆盖车辆侧终端。
+
+\section{B类：相关应用现有技术 / Category B: Related Application Prior Art}
+\subsection{B1. 充电线缆结构专利}
+充电线缆、车端收纳和连接器结构已是活跃专利方向，但未见把线缆作为量子密钥暗通道载体。
+
+\subsection{B2. 物理连接窗口补钥}
+在维护或生产阶段通过有线连接写入密钥是工程上可接受的，但未公开短距量子链路和 V2G 预算调度。
+
+\subsection{B3. V2G 风险控制}
+V2G 安全、计量与结算密钥管理方向已知，但未公开离桩后使用充电期生成的离线量子密钥池。
+
+\section{C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}
+\subsection{C1. 短距量子密钥生成}
+低成本短距量子密钥生成具有工程基础，但未绑定到充电线缆和车端 HSM。
+
+\subsection{C2. 元数据式审计}
+通过 KeyID 或索引账本实现追溯的安全系统设计早已存在，但现有资料未与充电期离线量子补钥结合。
+
+\section{D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}
+\subsection{D1. 移动终端量子链路缺口}
+量子通信网络公开研究普遍承认移动车辆难以依赖实时量子网络，本申请通过充电窗口规避了这一缺口。
+
+\subsection{D2. 产业化接口}
+充电运营商、线缆厂商和 HSM 厂商的接口结合方向明确存在，但现有公开未将量子注入纳入线缆标准件。
+
+\section{E类：专利检索结果 / Category E: Patent Search Results}
+\subsection{USPTO 检索结果}
+代表性结果包括 US11697353B2（Electric vehicle charging connector）和 US10950974B2（Charging cable system for an electric vehicle）。相似度主要落在线缆或连接器结构层面。
+
+\subsection{EPO 检索结果}
+代表性结果包括 EP3812198B1 和 EP2915732B1。该类结果说明连接器和集成线缆是现有技术热点，但未覆盖量子补钥和预算调度闭环。
+
+\subsection{CNIPA 检索结果}
+国内公开可检出充电线缆机械结构、充电安全迁移和经典密钥管理方案，但未见量子暗通道和离线补钥流程的统一公开。
+
+\section{新颖性分析 / Novelty Analysis}
+\subsection{创新点 A：线缆暗通道}
+充电连接器结构广泛公开，但将独立光通道用作量子密钥暗通道未见单一公开。
+
+\subsection{创新点 B：充电期离线量子注入}
+PQC 迁移已知，但充电窗口内短距量子补钥尚未检出同构公开。
+
+\subsection{创新点 C：用途分区密钥池}
+密钥池和 HSM 管理已有公开，但源自量子暗通道的分区式密钥池未见同构公开。
+
+\subsection{创新点 D：V2G 预算调度}
+风险分级和密钥消耗策略常见，但与离线量子补钥耦合未见公开。
+
+\subsection{创新点 E：元数据审计}
+不泄露明文密钥的审计做法存在通用基础，但专门针对车桩量子补钥场景尚未见公开。
+
+\subsection{创新点 F：产品结构证据}
+现有量子通信文献很少关注产品取证结构，本申请在结构和接口层都提供了可检测外显。
+
+\section{可专利性评估 / Patentability Assessment}
+\begin{itemize}
+\item 新颖性：较强。未见单一文献同时公开线缆暗通道、离线量子注入、车端密钥池和 V2G 预算调度。
+\item 创造性：中上。需要应对“PQC 迁移、线缆结构、QKD”拼接式对比。
+\item 实用性：明确。优先适合车队、园区微电网和高价值 V2G 场景。
+\item 公开充分：可补强。建议补充光耦合结构、会话状态机和 KeyID 账本格式。
+\end{itemize}
+
+\section{权利要求差异化矩阵 / Claim Differentiation Matrix}
+\begin{tabular}{|p{2.8cm}|p{3.8cm}|p{3.8cm}|p{2.8cm}|}
+\hline
+特征 & 本申请 & 相邻技术 & 差异 \\
+\hline
+补钥窗口 & 充电物理连接期间 & 远程网络实时分发 & 安全窗口更可控 \\
+\hline
+物理链路 & 线缆光学暗通道 & PLC 或专线 QKD & 短距封闭、低泄露 \\
+\hline
+密钥使用 & 离桩后预算化消耗 & 当前会话内使用 & 服务后续多事件调度 \\
+\hline
+审计形态 & KeyID 元数据 & 普通日志 & 兼顾安全与追溯 \\
+\hline
+\end{tabular}
+
+\section{关键区别特征 / Key Distinguishing Features}
+\begin{enumerate}
+\item 把量子密钥生成窗口压缩到车桩物理连接期间。
+\item 在线缆和连接器内部设置用于量子链路的光学暗通道。
+\item 构建面向 V2G 的用途分区式车端密钥池。
+\item 引入基于风险等级的预算调度策略。
+\item 通过元数据审计和结构证据支持产业化与取证。
+\end{enumerate}
+
+\section{建议申请策略 / Recommended Filing Strategy}
+\begin{enumerate}
+\item 主权利要求优先覆盖“暗通道结构、量子注入流程、预算调度”组合。
+\item 从属权利要求覆盖光耦合结构、用途分区、KeyID 账本和云侧审计字段。
+\item 另行分案布局车队版、公共充电站版和充电枪标准件版。
+\item 避免宣称车辆行驶中实时量子通信，本申请强调离线补钥路径。
+\end{enumerate}
+
+\section{结论 / Conclusion}
+公开资料已经充分表明 EV 充电抗量子迁移和连接器结构优化具有明显市场需求，但尚未发现利用充电线缆暗通道在充电窗口中执行短距量子密钥生成并把结果预算化分配给后续 V2G 业务的同构公开方案。本申请应把创新重心放在线缆结构与密钥生命周期闭环，而不是泛化到所有车联网加密。
+\end{document}

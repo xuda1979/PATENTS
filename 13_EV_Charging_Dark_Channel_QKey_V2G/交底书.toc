@@ -1,0 +1,33 @@
+\contentsline {section}{\numberline {1}发明名称}{3}{}%
+\contentsline {section}{\numberline {2}申请人信息}{3}{}%
+\contentsline {section}{\numberline {3}发明人信息}{3}{}%
+\contentsline {subsection}{\numberline {3.1}第一发明人}{3}{}%
+\contentsline {section}{\numberline {4}技术领域}{3}{}%
+\contentsline {section}{\numberline {5}背景技术}{4}{}%
+\contentsline {subsection}{\numberline {5.1}现有技术的局限性}{4}{}%
+\contentsline {subsection}{\numberline {5.2}相关技术路线与工程瓶颈}{4}{}%
+\contentsline {subsection}{\numberline {5.3}审查中可能关注的现有技术边界}{4}{}%
+\contentsline {section}{\numberline {6}发明内容}{4}{}%
+\contentsline {subsection}{\numberline {6.1}发明目的}{4}{}%
+\contentsline {subsection}{\numberline {6.2}技术方案}{4}{}%
+\contentsline {subsubsection}{\numberline {6.2.1}创新点 A：复合充电线缆中的光学暗通道}{4}{}%
+\contentsline {subsubsection}{\numberline {6.2.2}创新点 B：充电窗口内的离线量子密钥注入}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.3}创新点 C：按用途分区的车端密钥池}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.4}创新点 D：V2G 风险驱动的密钥预算调度}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.5}创新点 E：不泄露明文密钥的审计元数据}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.6}创新点 F：可拆解、可检测的产品结构证据}{5}{}%
+\contentsline {section}{\numberline {7}附图说明}{5}{}%
+\contentsline {section}{\numberline {8}具体实施方式}{5}{}%
+\contentsline {subsection}{\numberline {8.1}系统架构}{5}{}%
+\contentsline {subsection}{\numberline {8.2}实施步骤}{6}{}%
+\contentsline {subsubsection}{\numberline {8.2.1}实施例 1：面向 V2G 调度指令的离线一次一密 MAC}{6}{}%
+\contentsline {subsubsection}{\numberline {8.2.2}实施例 2：分区式密钥池与结算保护}{6}{}%
+\contentsline {subsubsection}{\numberline {8.2.3}实施例 3：下一次充电的自动补钥}{6}{}%
+\contentsline {section}{\numberline {9}技术效果}{7}{}%
+\contentsline {subsection}{\numberline {9.1}安全效果}{7}{}%
+\contentsline {subsection}{\numberline {9.2}产业化与经济可行性}{7}{}%
+\contentsline {subsection}{\numberline {9.3}可取证性与实施稳定性}{7}{}%
+\contentsline {section}{\numberline {10}权利要求书}{7}{}%
+\contentsline {subsection}{\numberline {10.1}独立权利要求}{7}{}%
+\contentsline {subsection}{\numberline {10.2}从属权利要求}{7}{}%
+\contentsline {section}{\numberline {11}说明书摘要}{8}{}%
