@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}检索参数 / Search Parameters}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}使用的关键词 / Keywords Used}{4}{subsection.1.1}%
+\contentsline {section}{\numberline {2}A类：基础性现有技术 / Category A: Foundational Prior Art}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}A1. Falcon 算法标准}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}A2. 格陷门理论}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}A3. 门限密码学框架}{5}{subsection.2.3}%
+\contentsline {section}{\numberline {3}B类：相关门限签名现有技术 / Category B: Related Threshold Signature Prior Art}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}B1. Threshold Dilithium}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}B2. 基于格的 MPC 签名}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}B3. 经典门限 ECDSA}{7}{subsection.3.3}%
+\contentsline {section}{\numberline {4}C类：MPC 协议现有技术 / Category C: MPC Protocol Prior Art}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}C1. SPDZ 协议}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}C2. 安全聚合}{8}{subsection.4.2}%
+\contentsline {section}{\numberline {5}D类：跨链与区块链现有技术 / Category D: Cross-Chain and Blockchain Prior Art}{8}{section.5}%
+\contentsline {subsection}{\numberline {5.1}D1. 跨链桥漏洞分析}{8}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}D2. 多签名跨链专利}{8}{subsection.5.2}%
+\contentsline {section}{\numberline {6}E类：专利检索结果 / Category E: Patent Search Results}{9}{section.6}%
+\contentsline {subsection}{\numberline {6.1}USPTO 检索结果}{9}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}EPO 检索结果}{9}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}CNIPA 检索结果}{9}{subsection.6.3}%
+\contentsline {section}{\numberline {7}新颖性分析 / Novelty Analysis}{9}{section.7}%
+\contentsline {subsection}{\numberline {7.1}创新点 A：算术共享 NTT 协议}{9}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}创新点 B：具有缩放参数的分布式高斯采样}{10}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}创新点 C：基于 Beaver 预处理的协同拒绝采样}{10}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}创新点 D：NTRU 陷门的可验证秘密共享}{10}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}创新点 E：格门限的动态节点管理}{10}{subsection.7.5}%
+\contentsline {subsection}{\numberline {7.6}创新点 F：NTRU 陷门的 MPC-Extended-GCD}{10}{subsection.7.6}%
+\contentsline {section}{\numberline {8}可专利性评估 / Patentability Assessment}{11}{section.8}%
+\contentsline {section}{\numberline {9}权利要求差异化矩阵 / Claim Differentiation Matrix}{11}{section.9}%
+\contentsline {section}{\numberline {10}关键区别特征 / Key Distinguishing Features}{11}{section.10}%
+\contentsline {section}{\numberline {11}建议申请策略 / Recommended Filing Strategy}{11}{section.11}%
+\contentsline {section}{\numberline {12}结论 / Conclusion}{12}{section.12}%

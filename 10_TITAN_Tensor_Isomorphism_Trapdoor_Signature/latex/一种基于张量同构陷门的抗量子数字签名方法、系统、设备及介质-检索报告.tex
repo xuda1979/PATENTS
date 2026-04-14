@@ -1,0 +1,130 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\noindent
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{一种基于张量同构陷门的抗量子数字签名方法、系统、设备及介质} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.03.31} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本申请面向量子计算威胁下的数字签名需求，目标是在量子计算网络、云边协同节点、AI 加速设备及通用软件发布场景中提供抗量子认证能力。与现有主要以后量子格签名为代表的路线不同，本申请拟采用张量同构陷门和零知识应答结构构造签名机制，因此检索重点围绕后量子签名、识别到签名变换、同构类困难问题和多变量/隐藏结构公钥方案展开。
+}}
+
+\vspace{1em}
+
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 张量同构，张量陷门，三阶张量签名，模态乘法
+(2) 抗量子数字签名，后量子签名，零知识签名，Fiat-Shamir
+(3) 非交换群作用，有限域矩阵，可逆矩阵，张量收缩
+(4) 多变量同构，隐藏结构公钥密码，身份识别到签名变换
+
+\textbf{外文检索关键词：}
+(1) tensor isomorphism, tensor trapdoor, tensor signature, mode product
+(2) post-quantum digital signature, zero-knowledge signature, Fiat-Shamir transform
+(3) non-abelian group action, finite-field matrix, invertible matrix, tensor contraction
+(4) hidden-structure public-key cryptography, isomorphism of polynomials, identification to signature
+
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.2cm}|p{5.2cm}|p{7.2cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A（基础技术） & \textbf{How to Prove Yourself: Practical Solutions to Identification and Signature Problems} \newline CRYPTO 1986 \newline Fiat, A.; Shamir, A. \\
+\hline
+2 & Y（相关技术） & \textbf{Falcon: Fast-Fourier Lattice-based Compact Signatures over NTRU} \newline NIST Post-Quantum Cryptography Submission, 2020 \newline Fouque, P.-A., et al. \\
+\hline
+3 & Y（相关技术） & \textbf{Hidden Fields Equations (HFE) and Isomorphisms of Polynomials (IP):} \newline \textbf{Two New Families of Asymmetric Algorithms} \newline EUROCRYPT 1996 \newline Patarin, J. \\
+\hline
+4 & A（基础技术） & \textbf{Proofs that Yield Nothing But Their Validity or} \newline \textbf{All Languages in NP Have Zero-Knowledge Proof Systems} \newline Journal of the ACM, 1991 \newline Goldreich, O.; Micali, S.; Wigderson, A. \\
+\hline
+\end{longtable}
+
+\section*{三、分析评价}
+
+\textbf{1. 与文献1（Fiat-Shamir 变换）的对比分析：}
+文献1公开了由身份识别协议转化为数字签名的基础方法，其贡献在于给出了承诺、挑战和响应的非交互化路线。但文献1并未公开任何基于张量同构陷门的具体公钥结构，也未公开“以公开基准张量和公钥张量分别完成双视图承诺重构”的验证机制。本申请虽然可以使用 Fiat-Shamir 作为整体签名框架，但其核心困难问题、密钥关系和验证代数结构均不同于文献1。
+
+\textbf{2. 与文献2（Falcon 格签名）的对比分析：}
+文献2属于现有主流后量子紧凑型签名方案，建立在 NTRU 格及离散高斯采样之上。其核心特征是短向量、采样分布控制、傅里叶域运算和范数约束。本申请不采用格噪声、离散高斯采样或 NTRU 短向量结构，而是通过公开基准张量 $\mathcal{T}_0$、私钥矩阵 $U,V,W$ 与公钥张量 $\mathcal{T}_{pk}$ 之间的张量模态作用关系完成陷门构造。两者在基础数学对象、签名生成路径和验证关系上均有明显差异。
+
+\textbf{3. 与文献3（HFE/IP 及多变量同构思路）的对比分析：}
+文献3公开了基于隐藏结构和多项式同构的非对称算法思路，与本申请在“利用隐藏变换掩盖公开对象”这一高层思想上存在一定关联。但文献3的核心对象为多变量多项式映射，其公开结构、陷门表示和攻击面均围绕多项式求逆与等价变换展开。本申请则直接以有限域三阶张量为公开对象，以三个模态上的可逆矩阵作用定义公钥，并结合零知识应答实现签名；并未发现文献3公开了本申请的三模态张量陷门及双分支验证结构。
+
+\textbf{4. 与文献4（通用零知识证明框架）的对比分析：}
+文献4给出了通用零知识证明理论基础，可用于解释为什么交互式证明能够在不泄露秘密的条件下证明知道某个见证。然而文献4并未给出适用于数字签名部署的具体张量同构实例，也未公开将三阶张量的模态群作用嵌入到公钥签名中的具体流程。因此，文献4仅可作为零知识理论基础，不能否定本申请在具体困难问题选取和工程化签名流程上的创新性。
+
+\textbf{5. 综合评价：}
+从目前检索到的基础文献和相关技术路线看，现有公开方案主要覆盖：
+\begin{itemize}
+    \item 以 Fiat-Shamir 为代表的通用识别到签名转换方法；
+    \item 以 Falcon 为代表的格基后量子签名；
+    \item 以 HFE/IP 为代表的隐藏结构和多变量同构类公钥方案；
+    \item 以通用零知识证明为代表的理论构件。
+\end{itemize}
+
+尚未发现现有文献同时公开以下组合特征：
+\begin{itemize}
+    \item 公开基准三阶张量与公钥张量之间的三模态可逆矩阵作用关系；
+    \item 以 $U,V,W$ 的逆矩阵将随机掩码变换为隐身重构矩阵的签名响应方式；
+    \item 验证端分别基于 $\mathcal{T}_0$ 与 $\mathcal{T}_{pk}$ 重构同一承诺张量的双视图验证结构；
+    \item 基于上述结构形成不依赖格噪声采样的抗量子数字签名工程方案。
+\end{itemize}
+
+\section*{四、检索结论}
+
+经检索，未发现与本申请全部技术特征相同的现有技术。现有公开文献虽分别覆盖了零知识签名变换、格基后量子签名以及多变量隐藏结构公钥思路，但尚未公开本申请所提出的“基于公开基准张量和三模态张量同构陷门的抗量子数字签名”完整技术方案。基于当前检索结果，本申请相对于现有技术具有较好的新颖性检索基础，并具备进一步论证创造性的空间。需要说明的是，本检索结论的依据是现有技术文献与本申请技术结构之间的对应关系和差异关系；交底书中附带的真实实验数据主要用于说明工程可实现性和定量效果，不作为本检索报告判断新颖性的直接依据。
+
+\end{document}

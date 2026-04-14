@@ -1,0 +1,598 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,heading=true]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{setspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+\ctexset{
+  section = {
+    name = {,、},
+    number = \chinese{section},
+    format = {\Large\bfseries\raggedright}
+  }
+}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+
+\title{\textbf{发明专利技术交底书} \\[0.5em]
+\Large 一种基于张量同构陷门的抗量子数字签名方法、系统、设备及介质}
+\author{中国移动通信有限公司研究院}
+\date{2026年3月31日}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[1em]
+    {\Huge\heiti 技术交底书} \\[1em]
+\end{center}
+
+\noindent
+\begin{tabular}{|p{3cm}|p{12cm}|}
+\hline
+公司编号 &  \\
+\hline
+发明名称 & 一种基于张量同构陷门的抗量子数字签名方法、系统、设备及介质 \\
+\hline
+申报单位 & 研究院 \\
+\hline
+申报类型 & 发明 \\
+\hline
+发明人 & 待填写 \\
+\hline
+技术联系人 & 许达 (xudayj@chinamobile.com, +86-13521894156) \\
+\hline
+注意事项 & 1．技术联系人应为深入了解本申请提案技术方案的技术人员。 \\
+         & 2．请按照集团公司提供的本技术交底书模板逐项填写。 \\
+\hline
+\end{tabular}
+
+\vspace{1cm}
+
+%==============================================================================
+\section{发明名称}
+%==============================================================================
+
+一种基于张量同构陷门的抗量子数字签名方法、系统、设备及介质。
+
+
+%==============================================================================
+\section{技术领域}
+%==============================================================================
+
+本发明涉及密码学、网络安全及抗量子密码技术领域，特别涉及一种基于有限域高阶张量同构陷门构造的抗量子数字签名方法、系统、设备及介质。
+
+\textbf{与量子计算的关联说明：}
+
+随着量子计算能力持续提升，基于大整数分解和离散对数困难性的传统数字签名体制将面临失效风险。现有后量子签名体制主要集中于格、哈希、纠错码、多变量或同源椭圆曲线等技术路线。与上述路线不同，本申请提出一种基于张量同构困难问题的抗量子签名方案，可用于量子计算网络节点认证、软件与模型发布签名、AI 加速设备固件完整性校验以及量子威胁背景下的通用身份认证。
+
+\textbf{关联项目：}\underline{\hspace{8cm}}（待填写）
+
+%==============================================================================
+\section{现有技术的技术方案}
+%==============================================================================
+
+\subsection{现有后量子签名技术路线}
+
+现有公开研究和工业部署中的后量子签名技术主要包括以下几类：
+
+\begin{enumerate}
+    \item \textbf{格密码路线}：典型代表包括 Falcon、Dilithium 等。该类方案通常基于短向量搜索、模块格或 NTRU 结构构造签名，并依赖离散高斯采样、拒绝采样、模约简或傅里叶域运算来实现签名分布控制和安全性约束。
+    \item \textbf{哈希路线}：典型代表包括 SPHINCS+。其安全性主要建立在哈希原语之上，优点在于假设简单，但签名或公钥尺寸通常较大，验证吞吐量受限。
+    \item \textbf{纠错码路线}：该类方案通常具有较强的抗量子属性，但公钥尺寸较大，难以直接用于带宽敏感型签名场景。
+    \item \textbf{多变量路线}：该类方案多基于多变量多项式映射的求逆困难性，但公开历史中已有部分方案在参数设计或代数结构泄露方面被攻破。
+    \item \textbf{同源或同构相关路线}：部分方案基于图同构、多项式同构或椭圆曲线同源构造身份识别或签名机制，但在工程上尚未形成适配大规模软件与设备签名的统一方案。
+\end{enumerate}
+
+\subsection{现有识别到签名的构造方式}
+
+现有数字签名中还常见一类思路，即先构造交互式身份识别协议，再通过 Fiat-Shamir 变换将挑战消息非交互化，从而得到签名方案。该类方法的关键在于：
+
+\begin{itemize}
+    \item 需要存在一个难以伪造、但易于由合法持钥人应答的交互式证明关系；
+    \item 需要承诺、挑战和响应三者之间满足可公开验证的一致性；
+    \item 需要避免在实现中引入过多浮点分支、失败重试或参数敏感逻辑，否则会增加侧信道风险。
+\end{itemize}
+
+\subsection{现有技术在工程实现上的共同特点}
+
+在实际系统中，现有后量子签名方案大多具有如下工程特征：
+
+\begin{itemize}
+    \item 依赖标量或向量级运算，难以直接映射到面向张量收缩优化的 AI 加速硬件；
+    \item 在签名端经常需要进行噪声控制、范数检查、拒绝采样或近似分布采样；
+    \item 对嵌入式、侧信道敏感设备而言，实现常数时间路径较为复杂；
+    \item 多数方案的公钥、签名或计算流程仍围绕低阶线性结构展开，未充分利用高阶张量上的非交换群作用结构。
+\end{itemize}
+
+%==============================================================================
+\section{现有技术的缺点及本申请提出要解决的技术问题}
+%==============================================================================
+
+现有技术主要存在以下缺点和技术问题：
+
+(1) \textbf{依赖噪声或采样过程，工程实现复杂}：以 Falcon 为代表的紧凑型格签名方案通常需要离散高斯采样、浮点近似、拒绝采样或复杂的范数控制逻辑，给轻量设备、可信执行环境和硬件实现带来较高复杂度。
+
+(2) \textbf{侧信道实现压力较大}：当签名算法依赖浮点运算、条件分支和重试机制时，其功耗轨迹、缓存访问、执行时延等更容易随中间状态发生变化，不利于实现稳定的常数时间执行路径。
+
+(3) \textbf{存在验证失败或实现敏感性问题}：部分现有方案在参数边界、采样近似误差或编码处理不当时，可能出现失败重试、边界拒绝或实现差异放大的问题，不利于在大规模设备签名场景中做统一部署。
+
+(4) \textbf{与 AI 张量硬件天然不匹配}：当前 GPU、NPU、Tensor Core 等硬件对高维张量收缩、矩阵乘法和批处理有成熟支持，而多数现有签名算法并未围绕张量原语构造，无法直接利用此类硬件的高吞吐优势。
+
+(5) \textbf{尚缺少基于高阶张量同构陷门的签名机制}：现有公开技术中，尚缺少一种以公开基准张量为核心、以三个独立可逆矩阵的模态作用构造公私钥关系、并通过双视图零知识应答实现非交互签名的完整工程方案。
+
+基于上述问题，本申请拟解决以下技术问题：提出一种不依赖格噪声、浮点高斯采样和失败重试的抗量子签名方案；在有限域上仅使用矩阵乘法和张量收缩完成密钥生成、签名与验证；使该方案更易映射到常数时间实现和张量加速硬件；同时形成可用于方法、系统、设备及存储介质的统一签名框架。
+
+%==============================================================================
+\section{本申请提出的技术方案的详细阐述}
+%==============================================================================
+
+本申请提出一种 TITAN（Tensor Isomorphism Trapdoor Asymmetric Network，张量同构陷门非对称网络）抗量子数字签名方案。该方案基于有限域 $\mathbb{F}_p$ 上三阶张量的模态群作用关系构造公私钥陷门，并通过多轮承诺-挑战-响应关系经 Fiat-Shamir 变换得到非交互数字签名。
+
+\subsection{基本数学对象}
+
+设有限域为 $\mathbb{F}_p$，其中 $p$ 为素数；设张量维度为 $N$；设公开基准张量为
+\[
+\mathcal{T}_0 \in \mathbb{F}_p^{N \times N \times N}.
+\]
+
+定义三个模态上的张量作用为：
+\[
+\mathcal{T}' = \mathcal{T} \times_1 A \times_2 B \times_3 C,
+\]
+其中 $A,B,C \in \mathbb{F}_p^{N \times N}$，且
+\[
+\mathcal{T}'(i,j,k)=\sum_{x=1}^{N}\sum_{y=1}^{N}\sum_{z=1}^{N}
+A_{i,x}B_{j,y}C_{k,z}\mathcal{T}(x,y,z)\pmod p.
+\]
+
+在本申请中，私钥对应于三个可逆矩阵
+\[
+U,V,W \in GL(N,\mathbb{F}_p),
+\]
+公钥由上述三个矩阵作用于基准张量得到：
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W.
+\]
+
+\subsection{系统组成}
+
+本申请的系统可包括如下功能模块：
+
+\begin{itemize}
+    \item \textbf{参数生成模块}：用于生成有限域参数 $p$、张量维度 $N$、签名轮数 $r$、哈希函数 $H$ 及公开基准张量 $\mathcal{T}_0$；
+    \item \textbf{密钥生成模块}：用于生成三个私钥矩阵 $U,V,W$ 及公钥张量 $\mathcal{T}_{pk}$；
+    \item \textbf{承诺生成模块}：用于针对待签名消息生成随机掩码矩阵和临时承诺张量；
+    \item \textbf{挑战派生模块}：用于根据消息和承诺张量计算哈希摘要并导出挑战序列；
+    \item \textbf{响应生成模块}：用于根据挑战位选择输出原始掩码矩阵或隐身重构矩阵；
+    \item \textbf{签名验证模块}：用于基于公开基准张量或公钥张量重构承诺并校验摘要一致性；
+    \item \textbf{硬件加速模块}：可选地部署于 GPU、NPU、FPGA 或支持张量乘加的处理器上，以实现矩阵乘法和张量收缩的并行计算。
+\end{itemize}
+
+上述模块之间的协同关系如图 1 所示。图 1 展示了公开参数、密钥生成、签名生成、签名验证以及硬件加速支撑之间的对应关系，用于说明本申请的系统构成。
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{0.94\textwidth}{!}{%
+    \begin{tikzpicture}[
+        font=\small,
+        node distance=11mm and 9mm,
+        module/.style={draw, rounded corners=2pt, align=center, minimum width=32mm, minimum height=9mm, fill=gray!8},
+        data/.style={draw, trapezium, trapezium left angle=70, trapezium right angle=110, align=center, minimum width=30mm, minimum height=9mm, fill=blue!8},
+        accel/.style={draw, rounded corners=2pt, align=center, text width=104mm, minimum height=12mm, inner ysep=2.5mm, fill=green!8},
+        line/.style={-Latex, thick}
+    ]
+        \node[data] (param) {公开参数\\$p,N,r,H,\mathcal{T}_0$};
+        \node[module, right=of param] (keygen) {密钥生成模块\\生成 $U,V,W,\mathcal{T}_{pk}$};
+        \node[module, below=of keygen] (commit) {承诺生成模块\\生成 $\mathcal{C}^{(t)}$};
+        \node[module, left=of commit] (inputmsg) {输入消息\\$M$};
+        \node[module, right=of commit] (challenge) {挑战派生模块\\计算 $\rho,c_t$};
+        \node[module, below=of challenge] (response) {响应生成模块\\输出 $S^{(t)}$};
+        \node[module, left=of response] (package) {签名封装\\形成 $\sigma$};
+        \node[module, right=of response] (verify) {签名验证模块\\校验 $\rho'=\rho$};
+        \node[accel, below=22mm of commit] (accel) {硬件加速模块（GPU/NPU/FPGA/Tensor Core）\\支持矩阵乘法、有限域求逆和张量收缩计算};
+
+        \draw[line] (param) -- (keygen);
+        \draw[line] (param) -- (commit);
+        \draw[line] (param.east) |- (verify.north);
+        \draw[line] (keygen) -- (commit);
+        \draw[line] (keygen) -- (verify);
+        \draw[line] (inputmsg) -- (challenge);
+        \draw[line] (commit) -- (challenge);
+        \draw[line] (challenge) -- (response);
+        \draw[line] (response) -- (package);
+        \draw[line] (package) -- (verify);
+
+        \draw[line, dashed] (accel.north) -- (commit.south);
+        \draw[line, dashed] (accel.north west) -- ++(0,9mm) -| (keygen.south);
+        \draw[line, dashed] (accel.north east) -- ++(0,9mm) -| (verify.south);
+    \end{tikzpicture}
+    }
+    \caption{TITAN 抗量子签名系统架构图}
+\end{figure}
+
+\subsection{密钥生成方法}
+
+\subsubsection{1. 公开参数初始化}
+
+参数生成模块选定素数 $p$、张量阶数和维度 $N$、签名轮数 $r$ 以及哈希函数 $H$。公开基准张量 $\mathcal{T}_0$ 可以直接存储，也可以通过公开种子经确定性扩展算法生成，以降低参数分发开销。
+
+\subsubsection{2. 私钥生成}
+
+密钥生成模块随机生成三个满秩可逆矩阵 $U,V,W$。为便于嵌入式实现，矩阵既可采用一般稠密矩阵形式，也可采用块对角、循环、Toeplitz 或种子展开的结构化形式。
+
+\subsubsection{3. 公钥生成}
+
+根据私钥矩阵计算公钥张量：
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W.
+\]
+
+在一个实施例中，当 $N=10,p=251$ 时，若按每个张量元素使用 1 字节编码，则公钥张量主体数据量为 $10 \times 10 \times 10=1000$ 字节。
+
+\subsection{签名生成方法}
+
+设待签名消息为 $M$，签名轮数为 $r$。
+
+\subsubsection{1. 承诺阶段}
+
+对于每一轮 $t\in\{1,\dots,r\}$，签名者随机生成三个可逆掩码矩阵
+\[
+R_A^{(t)},R_B^{(t)},R_C^{(t)} \in GL(N,\mathbb{F}_p),
+\]
+并计算临时承诺张量
+\[
+\mathcal{C}^{(t)}=\mathcal{T}_0 \times_1 R_A^{(t)} \times_2 R_B^{(t)} \times_3 R_C^{(t)}.
+\]
+
+\subsubsection{2. 挑战阶段}
+
+将消息和所有承诺张量串接后输入哈希函数：
+\[
+\rho = H\big(M \parallel \mathcal{C}^{(1)} \parallel \cdots \parallel \mathcal{C}^{(r)}\big).
+\]
+
+再由摘要 $\rho$ 按位或按分组导出挑战序列
+\[
+c_1,c_2,\dots,c_r.
+\]
+在一个实施方式中，$c_t \in \{0,1\}$。
+
+\subsubsection{3. 响应阶段}
+
+设 $U^{-1},V^{-1},W^{-1}$ 为私钥矩阵在 $\mathbb{F}_p$ 上的逆矩阵。对于第 $t$ 轮：
+
+\begin{itemize}
+    \item 若 $c_t=0$，则输出原始掩码矩阵
+    \[
+    S^{(t)}=\big(R_A^{(t)},R_B^{(t)},R_C^{(t)}\big);
+    \]
+    \item 若 $c_t=1$，则输出隐身重构矩阵
+    \[
+    Z_A^{(t)}=R_A^{(t)}U^{-1},\quad
+    Z_B^{(t)}=R_B^{(t)}V^{-1},\quad
+    Z_C^{(t)}=R_C^{(t)}W^{-1},
+    \]
+    并令
+    \[
+    S^{(t)}=\big(Z_A^{(t)},Z_B^{(t)},Z_C^{(t)}\big).
+    \]
+\end{itemize}
+
+最终签名为
+\[
+\sigma=\big(\rho,S^{(1)},S^{(2)},\dots,S^{(r)}\big).
+\]
+
+\subsection{签名验证方法}
+
+验证者输入消息 $M$、签名 $\sigma$ 以及公钥 $\mathcal{T}_{pk}$ 后，执行如下步骤。
+
+\subsubsection{1. 解析挑战}
+
+验证者根据签名中的摘要 $\rho$ 导出挑战序列 $c_1,\dots,c_r$。
+
+\subsubsection{2. 重构承诺}
+
+对于每一轮 $t$：
+
+\begin{itemize}
+    \item 当 $c_t=0$ 时，验证者利用公开基准张量重构
+    \[
+    \widehat{\mathcal{C}}^{(t)}=\mathcal{T}_0 \times_1 R_A^{(t)} \times_2 R_B^{(t)} \times_3 R_C^{(t)};
+    \]
+    \item 当 $c_t=1$ 时，验证者利用公钥张量重构
+    \[
+    \widehat{\mathcal{C}}^{(t)}=\mathcal{T}_{pk} \times_1 Z_A^{(t)} \times_2 Z_B^{(t)} \times_3 Z_C^{(t)}.
+    \]
+\end{itemize}
+
+由于
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W,
+\]
+因此当 $c_t=1$ 时，有
+\[
+\widehat{\mathcal{C}}^{(t)}
+=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W
+\times_1 \big(R_A^{(t)}U^{-1}\big)
+\times_2 \big(R_B^{(t)}V^{-1}\big)
+\times_3 \big(R_C^{(t)}W^{-1}\big)
+=\mathcal{T}_0 \times_1 R_A^{(t)} \times_2 R_B^{(t)} \times_3 R_C^{(t)}.
+\]
+
+即，不论挑战位为何值，合法签名者均可使验证端重构出同一承诺张量。
+
+\subsubsection{3. 一致性校验}
+
+验证者重新计算
+\[
+\rho' = H\big(M \parallel \widehat{\mathcal{C}}^{(1)} \parallel \cdots \parallel \widehat{\mathcal{C}}^{(r)}\big).
+\]
+若 $\rho'=\rho$，则验证通过；否则验证失败。
+
+本申请的签名生成与验证主流程如图 2 所示。图 2 重点展示了“承诺-挑战-响应”和“基于 $\mathcal{T}_0$ 或 $\mathcal{T}_{pk}$ 的双路径验证”这两个便于理解本申请的关键动作。
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        font=\small,
+        node distance=8mm and 12mm,
+        flow/.style={draw, rounded corners=2pt, align=center, minimum width=34mm, minimum height=9mm, fill=gray!8},
+        decision/.style={draw, diamond, aspect=2.0, align=center, inner sep=1pt, minimum width=22mm, minimum height=10mm, fill=orange!10},
+        term/.style={draw, rounded corners=6pt, align=center, minimum width=30mm, minimum height=9mm, fill=blue!8},
+        line/.style={-Latex, thick}
+    ]
+        \node[term] (start) {输入 $M$、私钥和公钥};
+        \node[flow, below=of start] (mask) {按轮生成\\$R_A^{(t)},R_B^{(t)},R_C^{(t)}$};
+        \node[flow, below=of mask] (commit2) {计算承诺张量\\$\mathcal{C}^{(t)}$};
+        \node[flow, below=of commit2] (hash) {计算摘要 $\rho$\\并导出挑战 $c_t$};
+        \node[decision, below=of hash] (chal1) {$c_t=0$?};
+        \node[flow, below left=of chal1] (resp0) {输出原始掩码\\$(R_A^{(t)},R_B^{(t)},R_C^{(t)})$};
+        \node[flow, below right=of chal1] (resp1) {输出隐身重构矩阵\\$(Z_A^{(t)},Z_B^{(t)},Z_C^{(t)})$};
+        \node[flow, below=16mm of chal1] (sigma) {组合得到签名\\$\sigma=(\rho,S^{(1)},\dots,S^{(r)})$};
+        \node[flow, below=of sigma] (parse) {验证端解析 $\rho$\\并恢复挑战序列};
+        \node[decision, below=of parse] (chal2) {$c_t=0$?};
+        \node[flow, below left=of chal2] (ver0) {利用 $\mathcal{T}_0$\\重构 $\widehat{\mathcal{C}}^{(t)}$};
+        \node[flow, below right=of chal2] (ver1) {利用 $\mathcal{T}_{pk}$\\重构 $\widehat{\mathcal{C}}^{(t)}$};
+        \node[flow, below=16mm of chal2] (rehash) {重算 $\rho'$ 并比较\\$\rho'=\rho$};
+        \node[term, below=of rehash] (end) {输出验证通过/失败};
+
+        \draw[line] (start) -- (mask);
+        \draw[line] (mask) -- (commit2);
+        \draw[line] (commit2) -- (hash);
+        \draw[line] (hash) -- (chal1);
+        \draw[line] (chal1) -- node[left] {\scriptsize 是} (resp0);
+        \draw[line] (chal1) -- node[right] {\scriptsize 否} (resp1);
+        \draw[line] (resp0) |- (sigma);
+        \draw[line] (resp1) |- (sigma);
+        \draw[line] (sigma) -- (parse);
+        \draw[line] (parse) -- (chal2);
+        \draw[line] (chal2) -- node[left] {\scriptsize 是} (ver0);
+        \draw[line] (chal2) -- node[right] {\scriptsize 否} (ver1);
+        \draw[line] (ver0) |- (rehash);
+        \draw[line] (ver1) |- (rehash);
+        \draw[line] (rehash) -- (end);
+    \end{tikzpicture}
+    \caption{TITAN 抗量子签名生成与验证流程图}
+\end{figure}
+
+\subsection{真实数值试验与定量结果}
+
+为进一步说明本申请方案的实际运行效果，本申请开展了真实运行试验，并将原始结果保存在随附实验目录中。相关数据全部由实际代码执行得到，不使用模拟数据、插值数据或手工补齐数据。实验程序位于 \path{experiments/run_real_benchmarks.py}。原始逐次测量结果位于 \path{experiments/results/raw_benchmark.csv}，汇总统计结果位于 \path{experiments/results/summary.json}。
+
+本组实验在同一台机器、同一 Python 运行环境下同时运行 TITAN 原型实现和 Falcon 本地实现，以保证工程比较口径一致。实验环境包括：Windows 11 64 位、Python 3.13.5、NumPy 2.1.3、SymPy 1.14.0。Falcon 对比实现采用本地现有目录中的真实实现代码。需要说明的是，表中 TITAN 参数点用于工程样机验证，尚未映射到与 Falcon 完全一致的标准安全等级，因此以下结果用于说明工程特征和实现趋势，而非宣称已完成标准安全等级对齐。
+
+\textbf{正确性与篡改拒绝结果}
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        方案 & 原始签名验证成功率 & 篡改消息拒绝率 & 篡改签名拒绝率 \\
+        \hline
+        TITAN N=8, rounds=16 & 50/50 (100\%) & 50/50 (100\%) & 50/50 (100\%) \\
+        \hline
+        TITAN N=8, rounds=32 & 50/50 (100\%) & 50/50 (100\%) & 50/50 (100\%) \\
+        \hline
+        TITAN N=10, rounds=32 & 50/50 (100\%) & 50/50 (100\%) & 50/50 (100\%) \\
+        \hline
+        TITAN N=12, rounds=32 & 50/50 (100\%) & 50/50 (100\%) & 50/50 (100\%) \\
+        \hline
+        Falcon-512 & 50/50 (100\%) & 50/50 (100\%) & 50/50 (100\%) \\
+        \hline
+        Falcon-1024 & 50/50 (100\%) & 50/50 (100\%) & 50/50 (100\%) \\
+        \hline
+    \end{tabular}}
+    \caption{真实运行下的正确性与篡改拒绝结果}
+\end{table}
+
+表 1 表明：在本次实际执行的 200 次 TITAN 验证试验中，未观察到签名验证失败；且对消息篡改和签名篡改均实现了 100\% 的拒绝。该结果说明本申请方案不仅具备数学构造上的一致性，而且已经能够稳定完成实际签名与验证流程。
+
+\textbf{与 Falcon 实现的工程指标比较}
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+        \hline
+        方案 & 公钥字节数 & 私钥字节数 & 签名字节数 & KeyGen均值(ms) & Sign均值(ms) & Verify均值(ms) \\
+        \hline
+        TITAN N=8, rounds=16 & 512 & 384 & 3104 & 4.539 & 16.534 & 1.808 \\
+        \hline
+        TITAN N=8, rounds=32 & 512 & 384 & 6176 & 4.936 & 33.794 & 3.495 \\
+        \hline
+        TITAN N=10, rounds=32 & 1000 & 600 & 9632 & 6.525 & 43.297 & 4.136 \\
+        \hline
+        TITAN N=12, rounds=32 & 1728 & 864 & 13856 & 10.096 & 50.150 & 4.806 \\
+        \hline
+        Falcon-512 & 896 & 3584 & 666 & 2328.044 & 16.280 & 4.263 \\
+        \hline
+        Falcon-1024 & 1792 & 7168 & 1280 & 11414.624 & 40.760 & 10.706 \\
+        \hline
+    \end{tabular}}
+    \caption{TITAN 与 Falcon 的真实工程指标对比}
+\end{table}
+
+为直观展示“时间成本”和“尺寸成本”的整体差异，依据同一份真实汇总文件自动生成了图 3 和图 4。图中全部柱状值均来自 \path{experiments/results/summary.json}，未进行手工修饰。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../experiments/results/latency_comparison.png}
+    \caption{基于真实运行结果自动生成的 TITAN 与 Falcon 时间开销对比图}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{../experiments/results/size_comparison.png}
+    \caption{基于真实运行结果自动生成的 TITAN 与 Falcon 尺寸开销对比图}
+\end{figure}
+
+由表 2 可得到如下可量化结论：
+\begin{itemize}
+    \item 在本机实验中，TITAN 的 \textbf{密钥生成时间显著低于} Falcon。以 $N=8$、rounds=16 的 TITAN 参数点为例，其 KeyGen 均值为 4.539 ms；相比 Falcon-512 的 2328.044 ms，约快 512.9 倍。
+    \item 在本机实验中，TITAN 的 \textbf{验证延迟显著低于} Falcon。以 TITAN N=8、rounds=16 为例，其 Verify 均值为 1.808 ms，相比 Falcon-512 的 4.263 ms 约快 2.36 倍。
+    \item 在公钥维度上，TITAN 可取得较紧凑表示。以 TITAN N=8、rounds=16 为例，其公钥为 512 字节，仅为 Falcon-512 公钥 896 字节的约 57\%。
+    \item 当前未压缩原型实现下，TITAN 的 \textbf{签名字节数明显大于} Falcon。例如 TITAN N=8、rounds=16 的签名为 3104 字节，为 Falcon-512 的约 4.66 倍；这表明本申请在计算延迟上有优势，但在签名压缩方面仍存在明确优化空间。
+\end{itemize}
+
+\textbf{参数变化时的时间与尺寸趋势}
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+        \hline
+        TITAN参数点 & $N$ & rounds & 公钥字节数 & 签名字节数 & Sign均值(ms) & Verify均值(ms) \\
+        \hline
+        TITAN N=8, rounds=16 & 8 & 16 & 512 & 3104 & 16.534 & 1.808 \\
+        \hline
+        TITAN N=8, rounds=32 & 8 & 32 & 512 & 6176 & 33.794 & 3.495 \\
+        \hline
+        TITAN N=10, rounds=32 & 10 & 32 & 1000 & 9632 & 43.297 & 4.136 \\
+        \hline
+        TITAN N=12, rounds=32 & 12 & 32 & 1728 & 13856 & 50.150 & 4.806 \\
+        \hline
+    \end{tabular}}
+    \caption{TITAN 参数扩展下的真实测量结果}
+\end{table}
+
+由表 3 可见，本申请的参数变化趋势具备良好的可解释性：
+\begin{itemize}
+    \item 当维度固定为 $N=8$、将 rounds 从 16 增加到 32 时，签名字节数由 3104 字节增加到 6176 字节，约增长 1.99 倍；签名时间由 16.534 ms 增加到 33.794 ms，约增长 2.04 倍；验证时间由 1.808 ms 增加到 3.495 ms，约增长 1.93 倍，表明 rounds 的影响接近线性。
+    \item 当 rounds 固定为 32、将维度从 $N=8$ 提高到 $N=12$ 时，公钥由 512 字节增加到 1728 字节，约增长 3.38 倍；签名时间由 33.794 ms 增加到 50.150 ms，约增长 1.48 倍；验证时间由 3.495 ms 增加到 4.806 ms，约增长 1.38 倍，说明参数增长趋势平稳、可预测。
+    \item 以 TITAN N=12、rounds=32 为例，公钥为 1728 字节，略低于 Falcon-1024 的 1792 字节；验证时间为 4.806 ms，约为 Falcon-1024 的 44.9\%，显示出本申请在较大参数点下仍具有较好的验证效率优势。
+\end{itemize}
+
+综上，真实试验结果表明：本申请方案在当前原型实现中，已经能够以可复现方式说明其稳定运行能力、篡改拒绝能力以及工程时间和尺寸成本特征。其当前最明确的工程优势集中在：\textbf{更快的密钥生成、更快的验证路径、较小的公钥表示}；其当前最明确的工程代价则是：\textbf{未压缩签名尺寸较大}。因此，该组数据既支撑了本申请的创新可实现性，也为后续进一步的签名压缩和参数优化提供了量化依据。
+
+\textbf{上述真实数据的证明范围}
+
+上述真实数据已经直接证明：其一，本申请给出的 TITAN 算法流程能够在本地代码中完成密钥生成、签名生成、签名验证以及篡改拒绝，且在当前执行的 200 次 TITAN 验证试验中未观察到失败样本；其二，本申请在同一机器、同一运行环境下，相较本地 Falcon 参考实现，已经展示出更快的密钥生成路径和更快的验证路径；其三，本申请当前原型在公钥尺寸方面具备一定优势，但在未压缩签名尺寸方面仍有明显优化空间。上述真实数据尚未直接证明的内容包括：与 NIST 标准参数逐点对齐的安全等级结论、针对大规模密码分析的最终安全性结论、以及经过专门常数时间实现与物理测试验证后的最终侧信道强度结论。因此，本申请将该组实验明确定位为\textbf{真实性能与可实现性证据}，不将其表述为已经完成全部标准化安全论证，从而准确区分已被数据支撑的内容与后续仍需继续论证的内容。
+
+\subsection{扩展实施方式}
+
+除上述基本实施方式外，本申请还包括如下扩展方式：
+
+\begin{itemize}
+    \item 可将三阶张量扩展为四阶或更高阶张量，以构造更多模态上的联合陷门；
+    \item 可将二元挑战扩展为多元挑战，以减少在相同安全目标下的总轮数；
+    \item 可采用种子展开的随机矩阵生成方式，降低私钥和签名中的响应存储量；
+    \item 可将张量按切片方式进行并行调度，以适配 GPU/NPU 的批量矩阵乘法接口；
+    \item 可将本申请的方法封装为签名服务器、密码卡、可信模组、终端 SoC 固件或云端签名服务。
+\end{itemize}
+
+%==============================================================================
+\section{本申请提出的创新点和欲保护点}
+%==============================================================================
+
+本申请提出主要包含以下创新点和保护点：
+
+(1) \textbf{基于三模态张量同构关系构造公私钥陷门}：以公开基准张量 $\mathcal{T}_0$ 为参照，通过三个私钥可逆矩阵在不同模态上的联合作用得到公钥张量 $\mathcal{T}_{pk}$，区别于现有格、哈希、码或传统多变量签名的线性/低阶结构。
+
+(2) \textbf{基于双视图一致性的零知识签名机制}：在同一承诺张量下，允许验证端针对不同挑战分别使用 $\mathcal{T}_0$ 或 $\mathcal{T}_{pk}$ 完成重构，从而形成适合 Fiat-Shamir 变换的签名结构。
+
+(3) \textbf{不依赖噪声采样的有限域签名实现路径}：签名和验证仅需有限域矩阵乘法、求逆和张量收缩，更易形成常数时间实现，不依赖高斯采样、拒绝采样或浮点近似。
+
+(4) \textbf{适配张量加速硬件的密码原语设计}：将签名核心运算直接表达为张量收缩与矩阵乘法，使其能够复用 AI 芯片、GPU、NPU 或张量核心的并行计算能力。
+
+(5) \textbf{覆盖方法、系统、设备和介质的统一方案}：保护点不仅包括签名流程本身，还包括参数生成系统、验证设备、存储签名程序的计算机可读介质及其部署结构。
+
+%==============================================================================
+\section{与第三节中最接近的现有技术相比，本申请提出有何技术优点}
+%==============================================================================
+
+与第三节中最接近的现有技术，尤其是基于格的紧凑型签名方案和通用识别到签名方案相比，本申请具有如下技术优点：
+
+(1) \textbf{避免离散高斯采样和浮点路径}：本申请的核心流程建立在有限域矩阵和张量运算上，较格签名更易实现整数化、分支稳定的执行路径。
+
+(2) \textbf{更适合常数时间与侧信道防护}：由于不存在高斯采样重试、浮点近似和范数拒绝过程，本申请更有利于构造功耗、缓存和时延表现更稳定的实现。
+
+(3) \textbf{验证关系严格由代数抵消给出}：验证端通过公钥张量与隐身重构矩阵的模态抵消恢复承诺，签名正确性来源于显式代数关系，便于做形式化推导与实现自检。
+
+(4) \textbf{与张量硬件天然对齐}：本申请的主要计算是矩阵乘法和张量收缩，能够直接映射到现有 AI 加速硬件的软件栈中，在批量签名、批量验证和边云协同验证场景中具有工程优势。
+
+(5) \textbf{公钥表示紧凑且可结构化压缩}：在中等维度参数下，公钥可直接表示为有限域三阶张量；若进一步结合种子生成和结构化矩阵，还可继续压缩密钥分发成本。
+
+(6) \textbf{技术路线区别于现有主流后量子路线}：本申请不依赖格噪声、Merkle 树、纠错码译码或椭圆曲线同源，而是采用高阶张量同构陷门作为核心困难结构，技术路径差异明显。
+
+%==============================================================================
+\section{其他有助于理解本申请提出的技术资料}
+%==============================================================================
+
+(1) \textbf{参数示例}：在一个示例实现中，可取 $p=251$、$N=10$、$r=32$。该参数仅用于说明本申请的基本可实现性，不构成对保护范围的限定。
+
+(2) \textbf{软件验证示例}：可采用 Python、C/C++、Rust 或硬件描述语言实现本申请方案。软件实现中可使用爱因斯坦求和约定、批处理矩阵乘法或张量库来完成
+\[
+\mathcal{T} \times_1 A \times_2 B \times_3 C
+\]
+运算。
+
+(3) \textbf{安全性理解}：本申请方案的安全性可理解为建立在如下问题的计算困难性之上：对于给定的公开基准张量 $\mathcal{T}_0$ 和公钥张量 $\mathcal{T}_{pk}$，在不知道私钥矩阵 $U,V,W$ 的情况下，难以恢复满足
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W
+\]
+的等价陷门结构，或难以同时回答多轮挑战并伪造一致签名。
+
+(4) \textbf{适用场景}：本申请可应用于量子计算网络节点认证、模型文件签名、固件升级保护、分布式软件发布、云边协同控制指令签名以及面向 AI 设备的软件供应链完整性校验。
+
+(5) \textbf{可替换部件}：哈希函数可选用 SHA-256、SHA3、SM3 或其它安全散列函数；有限域模数 $p$、张量阶数和矩阵结构均可按不同安全等级进行配置。
+
+%==============================================================================
+\section{本申请提出的侵权证据可获得性}
+%==============================================================================
+
+本申请提出的侵权证据具有较高的可获得性，主要包括：
+
+(1) \textbf{公钥格式证据}：若被控产品或系统公开输出以三阶张量为主体的公钥、证书或设备身份数据，并公开声明其由公开基准张量经三组可逆矩阵作用生成，则可据此识别是否采用了本申请的核心公钥结构。
+
+(2) \textbf{签名格式证据}：若签名数据中包含基于消息与多轮承诺导出的摘要以及按挑战位选择输出的三组矩阵响应，则可据此判断其是否落入本申请的签名格式和应答机制。
+
+(3) \textbf{验证逻辑证据}：若被控实现中同时存在“使用公开基准张量验证第一类响应”和“使用公钥张量验证第二类响应”的双路径验证逻辑，则可作为侵权判定的重要技术证据。
+
+(4) \textbf{程序和固件证据}：通过对软件二进制、固件、驱动、密码模块接口或加速内核进行逆向分析，如发现有限域矩阵求逆、模态张量乘法和基于哈希挑战的双分支验证流程，可作为实施本申请技术方案的证据。
+
+(5) \textbf{部署和接口证据}：在云签名服务、芯片 SDK、可信模组 API、日志或调试接口中，如公开暴露与张量维度、域参数、模态乘法、轮次挑战等对应的调用参数，也可作为辅助证据。
+
+\end{document}

@@ -1,0 +1,144 @@
+% ============================================
+% 面向量子计算网络的抗量子攻击节点协同认证系统及方法
+% Anti-Quantum Attack Node Collaborative Authentication System and Method for Quantum Computing Networks
+% Patent Application Document for CNIPA
+% ============================================
+
+\documentclass[a4paper,12pt]{article}
+
+% ============================================
+% PACKAGES
+% ============================================
+\usepackage[UTF8, heading=true]{ctex}          % Chinese language support
+\usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+\usepackage{graphicx}                           % Images and figures
+\usepackage{tikz}                               % High-quality diagrams
+\usepackage{pgfplots}                           % Plots and charts
+\pgfplotsset{compat=1.18}
+\usepackage{amsmath,amssymb,amsthm}            % Mathematical symbols
+\usepackage{booktabs}                           % Professional tables
+\usepackage{array}                              % Table formatting
+\usepackage{multirow}                           % Multi-row cells
+\usepackage{enumitem}                           % Better lists
+\usepackage{fancyhdr}                           % Headers and footers
+\usepackage{titlesec}                           % Section formatting
+\usepackage{tocloft}                            % Table of contents formatting
+\usepackage{hyperref}                           % PDF hyperlinks
+\usepackage{xcolor}                             % Colors
+\usepackage{float}                              % Figure placement
+\usepackage{caption}                            % Caption formatting
+\usepackage{subcaption}                         % Subfigures
+\usepackage{algorithm}                          % Algorithm environment
+\usepackage{algpseudocode}                      % Algorithm pseudocode
+\usepackage{setspace}                           % Line spacing
+\usepackage{tabularx}                           % Flexible tables
+
+% ============================================
+% DOCUMENT SETTINGS
+% ============================================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,
+    urlcolor=blue,
+    pdftitle={面向量子计算网络的抗量子攻击节点协同认证系统及方法},
+    pdfauthor={许达},
+    pdfsubject={发明专利申请},
+    pdfkeywords={量子计算网络, 后量子密码学, Falcon签名, 节点认证, NTRU格}
+}
+
+\setstretch{1.5}                                % 1.5 line spacing (CNIPA requirement)
+
+% TikZ libraries for diagrams
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, backgrounds, fit, decorations.pathreplacing, patterns}
+
+% ============================================
+% CUSTOM STYLES FOR PATENT DIAGRAMS
+% ============================================
+\tikzstyle{process} = [rectangle, minimum width=2.5cm, minimum height=0.8cm, 
+                       text centered, draw=black, fill=white, font=\small]
+\tikzstyle{decision} = [diamond, minimum width=2cm, minimum height=1cm, 
+                        text centered, draw=black, fill=white, aspect=2, font=\small]
+\tikzstyle{startstop} = [rectangle, rounded corners=8pt, minimum width=2cm, 
+                         minimum height=0.8cm, text centered, draw=black, fill=white, font=\small]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, 
+                  minimum width=2cm, minimum height=0.8cm, text centered, 
+                  draw=black, fill=white, font=\small]
+\tikzstyle{arrow} = [thick,->,>=Stealth]
+\tikzstyle{component} = [rectangle, draw=black, thick, minimum width=2cm, 
+                         minimum height=1cm, text centered, fill=white, font=\small]
+\tikzstyle{module} = [rectangle, draw=black, thick, minimum width=3cm, 
+                      minimum height=1.5cm, text centered, fill=white, font=\small]
+\tikzstyle{node_box} = [rectangle, draw=black, minimum width=1.2cm, minimum height=1.8cm, 
+                        text centered, fill=white, font=\footnotesize]
+\tikzstyle{phase_box} = [rectangle, draw=black, thick, minimum width=10cm, 
+                         minimum height=2cm, fill=white]
+
+% ============================================
+% HEADER AND FOOTER
+% ============================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 发明专利申请}
+\fancyhead[C]{\small 面向量子计算网络的抗量子攻击节点协同认证系统及方法}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[C]{\small 中国国家知识产权局}
+
+% ============================================
+% SECTION FORMATTING
+% ============================================
+\ctexset{
+    section = {
+        format = \Large\bfseries\centering,
+        name = {,、},
+        number = \chinese{section},
+        aftername = {},
+        beforeskip = 1.5ex,
+        afterskip = 1ex
+    },
+    subsection = {
+        format = \large\bfseries,
+        name = {（,）},
+        number = \chinese{subsection},
+        aftername = {},
+        beforeskip = 1ex,
+        afterskip = 0.5ex
+    },
+    subsubsection = {
+        format = \normalsize\bfseries,
+        name = {,.},
+        number = \arabic{subsubsection},
+        aftername = ~,
+        beforeskip = 0.5ex,
+        afterskip = 0.3ex
+    }
+}
+
+% ============================================
+% THEOREM ENVIRONMENTS
+% ============================================
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{definition}[theorem]{定义}
+
+% ============================================
+% DOCUMENT BEGIN
+% ============================================
+\begin{document}
+
+% Title Page
+\input{sections/titlepage}
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+% Main Content
+\input{sections/abstract}
+\input{sections/claims}
+\input{sections/description}
+\input{sections/drawings}
+
+\end{document}

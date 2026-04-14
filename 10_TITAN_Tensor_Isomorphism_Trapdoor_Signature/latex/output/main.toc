@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {一、}摘要}{2}{section.1}%
+\contentsline {subsection}{\numberline {（一）}中文摘要}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {（二）}English Abstract}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {（三）}关键词}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {（四）}技术效果摘要}{3}{subsection.1.4}%
+\contentsline {section}{\numberline {二、}权利要求书}{5}{section.2}%
+\contentsline {subsection}{\numberline {（一）}独立权利要求}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {1.}权利要求 1（系统权利要求）}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.}权利要求 2（方法权利要求）}{6}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {3.}权利要求 3（独立方法权利要求 - 分布式密钥生成）}{7}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {（二）}从属权利要求}{9}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {1.}依赖于权利要求 1（系统）的权利要求}{9}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.}依赖于权利要求 2（方法）的权利要求}{10}{subsubsection.2.2.2}%
+\contentsline {section}{\numberline {三、}说明书}{11}{section.3}%
+\contentsline {subsection}{\numberline {（一）}技术领域}{11}{subsection.3.1}%
+\contentsline {subsection}{\numberline {（二）}背景技术}{11}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {1.}现有技术的局限性}{11}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {2.}Falcon 算法及其分布式实现的挑战}{12}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {（三）}发明内容}{13}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {1.}发明目的}{13}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {2.}技术方案}{13}{subsubsection.3.3.2}%
+\contentsline {subsection}{\numberline {（四）}附图说明}{15}{subsection.3.4}%
+\contentsline {subsection}{\numberline {（五）}具体实施方式}{15}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {1.}系统架构}{15}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {2.}实施例 1：核心协议流程}{16}{subsubsection.3.5.2}%
+\contentsline {subsubsection}{\numberline {3.}实施例 2：硬件强制安全（TEE 集成）}{16}{subsubsection.3.5.3}%
+\contentsline {subsubsection}{\numberline {4.}实施例 3：Gas 优化验证}{17}{subsubsection.3.5.4}%
+\contentsline {subsection}{\numberline {（六）}技术效果}{17}{subsection.3.6}%
+\contentsline {subsubsection}{\numberline {1.}量子安全性}{17}{subsubsection.3.6.1}%
+\contentsline {subsubsection}{\numberline {2.}高性能与经济可行性}{17}{subsubsection.3.6.2}%
+\contentsline {subsubsection}{\numberline {3.}硬件实现与物理转换}{17}{subsubsection.3.6.3}%
+\contentsline {subsubsection}{\numberline {4.}系统健壮性}{18}{subsubsection.3.6.4}%
