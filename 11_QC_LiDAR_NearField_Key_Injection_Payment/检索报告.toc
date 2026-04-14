@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}检索参数 / Search Parameters}{3}{}%
+\contentsline {subsection}{\numberline {1.1}使用的关键词 / Keywords Used}{3}{}%
+\contentsline {section}{\numberline {2}A类：基础性现有技术 / Category A: Foundational Prior Art}{3}{}%
+\contentsline {subsection}{\numberline {2.1}A1. SPAD/ToF 深度传感器基础}{3}{}%
+\contentsline {subsection}{\numberline {2.2}A2. 移动/短距自由空间 QKD}{3}{}%
+\contentsline {subsection}{\numberline {2.3}A3. 安全元件与离线令牌管理}{3}{}%
+\contentsline {section}{\numberline {3}B类：相关应用现有技术 / Category B: Related Application Prior Art}{4}{}%
+\contentsline {subsection}{\numberline {3.1}B1. LiDAR 系统级实现}{4}{}%
+\contentsline {subsection}{\numberline {3.2}B2. 移动终端安全元件}{4}{}%
+\contentsline {subsection}{\numberline {3.3}B3. 线下支付安全流程}{4}{}%
+\contentsline {section}{\numberline {4}C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}{4}{}%
+\contentsline {subsection}{\numberline {4.1}C1. 自由空间背景噪声控制}{4}{}%
+\contentsline {subsection}{\numberline {4.2}C2. 最后一段量子接入}{4}{}%
+\contentsline {section}{\numberline {5}D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}{5}{}%
+\contentsline {subsection}{\numberline {5.1}D1. 近场支付与安全元件交易}{5}{}%
+\contentsline {subsection}{\numberline {5.2}D2. 安全元件初始化与写入}{5}{}%
+\contentsline {section}{\numberline {6}E类：专利检索结果 / Category E: Patent Search Results}{5}{}%
+\contentsline {subsection}{\numberline {6.1}USPTO 检索结果}{5}{}%
+\contentsline {subsection}{\numberline {6.2}EPO 检索结果}{5}{}%
+\contentsline {subsection}{\numberline {6.3}CNIPA 检索结果}{5}{}%
+\contentsline {section}{\numberline {7}新颖性分析 / Novelty Analysis}{6}{}%
+\contentsline {subsection}{\numberline {7.1}创新点 A：消费级深度传感器复用}{6}{}%
+\contentsline {subsection}{\numberline {7.2}创新点 B：厘米级近场发射基座}{6}{}%
+\contentsline {subsection}{\numberline {7.3}创新点 C：双信道协同后处理}{6}{}%
+\contentsline {subsection}{\numberline {7.4}创新点 D：SE 或 TEE 密钥池管理}{6}{}%
+\contentsline {subsection}{\numberline {7.5}创新点 E：近场稳健性与回退}{6}{}%
+\contentsline {subsection}{\numberline {7.6}创新点 F：可取证落地接口}{6}{}%
+\contentsline {section}{\numberline {8}可专利性评估 / Patentability Assessment}{6}{}%
+\contentsline {section}{\numberline {9}权利要求差异化矩阵 / Claim Differentiation Matrix}{7}{}%
+\contentsline {section}{\numberline {10}关键区别特征 / Key Distinguishing Features}{7}{}%
+\contentsline {section}{\numberline {11}建议申请策略 / Recommended Filing Strategy}{7}{}%
+\contentsline {section}{\numberline {12}结论 / Conclusion}{8}{}%

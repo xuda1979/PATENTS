@@ -1,0 +1,175 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{setspace}
+\usetikzlibrary{positioning,arrows.meta}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+\title{\textbf{发明专利技术交底书}\\[0.5em]\Large 基于消费级终端深度传感器阵列复用的近场自由空间量子密钥注入方法、装置及支付系统}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{发明名称}
+基于消费级终端深度传感器阵列复用的近场自由空间量子密钥注入方法、装置及支付系统。
+
+\textbf{英文名称}: Near-Field Free-Space Quantum Key Injection Method, Apparatus and Payment System Based on Reuse of Consumer Depth Sensor Arrays.
+
+\section{申请人信息}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+申请人名称 & 待补充 \\
+\hline
+申请人类型 & 企业或研究机构，待补充 \\
+\hline
+国籍或注册地 & 待补充 \\
+\hline
+通讯地址 & 待补充 \\
+\hline
+联系人及电话 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{发明人信息}
+\subsection{第一发明人}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+姓名 & 待补充 \\
+\hline
+工作单位 & 待补充 \\
+\hline
+联系电话 & 待补充 \\
+\hline
+电子邮箱 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{技术领域}
+本申请涉及量子安全通信、量子密钥分发、移动终端安全与近场支付技术，尤其涉及复用消费级 ToF 或 LiDAR 深度传感器接收阵列，在厘米级自由空间链路中完成量子密钥生成、筛选、隐私放大与安全元件注入。
+
+\section{背景技术}
+\subsection{现有技术的局限性}
+现有金融支付终端主要依赖经典密码体系，面临长期的“先窃取、后解密”风险。专用 QKD 设备体积大、成本高、部署重，不适合进入手机和可穿戴设备。普通 NFC 或二维码链路虽然能传输交易数据，但无法在几秒钟内向终端安全域稳定注入可长期消耗的高等级密钥池。
+
+\subsection{相关技术路线与工程瓶颈}
+高端手机的 ToF 或 LiDAR 模组本身已经具备门控采样、弱光接收和时间标记能力，但现有公开路线主要将其用于深度感知、测距和经典光学场景，并未形成“弱光接收模式切换 + 近场发射基座 + 支付流程联动”的工程闭环。对评审人而言，关键瓶颈不在单光子物理本身，而在于如何低成本复用现有终端硬件。
+
+\subsection{审查中可能关注的现有技术边界}
+公开资料已经分别覆盖短距自由空间 QKD、移动设备安全元件、LiDAR 的 SPAD 接收阵列以及线下支付安全流程，但未见将“终端深度传感器量子接收复用、近场发射基座、SE 或 TEE 密钥池写入、以及支付调用策略”统一成单一系统方案的公开。
+
+\section{发明内容}
+\subsection{发明目的}
+本申请的目的在于，在不增加终端专用量子通信硬件的前提下，通过复用现有深度传感器接收阵列与新增商户侧发射基座，建立秒级近场量子密钥注入流程，使终端安全元件获得可长期消耗的密钥池，并将该密钥池用于支付、认证或离线授权。
+
+\subsection{技术方案}
+\subsubsection{创新点 A：消费级深度传感器的量子接收复用}
+在系统授权条件下，将终端 ToF 或 LiDAR 接收阵列切换为弱光接收与时间标记模式，同时关闭或抑制主动发射端，使同一硬件从深度感知用途转为量子密钥接收用途。
+
+\subsubsection{创新点 B：厘米级近场自由空间发射基座}
+在 POS、ATM 或门禁终端部署微型发射基座，输出与终端深度模组波段相匹配的弱相干脉冲，并通过强衰减、门控和对准结构，将量子链路稳定约束在厘米级短距环境中。
+
+\subsubsection{创新点 C：双信道协同的密钥注入协议}
+经典近场链路承担身份认证、时间同步、公开讨论、纠错与隐私放大协商，弱光链路承担密钥材料生成，从而把量子信号处理与既有支付软件栈和后台审计统一起来。
+
+\subsubsection{创新点 D：面向 SE 或 TEE 的密钥池管理}
+生成的密钥不直接用于实时保密通话，而是按用途分片写入终端安全域，形成支付密钥、交易令牌、离线授权码等可被后续业务逐步消耗的密钥池。
+
+\subsubsection{创新点 E：近场稳健性与异常检测}
+通过磁吸定位、机械卡位、窄带滤光、门控窗口与误码阈值判定，降低背景光与偏移误差影响；一旦检测到异常链路或误码超阈，系统自动回退至传统加密支付流程。
+
+\subsubsection{创新点 F：可取证的系统化落地接口}
+保留发射波形配置、对准状态、NFC 公开讨论摘要、SE 写入记录以及密钥池消耗记录，使侵权取证可以落到固件、日志和交易联动行为，而非仅停留在外观层面。
+
+\section{附图说明}
+图1示出近场量子密钥注入支付系统的总体架构。图2示出贴靠对准、经典协商、弱光接收、后处理与写入密钥池的流程。
+
+\section{具体实施方式}
+\subsection{系统架构}
+系统由量子发射基座、移动终端深度传感器接收链路、经典近场协商链路以及安全元件写入与支付调用接口构成。发射基座负责脉冲生成、衰减控制与对准检测；终端负责接收事件记录、协议后处理与密钥池管理；后台用于审计、风控与证书管理。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1cm]
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm] (a) {量子发射基座};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, right=of a] (b) {深度传感器接收链路};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, right=of b] (c) {SE 或 TEE 密钥池};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, below=of b] (d) {NFC 或 BLE 协商与审计后台};
+\draw[->, thick] (a) -- (b);
+\draw[->, thick] (b) -- (c);
+\draw[->, thick] (b) -- (d);
+\draw[->, thick] (d) -| (c);
+\end{tikzpicture}
+\caption{图1 近场量子密钥注入支付系统架构示意图}
+\end{figure}
+
+\subsection{实施步骤}
+\subsubsection{实施例 1：线下支付的近场量子密钥池注入}
+用户将手机背部贴靠发射基座的定位区域。终端与基座首先通过 NFC 完成身份认证、时间同步与参数协商；随后终端切换深度传感器到弱光接收模式，记录到达事件并执行筛选、纠错与隐私放大，最后把会话密钥分片写入安全元件，形成受用途策略约束的密钥池。
+
+\subsubsection{实施例 2：高保密移动办公终端的离线补钥}
+政企场景下，桌面基座在每日签到或短时停靠过程中向终端注入用于离线文件加密、会议令牌或设备登录的量子增强密钥，使终端离开基座后仍保持高等级本地密钥储备。
+
+\subsubsection{实施例 3：商户侧异常检测与回退}
+当系统检测到对准失败、背景计数超阈或链路误码率异常时，发射基座停止量子注入，仅保留经典支付流程；同时在后台形成异常记录，用于审计、调试与潜在攻击识别。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm]
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm] (s1) {贴靠对准并建立经典近场会话};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s1] (s2) {切换深度传感器到弱光接收模式};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s2] (s3) {执行筛选、纠错与隐私放大};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s3] (s4) {写入 SE 或 TEE 并登记密钥池策略};
+\draw[->, thick] (s1) -- (s2);
+\draw[->, thick] (s2) -- (s3);
+\draw[->, thick] (s3) -- (s4);
+\end{tikzpicture}
+\caption{图2 近场量子密钥注入主流程示意图}
+\end{figure}
+
+\section{技术效果}
+\subsection{安全效果}
+本申请通过弱光量子链路生成并注入密钥池，使高价值交易获得比单纯经典密钥更新更强的长期抗回溯破解能力。由于链路限制在厘米级近场，背景光、对准误差和中继攻击面均较长距自由空间场景更可控。
+
+\subsection{产业化与经济可行性}
+终端侧不增加专用量子探测硬件，部署成本主要集中在商户或运营侧基座，适合先在高价值支付和政企场景中部署，再逐步扩展。终端厂商、安全芯片厂商和支付机构可基于同一接口形成标准化 SDK 或授权体系。
+
+\subsection{可取证性与实施稳定性}
+侵权取证时，可通过基座发射波段与波形统计、终端驱动调用链、SE 写入日志以及支付流程与贴靠注入动作之间的联动证据证明是否实施了本申请的关键方案。系统同时保留回退机制，提升工程稳定性。
+
+\section{权利要求书}
+\subsection{独立权利要求}
+\begin{itemize}
+\item 一种近场自由空间量子密钥注入方法，其特征在于，复用消费级终端深度传感器接收阵列作为弱光接收端，并在经典近场链路协同下完成筛选、纠错、隐私放大和安全元件写入。
+\item 根据前述方法，量子链路由商户侧发射基座发出弱相干脉冲并配合对准结构、窄带滤光与门控窗口工作于厘米级短距环境。
+\item 一种近场量子密钥注入装置，包括量子发射基座、终端深度传感器控制模块、协议后处理模块以及安全元件密钥池管理模块。
+\item 一种支付系统，将所生成密钥池用于支付会话、交易签名、离线授权码或认证令牌。
+\end{itemize}
+
+\subsection{从属权利要求}
+\begin{itemize}
+\item 经典协商链路采用 NFC、蓝牙或超声中的至少一种。
+\item 发射基座采用诱骗态比例配置与误码率阈值判定。
+\item 安全元件为 SE、TEE 或安全芯片中的至少一种。
+\item 链路异常时自动回退到传统加密支付流程。
+\end{itemize}
+
+\section{说明书摘要}
+本申请公开了一种基于消费级终端深度传感器阵列复用的近场自由空间量子密钥注入方法、装置及支付系统。该方案在不增加终端专用量子通信硬件的前提下，将 ToF 或 LiDAR 接收阵列切换为弱光接收端，并通过商户侧发射基座、经典近场协商链路和安全元件写入模块，在厘米级环境中完成量子密钥生成、后处理与密钥池注入。核心创新不在底层物理器件突破，而在“传感器复用、近场补钥、密钥池管理和支付闭环”四者的系统耦合。
+\end{document}
