@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}检索参数 / Search Parameters}{3}{}%
+\contentsline {subsection}{\numberline {1.1}使用的关键词 / Keywords Used}{3}{}%
+\contentsline {section}{\numberline {2}A类：基础性现有技术 / Category A: Foundational Prior Art}{3}{}%
+\contentsline {subsection}{\numberline {2.1}A1. 量子读出 PUF}{3}{}%
+\contentsline {subsection}{\numberline {2.2}A2. 量子认证数据扩展}{3}{}%
+\contentsline {subsection}{\numberline {2.3}A3. 经典 PUF 防伪}{3}{}%
+\contentsline {section}{\numberline {3}B类：相关应用现有技术 / Category B: Related Application Prior Art}{4}{}%
+\contentsline {subsection}{\numberline {3.1}B1. 可调谐超构表面}{4}{}%
+\contentsline {subsection}{\numberline {3.2}B2. 液晶超构表面}{4}{}%
+\contentsline {subsection}{\numberline {3.3}B3. 量子防伪产业实践}{4}{}%
+\contentsline {section}{\numberline {4}C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}{4}{}%
+\contentsline {subsection}{\numberline {4.1}C1. 量子 PUF 读出专利}{4}{}%
+\contentsline {subsection}{\numberline {4.2}C2. RFID 挑战应答方向}{4}{}%
+\contentsline {section}{\numberline {5}D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}{5}{}%
+\contentsline {subsection}{\numberline {5.1}D1. 供应链验真需求}{5}{}%
+\contentsline {subsection}{\numberline {5.2}D2. 结构与行为双证据}{5}{}%
+\contentsline {section}{\numberline {6}E类：专利检索结果 / Category E: Patent Search Results}{5}{}%
+\contentsline {subsection}{\numberline {6.1}USPTO 检索结果}{5}{}%
+\contentsline {subsection}{\numberline {6.2}EPO 检索结果}{5}{}%
+\contentsline {subsection}{\numberline {6.3}CNIPA 检索结果}{5}{}%
+\contentsline {section}{\numberline {7}新颖性分析 / Novelty Analysis}{6}{}%
+\contentsline {subsection}{\numberline {7.1}创新点 A：可调谐超构表面标签}{6}{}%
+\contentsline {subsection}{\numberline {7.2}创新点 B：量子受限挑战序列}{6}{}%
+\contentsline {subsection}{\numberline {7.3}创新点 C：材料指纹与协议绑定}{6}{}%
+\contentsline {subsection}{\numberline {7.4}创新点 D：诱骗态统计判决}{6}{}%
+\contentsline {subsection}{\numberline {7.5}创新点 E：供应链落地接口}{6}{}%
+\contentsline {subsection}{\numberline {7.6}创新点 F：结构与行为双证据}{6}{}%
+\contentsline {section}{\numberline {8}可专利性评估 / Patentability Assessment}{6}{}%
+\contentsline {section}{\numberline {9}权利要求差异化矩阵 / Claim Differentiation Matrix}{7}{}%
+\contentsline {section}{\numberline {10}关键区别特征 / Key Distinguishing Features}{7}{}%
+\contentsline {section}{\numberline {11}建议申请策略 / Recommended Filing Strategy}{7}{}%
+\contentsline {section}{\numberline {12}结论 / Conclusion}{8}{}%

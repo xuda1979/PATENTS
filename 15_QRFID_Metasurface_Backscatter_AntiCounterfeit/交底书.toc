@@ -1,0 +1,33 @@
+\contentsline {section}{\numberline {1}发明名称}{3}{}%
+\contentsline {section}{\numberline {2}申请人信息}{3}{}%
+\contentsline {section}{\numberline {3}发明人信息}{3}{}%
+\contentsline {subsection}{\numberline {3.1}第一发明人}{3}{}%
+\contentsline {section}{\numberline {4}技术领域}{3}{}%
+\contentsline {section}{\numberline {5}背景技术}{4}{}%
+\contentsline {subsection}{\numberline {5.1}现有技术的局限性}{4}{}%
+\contentsline {subsection}{\numberline {5.2}相关技术路线与工程瓶颈}{4}{}%
+\contentsline {subsection}{\numberline {5.3}审查中可能关注的现有技术边界}{4}{}%
+\contentsline {section}{\numberline {6}发明内容}{4}{}%
+\contentsline {subsection}{\numberline {6.1}发明目的}{4}{}%
+\contentsline {subsection}{\numberline {6.2}技术方案}{4}{}%
+\contentsline {subsubsection}{\numberline {6.2.1}创新点 A：可调谐超构表面标签}{4}{}%
+\contentsline {subsubsection}{\numberline {6.2.2}创新点 B：量子受限挑战序列}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.3}创新点 C：材料指纹与协议绑定}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.4}创新点 D：诱骗态与统计判决}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.5}创新点 E：供应链场景落地接口}{5}{}%
+\contentsline {subsubsection}{\numberline {6.2.6}创新点 F：可拆解、可测试的侵权证据}{5}{}%
+\contentsline {section}{\numberline {7}附图说明}{5}{}%
+\contentsline {section}{\numberline {8}具体实施方式}{5}{}%
+\contentsline {subsection}{\numberline {8.1}系统架构}{5}{}%
+\contentsline {subsection}{\numberline {8.2}实施步骤}{6}{}%
+\contentsline {subsubsection}{\numberline {8.2.1}实施例 1：高端芯片托盘的光学 Q-RFID 验真}{6}{}%
+\contentsline {subsubsection}{\numberline {8.2.2}实施例 2：冷链疫苗物流复核}{6}{}%
+\contentsline {subsubsection}{\numberline {8.2.3}实施例 3：军工部件全生命周期追溯}{6}{}%
+\contentsline {section}{\numberline {9}技术效果}{7}{}%
+\contentsline {subsection}{\numberline {9.1}安全效果}{7}{}%
+\contentsline {subsection}{\numberline {9.2}产业化与经济可行性}{7}{}%
+\contentsline {subsection}{\numberline {9.3}可取证性与实施稳定性}{7}{}%
+\contentsline {section}{\numberline {10}权利要求书}{7}{}%
+\contentsline {subsection}{\numberline {10.1}独立权利要求}{7}{}%
+\contentsline {subsection}{\numberline {10.2}从属权利要求}{7}{}%
+\contentsline {section}{\numberline {11}说明书摘要}{8}{}%
