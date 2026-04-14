@@ -1,0 +1,265 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,heading=true]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{setspace}  % 设置行距控制包
+
+% 配置 ctex 章节编号为 "一、"
+\ctexset{
+  section = {
+    name = {,、},
+    number = \chinese{section},
+    format = {\Large\bfseries\raggedright}
+  }
+}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}  % 设置1.5倍行距（CNIPA推荐）
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+
+\title{\textbf{发明专利技术交底书} \\[0.5em]
+\Large 一种支持端侧多智能体并发的基座权重与多路LoRA低秩适配权重单周期融合乘加阵列及方法}
+\author{中国移动通信有限公司研究院}
+\date{\today}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[1em]
+    {\Huge\heiti 技术交底书} \\[1em]
+\end{center}
+
+\noindent
+\begin{tabular}{|p{3cm}|p{12cm}|}
+\hline
+公司编号 &  \\
+\hline
+发明名称 & 一种支持端侧多智能体并发的基座权重与多路LoRA低秩适配权重单周期融合乘加阵列及方法 \\
+\hline
+申报单位 & 研究院 \\
+\hline
+申报类型 & 发明 \\
+\hline
+发明人 & 许达 \\
+\hline
+技术联系人 & 许达 (xudayj@chinamobile.com, +86-13521894156) \\
+\hline
+注意事项 & 1．技术联系人应为深入了解本申请提案技术方案的技术人员。 \\
+         & 2．请按照集团公司提供的本技术交底书模板逐项填写。 \\
+\hline
+\end{tabular}
+
+\vspace{1cm}
+
+%==============================================================================
+\section{发明名称}
+%==============================================================================
+
+一种支持端侧多智能体并发的基座权重与多路LoRA低秩适配权重单周期融合乘加阵列及方法
+
+%==============================================================================
+\section{技术领域}
+%==============================================================================
+
+本发明属于人工智能推理芯片（NPU/GPU/专用加速器）与编译器软硬协同优化技术领域，具体涉及一种面向端侧设备（手机、PC、车载、IoT、可穿戴等）多智能体（Multi-Agent）并发推理场景的硬件原生融合乘加（Fused MAC）数据通路、上下文切换控制方法及指令集扩展。其核心在于：在不改变基础大模型（Base Model）权重的前提下，将多路LoRA（Low-Rank Adaptation，低秩适配）权重的融合逻辑下沉至芯片微架构，使多智能体切换与并发的开销接近于零。
+
+\textbf{与量子计算的关联说明：}
+
+本发明不涉及量子计算。本字段与其标题沿用模板格式，按模板要求保留。与之对应地，本发明所处的技术背景为：端侧大模型推理逐步从单一助手演进为多智能体并发运行，不同智能体共享同一基座模型但挂载不同 LoRA/Adapter 权重。现有端侧硬件普遍需要通过软件完成 LoRA 融合、上下文切换与参数搬运，导致明显的延迟抖动与带宽竞争。本发明通过双轨数据流与单周期融合乘加微架构，将 LoRA 融合和上下文切换控制下沉至芯片微架构与指令接口。
+
+\textbf{关联项目：}\underline{\hspace{8cm}}（待填写）
+
+%==============================================================================
+\section{现有技术的技术方案}
+%==============================================================================
+
+\subsection{量子计算网络安全背景}
+
+端侧大模型推理逐步从“单一助手、单一配置”的调用方式，演进为“多个Agent并发运行、频繁切换上下文与个性化配置”的系统形态。例如：翻译助手、代码助手、会议助手等共享同一基座模型，但各自需要不同的风格、偏好或领域能力。由于端侧算力、内存带宽与功耗受限，任何额外的权重搬运、临时张量生成、内核重配置都会被放大为明显的延迟抖动与发热问题。
+
+多智能体并发推理的典型需求包括：
+\begin{enumerate}
+    \item 多Agent共享同一基座权重 $W_{base}$，但每个Agent绑定一套或多套LoRA/Adapter参数；
+    \item Agent切换频繁且具有强实时性（交互式UI、语音流、前台/后台混合）；
+    \item 端侧存储层次复杂（系统内存/LPDDR/片上SRAM/缓存），需要减少外部带宽压力；
+    \item 需要在尽量不改动上层框架的情况下实现快速切换与并发。
+\end{enumerate}
+
+\subsection{后量子密码技术现状}
+
+LoRA属于参数高效微调（PEFT）方法，常见形式为在权重矩阵上添加低秩更新：
+\[
+W = W_{base} + \Delta W,\quad \Delta W = BA,\quad \mathrm{rank}(\Delta W)=r \ll d
+\]
+现有端侧部署通常采用以下技术路线：
+\begin{enumerate}
+    \item \textbf{双路径计算}：每层分别计算 $W_{base}X$ 与 $\Delta WX$ 并在软件侧相加；
+    \item \textbf{运行时合并}：在切换Agent或加载配置时临时构造 $W_{base}+\Delta W$ 的合并权重再执行GEMM；
+    \item \textbf{多配置路由}：框架层维护多个LoRA并在运行时通过算子图或内核参数切换实现选择与组合。
+\end{enumerate}
+上述方案普遍存在额外算力开销、额外访存开销与明显的软件调度开销，尤其在多智能体并发场景下会出现系统抖动与吞吐下降。
+
+%==============================================================================
+\section{现有技术的缺点及本申请提案要解决的技术问题}
+%==============================================================================
+
+现有端侧多LoRA多智能体推理方案主要缺点包括：
+
+(1) \textbf{软件融合与调度开销大}：LoRA融合通常需要额外kernel或额外算子图路径，且在Agent切换时需要重新配置、重建或更新映射表，带来显著的CPU/驱动开销；
+
+(2) \textbf{带宽压力与缓存污染}：即便LoRA参数较小，频繁切换与多路并发会造成片上缓存污染、系统总线竞争，进而拖累基座GEMM吞吐；
+
+(3) \textbf{数据流与硬件不匹配}：通用MAC阵列优化目标是单一路径的大矩阵流式计算，而LoRA本质是低秩微核与主GEMM融合的异构数据流，常被迫拆成多次计算与多次写回；
+
+(4) \textbf{上下文切换不具备硬件常数时间特性}：多Agent并发时，软件层切换成本随配置数量与框架实现波动，难以保证实时性。
+
+因此，本申请提案要解决的技术问题是：\textbf{提出一种可在端侧硬件中原生支持“基座权重主轨 + 多路LoRA旁路轨”的双轨数据流，并在单周期内完成融合乘加，同时提供常数时间的上下文切换机制，以实现多智能体并发推理时几乎零额外开销的LoRA融合与切换。}
+
+%==============================================================================
+\section{本申请提案的技术方案的详细阐述}
+%==============================================================================
+
+\subsection{系统架构}
+
+本方案的系统架构可包括：
+\begin{itemize}
+    \item \textbf{双轨融合乘加阵列（Dual-Track Fused MAC Array）}：在同一输出累加路径上同时接收“基座权重主轨”与“LoRA高速旁路轨”的部分和，并在末级进行硬件原生融合；
+    \item \textbf{基座权重主轨（Base Track）}：连接慢速大容量存储层（系统内存/LPDDR/HBM等），面向 $W_{base}$ 的流式加载与块化计算；
+    \item \textbf{LoRA高速旁路轨（LoRA Track）}：连接片上SRAM/TCM，用于驻留多路LoRA参数（可为 $A,B$ 或等效重排后的块），并支持按AgentID/LayerID快速寻址；
+    \item \textbf{上下文切换控制器（Context Switch Controller）}：维护Agent到LoRA参数区域的映射表、版本标签与访问权限，支持通过一条指令在常数周期内切换；
+    \item \textbf{融合点与缩放单元}：在不增加额外pipeline stage的条件下，将 $P_{base}$ 与 $P_{lora}$ 融合，并支持多路LoRA的缩放、求和与可选的稀疏屏蔽；
+    \item \textbf{编译器与ISA扩展接口}：向编译器/运行时暴露上下文绑定、预取与融合执行原语，使框架无需生成额外kernel即可调用硬件融合路径。
+\end{itemize}
+
+为便于描述，令输入激活为 $X$，基座权重为 $W_{base}$。单路LoRA的输出可表示为：
+\[
+Y = W_{base}X + \Delta WX,\quad \Delta W = BA
+\]
+多路LoRA（例如多个Agent叠加或多Adapter组合）可表示为：
+\[
+Y = W_{base}X + \sum_{k=1}^{K} \alpha_k \Delta W_k X
+\]
+其中 $\alpha_k$ 为组合系数，可由软件设置但在硬件融合点完成缩放与累加。
+
+\subsection{核心方法步骤}
+
+\subsubsection{1. 分布式密钥生成 (KeyGen)}
+系统为每个Agent/租户分配唯一的上下文ID（AgentID），并在硬件上下文表中建立映射项：
+\begin{enumerate}
+    \item 为每个Agent记录其LoRA参数位置（SRAM bank/offset）、量化格式、秩 $r$ 与版本号；
+    \item 支持一组或多组LoRA绑定到同一Agent上下文（例如“风格 + 任务”叠加），并记录组合系数或路由策略；
+    \item 在隔离要求下，映射表由固件或安全管理器写入，普通应用仅能引用句柄。
+\end{enumerate}
+
+\subsubsection{2. 消息哈希与映射}
+当推理任务调度到硬件执行时，软件仅需发出一条指令切换上下文：
+\begin{enumerate}
+    \item `SET\_LORA\_CTX AgentID`：更新当前执行上下文的LoRA指针寄存器与bank选择；
+    \item 硬件在常数周期内完成地址重映射与权限检查，无需搬运任何LoRA参数块；
+    \item 支持按线程束/波前粒度携带AgentID，使多Agent并发时每个线程束可使用不同LoRA。
+\end{enumerate}
+
+\subsubsection{3. 分布式高斯采样}
+在执行每层线性算子时，双轨数据流并行运行：
+\begin{enumerate}
+    \item 主轨加载 $W_{base}$ 的tile并执行矩阵乘加，生成主部分和 $P_{base}$；
+    \item 旁路轨从片上SRAM读取对应LoRA参数块并执行低秩微核，生成旁路部分和 $P_{lora}$；
+    \item 输入激活 $X$ 在片上被广播到两条数据流，避免重复从外部内存读取。
+\end{enumerate}
+
+\subsubsection{4. 基于 NTT 的线性变换}
+为避免额外加法与写回开销，硬件在累加末级执行单周期融合：
+\begin{enumerate}
+    \item 在MAC输出对齐阶段，将 $P_{base}$ 与 $P_{lora}$ 送入同一累加器或融合点；
+    \item 通过零额外pipeline阶段的旁路加法器实现：$P = P_{base} + P_{lora}$；
+    \item 对于多路LoRA，旁路轨支持先在片上完成树形求和或按系数缩放后求和，再送入融合点。
+\end{enumerate}
+
+\subsubsection{5. 基于 Beaver 三元组的安全范数验证}
+为保证端侧功耗与热设计，硬件支持对LoRA路径的低开销优化：
+\begin{enumerate}
+    \item 支持LoRA参数以INT8/INT4等格式驻留SRAM，并在旁路轨内置缩放与解量化单元；
+    \item 支持结构化稀疏或按秩分组的屏蔽策略以减少乘法次数与SRAM读带宽；
+    \item 支持两级低秩执行：先计算 $U = AX$（维度为 $r$），再计算 $BU$ 并与主轨融合，使LoRA成本与 $r$ 线性相关。
+\end{enumerate}
+
+\subsubsection{6. 动态节点管理}
+为适配多智能体并发与运行时加载，支持LoRA参数的动态更新：
+\begin{enumerate}
+    \item `PREFETCH\_LORA AgentID, LayerID`：在后台预取即将使用的LoRA参数到指定SRAM bank；
+    \item 支持版本号与一致性检查，避免切换时读到旧参数或读到未完成更新的参数；
+    \item 支持按层粒度的局部更新与回收（释放不再使用的LoRA bank），降低碎片并提升并发度。
+\end{enumerate}
+
+%==============================================================================
+\section{本申请提案的关键点和欲保护点}
+%==============================================================================
+
+本申请提案的关键点和欲保护点包括但不限于：
+
+(1) \textbf{双轨数据流（Dual-Track Dataflow）微架构}：在同一计算阵列中并行支持基座权重主轨与LoRA旁路轨，且输入激活可共享/广播；
+
+(2) \textbf{单周期融合乘加（Single-Cycle Fusion）}：在不增加额外算子与pipeline stage的情况下，在累加末级对主轨与旁路轨部分和进行硬件原生融合；
+
+(3) \textbf{零开销上下文切换}：通过上下文指针寄存器与映射表机制，支持 `SET\_LORA\_CTX` 等指令在常数周期完成Agent/租户切换，而无需搬运或合并权重张量；
+
+(4) \textbf{多路LoRA驻留、组合与索引机制}：支持多路LoRA权重同时驻留片上SRAM，按AgentID/LayerID快速寻址，并支持组合系数、缩放与路由；
+
+(5) \textbf{编译器可见接口与协同调度}：将LoRA绑定、预取、融合执行抽象为ISA/ABI或硬件原语，使框架可稳定调用而不依赖特定软件实现；
+
+(6) \textbf{端侧低功耗实现细节}：包括LoRA路径的低精度/稀疏/两级低秩微核与主轨带宽隔离策略，以在端侧热功耗约束下保持性能。
+
+%==============================================================================
+\section{与第三条中最接近的现有技术相比，本申请提案有何技术优点}
+%==============================================================================
+
+与现有技术（软件侧LoRA融合、离线合并权重、或通用矩阵阵列执行两次GEMM）相比，本方案具有显著优点：
+
+(1) \textbf{延迟与抖动显著降低}：上下文切换无需搬运/合并权重，LoRA融合在硬件末级完成，避免额外kernel与调度开销；
+
+(2) \textbf{吞吐提升与资源利用率更高}：主轨保持基座GEMM的流式吞吐，旁路轨以低秩微核并行执行，融合点不扩展关键路径；
+
+(3) \textbf{带宽压力更小}：LoRA参数驻留片上SRAM，减少外部内存访问；输入激活共享广播降低重复读；
+
+(4) \textbf{多智能体并发能力更强}：按线程束携带AgentID，可在同一时间窗口内并发执行不同LoRA上下文的推理任务；
+
+(5) \textbf{落地性强}：完全基于成熟CMOS数字逻辑与现有乘加阵列改造即可实现（增加旁路轨、映射表与融合点），不依赖新材料与新工艺。
+
+%==============================================================================
+\section{其他有助于理解本申请提案的技术资料}
+%==============================================================================
+
+(1) Hu, E.J., et al. "LoRA: Low-Rank Adaptation of Large Language Models." 2021.
+(2) Pfeiffer, J., et al. "AdapterFusion: Non-Destructive Task Composition for Transfer Learning." 2021.
+(3) NVIDIA. "Tensor Cores and Warp Matrix Multiply-Accumulate (WMMA) Programming Guide / Whitepaper."
+(4) Qualcomm. "Qualcomm AI Engine / Hexagon NPU Technical Overview" (public materials).
+
+%==============================================================================
+\section{本申请提案的侵权证据可获得性}
+%==============================================================================
+
+本提案的侵权证据可获得性较高，主要体现在：
+
+(1) \textbf{硬件ISA/驱动接口特征}：若产品提供LoRA上下文切换与融合执行的专用指令/驱动接口（例如 `SET\_LORA\_CTX`、融合MMA语义），可作为直接证据；
+
+(2) \textbf{性能与行为侧信号}：在多Agent快速切换场景下，若设备表现为几乎无延迟抖动，且功耗曲线、带宽占用符合“片上LoRA驻留 + 单周期融合”的特征，可作为间接证据；
+
+(3) \textbf{固件/编译器产物}：通过对编译器IR、内核二进制或固件配置表分析，若存在LoRA映射表、bank绑定与预取状态机痕迹，可作为佐证；
+
+(4) \textbf{芯片微架构分析}：通过拆解或第三方测试报告，识别是否存在独立LoRA旁路轨与融合点电路（例如额外SRAM bank、旁路加法器、上下文表等），可构成物证链。
+
+\end{document}
