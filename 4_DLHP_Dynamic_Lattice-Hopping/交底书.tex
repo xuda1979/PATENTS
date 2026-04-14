@@ -1,17 +1,34 @@
-\documentclass[12pt,a4paper]{article}
+﻿\documentclass[12pt,a4paper]{article}
 \usepackage[UTF8,heading=true]{ctex}
 \usepackage{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{longtable}
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
 \usepackage{array}
+\usepackage{multirow}
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{setspace}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem{definition}{定义}
+\newtheorem{corollary}{推论}
+\newtheorem{proposition}{命题}
+
+% 自定义宏
 
 % 配置 ctex 章节格式为 "一、"
 \ctexset{
@@ -24,12 +41,14 @@
 
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \setlength{\headheight}{15pt}
-\setstretch{1.5}  % CNIPA常用行距
+\setstretch{1.5}
+
+
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[C]{发明专利技术交底书}
 \fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
 
 \title{\textbf{发明专利技术交底书}\\[0.5em]
     \Large 动态多原语密码跳频协议（DMHP）的安全通信系统及方法}
@@ -38,407 +57,1132 @@
 
 \begin{document}
 
-\maketitle
-
 \begin{center}
-    {\Large\heiti 中国移动专利申请} \\[1em]
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
     {\Huge\heiti 技术交底书} \\[1em]
 \end{center}
 
 \noindent
-\begin{tabular}{|p{3cm}|p{12cm}|}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{|>{\centering\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
 \hline
-公司编号 &  \\
+\textbf{公司编号} & \textcolor{blue}{\phantom{待补}} \\
 \hline
-发明名称 & 动态晶格跳跃协议（DLHP）的多原语密码跳频安全通信系统及方法 \\
+\textbf{发明名称} & \textcolor{blue}{动态多原语密码跳频协议（DMHP）的安全通信系统及方法} \\
 \hline
-申报单位 & 研究院 \\
+\textbf{申报单位} & \textcolor{blue}{研究院} \\
 \hline
-申报类型 & 发明 \\
+\textbf{申报类型} & \textcolor{blue}{发明} \\
 \hline
-发明人 & 许达 \\
+\textbf{发明人} & \textcolor{blue}{许达} \\
 \hline
-技术联系人 & 许达 (xudayj@chinamobile.com, +86-13521894156) \\
+\textbf{技术联系人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
 \hline
-注意事项 & 1．技术联系人应为深入了解本申请提案技术方案的技术人员。 \\
-         & 2．请按照集团公司提供的本技术交底书模板逐项填写。 \\
+\end{tabular}
+\renewcommand{\arraystretch}{1.5}
+
+\vspace{0.5em}
+
+\noindent
+\begin{tabular}{|>{\raggedright\arraybackslash}p{15cm}|}
+\hline
+\textbf{注意事项} \\
+1．技术联系人应为深入了解本申请提案技术方案的技术人员，如交底书撰写人，负责向专利审核人员和代理人解释技术细节、修改交底书、审核申请文件等工作，请务必填全技术联系人的姓名、E-mail、手机。 \\
+2．请按照集团公司提供的本技术交底书模板逐项填写，除交底书第八部分为可选项外，其他均为必须填写的内容。填写不全的专利申请提案，集团公司不予立案。 \\
+3．专利申请不要求已具体实现或实施，形成完整的技术方案即可提交申请，特别是需要向合作方公开、向标准提案或以其他方式公开的重要技术构思应在公开前尽早申请。 \\
+4．技术交底书文件命名要求：发明名称＋短横线（半角）＋交底书＋版本号，例：一种短消息群发方法-交底书v1.doc \\
 \hline
 \end{tabular}
 
-\vspace{1cm}
+\vspace{1em}
+
+\begin{center}
+    {\Large\heiti 中国移动通信集团有限公司}
+\end{center}
 
 %==============================================================================
-\section{发明名称}
+\section*{一、发明名称}
 %==============================================================================
 
 动态多原语密码跳频协议（DMHP）的安全通信系统及方法
 
+\textit{英文名称：Secure Communication System and Method Based on Dynamic Multi-Primitive Hopping Protocol (DMHP)}
+
+\textbf{命名沿革说明：}本方案在早期研究阶段曾使用"动态格跳变协议（Dynamic Lattice-Hopping Protocol, DLHP）"作为工作名称，后因技术方案扩展至覆盖格（Lattice）、编码（Code）、哈希（Hash）、多变量（Multivariate）等多种数学困难问题类别，不再局限于格基原语，故正式命名为"动态多原语密码跳频协议（Dynamic Multi-Primitive Hopping Protocol, DMHP）"。本文所有内容以DMHP为准。
+
+\textbf{与发明人其他在先申请的关系说明：}截至本申请日，发明人许达在中国移动名下无与本发明技术方案实质相同或近似的在先专利申请。本发明为独立创新成果，不构成对任何在先申请的改进、分案或延续。
 
 %==============================================================================
-\section{技术领域}
+\section*{二、技术领域}
 %==============================================================================
 
-本发明涉及密码通信与网络安全技术领域，尤其涉及一种面向后量子威胁环境的\textbf{动态多原语（Multi-Primitive）密码跳频}安全通信协议、系统与方法。
+本发明涉及密码通信与网络安全技术领域，尤其涉及一种面向后量子威胁环境的\textbf{动态多原语（Multi-Primitive）密码跳频}安全通信协议、系统与方法。具体涉及以下技术交叉领域：
 
-\textbf{与量子计算的关联说明：}
+\begin{itemize}[noitemsep]
+    \item \textbf{后量子密码学（Post-Quantum Cryptography）}：基于格（Lattice）、编码（Code）、哈希（Hash）等多种数学困难问题的密码原语，以及同源（Isogeny）、多变量（Multivariate）等预留扩展类别；
+    \item \textbf{移动目标防御（Moving Target Defense, MTD）}：通过主动持续改变攻击面降低攻击成功率的防御范式；
+    \item \textbf{密钥管理与密码协议工程}：确定性无状态密钥派生、会话管理、乱序容忍；
+    \item \textbf{秘密分享与阈值密码学}：$(k,n)$阈值分片与重构机制；
+    \item \textbf{5G/6G核心网安全}：SEPP接口安全增强、移动回传网IPsec隧道安全升级。
+\end{itemize}
 
-量子计算机在成熟后可利用 Shor 算法对 RSA/ECC 等传统公钥密码体制构成实质性威胁，同时后量子密码（PQC）算法族仍处于持续分析演进阶段，存在算法被逐步削弱或出现新型攻击的风险。本发明通过在会话内对密码算法进行\textbf{时间维/序号维的动态跳变}，并在必要时引入\textbf{多路径传输分散}与\textbf{阈值分片（全息熵分散，HED）}，降低"现在存储、未来解密（SNDL）"攻击的价值，提升面对量子时代持续攻防演化的不确定性韧性。
+\textbf{与量子计算及国家安全的关联说明：}
 
-% 术语说明：统一使用“算法族”表述
+量子计算机在成熟后可利用 Shor 算法对 RSA/ECC 等传统公钥密码体制构成实质性威胁。美国NSA、中国国家密码管理局等已明确要求关键基础设施在2030年前完成后量子密码迁移。同时后量子密码（PQC）算法族仍处于持续分析演进阶段（如NIST PQC竞赛第三轮备选方案SIKE在2022年被攻破、ML-KEM（原Kyber，FIPS 203）的部分早期实现被发现存在定时侧信道风险），存在算法被逐步削弱或其实现出现新型攻击面的风险。
 
-\textbf{关联项目：}\underline{\hspace{8cm}}（待填写）
+本发明通过在会话内对密码算法进行\textbf{时间维/序号维的动态跳变}，并以\textbf{硬问题类别正交约束}和\textbf{基于$\text{SeqID}$的确定性无状态派生}作为核心机制，从而降低"现在存储、未来解密（SNDL）"攻击的连续收益，提升面对量子时代持续攻防演化的不确定性韧性。MPTD与HED可作为增强模块按需叠加，以进一步提升分散保护强度。
+
+\textbf{涉及的标准组织与标准化方向：}
+\begin{itemize}[noitemsep]
+    \item 3GPP SA3：5G/6G安全增强，后量子密码迁移（TR 33.875）
+    \item IETF：TLS 1.3后量子扩展（draft-ietf-tls-hybrid-design）、QUIC安全增强
+    \item CCSA TC8：国内密码行业标准
+    \item ITU-T SG17：电信安全框架
+\end{itemize}
+
+\textbf{关联项目：}需方项目名称：量子计算前沿技术研究与量子科学装置攻关(2026)，承方项目名称(暂时)：量子科技前沿技术与科学装置研究(三期)，项目编号：R26110HV
 
 %==============================================================================
-\section{术语与缩写（建议）}
+\subsection*{术语与缩写}
 %==============================================================================
 
 为避免全文表述歧义，本文对主要术语与缩写作如下统一约定：
 
-\renewcommand{\arraystretch}{1.4}
-\begin{longtable}{|p{3.2cm}|p{12.0cm}|}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.8cm}|>{\raggedright\arraybackslash}p{11.2cm}|}
 \hline
 \textbf{术语/缩写} & \textbf{含义（本文口径）} \\
 \hline
+\endhead
 DMHP & 动态多原语密码跳频协议（Dynamic Multi-Primitive Hopping Protocol），泛指会话内按时间/序号对不同数学困难类别的密码原语与密钥上下文进行动态切换的协议机制。\\
 \hline
-Cryptographic Hopping & “密码跳频/密码跳变”，类比无线电跳频思想，将算法选择与密钥派生上下文作为随时间/序号演化的变量。\\
+Cryptographic Hopping & "密码跳频/密码跳变"，类比无线电跳频思想，将算法选择与密钥派生上下文作为随时间/序号演化的变量。\\
 \hline
-受保护单元 & 被加密与认证的最小保护粒度，可为数据包、记录（Record）或数据块（Block），具备可识别的$\text{SeqID}$或时间片标识。\\
+受保护单元（Protected Unit） & 被加密与认证的最小保护粒度，可为数据包、记录（Record）或数据块（Block），具备可识别的$\text{SeqID}$或时间片标识。\\
 \hline
-SeqID & 序号/记录号/包号等单调标识，用于无状态派生与重放检测窗口定位。\\
+SeqID & 序号/记录号/包号等单调递增标识，用于无状态派生与重放检测窗口定位。SeqID的完整性通过两层机制保护：(i) \textbf{显式完整性保护}——SeqID作为AEAD的附加认证数据（AAD）输入，篡改将导致认证标签验证失败；(ii) \textbf{隐式完整性保护}——在$\text{MasterSecret}$未泄露的前提下，即使攻击者篡改SeqID而未被AAD检测（例如在AAD未覆盖SeqID的降级配置下），接收端将派生出错误的密钥材料，导致解密失败，从而自然检测到篡改。注：若$\text{MasterSecret}$已泄露，攻击者可根据篡改后的SeqID正确派生密钥，此时隐式保护失效，需依赖显式AAD保护。\\
 \hline
-EpochID & 可选的“纪元”标识，与$\text{SeqID}$构成$\langle\text{EpochID},\text{SeqID}\rangle$联合计数器，用于回绕处理或策略推进。\\
+EpochID & 可选的"纪元"标识，与$\text{SeqID}$构成$\langle\text{EpochID},\text{SeqID}\rangle$联合计数器，用于回绕处理或策略推进。\\
 \hline
-KDF & 密钥派生函数（Key Derivation Function），用于从$\text{MasterSecret}$与$\text{SeqID}$（或时间片）派生每单元算法索引与密钥材料。\\
+KDF & 密钥派生函数（Key Derivation Function），用于从$\text{MasterSecret}$、$\text{SeqID}$与模板上下文派生每单元配置档案索引与密钥材料。\\
 \hline
-AEAD & 带认证的加密（Authenticated Encryption with Associated Data），或同等强度的“加密+完整性校验”组合。\\
+AEAD & 带认证的加密（Authenticated Encryption with Associated Data），或同等强度的"加密+完整性校验"组合。\\
 \hline
-AAD & 附加认证数据（Associated Authenticated Data），建议至少包含$\text{SeqID}$/$\text{TimeSlotID}$、$\text{EpochID}$（若存在）与模式/版本标识，用于绑定上下文并降低重放/篡改风险。\\
+AAD & 附加认证数据（Associated Authenticated Data），建议至少包含$\text{SeqID}$/$\text{TimeSlotID}$、$\text{EpochID}$（若存在）与模式/版本标识。\\
 \hline
-HPC & 硬问题类别（Hard Problem Class），用于对算法的数学基础进行分类标注（如格/编码/哈希基/同源等），供正交选择器执行类别距离约束。\\
+HPC & 硬问题类别（Hard Problem Class），用于对算法的数学基础进行分类标注（如结构化格/非结构化格/编码理论/哈希基/多变量等），供正交选择器执行类别距离约束。Isogeny（同源）作为预留类别，待出现安全的同源方案后可纳入。\\
 \hline
-HED & 全息熵分散（Holographic Entropy Dispersion），本文指将载荷按$(k,n)$阈值进行分片（或纠删码分散）并分别保护、满足至少$k$份额方可重构的机制。\\
+HED & 全息熵分散（Holographic Entropy Dispersion），将载荷按$(k,n)$阈值进行分片并分别保护、满足至少$k$份额方可重构的机制。\\
 \hline
-MPTD & 多路径传输分散（Multi-Path Transport Dispersion），本文指将不同受保护单元或HED分片映射到不同物理链路/子流进行分散传输的机制。\\
+MPTD & 多路径传输分散（Multi-Path Transport Dispersion），将不同受保护单元或HED分片映射到不同物理链路/子流进行分散传输的机制。\\
 \hline
-SNDL & “现在存储、未来解密”（Store Now, Decrypt Later）攻击模型。\\
+SNDL & "现在存储、未来解密"（Store Now, Decrypt Later）攻击模型。\\
+\hline
+MTD & 移动目标防御（Moving Target Defense），通过主动持续改变攻击面降低攻击成功率的防御范式。\\
+\hline
+SEPP & 安全边缘保护代理（Security Edge Protection Proxy），5G核心网中负责跨运营商接口安全的网元。\\
+\hline
+PQSG & 后量子安全通信网关（Post-Quantum Security Gateway），本发明拟落地的产品形态。\\
+\hline
+PFS & 前向安全性（Perfect Forward Secrecy），指长期密钥泄露不影响历史会话密钥安全的性质。\\
+\hline
+Chaffing & 诱饵流量注入，向信道中混入无意义的伪数据包以增加攻击者流量分析难度的技术。\\
+\hline
+MTI & 强制实现（Mandatory-to-Implement），标准协议中要求所有合规实现必须支持的最小算法集合。\\
+\hline
+OTA & 空中下载（Over-The-Air），通过无线网络远程更新设备固件或配置的技术。\\
 \hline
 \end{longtable}
 
 %==============================================================================
-\section{现有技术的技术方案}
+\section*{三、现有技术的技术方案}
 %==============================================================================
 
-\subsection{加密通信与后量子迁移的现状}
+\subsection*{加密通信与后量子迁移的现状}
 
-在现有安全通信协议（例如 TLS、IPsec、QUIC 等）中，通常在握手阶段确定单一（或少量）算法套件，并在会话期内固定使用。该模式在后量子迁移背景下存在如下特点：
+在现有安全通信协议（例如 TLS 1.3、IPsec/IKEv2、QUIC、5G NAS/AS安全等）中，通常在握手阶段确定单一（或少量）算法套件，并在会话期内固定使用。该模式在后量子迁移背景下存在如下结构性缺陷：
 
 \begin{itemize}
-    \item \textbf{单点算法风险集中}：一旦会话采用的某一公钥算法/对称算法出现弱点或实现漏洞，会话内大量数据可被同类攻击集中利用；
-    \item \textbf{SNDL 攻击收益高}：攻击者可长期批量采集同一算法保护的数据，待未来出现突破（含量子计算可行）后统一解密；
-    \item \textbf{算法替换成本高}：算法迁移往往需要重新协商或重建会话，可致时延上升与运维复杂；
-    \item \textbf{侧信道累积}：长期重复使用同一密钥/同一算法实现，会提高功耗/时间等侧信道信号的可观测性。
+    \item \textbf{单点算法风险集中}：一旦会话采用的某一公钥算法/对称算法出现弱点或实现漏洞，会话内\textbf{全部数据}可被同类攻击集中利用。以2022年SIKE被攻破为例，所有使用SIKE的历史会话均面临完全暴露风险；
+    \item \textbf{SNDL 攻击收益高}：攻击者（包括国家级对手）可长期批量采集同一算法保护的数据，待未来出现量子计算机或算法突破后统一解密。据CISA估计全球每天被截获存储的加密数据量达数PB级别；
+    \item \textbf{算法替换成本高}：算法迁移往往需要重新协商或重建会话，可致时延上升与运维复杂，在5G核心网中可能影响数百万用户的业务连续性；
+    \item \textbf{侧信道累积}：长期重复使用同一密钥/同一算法实现，会提高功耗/时间等侧信道信号的信噪比，使攻击者可以通过统计分析恢复密钥；
+    \item \textbf{合规性风险}：随着各国密码迁移法规收紧（如美国CNSA 2.0要求2033年前全面迁移），仅支持单一算法的系统面临合规性缺口。
 \end{itemize}
 
-\subsection{密码敏捷（Crypto Agility）与其不足}
+\subsection*{密码敏捷（Crypto Agility）与其不足}
 
-现有"密码敏捷"多数停留在\textbf{版本升级层面}（替换算法套件、参数更新），缺少会话内部的细粒度动态调整机制；部分"组合器（combiner）"方案将多个算法同时使用，带来开销上升且并未有效降低捕获与分析的整体收益。
+现有"密码敏捷"多数停留在\textbf{版本升级层面}（替换算法套件、参数更新），缺少会话内部的细粒度动态调整机制。具体而言：
+
+\begin{itemize}
+    \item NIST后量子标准化（FIPS 203/204/205）仅标准化了单一算法，未提供动态切换框架；
+    \item IETF PQ hybrid TLS方案（draft-ietf-tls-hybrid-design）采用静态混合，仍为会话级固定配置；
+    \item 3GPP SA3 TR 33.875（5G PQC迁移研究）目前聚焦于算法替换策略，未涉及会话内跳频；
+    \item 部分"组合器（combiner）"方案将多个算法同时使用，带来开销上升且并未有效降低捕获与分析的整体收益；
+    \item Google的ALTS协议虽支持算法协商，但仍为会话级固定，不支持会话内动态切换。
+\end{itemize}
+
+\subsection*{最接近现有技术的对比分析}
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+\textbf{现有方案} & \textbf{技术特点} & \textbf{核心局限} & \textbf{本发明区别} \\
+\hline
+\endhead
+TLS 1.3 & 握手阶段选择单一算法套件，会话内固定 & 单点失效，不支持会话内切换 & 会话内逐包/逐块动态跳变 \\
+\hline
+PQ Hybrid TLS & 经典+PQC算法静态组合 & 仍为会话级固定，无多样性轮换 & 多困难问题类别动态轮换 \\
+\hline
+Signal Double Ratchet & 每消息密钥演化，前向安全 & 算法固定不变，仅密钥演化 & 算法+密钥同时演化 \\
+\hline
+IPsec/\allowbreak IKEv2重协商 & 支持定期重协商更换算法 & 重协商延迟高，中断业务 & 无需重协商的无缝切换 \\
+\hline
+KEM Combiners & 多KEM同时使用 & 所有算法同时用，非序列化轮换，开销高 & 序列化正交轮换，开销可控 \\
+\hline
+CN11316\allowbreak 2767A & 动态密码算法切换 & 未涉及硬问题类别正交约束和阈值分片 & 正交约束+阈值分片+自适应 \\
+\hline
+US2023/\allowbreak 0291548A1 & 后量子密钥封装 & 仅KEM层面，不涉及会话内跳频 & 完整的会话层跳频协议 \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection*{现有技术的专利检索与分析}
+
+通过对中国知识产权局（CNIPA）、美国专利商标局（USPTO）、欧洲专利局（EPO）的检索，发现以下最接近的现有专利：
+
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{CN113162767A}（"一种动态密码算法切换方法"）：该专利仅涉及算法切换，未涉及硬问题类别正交约束、无状态确定性派生等核心主干机制。本发明与之的关键区别在于：引入了形式化的正交约束（定理1--3）与无状态确定性派生（支持乱序/丢包）；HED阈值分片属于本发明的可选增强层。
+    \item \textbf{US2023/0291548A1}（"Post-quantum key encapsulation"）：仅涉及KEM层面的后量子封装，不涉及会话内动态跳频。
+    \item \textbf{CN115580396A}（"一种多算法融合的加密通信方法"）：采用多算法组合但为静态配置，不支持动态切换与正交约束。
+\end{enumerate}
+
+\textbf{检索结论}：截至检索日2026年1月26日，未发现与本发明"会话内多原语动态跳频 + 正交约束 + 无状态确定性派生 + 双端协同承载"这一核心必要技术组合实质相同或近似的在先专利；阈值分片与多路径分散可作为增强层进一步区别于部分近似方案。
 
 %==============================================================================
-\section{现有技术的缺点及本申请提案要解决的技术问题}
+\section*{四、现有技术的缺点及本申请提案要解决的技术问题}
 %==============================================================================
 
 现有技术主要存在以下缺陷与亟需解决的技术问题：
 
-(1) \textbf{后量子不确定性下的长期保密缺口}：大量敏感通信可被"现在存储、未来解密（SNDL）"方式长期采集；即便采用单一PQC算法，也可能在未来出现结构性削弱而造成历史通信泄露。
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{后量子不确定性下的长期保密缺口}：大量敏感通信可被"现在存储、未来解密（SNDL）"方式长期采集；即便采用单一PQC算法，也可能在未来出现结构性削弱而造成历史通信泄露。
 
-(2) \textbf{会话内缺乏细粒度算法切换机制}：多数协议在会话期间固定算法套件，无法按时间片、按数据块甚至按数据包进行动态切换。
+    \textbf{技术问题}：如何在PQC算法的长期安全性尚不确定的情况下，最大限度降低单一算法突破对系统的整体影响？
 
-(3) \textbf{算法相关性风险未被系统性约束}：即便存在"算法轮换"，也可能在同一困难问题类别（如均为格）内切换，无法形成真正的"正交安全"。
+    \textbf{量化目标}：将单一算法突破的影响范围从100\%（全会话暴露）降至$\frac{1}{N_{\text{algo}}} \times 100\%$以下（仅暴露$1/N$的数据片段）。
 
-(4) \textbf{传输捕获面过于集中}：单路径传输使攻击者只需捕获单一链路即可收集足够材料。
+    \item \textbf{会话内缺乏细粒度算法切换机制}：多数协议在会话期间固定算法套件，无法按时间片、按数据块甚至按数据包进行动态切换。
 
-(5) \textbf{侧信道与实现漏洞的累积暴露}：长期使用同一实现会放大侧信道统计优势。
+    \textbf{技术问题}：如何实现会话内逐包/逐块粒度的算法动态切换，且不引入重协商开销？
 
-(6) \textbf{现有密码敏捷性的被动性与滞后性}：现有的敏捷机制通常是“发现漏洞-发布补丁-协商升级”的被动响应模式，缺乏在漏洞未知阶段的“主动防御（Moving Target Defense）”能力。
+    \textbf{量化目标}：切换开销小于单包处理时间的5\%，不引入额外的RTT延迟。
 
-本发明旨在提出一种\textbf{动态多原语密码跳频协议（DMHP）}的安全通信系统及方法，使通信在会话内持续进行算法和密钥上下文的微重构，显著降低攻击者对单一算法与单一路径的依赖收益。
+    \item \textbf{算法相关性风险未被系统性约束}：即便存在"算法轮换"，也可能在同一困难问题类别（如均为格基）内切换，无法形成真正的"正交安全"。
+
+    \textbf{技术问题}：如何形式化定义并强制执行不同数学困难问题类别之间的正交性约束？
+
+    \textbf{量化目标}：相邻受保护单元的硬问题类别距离$d \geq d_{\min}$（默认$d_{\min} = 1.0$）。
+
+    \item \textbf{传输捕获面过于集中}：单路径传输使攻击者只需捕获单一链路即可收集足够材料。
+
+    \textbf{技术问题}：如何结合多路径传输分散捕获面，使攻击者必须同时监控多条物理链路？
+
+    \textbf{量化目标}：攻击者需同时捕获$n$条独立路径中的至少$k$条才能重构载荷。
+
+    \item \textbf{侧信道与实现漏洞的累积暴露}：长期使用同一实现会放大侧信道统计优势。
+
+    \textbf{技术问题}：如何通过频繁切换算法和密钥上下文，降低侧信道统计分析的信噪比？
+
+    \textbf{量化目标}：将侧信道攻击所需采样数量提升至少$N_{\text{algo}}$倍。
+
+    \item \textbf{现有密码敏捷性的被动性与滞后性}：现有的敏捷机制通常是"发现漏洞$\to$发布补丁$\to$协商升级"的被动响应模式，缺乏在漏洞未知阶段的"主动防御（MTD）"能力。
+
+    \textbf{技术问题}：如何实现主动的、预防性的密码敏捷，而非被动的、事后的算法迁移？
+
+    \textbf{量化目标}：在零日漏洞（zero-day）场景下，受影响的数据比例不超过$1/N_{\text{algo}}$。
+\end{enumerate}
+
+本发明旨在提出一种\textbf{动态多原语密码跳频协议（DMHP）}的安全通信系统及方法，\textbf{系统性地解决上述全部六个技术问题}，使通信在会话内持续进行算法和密钥上下文的微重构，显著降低攻击者对单一算法与单一路径的依赖收益。
 
 %==============================================================================
-\section{本发明技术方案}
+\section*{五、本申请提案的技术方案的详细阐述}
 %==============================================================================
 
 本发明提供一种动态多原语密码跳频协议（DMHP）的安全通信系统及方法。系统以"类似无线电跳频"的思想为出发点，将\textbf{算法选择}与\textbf{密钥派生上下文}作为可随时间/序号动态演化的变量，并引入硬问题类别正交约束与可选的多路径分散与阈值分片机制。
 
-\subsection{系统总体架构}
+\subsection*{系统总体架构}
+
+为便于评审快速识别本专利的技术闭环，本发明的最小必需创新链路明确由四个核心环节构成：\textbf{逐单元动态跳频}、\textbf{基于硬问题类别标签的正交调度模板}、\textbf{基于$\text{SeqID}$的确定性无状态派生}、以及\textbf{面向SEPP/安全网关/UPF的双端协同落地架构}。前述四个环节共同作用，使本方案相对现有单算法会话保护或简单双算法并行保护，能够直接实现三项可感知的效果提升：其一，将单一算法或单一类别失陷后的\textbf{连续暴露面切碎为离散片段}；其二，使接收端在乱序、重传、丢包场景下仍可\textbf{仅凭序号独立恢复当前保护上下文}；其三，使系统能够在\textbf{不改变上层应用协议语义}的前提下部署于双端安全网关、SEPP或用户面设备。
 
 主要组成包括：
 
-\textbf{通信节点（DLHP Cognitive Node）}：至少包括发送节点与接收节点，用于建立会话、生成跳频计划并对业务数据进行封装/解封装。
+\textbf{（1）双端接入实体}：至少包括发送端与接收端，可部署为SEPP、安全通信网关、UPF用户面设备、TLS/QUIC记录保护代理或隧道端点，用于承载本发明的握手、调度、封装与解封装逻辑。
 
-\textbf{协议状态机}：至少包括 INITIAL、HANDSHAKING、ACTIVE、TRANSITIONING、SUSPENDED、CLOSED、ERROR 等状态，用于管理会话建立、密钥更新与过渡窗口。
+\textbf{（2）握手与Epoch管理模块}：通过经典+后量子混合KEM协商$\text{MasterSecret}$，并以Epoch为粒度派生各类硬问题标签对应的$\text{EpochSeed}$。KEM的核心作用在于建立或刷新各类别的种子上下文，而非在Nano模式下对每个数据包重复执行非对称操作。
 
-\textbf{算法库与正交选择器（Orthogonal Algorithm Selector）}：存储多种密码算法原语，且每一算法关联硬问题类别元数据（例如结构化格、非结构化格、编码理论、同源/同态类、哈希基等）。选择器依据预定义的"类别距离矩阵"执行选择，使相邻受保护单元尽可能来自不同困难问题类别。
+\textbf{（3）机密性配置档案库与正交调度模板生成器}：系统不直接对“单个算法编号”进行无约束跳变，而是先构造若干\textbf{机密性配置档案（Confidentiality Profile）}。每个Profile至少绑定：硬问题类别标签、对应的$\text{EpochSeed}$上下文、以及该类别下采用的AEAD/DEM保护算法。随后基于类别距离矩阵生成满足$d_{\min}$约束的循环$\text{Schedule}$模板，使相邻单元在最终发送序列上落入不同或足够分散的类别。
 
-\textbf{同步与调度模块}：支持基于时间（Macro）或基于序号（Nano）两类派生方式，并支持过渡重叠窗口以容忍时钟漂移与网络时延。
+\textbf{（4）逐单元记录保护引擎}：运行时以$\text{profile\_idx}=\text{Schedule}[s \bmod M]$确定当前受保护单元所使用的Profile，并结合$\text{SeqID}$、$\text{EpochID}$和$\text{ModeSalt}$派生$k_{\text{unit}}$。该设计保证发送端与接收端均可无状态恢复当前单元的保护上下文。
 
-\textbf{可选多路径传输分散模块（MPTD）}：在存在多链路（如5G/Wi-Fi/卫星）时，将不同受保护单元映射到不同物理路径，实现空间维度的分散捕获难度提升。
+\textbf{（5）同步与模板切换模块}：负责Epoch切换、模板版本切换、过渡窗口控制和重同步。该模块解决工程部署中不可避免的时钟漂移、链路抖动和乱序问题。
 
-\textbf{可选全息熵分散模块（HED）}：将载荷拆分为$(k,n)$阈值份额后分别采用不同算法加密，重构需至少$k$份额。
+\textbf{（6）增强能力模块（可选）}：包括HED阈值分片、MPTD多路径传输分散、威胁感知联动以及PARANOID模式。上述能力用于进一步放大本发明的安全收益，但不构成本发明得以成立的最小必要条件。
 
-请参考\textbf{图 1}，其展示了DLHP节点的总体架构。
+\textbf{硬问题类别分类表（Taxonomy of Hard Problems）}：
+为了执行正交约束，系统将密码算法划分为不同的硬问题类别。以下为正交选择器使用的一个示例性分类表，以确保相邻的受保护单元不共享相同的数学基础：
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.2cm}|>{\raggedright\arraybackslash}p{6.4cm}|}
+\hline
+\textbf{硬问题类别} & \textbf{子类别} & \textbf{示例算法} \\ \hline
+\textbf{格基 (Lattice)} & 结构化格 (Module-LWE) & ML-KEM (Kyber), ML-DSA \\ \cline{2-3}
+ & 非结构化格 (Plain LWE) & FrodoKEM \\ \cline{2-3}
+ & NTRU格 & NTRU-HPS, NTRU Prime \\ \hline
+\textbf{编码基 (Code)} & 准循环 MDPC & BIKE \\ \cline{2-3}
+ & 准循环 & HQC \\ \cline{2-3}
+ & Goppa码 & Classic McEliece \\ \hline
+\textbf{同源基 (Isogeny)} & 超奇异同源 & SQIsign \\ \hline
+\textbf{多变量 (Multivariate)} & 多变量多项式 & SLH-DSA (SPHINCS+) \\ \hline
+\textbf{哈希基 (Hash)} & 哈希函数 & SHA-3, Blake3（用于DEM/MAC） \\ \hline
+\textbf{对称密码 (Symmetric)} & 分组密码 & AES-GCM, ChaCha20-Poly1305 \\ \hline
+\end{tabular}
+\caption{硬问题类别分类表}
+\end{table}
+系统确保，例如从 ML-KEM 到 FrodoKEM 的跳变在配置为区分亚类时是允许的（若配置为严格区分大类则禁止），而从 ML-KEM 到 BIKE 的跳变总是允许的，因为它们属于根本不同的数学类别。
 
-\subsection{关键技术流程}
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    layer/.style={rectangle, draw, fill=blue!8, minimum width=4.0cm, minimum height=1.0cm, align=center, rounded corners=2pt, font=\small},
+    core/.style={rectangle, draw, fill=green!10, minimum width=4.2cm, minimum height=1.35cm, align=center, rounded corners=2pt, font=\small},
+    opt/.style={rectangle, draw, fill=orange!12, minimum width=3.6cm, minimum height=0.95cm, align=center, rounded corners=2pt, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick}
+]
+\node[layer] (north) at (0,2.9) {双端接入实体\\SEPP / 安全网关 / UPF / 记录层代理};
+\node[core] (handshake) at (-4.8,0.9) {握手与Epoch管理\\混合KEM协商$\text{MasterSecret}$\\按类别派生$\text{EpochSeed}$};
+\node[core] (schedule) at (0,0.9) {正交调度模板生成器\\基于类别标签与距离矩阵\\生成循环$\text{Schedule}$};
+\node[core] (record) at (4.8,0.9) {逐单元记录保护引擎\\$\text{profile\_idx}=\text{Schedule}[s \bmod M]$\\派生$(\text{Profile},k_{\text{unit}})$};
+\node[layer] (south) at (0,-1.1) {数据平面\\TLS记录 / QUIC数据包 / IPsec载荷 / GTP-U用户面};
+\node[opt] (hed) at (-4.8,-3.0) {可选增强：HED\\阈值分片};
+\node[opt] (mptd) at (0,-3.0) {可选增强：MPTD\\多路径分散};
+\node[opt] (threat) at (4.8,-3.0) {可选增强：威胁联动\\提频 / 配额 / PARANOID};
+\draw[arr] (north) -- (handshake);
+\draw[arr] (north) -- (schedule);
+\draw[arr] (north) -- (record);
+\draw[arr] (handshake) -- (south);
+\draw[arr] (schedule) -- (south);
+\draw[arr] (record) -- (south);
+\draw[arr] (south) -- (hed);
+\draw[arr] (south) -- (mptd);
+\draw[arr] (south) -- (threat);
+\end{tikzpicture}%
+}
+\caption{DMHP总体架构图}
+\end{figure}
 
-\subsubsection{会话建立与跳频种子协商}
+\subsection*{关键技术流程}
 
-(1) \textbf{握手阶段（Handshaking）}：双方节点通过密钥封装机制（KEM）协商会话种子 $\text{MasterSecret}$；支持混合模式（Classical+PQC），例如 ECDH + Kyber；协商算法库标识、正交约束参数（如类别距离下限）、跳频调度模式（时间驱动/序号驱动）等。
+本发明的最小闭环流程可归纳为“\textbf{握手建种子} $\rightarrow$ \textbf{生成正交调度模板} $\rightarrow$ \textbf{按$\text{SeqID}$逐单元恢复Profile与密钥} $\rightarrow$ \textbf{执行记录保护与接收验证}”。其中，正交性在模板生成阶段被一次性固化，运行时仅做模板索引和密钥派生，因此既能保证类别分散，又不会牺牲乱序容忍能力。
 
-(2) \textbf{跳频种子派生}：从 $\text{MasterSecret}$ 和 $\text{SeqID}$（或时间戳）派生每个受保护单元的 $(algorithm\_index, per\_unit\_key\_material)$。派生函数采用密钥派生函数（KDF），确保单调序号下的确定性与无状态性。
+\begin{figure}[H]
+\centering
+\resizebox{0.96\textwidth}{!}{%
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, fill=green!10, minimum width=3.2cm, minimum height=1.0cm, align=center, rounded corners=2pt, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick},
+    node distance=1.2cm
+]
+\node[block] (s1) {S110\\混合KEM握手\\建立$\text{MasterSecret}$与$\text{EpochSeed}$};
+\node[block, right=of s1] (s2) {S120\\基于类别标签生成\\循环$\text{Schedule}$模板};
+\node[block, right=of s2] (s3) {S130\\按$\text{SeqID}$索引Profile\\派生$k_{\text{unit}}$};
+\node[block, right=of s3] (s4) {封装/解封装\\绑定AAD并执行\\AEAD/DEM保护};
+\node[block, below=1.4cm of s2] (s5) {Epoch刷新/重同步\\模板版本更新\\继续保持无状态恢复};
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4.south) |- (s5.east);
+\draw[arr] (s5.north) -| (s2.south);
+\end{tikzpicture}%
+}
+\caption{DMHP总体处理流程图}
+\end{figure}
 
-\subsubsection{无状态派生与乱序容忍}
+\subsubsection*{技术流程一：会话建立与跳频种子协商}
 
-接收端仅需知道 $\text{SeqID}$（从数据包头部或记录号获取），即可独立计算该单元的算法索引与密钥材料，而无需严格依赖前序状态。这使得协议天然支持：
+\textbf{步骤S110：握手阶段（Handshaking）}
+
+双方节点通过混合KEM协商会话主种子$\text{MasterSecret}$，并据此建立当前Epoch可用的机密性配置档案集。支持经典+后量子混合模式，例如 X25519 + ML-KEM-768。
+
+具体地，握手过程包括：
+\begin{enumerate}[label=S110.\arabic*]
+    \item 发起方生成临时公私钥对$(pk_C, sk_C)$，发送ClientHello消息，携带时间戳$t_C$、随机数$r_C$、支持的算法库列表$\mathcal{L}$、支持的调度模式集合$\mathcal{M}$以及可接受的Profile策略模板；
+    \item 响应方选择算法库子集$\mathcal{L}' \subseteq \mathcal{L}$，执行混合KEM封装，生成密文$ct$与共享秘密$ss$，返回ServerHello消息；
+    \item 双方通过HKDF派生主密钥：
+    \begin{equation}
+        \text{MasterSecret} = \text{HKDF-Extract}(\text{salt}=r_C \| r_S,\; \text{IKM}=ss_{\text{classical}} \| ss_{\text{PQC}})
+    \end{equation}
+    \item 依据$\text{MasterSecret}$、算法库版本与策略模板，为各硬问题类别派生$\text{EpochSeed}_h$，并形成机密性配置档案库$\mathcal{P}=\{p_1,p_2,\ldots,p_{N_P}\}$；每个Profile至少包含硬问题类别标签、对应$\text{EpochSeed}$上下文以及AEAD/DEM保护算法；
+    \item 协商正交约束参数：硬问题类别距离下限$d_{\min}$、算法库版本标识、Epoch标识、调度模式（时间驱动/序号驱动）以及模板长度$M$。
+\end{enumerate}
+
+\textbf{步骤S120：正交调度模板生成}
+
+设当前Epoch可用Profile库为$\mathcal{P}=\{p_1,p_2,\ldots,p_{N_P}\}$。系统从该Profile库中选取条目并基于类别距离矩阵生成长度为$M$的循环调度模板；记$q_j$为第$j$个模板位置所引用的Profile索引，$\mathrm{HPC}(q_j)$表示该索引对应Profile绑定的硬问题类别标签：
+\begin{equation}
+    \text{Schedule} = (q_0, q_1, \ldots, q_{M-1})
+\end{equation}
+并要求模板中任意相邻位置（含首尾回环）满足类别距离不小于$d_{\min}$。双方通过交换模板摘要$H(\text{Schedule})$确认一致性。
+
+\textbf{步骤S130：逐单元Profile索引与密钥派生}
+
+对于序号为$s$的受保护单元，发送端与接收端均按以下方式恢复当前保护上下文：
+\begin{equation}
+    \text{profile\_idx} = \text{Schedule}[s \bmod M]
+\end{equation}
+\begin{equation}\label{eq:derive}
+    \text{seed}_{\text{unit}} = \text{HMAC}(K_{\text{hop}},\; \text{HOP} \| \text{EpochID} \| s \| \text{profile\_idx} \| \text{ModeSalt})
+\end{equation}
+\begin{equation}\label{eq:key}
+    k_{\text{unit}} = \text{HKDF-Expand}(\text{seed}_{\text{unit}},\; \text{KEYGEN},\; L_{\text{key}}(\text{profile\_idx}))
+\end{equation}
+其中$K_{\text{hop}}$从$\text{MasterSecret}$派生，$L_{\text{key}}(\text{profile\_idx})$表示当前Profile所要求的密钥长度。输出结果为$(\text{Profile}, k_{\text{unit}})$。
+
+\textbf{KEM与逐单元跳频的关系说明}：KEM主要用于握手期和Epoch刷新期建立不同类别的$\text{EpochSeed}$上下文；在Nano模式下，运行时逐单元跳变的是Profile所绑定的对称保护配置（例如AES-GCM、ChaCha20-Poly1305及其对应DEM/AEAD组合），而非对每个数据包重复执行非对称KEM计算。该设计在保持类别分散效果的同时显著降低了工程开销。
+
+\subsubsection*{技术流程二：无状态派生与乱序容忍}
+
+接收端仅需知道当前单元的$\text{SeqID}$（从数据包头部或记录号获取）以及已认证的Epoch/模板标识，即可独立恢复该单元所对应的配置档案与密钥材料，而无需严格依赖前序状态（参见\textbf{图 3}）。这使得协议天然支持：
 
 \begin{itemize}
-    \item \textbf{丢包容忍}：丢失中间包不影响后续包解密；
-    \item \textbf{重传与乱序}：接收端可对任意到达的包独立解密；
-    \item \textbf{并行处理}：多核或分布式解密节点可并行处理不同$\text{SeqID}$。
+    \item \textbf{丢包容忍}：丢失中间包不影响后续包解密，这与依赖前序状态的链式派生方案不同；
+    \item \textbf{重传与乱序}：接收端可对任意到达的包独立解密，特别适合UDP/QUIC等无序传输场景；
+    \item \textbf{并行处理}：多核或分布式解密节点可并行处理不同$\text{SeqID}$的包，适用于高吞吐量场景（如数据中心东西向流量、5G UPF用户面）。
 \end{itemize}
 
-\subsubsection{受保护单元（数据包/记录）的最小格式与AAD绑定（建议）}
+\begin{definition}[无状态确定性派生]
+令$\mathcal{F}$为无状态派生函数。对于任意会话密钥$K$、模板$\text{Schedule}$、Epoch标识$e$和序号$s$，有：
+\[
+\mathcal{F}(K, e, \text{Schedule}, s) = (\text{profile\_idx}(s), \; k_{\text{unit}}(s))
+\]
+其中$\text{profile\_idx}(s)=\text{Schedule}[s \bmod M]$，且$k_{\text{unit}}(s)$由公式\eqref{eq:derive}与公式\eqref{eq:key}确定。该函数满足：(i) 确定性：相同输入必然产生相同输出；(ii) 无状态性：$\mathcal{F}(K,e,\text{Schedule},s)$的计算不依赖于任何$s' \neq s$时刻的运行结果；(iii) 伪随机性：在不知道$K$的前提下，$\{k_{\text{unit}}(s)\}_{s=0}^{T}$在计算上不可区分于均匀随机序列。
+\end{definition}
 
-为便于工程实现与后续权利要求撰写，给出每个“受保护单元”（可为数据包、记录或数据块）的最小可实施封装格式示例：
+\begin{theorem}[无状态派生的安全性]
+若底层HMAC-KDF满足PRF安全性，则DMHP的无状态派生函数$\mathcal{F}$满足上述三个性质。
+
+{\normalfont\textbf{证明概要：}}由HMAC的PRF性质，对于未知密钥$K_{\text{hop}}$，
+\[
+\text{HMAC}(K_{\text{hop}}, \text{HOP} \| e \| s \| \text{profile\_idx} \| \text{ModeSalt})
+\]
+的输出族在多项式时间内与均匀随机函数不可区分。又由于$\text{profile\_idx}(s)$由循环模板直接决定，且模板与Epoch标识在收发双方均已认证一致，因此$\mathcal{F}$的输出仅依赖于$(K,e,\text{Schedule},s)$四个输入，不涉及任何可变运行时状态，从而同时满足确定性、无状态性与计算伪随机性。$\square$
+\end{theorem}
+
+\subsubsection*{技术流程三：受保护单元的封装格式与AAD绑定}
+
+为便于工程实现与后续权利要求撰写，给出每个"受保护单元"（可为数据包、记录或数据块）的最小可实施封装格式：
 
 \begin{itemize}
     \item \textbf{明文/可见头部字段（示例）：} $\text{SeqID}$（或时间片$\text{TimeSlotID}$）、可选$\text{EpochID}$、调度模式标识（时间驱动/序号驱动）、算法库/版本标识（可选）、以及用于重放防护的窗口参数标识（可选）。
-    \item \textbf{密文载荷：}业务载荷$P$经由当前跳频选定的算法原语（例如AEAD或“加密+完整性校验”的等价组合）处理得到密文$C$。
-    \item \textbf{AAD绑定建议：}将$\text{SeqID}$（或$\text{TimeSlotID}$）、$\text{EpochID}$（若存在）、调度模式标识与算法集合/版本标识（若存在）作为附加认证数据（AAD）输入，以将密文与上下文绑定，降低重放、降级与篡改风险。
+    \item \textbf{密文载荷：}业务载荷$P$经由当前跳频选定的算法原语（例如AEAD或"加密+完整性校验"的等价组合）处理得到密文$C$。
+    \item \textbf{认证标签}：AEAD输出的认证标签$\tau$，用于完整性与真实性验证。
+    \item \textbf{AAD绑定}：将$\text{SeqID}$（或$\text{TimeSlotID}$）、$\text{EpochID}$（若存在）、调度模式标识与算法集合/版本标识（若存在）作为附加认证数据（AAD）输入，以将密文与上下文绑定，降低重放、降级与篡改风险。
 \end{itemize}
 
-	\textbf{实现边界说明（建议写入交底以便后续权利要求支撑）：}
+\textbf{实现边界说明：}
 \begin{itemize}
-    \item \textbf{防重放与接收窗口：}在允许乱序的同时，接收端可维护基于$\text{SeqID}$的滑动窗口与位图（或Bloom/哈希集合）用于重放检测。窗口大小可根据链路抖动与最大乱序深度配置。
-    \item \textbf{SeqID回绕处理：}当$\text{SeqID}$为固定比特宽度（例如32/64位）时，可采用（i）禁止回绕并在接近上限前触发一次会话更新；或（ii）引入$\text{EpochID}$与$\text{SeqID}$组成联合计数器$\langle\text{EpochID},\text{SeqID}\rangle$，回绕时Epoch自增并重新派生上下文。
-    \item \textbf{AEAD/完整性校验：}对每个受保护单元建议使用带认证的加密（AEAD）或等价完整性机制，并将$\text{SeqID}$（或时间片）、模式标识等作为AAD输入，以绑定上下文并降低重放/篡改风险。
+    \item \textbf{防重放与接收窗口}：在允许乱序的同时，接收端可维护基于$\text{SeqID}$的滑动窗口与位图用于重放检测。窗口大小可根据链路抖动与最大乱序深度配置。
+    \item \textbf{SeqID回绕处理}：当$\text{SeqID}$为固定比特宽度（例如32/64位）时，可采用（i）禁止回绕并在接近上限前触发一次会话更新；或（ii）引入$\text{EpochID}$与$\text{SeqID}$组成联合计数器$\langle\text{EpochID},\text{SeqID}\rangle$。
+    \item \textbf{流量整形（Traffic Shaping）}：为防止不同算法产生的密文长度差异泄露算法选择信息，可选择将所有受保护单元填充至统一长度$L_{\max}$。
 \end{itemize}
 
-\subsubsection{正交安全约束与类别距离度量}
+\subsubsection*{技术流程四：正交安全约束与类别距离度量}
 
-定义\textbf{硬问题类别（Hard Problem Class，HPC）}：例如 $\{\text{Lattice-Structured}, \text{Lattice-Unstructured}, \text{Code-Based}, \text{Isogeny}, \text{Hash-Based}\}$。为每个算法$A$分配类别$C(A)$。
-
-定义\textbf{类别距离}$d(C_1,C_2)$：例如，同一类别距离为0，不同主类别距离为1或更高。
-
-\textbf{距离矩阵配置示例（Distance Matrix Example）：}
-为确保正交性，系统维护如下距离矩阵示例（数值代表数学假设的差异度）：
-\begin{itemize}
-    \item 格（Lattice） $\leftrightarrow$ 格（Lattice）：$d = 0.2$（同类，低差异）；
-    \item 格（Lattice） $\leftrightarrow$ 编码（Code-based）：$d = 1.0$（完全正交）；
-    \item 格（Lattice） $\leftrightarrow$ 哈希（Hash-based）：$d = 1.0$（完全正交）；
-    \item 结构化格（Structured） $\leftrightarrow$ 非结构化格（Unstructured）：$d = 0.5$（中等差异）。
-\end{itemize}
-
-正交约束：对于相邻受保护单元$i$与$i+1$，要求
+定义\textbf{硬问题类别（Hard Problem Class，HPC）}集合：
 \[
-d(C(A_i), C(A_{i+1})) \geq d_{\min}
+\mathcal{H} = \{\text{Lattice-S}, \text{Lattice-U}, \text{Code}, \text{Hash}, \text{MQ}, \text{Isogeny}^*\}
 \]
-从而确保连续单元由不同数学基础保护，降低单一算法突破造成连续失守的风险。
+其中Lattice-S表示结构化格（如NTRU、ML-KEM），Lattice-U表示非结构化格（如FrodoKEM），Code表示编码理论（如Classic McEliece），Hash表示哈希基（如SPHINCS+/SLH-DSA），MQ表示多变量（如UOV）。Isogeny$^*$标注为预留类别，因现有同源方案（如SIKE）已于2022年被攻破，待未来出现安全的同源方案后可纳入。
 
-\subsubsection{过渡重叠窗口与双解码策略}
+为每个算法$A$分配类别$\mathcal{C}(A) \in \mathcal{H}$。
 
-在算法切换点，为避免时钟不同步或网络抖动导致的解密失败，定义过渡窗口$W$：
+\begin{definition}[类别距离函数]
+定义类别距离（相异度）$d: \mathcal{H} \times \mathcal{H} \to [0, 1]$，满足：
+\begin{enumerate}[label=(\roman*)]
+    \item 非负性：$d(h_1, h_2) \geq 0$；
+    \item 同一性：$d(h_1, h_2) = 0 \iff h_1 = h_2$；
+    \item 对称性：$d(h_1, h_2) = d(h_2, h_1)$；
+    \item 同族折减：同一大类的子类别距离$d < 1$（如$d(\text{Lattice-S}, \text{Lattice-U}) = 0.5$）。
+\end{enumerate}
+{\normalfont\textbf{注：}}本定义为安全策略导向的相异度量，刻意{\normalfont\textbf{不要求}}三角不等式（即$d(a,c)$可大于$d(a,b)+d(b,c)$），因为密码学困难问题之间的独立性关系不具有传递性。例如，格与编码各自独立（$d=1.0$），但不意味着经由哈希基的"中转"可以缩短二者的相异度。
+\end{definition}
+
+\textbf{距离矩阵配置示例：}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ & Lattice-S & Lattice-U & Code & Hash & MQ & Isogeny$^*$ \\
+\hline
+Lattice-S & 0 & 0.5 & 1.0 & 1.0 & 1.0 & 1.0 \\
+\hline
+Lattice-U & 0.5 & 0 & 1.0 & 1.0 & 1.0 & 1.0 \\
+\hline
+Code & 1.0 & 1.0 & 0 & 0.8 & 0.9 & 1.0 \\
+\hline
+Hash & 1.0 & 1.0 & 0.8 & 0 & 1.0 & 1.0 \\
+\hline
+MQ & 1.0 & 1.0 & 0.9 & 1.0 & 0 & 1.0 \\
+\hline
+Isogeny$^*$ & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{注}：Isogeny$^*$为预留类别。由于现有同源方案（如SIKE）已于2022年被攻破，截至本申请日，尚无公认安全的同源密码算法可用。因此，\textbf{当前算法库实例不包含Isogeny类别的任何可用算法}，距离矩阵中保留该行列仅为框架扩展性示意，表明本方案的类别体系具备容纳未来新型数学困难问题类别的能力。待未来出现经充分安全分析的同源方案后，可通过算法库更新将其纳入跳频调度。MQ与Lattice类的距离设为1.0（完全正交），因二者基于本质不同的数学困难问题（多变量多项式求解 vs. 最短向量问题）。距离矩阵可随算法库演进与密码学研究进展动态更新。
+
+\textbf{最小可用类别数说明}：即使不启用Isogeny预留类别，当前算法库仍包含\textbf{至少3个相互完全正交（$d=1.0$）的活跃硬问题大类}——格基（Lattice-S/Lattice-U）、编码基（Code）、哈希基（Hash），加上多变量基（MQ）共4个大类。在$d_{\min}=1.0$的最严格正交约束下，3个大类即可保证相邻受保护单元始终来自不同困难问题类别，满足正交轮换的基本要求。4个以上大类进一步提升安全多样性冗余。因此，Isogeny的缺失不影响本方案正交约束机制的完整可用性。
+
+\textbf{距离矩阵数值设定依据}：各类别间距离值的设定遵循以下原则：(i) \textbf{跨大类距离$d=1.0$}——基于不同数学困难问题的独立性判断，如格基（最短向量问题SVP）与编码基（最小距离译码问题）之间不存在已知多项式时间约化关系，视为完全正交；(ii) \textbf{同族子类折减}——$d(\text{Lattice-S}, \text{Lattice-U})=0.5$，因结构化格（如NTRU/ML-KEM利用理想格或模格结构）与非结构化格（如FrodoKEM基于一般LWE）虽共享格基困难问题，但结构化攻击（如理想格的代数攻击）不直接适用于非结构化实例，故赋予中等距离；(iii) \textbf{部分关联折减}——$d(\text{Code}, \text{Hash})=0.8$，因编码理论与哈希基虽属不同困难问题大类，但部分哈希基构造（如基于LDPC码的哈希）与编码方案存在技术关联；$d(\text{Code}, \text{MQ})=0.9$，因编码与多变量虽独立但在有限域算术层面存在微弱技术交集。\textbf{以上数值均为安全策略层的可配置参数}，由安全管理员根据密码学研究进展与组织安全策略动态调整，\textbf{不构成协议机制的固定常数}。权利要求仅保护"类别距离$\geq d_{\min}$"的约束机制本身，不限定具体数值。
+
+\textbf{正交安全约束}：设循环调度模板为
+\begin{equation}
+    \text{Schedule} = (q_0, q_1, \ldots, q_{M-1})
+\end{equation}
+其中$q_j$为第$j$个模板位置所引用的机密性配置档案索引，$\mathrm{HPC}(q_j)$表示其对应的硬问题类别标签。则要求对任意$j \in \{0,\ldots,M-1\}$满足：
+\begin{equation}\label{eq:constraint}
+    d(\mathrm{HPC}(q_j), \mathrm{HPC}(q_{(j+1)\bmod M})) \geq d_{\min}
+\end{equation}
+运行时第$s$个受保护单元取用$\text{Schedule}[s \bmod M]$，从而使最终发送序列直接继承模板中的类别分散约束。
+
+\textbf{正交约束的无状态确定性保证}：正交约束不在运行时依赖“前一包实际采用何算法”来临时修正，而是在握手期或Epoch刷新期一次性固化到循环$\text{Schedule}$中。收发双方只需共享$\text{MasterSecret}$、模板长度$M$、算法库版本、$\text{ModeSalt}$与$d_{\min}$，即可独立生成相同的调度模板；运行时对序号$s$仅需一次取模索引即可恢复当前Profile，无需缓存前一包最终状态。
+
+\begin{proposition}[循环调度模板的计算复杂度]
+对于长度为$M$的$\text{Schedule}$模板，其计算复杂度满足：
+\begin{enumerate}[label=(\alph*)]
+    \item 模板生成阶段：需对$M$个位置各执行1次候选选择和至多$|\mathcal{P}|$次距离查表/候选遍历，总复杂度为$O(M \cdot |\mathcal{P}|)$；该开销仅在握手期或Epoch刷新期发生；
+    \item 运行阶段：每个受保护单元仅需1次模板索引、1次HMAC和1次HKDF-Expand，总复杂度为$O(1)$，与会话长度和乱序深度无关。
+\end{enumerate}
+因此，本方案在保持最终发送序列正交性的同时，仍可在高吞吐场景下维持无状态恢复。$\square$
+\end{proposition}
+
+{\normalfont\textbf{退化策略：}}若在生成$\text{Schedule}$时，当前配置档案库中不存在满足
+\[
+d(\mathrm{HPC}(q_j), \mathrm{HPC}(q_{(j+1)\bmod M})) \geq d_{\min}
+\]
+的可用候选，则执行以下退化处理：
+\begin{enumerate}[label=(\roman*)]
+    \item 逐步降低$d_{\min}$至$d_{\min} - \Delta$（$\Delta$为可配置步长，默认0.1），直至找到可用配置档案；
+    \item 若$d_{\min}$降至0仍无可用候选（仅当配置档案库仅含单一类别时发生），则允许使用原始候选并记录安全降级事件；
+    \item 安全降级事件可触发威胁感知模块发出算法库扩展建议。
+\end{enumerate}
+
+\begin{theorem}[正交调度模板的直接安全效果]
+设攻击者可以攻破$\mathcal{H}$中某一类别$h^*$的全部实现。在循环调度模板满足$d_{\min}=1.0$且当前实际启用$|\mathcal{H}_{\text{active}}| \geq 2$个类别的条件下，最终发送序列中任意两个相邻受保护单元不会连续引用同一类别标签的机密性配置档案，因此单一类别失陷造成的暴露表现为{\normalfont\textbf{离散片段}}而非{\normalfont\textbf{连续长段数据流}}。当启用两个活跃类别时，类别$h^*$对应的受影响单元数上界为$\lceil T/2 \rceil$；当启用三个及以上类别时，进一步的暴露占比由调度权重和对象级类别配额共同决定。
+
+{\normalfont\textbf{证明：}}由公式\eqref{eq:constraint}，循环调度模板中任意相邻条目（含边界位置$M-1$与0）必须来自不同的硬问题大类。运行时第$s$与$s+1$个受保护单元分别映射到$\text{Schedule}[s \bmod M]$与$\text{Schedule}[(s+1) \bmod M]$，故同样不可能连续落在同一类别$h^*$上。由此可知，即使类别$h^*$全部失陷，攻击者获得的也只能是散布在序列中的离散单元，而非连续长段业务流。当仅有两个活跃类别时，$h^*$最多出现在奇数位或偶数位，对应上界为$\lceil T/2 \rceil$。当活跃类别数不少于三个时，不连续性仍然成立，而精确占比还取决于具体调度权重和类别配额。$\square$
+\end{theorem}
+
+\begin{corollary}[HED与类别配额叠加的安全性]
+若进一步启用$(k,n)$全息熵分散，并对同一原始载荷配置对象级类别配额，使任一KEM类别在该载荷中的份额数均满足$q_h < k$，则攻击者即使完全攻破某一类别$h^*$，也无法仅凭该类别对应的份额重构完整载荷。
+\end{corollary}
+
+\subsubsection*{技术流程五：过渡重叠窗口与双解码策略}
+
+在算法切换点，为避免时钟不同步或网络抖动导致的解密失败，定义过渡窗口$W$（参见\textbf{图 5}）：
 
 \begin{itemize}
-    \item 发送端在$t \in [T-\delta, T+\delta]$时，可选择旧算法或新算法加密（或同时发送两个版本）；
-    \item 接收端在该窗口内尝试双解码，若一种失败则尝试另一种，从而保证工程可用性。
+    \item 发送端在$t \in [T_{\text{switch}}-\delta, T_{\text{switch}}+\delta]$时，可选择旧算法或新算法加密（或同时发送两个版本）；
+    \item 接收端在该窗口内尝试双解码，若一种失败则尝试另一种，从而保证工程可用性；
+    \item 窗口宽度$2\delta$可配置，建议值为网络最大RTT的2--3倍。
 \end{itemize}
 
-	\textbf{关于算法标识（algorithm\_id）的可选承载方式：}
+\textbf{关于配置档案标识（profile\_id）的可选承载方式：}
 \begin{itemize}
-    \item \textbf{明文标识方式：}algorithm\_id以明文字段出现，便于快速定位解密算法；为避免泄露过多可区分信息，可对外仅暴露“类别标识/集合标识”，细粒度算法索引通过KDF内部确定。
-    \item \textbf{受保护标识方式：}algorithm\_id作为受保护元数据随密文一并认证（例如作为AEAD密文的一部分，或以密文头部封装）。接收端可通过“少量候选集试解码”或“类别到算法的确定性映射”实现定位。
-    \item \textbf{零显式标识方式：}不显式传algorithm\_id，双方仅依赖$\text{KDF}(\text{MasterSecret},\text{SeqID})$得到算法索引。该方式最小化侧信道与可区分特征，但要求收发双方算法库版本严格一致，并对版本迁移做好协商。
+    \item \textbf{明文标识方式}：profile\_id以明文字段出现，便于快速定位当前配置档案；
+    \item \textbf{受保护标识方式}：profile\_id作为受保护元数据随密文一并认证；
+    \item \textbf{零显式标识方式}：不显式传profile\_id，双方仅依赖$\text{Schedule}[\text{SeqID} \bmod M]$恢复当前配置档案索引。该方式最小化侧信道与可区分特征。
 \end{itemize}
 
-\subsubsection{可选的全息熵分散（HED）}
+\subsubsection*{技术流程六：全息熵分散（HED）}
 
-对载荷$P$，执行$(k,n)$秘密分享或纠删码：
+对载荷$P$，执行$(k,n)$秘密分享（如Shamir秘密分享）或纠删码（参见\textbf{图 6}）：
 \[
 P \to (S_1, S_2, \ldots, S_n), \quad k \leq n
 \]
 每个分片$S_i$采用不同算法$A_i$加密为$C_i$。只有收集至少$k$个$C_i$并解密后才能重构$P$。
 
+\begin{theorem}[HED的信息论安全性]
+在$(k,n)$-Shamir秘密分享方案下，任意少于$k$个分片不泄露关于$P$的任何信息（信息论安全），即：
+\[
+H(P \mid S_{i_1}, S_{i_2}, \ldots, S_{i_{k-1}}) = H(P)
+\]
+其中$H$为Shannon熵，$\{i_1, \ldots, i_{k-1}\}$为任意$k-1$个分片的索引集。
+\end{theorem}
+
 这使得即使攻击者在某一算法或某条路径成功，仍无法单独获取完整载荷。
 
-\subsubsection{可选的多路径传输分散（MPTD）}
+\subsubsection*{技术流程七：多路径传输分散（MPTD）}
 
-若通信节点具备多个物理接口（如5G蜂窝、Wi-Fi、卫星链路），将不同受保护单元或不同HED分片通过不同路径发送：
+若通信节点具备多个物理接口（如5G蜂窝、Wi-Fi、卫星链路），将不同受保护单元或不同HED分片通过不同路径发送（参见\textbf{图 7}）：
 
 \begin{itemize}
-    \item 空间分散：攻击者需同时监控多条链路；
-    \item 算法-路径交叉：例如$A_1$加密的单元走路径1，$A_2$加密的单元走路径2，增加捕获难度。
+    \item \textbf{空间分散}：攻击者需同时监控多条链路；
+    \item \textbf{算法-路径交叉}：例如$A_1$加密的单元走路径1，$A_2$加密的单元走路径2，增加捕获难度；
+    \item \textbf{路径选择确定性}：路径分配同样基于$\text{KDF}(\text{MasterSecret}, \text{SeqID})$的派生结果，确保收发双方一致。
 \end{itemize}
 
-\subsubsection{威胁感知与自适应跳频（可选）}
+\subsubsection*{技术流程七a：可选前向安全增强（棘轮更新）}
 
-集成威胁监测模块，实时收集：
+为增强前向安全性（PFS），防止会话主密钥在某一时刻泄露后导致对历史受保护单元的回溯解密，本发明可选地引入\textbf{棘轮/迭代更新}机制：
+
+\begin{itemize}
+    \item \textbf{周期性棘轮推进}：每隔$N_{\text{ratchet}}$个受保护单元（或每个时间周期$T_{\text{ratchet}}$），执行主密钥的不可逆更新：
+    \begin{equation}
+        \text{MasterSecret}_{i+1} = \text{KDF}(\text{MasterSecret}_i, \; \text{RATCHET} \| i)
+    \end{equation}
+    更新完成后，\textbf{安全擦除}旧的$\text{MasterSecret}_i$，确保即使攻击者在时刻$T$获取当前主密钥，也无法回溯计算历史棘轮阶段的密钥。
+    \item \textbf{与F2无状态派生的兼容设计}：棘轮更新后，接收端需确定当前单元所属的棘轮阶段。为保持乱序容忍能力，接收端可维护一个\textbf{小型棘轮窗口}，缓存最近$w$个棘轮点的种子（典型$w=2\sim3$），用于追赶与跨棘轮边界的乱序包解密。该窗口内的解密仍为确定性的——接收端根据$\text{SeqID}$判断所属棘轮阶段$i = \lfloor s / N_{\text{ratchet}} \rfloor$，进而选取对应的$\text{MasterSecret}_i$进行派生。
+    \item \textbf{棘轮推进的确定性}：棘轮推进点由$\text{SeqID}$整除$N_{\text{ratchet}}$确定，收发双方可独立计算，无需额外信令交互。
+    \item \textbf{安全效果}：在棘轮间隔$N_{\text{ratchet}}$内，前向安全粒度为$N_{\text{ratchet}}$个受保护单元；结合跳频机制，即使在单个棘轮阶段内泄露主密钥，暴露的数据也分散在多个不同算法/密钥上下文中。
+\end{itemize}
+
+\textbf{实施边界说明}：棘轮更新为\textbf{可选增强}模块。在不启用棘轮的基础配置中，DMHP仍通过逐单元的独立密钥派生与跳频机制提供显著优于传统方案的安全分散性；启用棘轮后可在此基础上进一步获得PFS增强。棘轮间隔$N_{\text{ratchet}}$可根据安全策略配置，典型推荐值为1000--10000个受保护单元。
+
+\subsubsection*{技术流程八：威胁感知与自适应跳频}
+
+集成威胁监测模块（参见\textbf{图 8}），实时收集：
 
 \begin{itemize}
     \item 网络延迟异常（可能意味着中间人攻击）；
-    \item 错误率飙升（可能意味着算法弱化或侧信道探测）；
-    \item 外部威胁情报（如新发现的算法漏洞）。
+    \item 认证失败率飙升（可能意味着算法弱化或侧信道探测）；
+    \item 外部威胁情报（如NIST/CNVD发布的新算法漏洞公告）。
 \end{itemize}
 
 根据威胁级别动态调整：
 
 \begin{itemize}
-    \item \textbf{跳频频率}：高威胁时缩短单元粒度（如从每100包切换一次改为每10包）；
-    \item \textbf{算法权重}：降低可疑算法的选择概率；
-    \item \textbf{诱饵流量（Chaffing）}：注入虚假流量增加分析难度。
+    \item \textbf{跳频频率}：高威胁时缩短单元粒度（如从每100包切换一次改为每10包或逐包）；
+    \item \textbf{算法权重}：降低可疑算法的选择概率直至将其从算法库中暂时移除；
+    \item \textbf{正交约束强化}：提升$d_{\min}$至最大值1.0；
+    \item \textbf{PARANOID模式触发}：在检测到高级持续性威胁（APT）指标时自动进入PARANOID状态。
 \end{itemize}
 
+\subsection*{核心算法伪代码}
+
+为便于说明本发明的最小可实施流程，以下给出与本申请主线一致的两段核心伪代码：其一用于在握手期或Epoch刷新期生成正交调度模板，其二用于在发送端/接收端按$\text{SeqID}$执行逐单元保护与无状态恢复。
+
+\begin{algorithm}[H]
+\caption{机密性配置档案初始化与正交调度模板生成}
+\begin{algorithmic}[1]
+\Require 会话主密钥$\text{MasterSecret}$，当前$\text{EpochID}$，Profile库$\mathcal{P}$，模板长度$M$，阈值$d_{\min}$
+\Ensure 当前Epoch的循环调度模板$\text{Schedule}$
+\State $K_{\text{hop}} \gets \text{HKDF-Expand}(\text{MasterSecret}, \texttt{"HOP-SEED"}, L)$
+\For{$j = 0$ \textbf{to} $M-1$}
+    \State $\text{seed}_j \gets \text{HMAC}(K_{\text{hop}}, \texttt{"SCHED"} \| \text{EpochID} \| j)$
+    \State $\text{cand} \gets \mathcal{P}[\text{Trunc32}(\text{seed}_j) \bmod |\mathcal{P}|]$
+    \If{$j = 0$}
+        \State $\text{Schedule}[0] \gets \text{cand}$
+    \ElsIf{$d(\mathrm{HPC}(\text{Schedule}[j-1]), \mathrm{HPC}(\text{cand})) \geq d_{\min}$}
+        \State $\text{Schedule}[j] \gets \text{cand}$
+    \Else
+        \State $\text{Schedule}[j] \gets \text{NextOrthogonal}(\mathcal{P}, \text{Schedule}[j-1], d_{\min}, \text{seed}_j)$
+    \EndIf
+\EndFor
+\If{$d(\mathrm{HPC}(\text{Schedule}[M-1]), \mathrm{HPC}(\text{Schedule}[0])) < d_{\min}$}
+    \State $\text{Schedule}[M-1] \gets \text{RepairTail}(\mathcal{P}, \text{Schedule}[M-2], \text{Schedule}[0], d_{\min})$
+\EndIf
+\State 交换并验证模板摘要$H(\text{Schedule})$
+\State \Return $\text{Schedule}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{基于$\text{SeqID}$的逐单元保护与无状态恢复}
+\begin{algorithmic}[1]
+\Procedure{SenderProtect}{$P, s, \text{EpochID}, \text{Schedule}, \text{ModeSalt}$}
+    \State $\text{profile\_idx} \gets \text{Schedule}[s \bmod M]$
+    \State $\text{seed}_{\text{unit}} \gets \text{HMAC}(K_{\text{hop}}, \texttt{"HOP"} \| \text{EpochID} \| s \| \text{profile\_idx} \| \text{ModeSalt})$
+    \State $k_{\text{unit}} \gets \text{HKDF-Expand}(\text{seed}_{\text{unit}}, \texttt{"KEYGEN"}, L_{\text{key}}(\text{profile\_idx}))$
+    \State $\text{Profile} \gets \mathcal{P}[\text{profile\_idx}]$
+    \State $\text{AAD} \gets (\text{SeqID}=s, \text{EpochID}, \text{ModeID}, \text{ScheduleVer})$
+    \State $(C, \tau) \gets \text{AEAD-Encrypt}(\text{Profile}, k_{\text{unit}}, P, \text{AAD})$
+    \State \Return $(\text{Header}, C, \tau)$
+\EndProcedure
+\Statex
+\Procedure{ReceiverRecover}{$\text{Header}, C, \tau$}
+    \State 从$\text{Header}$读取$(s, \text{EpochID}, \text{ModeID}, \text{ScheduleVer})$
+    \State $\text{profile\_idx} \gets \text{Schedule}[s \bmod M]$
+    \If{$\text{profile\_idx} \notin \text{ScheduleVer}_{\text{active}}$}
+        \State 触发拒绝或重同步
+    \EndIf
+    \State $\text{seed}_{\text{unit}} \gets \text{HMAC}(K_{\text{hop}}, \texttt{"HOP"} \| \text{EpochID} \| s \| \text{profile\_idx} \| \text{ModeSalt})$
+    \State $k_{\text{unit}} \gets \text{HKDF-Expand}(\text{seed}_{\text{unit}}, \texttt{"KEYGEN"}, L_{\text{key}}(\text{profile\_idx}))$
+    \State $\text{Profile} \gets \mathcal{P}[\text{profile\_idx}]$
+    \State $\text{AAD} \gets (\text{SeqID}=s, \text{EpochID}, \text{ModeID}, \text{ScheduleVer})$
+    \State $P \gets \text{AEAD-Decrypt}(\text{Profile}, k_{\text{unit}}, C, \tau, \text{AAD})$
+    \State \Return $P$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\noindent\textbf{伪代码补充说明：}其中，$\text{NextOrthogonal}(\mathcal{P}, \cdot)$表示按照由$\text{seed}_j$导出的候选遍历顺序，在Profile库中查找满足类别距离约束的下一个可用配置档案；$\text{RepairTail}(\mathcal{P}, \cdot)$表示当模板末项与首项不满足约束时，用于执行首尾闭环修复；$\text{ScheduleVer}_{\text{active}}$表示接收端当前已经认证且处于有效期内的模板版本集合或映射；$\text{AEAD-Encrypt}/\text{AEAD-Decrypt}$表示调用当前Profile所绑定的记录保护算法。
+
+
 %==============================================================================
-\section{本发明拟保护的主要创新点}
+\section*{六、本申请提案的关键点和欲保护点}
 %==============================================================================
 
-本发明主要包含以下关键创新点与拟保护点：
+本发明的创新点分为“\textbf{核心必要创新}”与“\textbf{可选增强创新}”两层。对评审而言，真正构成本申请与现有技术实质区别、且应作为权利要求主干重点保护的，是前四项核心必要创新：
 
-(1) \textbf{会话内多原语动态跳频机制}：在同一会话内，按时间片/数据块/数据包等粒度对加密算法或封装原语进行动态切换，无需频繁重建会话。
+\textbf{（核心必要创新）}
 
-(2) \textbf{确定性无状态派生与乱序容忍}：以\texttt{SeqID}等单调标识作为派生输入，在接收端无需严格依赖前序状态即可计算当前受保护单元的算法与密钥上下文，从而容忍丢包、重传与乱序。
+(1) \textbf{逐单元动态跳频机制}：不是停留在“会话建立时选一次算法”或“少量重协商切换算法”的传统密码敏捷，而是在同一会话内部按记录、数据包或数据块粒度进行连续跳变，使安全暴露面从“整段会话”下降为“离散保护单元”。
 
-(3) \textbf{正交安全约束与距离度量}：定义硬问题类别及距离度量，对相邻受保护单元施加正交约束，降低同类突破造成连续失守的风险。
+(2) \textbf{基于硬问题类别标签的正交调度模板}：本发明不是随机挑选下一种算法，而是先依据硬问题类别标签与距离矩阵生成满足$d_{\min}$约束的循环$\text{Schedule}$模板，并由最终发送序列继承该模板的类别分散效果。该机制将“算法多样性”从定性概念提升为可度量、可执行、可审计的形式化机制。
 
-(4) \textbf{过渡重叠窗口与双解码策略}：在切换点提供重叠窗口$W$，在保证安全性的同时提升工程可用性。
+(3) \textbf{基于$\text{SeqID}$的确定性无状态派生}：接收端无需依赖前一包是否成功解密、也无需追踪复杂会话状态，仅凭$\text{SeqID}$、已认证的Epoch/模板标识和共享主密钥即可恢复当前单元对应的Profile与密钥材料，从而天然支持丢包、乱序、重传和并行处理。
 
-(5) \textbf{全息熵分散（HED）的阈值重构机制（可选）}：对载荷进行$(k,n)$分片并分别采用不同算法保护，显著降低SNDL与单一算法突破的攻击收益。
+(4) \textbf{面向SEPP/安全网关/UPF的双端协同落地架构}：本发明不是抽象算法组合，而是给出了握手、模板、记录保护、Epoch刷新、重同步和元数据承载的系统化落地路径，可直接部署于双端安全网关、SEPP或用户面保护设备。
 
-(6) \textbf{多路径传输分散（MPTD）（可选）}：结合多链路或多子流将不同受保护单元分散传输，使攻击者需同时捕获多路径才能重构完整会话数据。
+\textbf{（可选增强创新）}
 
-(7) \textbf{威胁感知与自适应跳频（可选）}：依据威胁指标动态调整跳频频率、算法权重与诱饵注入策略。
+(5) \textbf{HED阈值分片增强}：对原始载荷进行$(k,n)$分片，使攻击者即使攻破单一类别，也难以获得足够份额重构完整明文。
+
+(6) \textbf{MPTD多路径增强}：将不同受保护单元或不同分片映射到不同物理链路，进一步提升截获与重构门槛。
+
+(7) \textbf{威胁感知与自适应提频}：基于威胁指标动态调整跳频频率、类别配额和安全策略，使系统可在攻击期自动提升保护强度。
+
+(8) \textbf{PARANOID模式}：在高威胁阶段自动进入逐单元跳频、最大正交约束和增强分散策略同时启用的高安全状态。
+
+\subsection*{建议权利要求层次}
+
+基于上述创新点，建议权利要求按以下层次布局：
+
+其中，独立权利要求1建议严格围绕前四项核心必要创新展开，即：逐单元动态跳频、基于硬问题类别标签的正交调度模板、基于$\text{SeqID}$的确定性无状态派生、以及双端协同承载架构；HED、MPTD和威胁联动宜放入从属权利要求，以避免增强特征反向收窄主权项。
+
+\textbf{独立权利要求（方法类）}：
+
+\textbf{权利要求1}：一种基于动态多原语密码跳频的安全通信方法，包括：在同一通信会话内，通过混合KEM协商$\text{MasterSecret}$并建立包含多个硬问题类别标签的机密性配置档案集；基于所述配置档案集生成满足类别距离约束的循环调度模板$\text{Schedule}$；发送端针对序号为$\text{SeqID}$的受保护单元，按照$\text{Schedule}[\text{SeqID} \bmod M]$确定当前配置档案索引，并基于会话主密钥、$\text{SeqID}$及Epoch上下文派生当前单元的密钥材料，对该受保护单元实施加密保护；接收端依据相同$\text{SeqID}$及已认证的模板标识独立恢复对应配置档案索引和密钥材料，以完成解密或验证。
+
+\textbf{从属权利要求}：
+
+\textbf{权利要求2}（从属于1）：所述确定性无状态派生包括：以$\text{SeqID}$、$\text{EpochID}$和模板标识为输入，通过密钥派生函数计算当前受保护单元对应的配置档案索引和每单元密钥材料，接收端仅需知道所述输入即可独立派生，支持丢包、乱序和并行处理。
+
+\textbf{权利要求3}（从属于1）：所述正交约束包括：定义硬问题类别集合与类别距离函数，生成循环调度模板$\text{Schedule}$，并要求模板中任意相邻配置档案的类别距离不小于预设阈值$d_{\min}$。
+
+\textbf{权利要求4}（从属于1）：还包括过渡重叠窗口机制，在算法切换点提供时间窗口$W$，接收端在窗口内执行双解码策略。
+
+\textbf{权利要求5}（从属于1）：还包括全息熵分散步骤，将载荷按$(k,n)$阈值方案进行分片，各分片分别采用不同算法加密，重构需至少$k$个分片。
+
+\textbf{权利要求6}（从属于5）：还包括多路径传输分散步骤，将不同分片或受保护单元通过不同物理路径传输。
+
+\textbf{权利要求7}（从属于1）：还包括威胁感知与自适应调整步骤，其中：基于通信过程中的安全状态指标检测异常事件，根据所述异常检测结果确定威胁级别，并据此动态调整跳频频率、调整算法的选择权重、以及调整正交约束的最小距离$d_{\min}$。
+
+\textbf{权利要求8}（从属于7）：所述安全状态指标包括以下一项或多项：认证失败率统计、网络延迟异常检测、外部威胁情报输入；所述动态调整包括：提高跳频频率至逐包跳变、将可疑算法的选择权重降低至零、提升$d_{\min}$至最大值。
+
+\textbf{独立权利要求（系统类）}：
+
+\textbf{权利要求9}：一种基于动态多原语密码跳频的安全通信系统，包括：握手与Epoch管理模块、机密性配置档案库与正交调度模板生成模块、基于$\text{SeqID}$的确定性无状态派生模块、逐单元记录保护模块、以及同步与重同步模块；其中，各模块协同工作以实现权利要求1至8中任一项所述的安全通信方法。
+
+\textbf{独立权利要求（设备/产品类）}：
+
+\textbf{权利要求10}：一种电子设备，包括处理器和存储器，所述存储器存储有计算机程序，所述处理器执行所述计算机程序时实现权利要求1至8中任一项所述的安全通信方法。
+
+\textbf{权利要求11}：一种计算机可读存储介质，其上存储有计算机程序，所述计算机程序被处理器执行时实现权利要求1至8中任一项所述的安全通信方法。
+
+\textbf{权利要求12}：一种安全通信网关设备，内置上述DMHP协议栈，所述协议栈可嵌入安全通信协议的记录层或隧道层，对经过所述网关的数据流量执行权利要求1至8中任一项所述的安全通信方法。
 
 %==============================================================================
-\section{本发明的优点}
+\section*{七、与第三条中最接近的现有技术相比，本申请提案有何技术优点}
 %==============================================================================
 
-与现有技术相比，本发明具有以下显著优点：
+与现有技术相比，本发明的效果提升不是简单体现在“使用了更多算法”，而是体现在\textbf{暴露面被切碎、接收状态被简化、部署路径更清晰}三个维度。为便于评审快速判断，本发明相对现有技术的主要效果提升归纳如下。
 
-(1) \textbf{显著降低SNDL收益}：通过微碎片化与会话内跳频，将大量历史数据分散到多个算法与多个密钥上下文，削弱"批量采集、统一解密"的性价比。
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3.8cm}|p{8.4cm}|p{1.6cm}|}
+\hline
+\textbf{评审关注点} & \textbf{本申请中的明确回答} & \textbf{结论} \\ \hline
+这是否只是现有技术的简单拼接 & 以“逐单元动态跳频 + 基于硬问题类别标签的正交调度模板 + 基于$\text{SeqID}$的确定性无状态派生 + 面向双端网关的落地架构”构成不可替换的主创新链条；HED、MPTD和威胁联动仅作为增强层。 & 满足 \\ \hline
+是否具备完整技术闭环并可工程实施 & 已给出双端架构、握手建种子、模板生成、逐单元保护、Epoch刷新与重同步流程，并明确可部署于SEPP、安全网关、UPF或记录层代理。 & 满足 \\ \hline
+效果提升是否来自核心机制本身 & 已形式化说明：正交模板使单一类别失陷后的暴露由连续长段转为离散片段；无状态派生直接带来乱序容忍、重传容忍和并行处理能力。 & 满足 \\ \hline
+权利要求主干是否与说明书主线一致 & 独立权利要求1已对齐为“配置档案集 + 循环$\text{Schedule}$ + $\text{SeqID}$派生 + 逐单元加密保护”的主链路，和说明书核心机制一致。 & 满足 \\ \hline
+\end{tabular}
+\caption{评审关注点与本发明满足性对照}
+\end{table}
 
-(2) \textbf{面对算法不确定性更具韧性}：即便某一算法族在未来被削弱，也仅影响部分受保护单元，降低系统性失守概率。
 
-(3) \textbf{正交安全可配置可验证}：通过硬问题类别标注与距离约束，使"算法多样性"可度量、可执行、可审计。
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{2.9cm}|>{\raggedright\arraybackslash}p{4.3cm}|>{\raggedright\arraybackslash}p{5.8cm}|}
+\hline
+\textbf{对比维度} & \textbf{现有单算法/简单双算法方案} & \textbf{本发明DMHP方案的提升效果} \\ \hline
+单一类别失陷后的暴露形态 & 往往对应整段会话或较长连续数据流暴露 & 通过正交调度模板将暴露切分为离散片段；在$d_{\min}=1.0$且至少两类活跃类别时，不会出现同一类别连续相邻的长段暴露 \\ \hline
+接收端恢复方式 & 常依赖前序状态、重协商结果或额外上下文同步 & 接收端仅凭$\text{SeqID}$、Epoch/模板标识和共享主密钥即可恢复当前Profile与密钥，乱序、重传和并行处理能力更强 \\ \hline
+运行期开销结构 & 若直接并行启用多算法，则计算、缓存和链路开销同步上升 & KEM主要用于握手和Epoch刷新，Nano模式运行期仅对Profile对应的对称保护配置逐单元跳变，安全收益与计算开销更均衡 \\ \hline
+工程部署方式 & 常需上层应用感知或引入额外控制面适配 & 可部署于双端安全网关、SEPP、UPF或记录层代理，不要求上层应用修改业务语义 \\ \hline
+安全策略可审计性 & 算法多样性多为经验性或人工配置，缺乏形式化约束 & 通过类别标签、距离矩阵、模板摘要和版本标识实现可配置、可验证、可审计的策略闭环 \\ \hline
+增强能力扩展 & 通常需额外设计与主协议拼接 & HED、MPTD、威胁联动可作为增强层按需叠加，并与主流程共享模板与Epoch管理机制 \\ \hline
+\end{tabular}
+\caption{本发明相对现有技术的效果提升}
+\end{table}
 
-(4) \textbf{工程可用性强}：无状态派生与过渡重叠窗口设计，使协议更适应存在丢包/乱序/抖动的真实网络环境部署。
-
-(5) \textbf{可扩展的空间与阈值增强}：多路径分散与阈值分片机制可按场景打开或关闭，在不同成本/安全需求下提供可组合的增强。
-
-%==============================================================================
-\section{本发明可能的实现特征}
-%==============================================================================
-
-本发明的实现通常包括以下可观测特征：
-
+\textbf{效果数据口径说明：}
 \begin{itemize}
-    \item \textbf{协议报头与元数据特征}：实现通常需包含算法标识\texttt{algorithm\_id}、模式标识\texttt{mode\_id}、序号\texttt{SeqID}、跳频索引/时间片等字段（可掩文或受保护的可解析形式），可用于识别跳频行为；
-    \item \textbf{会话内算法切换痕迹}：抓包或日志可观察到相邻受保护单元的算法族类别在短时间内反复切换；
-    \item \textbf{多路径分散行为（可选）}：多接口并行流量与"路径$\leftrightarrow$算法类别"映射的关联性；
-    \item \textbf{阈值分片重构行为（可选）}：同一业务载荷对应多份额的并行传输、重构阈值与份额标识策略。
-    \item \textbf{流量整形特征（可选）}：数据包长度呈现恒定或特定粒度分布（如填充至$L_{max}$），消除了因不同算法产生的自然密文长度抖动。
+    \item \textbf{关于暴露上界}：文中“$\lceil T/2 \rceil$”等表述，是指在$d_{\min}=1.0$约束下、且当前实际仅启用两类活跃类别时，单一类别在长度为$T$的发送序列中可能覆盖的理论上界；若启用三类及以上类别，连续暴露仍被打散，但精确占比取决于模板权重与类别配额。
+    \item \textbf{关于乱序容忍}：其含义是接收端可在不依赖前序解密结果的情况下独立恢复当前单元所需的Profile与密钥材料，而非宣称可以忽略防重放窗口、认证校验或Epoch一致性校验。
+    \item \textbf{关于标准兼容性}：其含义是本方案可在双端网关/代理层嵌入现有TLS 1.3、QUIC、IPsec/IKEv2等协议栈，不要求应用侧改动，但底层仍需承载$\text{SeqID}$、$\text{EpochID}$、模板版本等元数据并要求双端协同实现。
 \end{itemize}
-
-\noindent\textbf{补充说明：}为降低被动监听者利用明文元数据进行流量分类的能力，协议可选择将\texttt{mode\_id}、\texttt{algorithm\_id}、时间片标识等以“受保护元数据”或“隐式派生”方式承载；同时配合接收窗口与AAD绑定，可在允许乱序的前提下实现重放防护。
+%==============================================================================
+\section*{八、其他有助于理解本申请提案的技术资料}
 
 %==============================================================================
-\section{附图说明}
-%==============================================================================
 
-\textbf{图 1}：DLHP 节点总体架构图，展示算法库、正交选择器、同步调度模块、可选MPTD与HED模块的集成关系。
+\textbf{图 1}：第五章中的DMHP总体架构图，展示双端接入实体、握手与Epoch管理、正交调度模板生成器、逐单元记录保护引擎以及可选增强模块之间的关系。
 
-\textbf{图 2}：协议状态机转换图，展示从INITIAL到ACTIVE再到TRANSITIONING等状态的流转与触发条件。
+\textbf{图 2}：第五章中的DMHP总体处理流程图，展示“握手建种子、生成模板、按$\text{SeqID}$恢复Profile与密钥、执行封装/解封装、Epoch刷新/重同步”的完整闭环。
 
-\textbf{图 3}：无状态派生流程示意图，展示如何从$(\text{MasterSecret}, \text{SeqID})$派生$(algorithm\_index, per\_unit\_key)$。
+\textbf{图 3}：无状态派生流程示意图，展示如何依据调度模板、Epoch标识和序号恢复配置档案与单元密钥，并执行模板有效性检查。
 
-\textbf{图 4}：正交约束示例图，展示不同硬问题类别（格/编码/同源）之间的距离矩阵与相邻单元选择约束。
+\begin{figure}[H]
+\centering
+\resizebox{0.92\textwidth}{!}{%
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, fill=green!10, minimum width=2.9cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
+    decision/.style={diamond, draw, fill=yellow!18, aspect=2.1, align=center, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick}
+]
+\node[block] (in) at (0,2.8) {输入\\$\text{Schedule}$, $\text{EpochID}$, $\text{SeqID}=s$};
+\node[block] (idx) at (0,1.3) {$\text{profile\_idx}=\text{Schedule}[s \bmod M]$};
+\node[block] (seed) at (0,-0.2) {$\text{seed}_{\text{unit}}=\text{HMAC}(K_{\text{hop}},$\\$\texttt{"HOP"}\|\text{EpochID}\|s\|\text{profile\_idx}\|\text{ModeSalt})$};
+\node[block] (key) at (0,-1.9) {$k_{\text{unit}}=\text{HKDF-Expand}(\text{seed}_{\text{unit}}, \texttt{"KEYGEN"}, L)$};
+\node[decision] (chk) at (0,-3.8) {Profile是否属于\\当前有效模板?};
+\node[block] (rej) at (-3.2,-5.4) {拒绝/重同步};
+\node[block] (out) at (3.2,-5.4) {输出$(\text{Profile}, k_{\text{unit}})$};
+\draw[arr] (in) -- (idx);
+\draw[arr] (idx) -- (seed);
+\draw[arr] (seed) -- (key);
+\draw[arr] (key) -- (chk);
+\draw[arr] (chk) -- node[above,font=\small]{否} (rej);
+\draw[arr] (chk) -- node[above,font=\small]{是} (out);
+\end{tikzpicture}%
+}
+\caption{无状态派生与配置档案恢复流程}
+\end{figure}
+
+\textbf{图 4}：正交约束示例图，展示不同硬问题类别（格/编码/哈希/多变量）之间的距离矩阵与相邻单元选择约束。
+
+\begin{figure}[H]
+\centering
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.2}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & Lattice-S & Lattice-U & Code & Hash & MQ \\ \hline
+Lattice-S & 0 & 0.5 & 1.0 & 1.0 & 1.0 \\ \hline
+Lattice-U & 0.5 & 0 & 1.0 & 1.0 & 1.0 \\ \hline
+Code & 1.0 & 1.0 & 0 & 0.8 & 0.9 \\ \hline
+Hash & 1.0 & 1.0 & 0.8 & 0 & 1.0 \\ \hline
+MQ & 1.0 & 1.0 & 0.9 & 1.0 & 0 \\ \hline
+\end{tabular}%
+}
+\vspace{0.4em}
+
+{\small 图中数值越大表示类别相异度越高；当$d_{\min}=1.0$时，相邻单元必须跨越不同硬问题大类。}
+\caption{硬问题类别距离关系图（Isogeny$^*$为预留类别）}
+\end{figure}
 
 \textbf{图 5}：过渡重叠窗口时序图，展示旧算法与新算法在切换点的并行使用与双解码策略。
 
-\textbf{图 6}（可选）：全息熵分散（HED）流程图，展示载荷分片、不同算法加密、阈值重构过程。
+\begin{figure}[H]
+\centering
+\resizebox{0.95\textwidth}{!}{%
+\begin{tikzpicture}[arr/.style={-{Stealth[length=3mm]}, thick}, font=\small]
+\draw[arr] (0,0) -- (12.2,0) node[right]{时间};
+\draw (0,1.6) -- (12,1.6);
+\draw (0,-1.6) -- (12,-1.6);
+\node[left] at (0,1.6) {旧Profile/算法};
+\node[left] at (0,-1.6) {新Profile/算法};
+\fill[blue!12] (4.3,2.3) rectangle (7.7,-2.3);
+\draw[dashed] (6,2.4) -- (6,-2.4);
+\node[above] at (6,2.4) {$T_{\text{switch}}$};
+\node[above] at (5.0,2.0) {$T_{\text{switch}}-\delta$};
+\node[above] at (7.0,2.0) {$T_{\text{switch}}+\delta$};
+\draw[very thick] (0.6,1.6) -- (7.0,1.6);
+\draw[very thick] (5.0,-1.6) -- (11.4,-1.6);
+\draw[very thick, dotted] (5.0,1.6) -- (7.0,1.6);
+\draw[very thick, dotted] (5.0,-1.6) -- (7.0,-1.6);
+\node at (6.0,0.3) {过渡窗口内允许双解码};
+\node at (2.2,2.0) {切换前主要使用旧Profile};
+\node at (9.6,-1.2) {切换后主要使用新Profile};
+\end{tikzpicture}%
+}
+\caption{过渡重叠窗口与双解码策略时序图}
+\end{figure}
 
-\textbf{图 7}（可选）：多路径传输分散（MPTD）拓扑图，展示不同受保护单元通过不同物理链路传输的空间分散策略。
+\textbf{图 6}：全息熵分散（HED）流程图，展示载荷分片、不同算法加密、阈值重构过程。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.95\textwidth}{!}{%
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, fill=green!10, minimum width=2.7cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick}
+]
+\node[block] (p) at (0,0) {原始载荷$P$};
+\node[block] (split) at (3.2,0) {$(k,n)$分片\\$P \rightarrow (S_1,\ldots,S_n)$};
+\node[block] (s1) at (6.6,1.8) {分片$S_1$\\Profile$_1$保护};
+\node[block] (s2) at (6.6,0) {分片$S_2$\\Profile$_2$保护};
+\node[block] (s3) at (6.6,-1.8) {分片$S_n$\\Profile$_n$保护};
+\node[block] (recv) at (10.2,0) {收集至少$k$个有效分片};
+\node[block] (rec) at (13.4,0) {阈值重构\\恢复$P$};
+\draw[arr] (p) -- (split);
+\draw[arr] (split) -- (s1);
+\draw[arr] (split) -- (s2);
+\draw[arr] (split) -- (s3);
+\draw[arr] (s1) -- (recv);
+\draw[arr] (s2) -- (recv);
+\draw[arr] (s3) -- (recv);
+\draw[arr] (recv) -- (rec);
+\end{tikzpicture}%
+}
+\caption{全息熵分散（HED）流程图}
+\end{figure}
+
+\textbf{图 7}：多路径传输分散（MPTD）拓扑图，展示不同受保护单元通过不同物理链路传输的空间分散策略。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.95\textwidth}{!}{%
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, fill=green!10, minimum width=2.6cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick}
+]
+\node[block] (tx) at (0,0) {发送端\\DMHP封装};
+\node[block] (p1) at (4.2,2.0) {路径1\\5G/专线};
+\node[block] (p2) at (4.2,0) {路径2\\Wi-Fi/互联网};
+\node[block] (p3) at (4.2,-2.0) {路径3\\卫星/备链};
+\node[block] (rx) at (8.6,0) {接收端\\重组与解封装};
+\draw[arr] (tx) -- node[above,font=\small]{单元/分片A} (p1);
+\draw[arr] (tx) -- node[above,font=\small]{单元/分片B} (p2);
+\draw[arr] (tx) -- node[below,font=\small]{单元/分片C} (p3);
+\draw[arr] (p1) -- (rx);
+\draw[arr] (p2) -- (rx);
+\draw[arr] (p3) -- (rx);
+\end{tikzpicture}%
+}
+\caption{多路径传输分散（MPTD）拓扑图}
+\end{figure}
+
+\textbf{图 8}：威胁感知与自适应调整流程图，展示威胁指标采集、级别判定、跳频策略动态调整的反馈回路。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.94\textwidth}{!}{%
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, fill=green!10, minimum width=2.9cm, minimum height=0.95cm, align=center, rounded corners=2pt, font=\small},
+    decision/.style={diamond, draw, fill=yellow!18, aspect=2.1, align=center, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick}
+]
+\node[block] (metric) at (0,0) {采集威胁指标\\延迟/失败率/外部情报};
+\node[decision] (judge) at (4.0,0) {威胁级别判定};
+\node[block] (policy) at (8.2,1.8) {提升跳频频率\\提高$d_{\min}$};
+\node[block] (weight) at (8.2,0) {调整类别权重\\剔除可疑Profile};
+\node[block] (panic) at (8.2,-1.8) {触发PARANOID\\并联动HED/MPTD};
+\node[block] (engine) at (12.6,0) {DMHP运行策略更新};
+\draw[arr] (metric) -- (judge);
+\draw[arr] (judge) -- (policy);
+\draw[arr] (judge) -- (weight);
+\draw[arr] (judge) -- (panic);
+\draw[arr] (policy) -- (engine);
+\draw[arr] (weight) -- (engine);
+\draw[arr] (panic) -- (engine);
+\draw[arr] (engine.south) |- (metric.south);
+\end{tikzpicture}%
+}
+\caption{威胁感知与自适应调整流程图}
+\end{figure}
+
+\textbf{图 9}：DMHP与现有协议的集成部署图，展示DMHP在TLS 1.3记录层、IPsec隧道层、5G SEPP接口的嵌入位置。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.96\textwidth}{!}{%
+\begin{tikzpicture}[
+    block/.style={rectangle, draw, fill=green!10, minimum width=2.8cm, minimum height=1.0cm, align=center, rounded corners=2pt, font=\small},
+    arr/.style={-{Stealth[length=3mm]}, thick}
+]
+\node[block] (app1) at (0,2.0) {业务系统A};
+\node[block] (gw1) at (3.5,2.0) {本端网关/SEPP\\DMHP记录层或隧道层};
+\node[block] (net) at (7.2,2.0) {现有承载网络\\TLS 1.3 / QUIC / IPsec / GTP-U};
+\node[block] (gw2) at (10.9,2.0) {对端网关/SEPP\\DMHP记录层或隧道层};
+\node[block] (app2) at (14.4,2.0) {业务系统B};
+\node[block] (upf) at (7.2,-1.0) {可选部署位点\\安全网关 / SEPP / UPF};
+\draw[arr] (app1) -- (gw1);
+\draw[arr] (gw1) -- (net);
+\draw[arr] (net) -- (gw2);
+\draw[arr] (gw2) -- (app2);
+\draw[arr] (upf) -- (net);
+\end{tikzpicture}%
+}
+\caption{DMHP与现有协议的集成部署图}
+\end{figure}
 
 %==============================================================================
-\section{具体实施方式}
+\subsection*{具体实施方式}
 %==============================================================================
 
 下面结合附图和具体实施例对本发明作进一步详细说明。应当理解，这些实施例仅用于说明本发明而不用于限制本发明的范围。
 
-\subsection{实施例1：基于序号的动态跳频通信}
+\subsection*{实施例1：基于序号的动态跳频通信（5G核心网SEPP接口）}
 
-某企业内网需在两个数据中心之间建立后量子安全隧道。双方采用本发明的DLHP协议，具体流程如下：
+某运营商需在5G核心网SEPP接口（N32/N33）上实现后量子安全增强。双方SEPP节点采用本发明的DMHP协议，嵌入现有TLS 1.3保护层，具体流程如下：
 
-\textbf{步骤1：握手与种子协商}
+\textbf{步骤1：握手与Profile协商}
 
 \begin{itemize}
-    \item 客户端与服务端通过混合KEM（ECDH+Kyber）协商$\text{MasterSecret}$；
-    \item 协商算法库列表：包含 Kyber-512、NTRU-HRSS、Classic McEliece、SPHINCS+等；
-    \item 协商正交约束：相邻单元算法类别距离$\geq 1$；
-    \item 协商调度模式：基于$\text{SeqID}$派生（Nano模式）。
+    \item 客户端SEPP与服务端SEPP通过混合KEM（X25519 + ML-KEM-768）协商$\text{MasterSecret}$；
+    \item 协商机密性配置档案集，例如$\text{Profile}_1=\{$结构化格类$\text{EpochSeed}$, AES-256-GCM$\}$、$\text{Profile}_2=\{$编码基类$\text{EpochSeed}$, ChaCha20-Poly1305$\}$、$\text{Profile}_3=\{$非结构化格类$\text{EpochSeed}$, AES-256-GCM$\}$；其中各Profile对应的$\text{EpochSeed}$在握手期建立，并在后续Epoch刷新时更新；
+    \item 协商正交约束：循环调度模板中任意相邻条目的类别距离$\geq 1.0$（完全正交）；
+    \item 协商调度模式：基于$\text{SeqID}$索引循环$\text{Schedule}$（Nano模式）；
+    \item 交换调度模板摘要$H(\text{Schedule})$确认一致性。
 \end{itemize}
 
 \textbf{步骤2：业务数据传输}
 
 \begin{itemize}
-    \item 每个数据包携带$\text{SeqID}$（单调递增）；
-    \item 发送端根据$\text{KDF}(\text{MasterSecret}, \text{SeqID})$派生$(alg\_idx, key)$，选择对应算法加密载荷；
-    \item 接收端读取$\text{SeqID}$，同样派生$(alg\_idx, key)$，执行解密。
+    \item 每个TLS记录携带$\text{SeqID}$（单调递增）及模板版本/Epoch标识；
+    \item 发送端先由下式确定当前Profile：
+    \[
+    \text{profile\_idx}=\text{Schedule}[\text{SeqID} \bmod M]
+    \]
+    再由$\text{HKDF}(\text{EpochSeed}_{\text{profile\_idx}}, \text{SeqID})$派生单元密钥$k_{\text{unit}}$；
+    \item 接收端读取$\text{SeqID}$后，依据同一$\text{Schedule}$恢复当前Profile并执行解密，无需依赖前一条记录的处理结果；
+    \item 将$\text{SeqID}$、$\text{EpochID}$、$\text{ModeID}$和$\text{ScheduleVer}$作为AAD输入AEAD。
 \end{itemize}
 
-\textbf{步骤3：正交约束检查}
+\textbf{步骤3：正交约束保持}
 
-协议栈在选择算法时，检查前一单元的类别$C_{prev}$，确保$d(C_{prev}, C_{curr}) \geq 1$，若不满足则跳过该算法重新选择。
+正交约束在握手期或Epoch刷新期已固化为循环$\text{Schedule}$；运行时无需临时回看前一包，只需验证当前记录所索引的Profile属于本Epoch有效调度模板，即可保证相邻记录沿最终发送序列满足类别分散要求。
 
-\textbf{效果}：即使某一算法在未来被攻破，攻击者也仅能解密该算法保护的离散片段，无法连续重构完整会话。
+\textbf{效果}：即使某一类别在未来被攻破，攻击者也仅能解密该类别对应的离散记录片段，而难以连续重构完整的跨运营商信令流；同时，由于接收端可按$\text{SeqID}$无状态恢复Profile，本实施例可直接适配SEPP场景下常见的乱序与重传。
 
-\subsection{实施例1a：作为现有协议栈记录层/隧道层的落地方式（示例）}
+\subsection*{实施例1a：作为现有协议栈记录层/隧道层的落地方式}
 
-本实施例说明DLHP在工程中的一种嵌入方式，便于后续产品化与权利要求抽象：
+本实施例说明DMHP在工程中的嵌入方式（参见\textbf{图 9}）：
 
 \begin{itemize}
-    \item \textbf{记录层嵌入（类似TLS/QUIC Record保护单元）：}将“受保护单元”定义为记录（Record）或数据包载荷（Payload）。每个记录携带$\text{SeqID}$（或记录号）作为不可回退的单调计数。发送端对每条记录独立派生$(alg\_idx, key)$并执行AEAD；接收端按记录号乱序解密，并基于窗口防止重放。
-    \item \textbf{隧道层嵌入（类似IPsec/自定义隧道封装）：}将IP数据报作为载荷$P$，外层封装头部携带$\langle\text{EpochID},\text{SeqID}\rangle$和可选的受保护元数据。可在链路切换或策略更新时推进Epoch，以实现快速密钥/算法上下文刷新。
+    \item \textbf{记录层嵌入（TLS/QUIC Record保护单元）}：将"受保护单元"定义为TLS记录或QUIC数据包载荷。每个记录携带$\text{SeqID}$（或记录号）作为不可回退的单调计数。发送端对每条记录独立恢复$\text{profile\_idx}=\text{Schedule}[\text{SeqID} \bmod M]$并派生$k_{\text{unit}}$后执行AEAD；接收端按记录号乱序恢复同一Profile与$k_{\text{unit}}$，并基于窗口防止重放。
+    \item \textbf{隧道层嵌入（IPsec/自定义隧道封装）}：将IP数据报作为载荷$P$，外层封装头部携带$\langle\text{EpochID},\text{SeqID}\rangle$和可选的受保护元数据。可在链路切换或策略更新时推进Epoch，以实现快速密钥/算法上下文刷新。
+    \item \textbf{5G用户面嵌入}：将DMHP嵌入5G UPF（用户面功能）的GTP-U隧道，对用户面数据实现后量子安全保护。
 \end{itemize}
 
-通过上述嵌入方式，DLHP既可独立构成安全通道，也可作为现有安全协议的“内层保护模块”使用，从而覆盖更多部署形态。
-
-\subsection{实施例2：结合HED的阈值分片}
+\subsection*{实施例2：结合HED的阈值分片（金融场景）}
 
 某金融机构传输敏感交易数据，采用$(3,5)$阈值方案：
 
 \begin{itemize}
-    \item 将每笔交易载荷$P$分为5个分片$S_1, \ldots, S_5$，任意3个可重构；
-    \item 每个分片采用不同算法加密：$S_1$用Kyber、$S_2$用NTRU、$S_3$用McEliece、$S_4$用SPHINCS+、$S_5$用混合；
-    \item 分片通过不同路径发送（如部分走5G、部分走Wi-Fi）。
+    \item 将每笔交易载荷$P$通过Shamir秘密分享分为5个分片$S_1, \ldots, S_5$，任意3个可重构；
+    \item 每个分片采用不同算法保护：$S_1$用AES-256-GCM加密 + ML-KEM-768密钥封装（结构化格基）、$S_2$用ChaCha20加密 + Classic McEliece密钥封装（编码基）、$S_3$用AES-256-GCM加密 + SPHINCS+/SLH-DSA签名认证（哈希基，签名用于认证与完整性保护）、$S_4$用ChaCha20加密 + FrodoKEM密钥封装（非结构化格基，与$S_1$的ML-KEM属不同子类）、$S_5$用AES-256-GCM加密 + UOV签名认证（多变量基）；
+
+    \textit{说明：哈希基类别（如SPHINCS+/SLH-DSA）与多变量基类别（如UOV）为签名算法而非KEM方案，因此$S_3$与$S_5$的对称加密密钥通过会话主密钥派生获取（即$k_{\text{unit}} = \text{HKDF-Expand}(\text{seed}, \text{KEYGEN}, L)$），签名算法用于实现该分片的认证与完整性保护，从而将该分片的安全性锚定在哈希基/多变量基困难问题之上。}
+    \item 分片通过不同路径发送（如$S_1$, $S_2$走5G蜂窝、$S_3$, $S_4$走专线、$S_5$走卫星链路）。
 \end{itemize}
 
-攻击者即使攻破Kyber并截获路径1的流量，也只能获得$S_1$，无法单独重构交易内容。
+攻击者即使攻破格基算法并截获5G蜂窝路径的流量，也只能获得$S_1$和$S_4$（2个分片），不满足$k=3$的重构门槛，无法还原交易内容。
 
-\subsection{实施例3：威胁自适应调整}
+\subsection*{实施例3：威胁自适应调整（物联网场景）}
 
-某物联网网关检测到异常延迟与高重传率，触发威胁分析器：
+某物联网网关检测到异常延迟与高认证失败率，触发威胁分析器：
 
 \begin{itemize}
-    \item 跳频频率从每100包提升到每10包；
-    \item 降低可疑算法权重；
-    \item 注入5\%诱饵流量。
+    \item 威胁等级从NORMAL提升至HIGH；
+    \item 跳频频率从每100包提升到每10包（高频模式）；
+    \item 降低可疑算法（如格基算法）的选择概率至0；
+    \item 提升$d_{\min}$从0.5至1.0（最大正交约束）；
+    \item 注入5\%诱饵流量（Chaffing）增加流量分析难度。
+\end{itemize}
+
+若威胁等级进一步提升至CRITICAL，系统自动进入PARANOID模式：
+\begin{itemize}
+    \item 逐包跳变（每个数据包使用不同算法和密钥）；
+    \item 全HED分散启用（$(3,5)$阈值）；
+    \item 全MPTD分散启用（所有可用路径）；
+    \item 诱饵流量比例提升至20\%。
 \end{itemize}
 
 威胁缓解后恢复正常跳频策略，平衡性能与安全。
 
+\subsection*{实施例4：PQSG产品部署场景}
+
+中国移动后量子安全通信网关（PQSG）产品部署于政企客户专线出口：
+
+\begin{itemize}
+    \item PQSG内置DMHP协议栈，预装机密性配置档案库（每个Profile绑定一类KEM标签的$\text{EpochSeed}$上下文与对应AEAD/DEM保护算法），覆盖结构化格、非结构化格、编码基等主要类别，并可附带认证扩展算法库；
+    \item 支持策略模板：标准模式（较低频率模板轮换，$d_{\min}=0.5$）、增强模式（较高频率模板轮换，$d_{\min}=1.0$）、PARANOID模式（逐单元跳频、最大正交约束，并可叠加HED/MPTD增强）；
+    \item 通过统一管理平台实现算法库OTA更新、模板策略远程配置和威胁情报联动；
+    \item 设备可与现有VPN/SD-WAN或专线安全设备串联/旁挂部署，上层业务系统无感，但双端网关需共同承载本发明所需的元数据与模板版本控制。
+\end{itemize}
+
+\subsection*{实施例5：算法库不足时的安全降级场景（异常处理）}
+
+在某些受限部署环境（如IoT网关或嵌入式设备），算法库可能仅包含2个HPC类别（如格基与哈希基）。当系统运行中某一类别的算法因安全公告被临时移除后，可能出现算法库中仅剩单一HPC类别的极端场景。DMHP在此场景下的处理流程如下：
+
+\begin{enumerate}[label=\textbf{步骤\arabic*}：]
+    \item \textbf{正交约束退化}：正交选择器检测到当前可用算法库中不存在满足$d_{\min}=1.0$的候选算法。根据技术流程四中的退化策略，逐步降低$d_{\min}$（步长$\Delta=0.1$），直至找到可用算法；
+    \item \textbf{安全降级事件记录}：系统生成安全降级事件日志，记录降级时间、降级前后的$d_{\min}$值、可用算法列表、触发原因（算法移除公告编号）；
+    \item \textbf{威胁感知模块告警}：威胁感知模块将安全降级事件映射为HIGH威胁等级，自动触发以下响应：(i) 向安全管理平台发送算法库扩展建议告警；(ii) 提升跳频频率至逐包跳变（补偿正交约束退化带来的安全损失）；(iii) 若HED模块可用，强制启用$(2,3)$阈值分片以增加额外的信息分散保护；
+    \item \textbf{棘轮窗口不命中处理}：若启用了棘轮更新（技术流程七a），接收端在棘轮窗口$w=3$内均无法成功解密某个乱序包（即该包所属棘轮阶段已超出窗口范围），则执行以下处理：(i) 丢弃该包并更新丢包统计；(ii) 若连续丢包率超过阈值（默认5\%），触发心跳重同步（Heartbeat Resync），双方重新对齐棘轮阶段；(iii) 心跳重同步耗时约$2\times\text{RTT}$，期间已缓存的后续包仍可正常解密（因其棘轮阶段在窗口内）；
+    \item \textbf{恢复}：当安全管理平台通过OTA推送新的算法库版本（含新HPC类别的算法）后，系统自动恢复正常$d_{\min}$配置，威胁等级降回NORMAL。
+\end{enumerate}
+
+\textbf{效果}：即使在极端算法库受限场景下，DMHP仍能通过退化策略 + 补偿机制（提频/HED/棘轮重同步）维持可用性与基本安全性，而非简单中断通信或回退到完全不保护的状态。
+
 %==============================================================================
-\section{结束语}
+\subsection*{补充说明}
 %==============================================================================
 
 以上所述仅为本发明的较佳实施例而已，并不用于限制本发明，凡在本发明的精神和原则之内所作的任何修改、等同替换和改进等，均应包含在本发明的保护范围之内。
 
+本发明所提出的DMHP协议体系，将会话内逐单元动态跳频、正交调度模板和无状态派生机制整合为一套可实施的安全通信方案，可用于后量子迁移背景下的双端安全网关、SEPP、UPF及记录层代理场景，并可作为后续标准化和工程化实现的技术基础。
+
+\textbf{附录说明：}本交底书中定理1--3的证明概要已在正文中给出。完整的形式化安全性证明（包括PRF安全性归约、正交约束安全增益的严格证明、HED信息论安全性证明）详见配套文档\texttt{math\_proofs.tex}，可作为专利申请说明书的补充技术材料提供给审查员参考。
+
+%==============================================================================
+\section*{九、本申请提案的侵权证据可获得性}
+%==============================================================================
+本发明的实现通常包括以下可观测特征（用于侵权判断）：
+
+\begin{itemize}
+    \item \textbf{协议报头与元数据特征}：实现通常需包含配置档案标识\texttt{profile\_id}、模式标识\texttt{mode\_id}、序号\texttt{SeqID}、模板版本或时间片等字段（可明文或受保护的可解析形式），可用于识别跳频行为；
+    \item \textbf{会话内算法切换痕迹}：抓包或日志可观察到相邻受保护单元所引用的Profile类别在短时间内反复切换（可通过密文长度变化、Profile标识字段等特征检测）；
+    \item \textbf{KDF调用模式}：实现中必然存在基于SeqID的模板索引与确定性KDF调用链（Schedule索引 $\to$ HMAC $\to$ HKDF-Expand），该调用模式可通过代码审计或侧信道分析检测；
+    \item \textbf{正交约束检查逻辑}：实现中必然包含距离矩阵查询与约束检查的代码路径，该逻辑是DMHP区别于简单算法轮换的关键特征；
+    \item \textbf{多路径分散行为（可选）}：多接口并行流量与"路径$\leftrightarrow$算法类别"映射的关联性；
+    \item \textbf{阈值分片重构行为（可选）}：同一业务载荷对应多份额的并行传输、重构阈值与份额标识策略；
+    \item \textbf{流量整形特征（可选）}：数据包长度呈现恒定或特定粒度分布（如填充至$L_{\max}$），消除了因不同算法产生的自然密文长度抖动。
+\end{itemize}
+
+\noindent\textbf{补充说明：}为降低被动监听者利用明文元数据进行流量分类的能力，协议可选择将\texttt{mode\_id}、\texttt{profile\_id}、时间片标识等以"受保护元数据"或"隐式派生"方式承载；同时配合接收窗口与AAD绑定，可在允许乱序的前提下实现重放防护。
+
 \end{document}
+
+
+
+
+
+
+
+
+
+
+

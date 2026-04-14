@@ -1,0 +1,5 @@
+overlap_window_s,trials,success_rate_pct,late_rate_pct,early_rate_pct,success_ci95_low_pct,success_ci95_high_pct
+0.5,5000,95.9,2.9,1.2,95.3504,96.4496
+1.0,5000,98.88,0.86,0.26,98.5883,99.1717
+2.0,5000,99.84,0.14,0.02,99.7292,99.9508
+5.0,5000,99.98,0.02,0.0,99.9408,100.0

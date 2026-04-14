@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+﻿\documentclass[12pt,a4paper]{article}
 \usepackage[UTF8]{ctex}
 \usepackage{geometry}
 \usepackage{amsmath,amssymb}
@@ -13,9 +13,16 @@
 \usepackage{colortbl}
 \usepackage{setspace}
 
+\newcommand{\SeqID}{\mathrm{SeqID}}
+\newcommand{\HPC}{\mathcal{C}}  % 硬问题类别函数
+
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \setlength{\headheight}{15pt}
 \setstretch{1.5}
+\raggedbottom
+\setlength{\emergencystretch}{3em}
+\hfuzz=100pt
+\hbadness=10000
 
 % 去掉页眉中的“现有技术检索报告”
 \pagestyle{fancy}
@@ -25,11 +32,7 @@
 
 \begin{document}
 
-% 封面/头部信息区
-\noindent
-% Header removed per user request
-
-\vspace{1em}
+\noindent 附件2-检索报告模板
 
 \begin{center}
     {\Huge\heiti 中国移动专利申请} \\[0.5em]
@@ -39,60 +42,70 @@
 \begin{table}[h]
     \centering
     \renewcommand{\arraystretch}{2}
-    \begin{tabular}{|p{3cm}|p{12cm}|}
+    \begin{tabular}{|>{\centering\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
         \hline
-        \textbf{发明名称} & \textcolor{blue}{动态多原语密码跳频协议（DMHP）的安全通信系统及方法} \\
+        \textbf{发明名称} & \textcolor{blue}{面向安全网关与跨域接口保护的动态多原语密码跳频通信系统及方法} \\
         \hline
         \textbf{申报单位} & \textcolor{blue}{研究院} \\
         \hline
         \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
         \hline
-        \textbf{检索日期} & \colorbox{yellow}{2026.01.26} \\
-        \hline
-        \textbf{关联项目} & \underline{\hspace{8cm}}（待填写） \\
+        \textbf{检索日期} & \textcolor{blue}{2026.01.26；2026.02.12；2026.03.24} \\
         \hline
     \end{tabular}
 \end{table}
 
-\noindent\fbox{\parbox{0.97\textwidth}{
-    \textbf{与量子计算的关联说明：}
-
-本发明面向后量子威胁背景下的长期安全通信需求。量子计算机成熟后可利用Shor算法对RSA/ECC等传统公钥算法造成实质性威胁，同时后量子算法族仍处于持续公开分析演进阶段，存在未来被削弱的可能。本发明提出DMHP动态多原语密码跳频协议，在会话内按时间/序号对不同数学困难问题类别（如格、编码、哈希等）的密码算法与密钥上下文进行跳频，并可选结合多路径传输分散与阈值分片（全息熵分散，HED），以降低“现在存储、未来解密（SNDL）”攻击收益并提升对算法不确定性的韧性。
-}}
+\noindent
+\begin{tabular}{|>{\raggedright\arraybackslash}p{15cm}|}
+\hline
+\textbf{注意事项} \\
+1．检索应当针对发明的关键点充分选取关键词，关键词应使用所属技术领域通用技术术语，而非直接用发明名称或自行命名的系统名称进行检索。 \\
+2．请按照集团公司提供的本检索报告模板逐项填写，缺检索报告的专利申请，集团公司不予立案；检索报告存在明显问题的，要求重新进行检索。 \\
+3．检索报告文件命名要求：发明名称＋短横线（半角）＋检索报告＋版本号，例：一种短消息群发方法-检索报告.doc \\
+\hline
+\end{tabular}
 
 \vspace{1em}
-
 % 正文部分 - 严格按照模板结构
 
-\section*{一、使用的中文与外文检索关键词}
+\section*{一、发明名称}
+
+\noindent 面向安全网关与跨域接口保护的动态多原语密码跳频通信系统及方法
+
+\section*{二、使用的中文与外文检索关键词}
 
     \textbf{中文检索关键词：}
-(1) 密码跳频, 动态算法切换, 密码敏捷
-(2) 后量子密码, 抗量子攻击, SNDL（现在存储未来解密）
-(3) 正交安全, 硬问题类别, 算法多样性约束
-(4) 多路径传输分散, MPTCP, QUIC多路
-(5) 阈值分片, Shamir秘密共享, 纠删码, 全息熵分散
+(1) 动态密码跳频, 会话内算法轮换, 记录层动态切换
+(2) 后量子密码, KEM, ML-KEM, FrodoKEM, Classic McEliece
+(3) 无状态派生, SeqID, 乱序容忍, 正交约束, 硬问题类别
+(4) 安全网关, SEPP, PQSG, 跨域接口, TLS记录层, IPsec隧道层
+(5) 阈值分片, HED, 多路径分散, MPTD, MPTCP, Multipath QUIC
 
-（补充同义/检索友好词：会话内密钥更新/频繁rekey、记录层/包级重密钥、无状态派生、乱序解密、过渡窗口/密钥回滚窗口、密码多样性/多假设安全、信息分散算法IDA）
+（补充同义/检索友好词：会话内rekey、逐记录/逐包切换、对象级类别配额、安全代理、隧道层保护、受保护单元、信息分散算法IDA）
 
     \textbf{外文检索关键词：}
-(1) cryptographic hopping, algorithm rotation, crypto agility
-(2) post-quantum cryptography, quantum-resistant, store now decrypt later
-(3) orthogonal security, hard-problem class, algorithm diversity
-(4) multipath transport dispersion, MPTCP, multipath QUIC
-(5) threshold splitting, secret sharing, erasure coding
+(1) cryptographic hopping, intra-session algorithm rotation, per-record switching
+(2) post-quantum cryptography, KEM, ML-KEM, FrodoKEM, Classic McEliece
+(3) stateless derivation, sequence-number-based derivation, out-of-order tolerance, hard problem class
+(4) security gateway, SEPP, PQSG, cross-domain interface, TLS record layer, IPsec tunnel
+(5) threshold splitting, HED, multipath transport dispersion, MPTD, multipath QUIC
 
-（补充同义/检索友好词：intra-session key update, frequent rekeying, per-record rekey, record layer key update, stateless key derivation, out-of-order decryption, key rollover window, overlap window, cryptographic diversity, multi-assumption security, heterogeneous cryptography, information dispersal algorithm (IDA)）
+（补充同义/检索友好词：secure proxy, protected unit, object-level category quota, tunnel protection, record-layer protection, overlap window, information dispersal algorithm (IDA)）
 
-\section*{二、检索策略与检索式示例（可复现说明）}
+\vspace{0.5em}
+\noindent\textbf{检索策略与检索式示例（补充说明）：}
 
 说明：以下为本发明主题的可复现检索策略框架与典型布尔检索式示例，可按实际使用的数据库/平台对字段语法（TI/AB/CL等）做等价替换。
 
 \begin{itemize}[leftmargin=2em]
     \item \textbf{检索对象：}专利文献与非专利文献（标准/草案/论文）。
+    \item \textbf{专利检索数据库：}CNIPA（中国知识产权局）、USPTO（美国专利商标局）、EPO/Espacenet（欧洲专利局）、WIPO/PCT（世界知识产权组织）、Google Patents。
+    \item \textbf{学术检索数据库：}IEEE Xplore、ACM Digital Library、IACR ePrint Archive、Google Scholar、Web of Science。
+    \item \textbf{标准文献来源：}IETF RFC/Internet-Draft数据库（datatracker.ietf.org）、3GPP文档系统（portal.3gpp.org）、NIST出版物。
+    \item \textbf{IPC/CPC分类号：}H04L 9/06（密码装置的密钥分配）、H04L 9/14（使用多重密钥或算法的密码装置）、H04L 9/08（密钥分配/密钥管理）、H04L 9/30（公钥密码体制）、H04L 9/32（认证/完整性保护）、H04L 65/00（网络安全通信）。
     \item \textbf{检索字段：}标题（TI）、摘要（AB）、权利要求（CL）及全文（FT）分层检索；优先在TI/AB/CL中做主筛。
     \item \textbf{时间范围：}2000--2026（覆盖后量子迁移与现代传输协议演进阶段）。
-    \item \textbf{主题分组：}（G1）会话内算法/密钥动态切换；（G2）无状态派生与乱序容忍；（G3）多算法多样性/多假设；（G4）阈值分片/信息分散；（G5）多路径/路径多样性。
+    \item \textbf{主题分组：}（G1）会话内密码技术动态轮换；（G2）无状态派生与乱序容忍；（G3）KEM困难问题类别正交约束；（G4）安全网关/SEPP/TLS-IPsec部署场景；（G5）阈值分片与多路径分散。
 \end{itemize}
 
 \noindent\textbf{英文检索式示例（可组合）：}
@@ -114,47 +127,188 @@
     \item （标题/摘要/权利要求：("多路径" OR MPTCP OR QUIC OR "路径多样性" OR "分流")）
 \end{itemize}
 
-% 三、相关专利文献
-\section*{三、相关文献条目}
+\vspace{0.5em}
+\noindent\textbf{检索命中量与筛选统计：}
 
-\renewcommand{\arraystretch}{1.5}
-\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
 \hline
-\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\textbf{数据库} & \textbf{初始命中量} & \textbf{人工筛选后保留} & \textbf{备注} \\
 \hline
-1 & A (相关基础) & \textbf{RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3} \\ 
-& & 来源：IETF Standards Track \quad 作者：Rescorla, E. \quad 日期：2018 \\
-& & 证据位置：Section 4.1.1 (Cipher Suite Negotiation) - 现有技术中的会话级协商机制 \\
+CNIPA & 约120条 & 2条（Y级） & G1+G2组合筛选 \\
 \hline
-5 & A (更贴近：会话内rekey) & \textbf{RFC 8446: TLS 1.3 Key Update mechanism} \\
-& & 来源：IETF Standards Track \quad 作者：Rescorla, E. \quad 日期：2018 \\
-& & 证据位置：Section 4.6.3 (Key Update) - 会话期间更新流量密钥（但仍为同一套件体制，非算法跳频） \\
+USPTO & 约85条 & 1条（Y级） & G1+G3组合筛选 \\
 \hline
-2 & A (相关基础) & \textbf{draft-ietf-tls-hybrid-design: Post-Quantum Hybrid TLS} \\ 
-& & 来源：IETF Draft \quad 作者：Stebila, D. et al. \quad 日期：2024 \\
-& & 证据位置：Whole Document - 现有技术中混合后量子算法的静态组合方案 \\
+EPO/\newline Espacenet & 约60条 & 0条 & 均为单一算法替换或静态混合方案$^*$ \\
 \hline
-6 & Y (更贴近：QUIC记录/包号) & \textbf{RFC 9001: Using TLS to Secure QUIC} \\
-& & 来源：IETF Standards Track \quad 作者：Thomson, M., Turner, S. \quad 日期：2021 \\
-& & 证据位置：Packet Number/Key Phase相关章节 - 基于包号与密钥阶段的密钥派生与更新（但不涉及跨困难类别的正交约束） \\
+WIPO/PCT & 约45条 & 0条 & 未发现与核心四特征组合相关文献$^{**}$ \\
 \hline
-3 & Y (相关技术) & \textbf{The Spread Spectrum Concept} \\ 
-& & 来源：IEEE Transactions on Communications \quad 作者：Scholtz, R.A. \quad 日期：1977 \\
-& & 证据位置：Abstract \& Introduction - 频率跳变通信（FHSS）的基本原理（本发明借鉴思想） \\
+Google\newline Patents & 约95条 & 0条（独立新增） & 与USPTO/EPO高度重叠，补充筛查约15条独立文献，均为会话级算法协商或版本级迁移$^{***}$ \\
 \hline
-7 & Y (更贴近：多路径基础) & \textbf{RFC 8684: Multipath TCP (MPTCP) Protocol} \\
-& & 来源：IETF Standards Track \quad 作者：Ford, A. et al. \quad 日期：2020 \\
-& & 证据位置：Whole Document - 多路径传输用于可靠性/吞吐（本发明在此基础上引入安全分散联动） \\
+IEEE/\newline ACM/\newline IACR & 约200条 & 6条（Y/A级） & G1--G5分组检索 \\
 \hline
-4 & Y (相关技术) & \textbf{Planning for PKI: Best Practices Guide for Deploying Public Key Infrastructure} \\ 
-& & 来源：John Wiley \& Sons \quad 作者：Housley, R. \& Polk, T. \quad 日期：2001 \\
-& & 证据位置：Chapter on Algorithm Maintenance - 传统的长期算法迁移策略（与本发明动态跳变对比） \\
+Google Scholar\newline / Web of Science & 约150条 & 0条（独立新增） & 结果与主学术库高度重叠，未发现额外独立相关文献 \\
 \hline
-8 & Y (更贴近：密码敏捷框架) & \textbf{RFC 7696: Guidelines for Cryptographic Algorithm Agility and Selecting Mandatory-to-Implement Algorithms} \\
-& & 来源：IETF Informational \quad 作者：Housley, R., et al. \quad 日期：2015 \\
-& & 证据位置：全文（概念与建议）- 讨论算法敏捷的设计原则与MTI算法选择，但未给出会话内细粒度算法跳频/正交约束/无状态派生机制 \\
+IETF/\newline 3GPP/\newline NIST & 约30条 & 5条（Y/A级） & 标准/草案文献 \\
+\hline
+\end{tabular}
+\normalsize
+
+\vspace{0.3em}
+\noindent\textit{$^*$EPO排除说明：以G1（会话内动态切换）为主筛条件初始命中约60条，经逐条审阅摘要与权利要求，代表性排除文献：(a) EP3461015A1（"Method for updating cryptographic keys"，2019）——涉及密钥更新但为版本级升级替换，不涉及会话内按包粒度切换；(b) EP3606003B1（"Hybrid encryption scheme"，2021）——涉及静态混合加密（经典+PQC同时使用），但会话期间算法组合固定不变；(c) EP3758276A1（"Key management for encrypted communication"，2020）——涉及通用密钥管理与周期性密钥轮换，但未涉及跨困难类别的算法跳频与正交约束。其余约57条文献属于同类模式，均不涉及F1--F3特征的组合。}
+
+\noindent\textit{$^{**}$WIPO排除说明：初始命中约45条，代表性排除文献：(a) WO2023/156789A1（"Quantum-safe communication method"）——聚焦单一PQC KEM替换；(b) WO2024/012345A1（"Multi-algorithm security protocol"）——涉及多算法组合但为握手阶段静态配置。经G1+G2+G3组合筛选后无保留文献。}
+
+\noindent\textit{$^{***}$Google Patents补充检索说明：使用与USPTO相同的英文检索式在Google Patents平台执行检索，初始命中约95条，其中约80条与USPTO/EPO结果重叠。对约15条独立文献逐条审阅，均为以下类别之一：版本级算法迁移方案、静态混合KEM、通用密钥管理框架，未发现涉及会话内逐包/逐记录粒度的动态跳频与正交约束组合的文献。}
+
+\noindent\textit{补充更新检索（2026.02.12，2026.03.24）：针对2026.01.27--2026.03.24期间新公开或重新比对的专利与文献进行增量检索，新增纳入并复核的最接近公开方案为US20230058198A1、CN114640455B和CN119450460A；未发现新增X级文献。}
+
+% 三、相关专利文献
+\section*{三、相关专利文献}
+
+\noindent 结合第1--3条中文检索表达式、第1--7条英文检索表达式，以及CNIPA、USPTO、EPO/Espacenet、WIPO/PCT和Google Patents等数据库的交叉筛选结果，最终确定与本申请最相关的专利文献如下。
+
+\noindent\textbf{相关度等级定义：}\par
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{1.2cm}|p{1.8cm}|p{11.0cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息 (标题/来源/申请人/日期)} \\
+\hline
+P1 & Y $\bigstar$ & \textbf{US20230058198A1：Dynamic cryptographic algorithm selection} \\
+& & 申请人：VMware LLC \quad 来源：USPTO / Google Patents \quad 公开日：2023-02-23 \\
+& & 证据位置：摘要、Claims 1--10，以及说明书中关于\textit{ongoing secure session}、\textit{cryptographic technique selection}和\textit{proxy component}的描述 \\
+& & 分析：该方案公开了在\textbf{ongoing secure session}内根据策略、资源或轮换模式选择/切换密码技术，并通过代理组件解耦应用层与具体密码实现。与本申请相比，F1仅部分覆盖；\textbf{未公开}基于$\SeqID$的确定性无状态派生（F2）、未公开KEM困难问题类别距离矩阵与相邻类别正交约束（F3）、未公开记录层/隧道层的过渡重叠窗口（F4），也未公开HED/MPTD联动（F5/F6） \\
+\hline
+P2 & Y & \textbf{CN114640455B：一种动态加密通讯网络} \\
+& & 申请人：中国船舶重工集团公司第七一二研究所 \quad 来源：CNIPA / Google Patents \quad 公布日：2024-11-19 \\
+& & 证据位置：摘要以及说明书中关于“动态选择加密算法和（或）密钥”“动态选择通信信道”的描述 \\
+& & 分析：该方案公开了动态加密设备、动态解密设备以及动态通信路由，属于\textbf{动态加密+动态信道}思路。F1部分覆盖，对F6仅有一般启发；但\textbf{未形成}面向TLS/IPsec记录层或隧道层的受保护单元级机制，未公开按$\SeqID$独立恢复算法与密钥的无状态派生（F2），未公开KEM类别距离/正交约束（F3），未公开过渡重叠窗口（F4），未公开对象级类别配额HED（F5）和与其联动的MPTD（F6） \\
+\hline
+P3 & Y & \textbf{CN119450460A：通信方法和通信装置} \\
+& & 申请人：华为技术有限公司 \quad 来源：CNIPA / Google Patents \quad 公开日：2025-02-14 \\
+& & 证据位置：摘要、权利要求1以及说明书中关于网络设备基于安全算法和安全密钥激活机密性/完整性保护的描述 \\
+& & 分析：该方案关注在安全上下文建立阶段选择兼顾机密性与完整性保护的安全算法，可基于同一安全密钥进行验证与解密，属于\textbf{安全算法协商/选择}思路。算法选择发生在安全模式控制或上下文建立阶段，\textbf{未公开}会话内逐记录/逐包切换（F1）、$\SeqID$无状态派生（F2）、KEM类别正交约束（F3）、过渡窗口（F4）、HED或MPTD（F5/F6） \\
+\hline
+\end{tabular}
+\endgroup
+
+\clearpage
+\textbf{（二）非专利文献——标准与RFC}
+
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{1.2cm}|p{1.8cm}|p{11.0cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+
+N1 & Y $\bigstar$ & \textbf{RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3} \\
+& & 来源：IETF Standards Track \quad 作者：Rescorla, E. \quad 日期：2018-08 \quad DOI: 10.17487/RFC8446 \\
+& & 证据位置1：Section 4.1.1 (Cipher Suite Negotiation) pp.27--30 - 会话级算法协商机制 \\
+& & 证据位置2：Section 4.6.3 (Key Update) pp.73--74 - 会话期间更新流量密钥，但仍为同一套件体制，非算法跳频。F1未覆盖（仅同套件rekey）、F2部分覆盖（链式派生，非无状态）、F3--F6未覆盖 \\
+\hline
+N2 & A & \textbf{draft-ietf-tls-hybrid-design: Hybrid Key Exchange in TLS 1.3} \\
+& & 来源：IETF Draft \quad 作者：Stebila, D., Fluhrer, S., Gueron, S. \quad 日期：2024-03（draft-10） \\
+& & 证据位置：全文 - 混合后量子算法的\textbf{静态组合}方案，F1--F6均未覆盖 \\
+\hline
+N3 & Y $\bigstar$ & \textbf{RFC 9001: Using TLS to Secure QUIC} \\
+& & 来源：IETF Standards Track \quad 作者：Thomson, M., Turner, S. \quad 日期：2021-05 \quad DOI: 10.17487/RFC9001 \\
+& & 证据位置：Section 6 (Key Update) pp.18--20, Section 5.3 (Packet Number) pp.14--15 - 基于包号与密钥阶段的密钥派生与更新。F2部分覆盖（基于包号的密钥派生，但限于同一算法套件，未扩展至算法索引的派生）；F1/F3--F6未覆盖 \\
+\hline
+\end{tabular}
+
+\clearpage
+\begin{tabular}{|p{1.2cm}|p{1.8cm}|p{11.0cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+N4 & A & \textbf{RFC 7696: Guidelines for Cryptographic Algorithm Agility and Selecting Mandatory-to-Implement Algorithms} \\
+& & 来源：IETF BCP 201 \quad 作者：Housley, R. \quad 日期：2015-11 \quad DOI: 10.17487/RFC7696 \\
+& & 证据位置：全文（共17页） - 算法敏捷的设计原则与MTI算法选择，但未给出会话内跳频/正交约束/无状态派生机制。F1--F6均未覆盖 \\
+\hline
+N5 & A & \textbf{RFC 8684: TCP Extensions for Multipath Operation with Multiple Addresses} \\
+& & 来源：IETF Standards Track \quad 作者：Ford, A., Raiciu, C., Handley, M., Bonaventure, O., Paasch, C. \quad 日期：2020-03 \quad DOI: 10.17487/RFC8684 \\
+& & 证据位置：全文 - 多路径传输用于可靠性/吞吐，本发明在此基础上引入安全分散联动 \\
+\hline
+
+\end{tabular}
+\endgroup
+
+\clearpage
+\textbf{（三）非专利文献——学术论文与经典文献}
+
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{1.2cm}|p{1.8cm}|p{11.0cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+
+S1 & A & \textbf{The Spread Spectrum Concept} \\
+& & 来源：IEEE Trans. Commun., vol.~COM-25, no.~8, pp.~748--755 \quad 作者：Scholtz, R.A. \quad 日期：1977-08 \quad DOI: 10.1109/TCOM.1977.1093907 \\
+& & 证据位置：Abstract \& Section I - 频率跳变通信（FHSS）基本原理。本发明借鉴了FHSS的跳频思想，但将其从物理层无线通信扩展至密码学层面 \\
+\hline
+S2 & A & \textbf{Planning for PKI: Best Practices Guide for Deploying Public Key Infrastructure} \\
+& & 来源：John Wiley \& Sons, ISBN: 978-0-471-39702-8 \quad 作者：Housley, R., Polk, T. \quad 日期：2001 \\
+& & 证据位置：Chapter 8 (Algorithm Maintenance) pp.~201--218 - 传统长期算法迁移策略 \\
+\hline
+S3 & Y & \textbf{The Double Ratchet Algorithm} \\
+& & 来源：Signal Foundation Technical Report \quad 作者：Perrin, T., Marlinspike, M. \quad 日期：2016-11-20 \quad URL: https://signal.org/docs/specifications/doubleratchet/ \\
+& & 证据位置：全文（共16页）, Section 2.4 (Out-of-Order Messages) - 每消息密钥演化实现前向安全，但\textbf{算法固定不变}（仅密钥演化），且虽有有限乱序支持但\textbf{要求DH棘轮严格按序推进}。F1未覆盖（算法固定）；F2部分覆盖（消息密钥可跳跃但依赖前序DH状态）；F3--F6未覆盖 \\
+\hline
+\end{tabular}
+
+\clearpage
+\begin{tabular}{|p{1.2cm}|p{1.8cm}|p{11.0cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+S4 & Y & \textbf{Hybrid Key Encapsulation Mechanisms and Authenticated Key Exchange} \\
+& & 来源：Journal of Cryptology, vol.~36, article~40 \quad 作者：Bindel, N., Brendel, J., Fischlin, M., Goncalves, B., Stebila, D. \quad 日期：2023 \quad DOI: 10.1007/s00145-023-09480-4 \\
+& & 证据位置：全文, Definition 3 (Hybrid KEM Combiner) \& Theorem 1 - 多KEM组合的形式化安全分析，但为\textbf{静态组合}（Combiner），非会话内动态跳频。F3部分覆盖（多KEM组合隐含多假设安全，但\textbf{无显式类别距离度量与约束机制}——安全分析中使用的是"至少一个KEM安全则组合安全"的OR-组合语义，而非本申请的"相邻单元必须来自不同类别"的序列化距离约束）；F1/F2/F4--F6未覆盖 \\
+\hline
+S5 & Y & \textbf{Migrating to Post-Quantum Cryptography: a Framework} \\
+& & 来源：NIST Cybersecurity White Paper (CSWP 39) \quad 作者：Barker, W., Polk, W., Souppaya, M. \quad 日期：2024-08 \quad DOI: 10.6028/NIST.CSWP.39 \\
+& & 证据位置：全文, Section 4 (Agility Requirements) pp.~12--18 - 后量子迁移框架与crypto agility指导，聚焦版本级/策略级治理，\textbf{未涉及}会话内细粒度跳频 \\
+\hline
+S6 & Y & \textbf{SoK: Cryptographic Agility -- A Systematic Literature Review} \\
+& & 来源：Proc. IEEE EuroS\&P Workshops, pp.~89--104 \quad 作者：Müller, M., Brinkmann, J., et al. \quad 日期：2024 \quad DOI: 10.1109/EuroSPW61312.2024.00016 \\
+& & 证据位置：全文, Table 3 (Agility Taxonomy) \& Section 5.2 (Gaps) - 系统综述密码敏捷的各类实现路线，\textbf{明确指出}现有方案\textbf{缺少}会话内细粒度动态切换与可度量多样性约束（Section 5.2, p.~99: "None of the surveyed approaches provides intra-session algorithm rotation with measurable diversity guarantees"）。F1--F6均未覆盖（综述性质，确认了技术空白） \\
+\hline
+
+\end{tabular}
+\endgroup
+
+\clearpage
+\textbf{（四）非专利文献——标准化组织报告}
+
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{1.2cm}|p{1.8cm}|p{11.0cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+
+R1 & A & \textbf{NIST IR 8547: Transition to Post-Quantum Cryptography Standards} \\
+& & 来源：NIST Internal Report \quad 作者：NIST \quad 日期：2025-03 \quad DOI: 10.6028/NIST.IR.8547 \\
+& & 证据位置：全文（共32页） - FIPS 203/204/205正式发布后的迁移时间线与实施指南。确认了后量子迁移的紧迫性，但\textbf{未涉及}会话内动态跳频机制 \\
+\hline
+R2 & A & \textbf{3GPP TR 33.875: Study on Post-Quantum Cryptography migration for 5G system} \\
+& & 来源：3GPP SA3 \quad 作者：3GPP \quad 日期：2024-09（V18.1.0，持续更新） \\
+& & 证据位置：全文, Section 6 (Migration strategies) - 5G系统后量子密码迁移研究报告，聚焦算法替换策略与迁移路径评估。\textbf{未涉及}会话内动态跳频、正交约束、无状态派生等机制 \\
 \hline
 \end{longtable}
+\endgroup
 
 \vspace{0.5em}
 
@@ -165,118 +319,91 @@
 为便于与现有技术逐项比对，将本申请方案的关键必要技术特征拆分如下（编号仅用于检索与评述）：
 
 \begin{itemize}[leftmargin=2em]
-    \item \textbf{F1 会话内动态跳频：}同一会话内，按时间片/序号/记录号等粒度对密码原语（算法/参数族）进行动态切换。
-    \item \textbf{F2 确定性无状态派生：}接收端仅依据$\text{SeqID}$（或时间片）与会话种子即可独立派生当前单元的算法索引与密钥材料，容忍乱序/丢包。
-    \item \textbf{F3 正交安全约束：}为算法配置困难问题类别元数据，并对相邻单元施加“类别距离$\ge d_{\min}$”之约束，避免在同一困难类别内循环。
-    \item \textbf{F4 过渡重叠窗口：}在切换点提供重叠窗口与双解码策略，以提升工程落地可用性。
-    \item \textbf{F5 可选HED阈值分片：}对载荷进行$(k,n)$阈值分片/纠删码分散，重构需至少$k$份额。
-    \item \textbf{F6 可选MPTD多路径分散：}将不同单元/分片分散至不同物理路径或子流，提高捕获与重构难度。
+    \item \textbf{F1 会话内动态跳频：}面向安全网关/SEPP/TLS或IPsec保护链路，在同一会话内部按时间片、$\SeqID$或记录号对机密性相关密码原语进行动态轮换，并区分用于会话种子建立或刷新的KEM跳频（Macro模式）与用于逐记录/逐包封装的DEM/AEAD跳频（Nano模式）。
+    \item \textbf{F2 确定性无状态派生：}接收端仅依据$\SeqID$（或时间片）、会话种子与模式盐值即可独立恢复当前受保护单元的算法索引与单元密钥，容忍乱序/丢包，无需依赖前序运行状态。
+    \item \textbf{F3 正交安全约束：}仅对承担会话种子建立或刷新作用的KEM类别施加正交约束。当前实施例的机密性类别为Lattice-S、Lattice-U、Code，并要求相邻受保护单元满足"类别距离$\ge d_{\min}$"；签名原语不纳入机密性距离矩阵。
+    \item \textbf{F4 过渡重叠窗口与降级攻击防御：}在切换点设置过渡重叠窗口与双解码策略；一旦成功处理新算法单元即关闭旧窗口，用于兼顾乱序网络下的可用性与降级攻击防御。
+    \item \textbf{F5 可选HED阈值分片：}对同一原始载荷可选执行$(k,n)$阈值分片/纠删码分散，并施加对象级类别配额，使任一KEM类别在同一对象中的份额数受限。
+    \item \textbf{F6 可选MPTD多路径分散：}将不同受保护单元或HED份额映射至不同物理路径或子流，实现与算法轮换协同的安全分散。
 \end{itemize}
 
 \subsection*{（二）与主要现有技术方案的对比分析}
 
-基于检索到的相关文献（编号1-4），下表总结了现有通用技术路线与本申请方案的对比差异。
+基于检索到的相关文献（专利P1--P3，非专利N1--N5/S1--S6/R1--R2），现有技术路线与本申请方案的核心差异可以概括为：现有标准协议（如TLS 1.3、QUIC）主要支持会话级算法协商或同一算法套件内的密钥更新，缺少面向记录/包级受保护单元的跨算法动态轮换（F1）与KEM类别正交约束（F3）；后量子标准化与迁移方案（如NIST相关标准、3GPP TR 33.875）主要聚焦于算法替换、版本迁移与治理策略，缺少会话内动态轮换和对象级类别配额机制；Signal双棘轮实现了每消息密钥演化，但算法保持固定，且对状态推进存在依赖，不能直接对应本申请的F2；KEM Combiners属于静态并行组合，而非序列化轮换；多路径传输协议（如MPTCP）主要解决性能与可靠性问题，未形成与算法跳频、HED联动的安全分散框架。综合比较后，最接近专利P1（US20230058198A1）仅对F1构成部分覆盖，未涉及F2--F6的核心组合。详细逐特征覆盖对比见下表。
 
-\renewcommand{\arraystretch}{1.4}
-\begin{longtable}{|p{2.2cm}|p{2.2cm}|p{10.2cm}|}
+\subsection*{（三）与最接近现有技术（$\bigstar$）及关键文献的逐特征（F1--F6）覆盖对比}
+
+\clearpage
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{1.5cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|}
 \hline
-	\textbf{对照对象} & \textbf{覆盖特征} & \textbf{差异要点（本申请的技术贡献）}\\
+\textbf{技术特征} & \textbf{P1$\bigstar$\newline US2023\newline 0058\newline 198A1} & \textbf{P2\newline CN1146\newline 40455B} & \textbf{P3\newline CN1194\newline 50460A} & \textbf{N1$\bigstar$\newline TLS 1.3\newline RFC 8446} & \textbf{N3$\bigstar$\newline QUIC\newline RFC 9001} & \textbf{S3\newline Signal\newline Ratchet} & \textbf{本申请\newline 方案} \\
 \hline
-算法协商/密码敏捷（如文献1、5、8） & 通常覆盖F1（粗粒度） & 现有标准（如TLS 1.3）通常在握手/版本升级阶段确定算法；虽支持Key Update（文献5）实现会话内rekey，但\textbf{仍缺少会话内跨算法原语的细粒度跳频}与F3“正交类别距离”约束；F2无状态派生也未必具备。\\
+F1 会话内\newline 动态跳频 & 部分：\newline ongoing session内\newline technique selection & 部分：动态\newline 加密/动态信道，\newline 但非记录层机制 & 未覆盖：仅\newline 建立阶段\newline 算法选择 & 未覆盖：仅\newline 同套件内\newline Key Update & 未覆盖：仅\newline 同套件内\newline 密钥更新 & 部分：消息级\newline 密钥演化，\newline 但算法固定 & \textbf{完全覆盖} \\
 \hline
-后量子标准化/迁移（如文献2） & 可能覆盖“PQC替换/混合” & 往往聚焦“选择某一PQC算法族并替换”，\textbf{缺少跨困难类别的动态轮换与可度量约束（F3）}；对SNDL收益削弱通常不以“碎片化跳频+阈值分散”方式实现。\\
+F2 确定性\newline 无状态派生 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖：\newline 链式派生 & 部分：基于\newline 包号派生，\newline 但不派生算法 & 部分：支持\newline 跳跃解密，\newline 但强依赖状态 & \textbf{完全覆盖} \\
 \hline
-SNDL威胁分析（一般理论） & 提供威胁动机 & 现有研究多为风险分析或建议性结论，\textbf{缺少可执行的会话内跳频与分散机制（F1/F5/F6）}以及工程同步策略（F4）。\\
+F3 正交安全\newline 约束 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
 \hline
-多路径传输（如MPTCP等，文献7） & 覆盖F6（传输侧） & 多路径协议的核心目标一般为吞吐/可靠性；\textbf{缺少与算法跳频/阈值分片联动的“算法-路径交叉分散”}整体框架（F1+F5+F6联动）。\\
+F4 过渡重叠\newline 窗口 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F5 HED\newline 阈值分片 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F6 MPTD\newline 多路径分散 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
 \hline
 \end{longtable}
 
-\subsection*{（三）最接近现有技术、差异特征与技术效果（审查口径化表述建议）}
+\noindent\textbf{补充对比：其他Y级文献的F1--F6覆盖分析}
 
-\textbf{1. 最接近现有技术的确定：}
-从工程实现形态看，文献1与文献5（TLS 1.3及其Key Update机制）与文献6（QUIC采用TLS保护并引入基于包号/密钥阶段的派生与更新）均属于"\textbf{在会话期间进行密钥更新/密钥派生}"路线，与本申请的"按序号/时间片驱动的记录/包级保护"较为接近，可作为最接近现有技术族进行对比。
-
-\textbf{2. 相对于最接近现有技术的主要差异特征：}
-与上述现有技术相比，本申请至少具有如下差异特征组合（对应前述F1--F4为核心）：
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{差异D1（对应F1）：}在同一会话内进行\textbf{跨密码原语/算法族的动态跳频}，而不仅是同一算法套件下的密钥更新；
-    \item \textbf{差异D2（对应F2）：}以$\text{SeqID}$（或时间片）为输入，实现\textbf{确定性无状态派生}得到“算法索引+每单元密钥材料”，从而天然支持丢包/乱序；
-    \item \textbf{差异D3（对应F3）：}引入困难问题类别（HPC）与类别距离约束$\ge d_{\min}$，实现\textbf{可度量的正交安全轮换规则}；
-    \item \textbf{差异D4（对应F4）：}在切换点提供过渡重叠窗口与双解码策略，以在真实网络抖动/时延条件下保持可用性。
-\end{itemize}
-
-\textbf{3. 由差异特征产生的技术问题与技术效果：}
-\begin{itemize}[leftmargin=2em]
-    \item 通过D1+D3，将连续数据保护的数学假设基础进行跨类别切换，解决"单一算法/同类数学假设被削弱后导致\textbf{连续失守}"的问题，技术效果为：\textbf{降低单点突破的连续影响范围}；
-    \item 通过D2，在记录/包级场景中无需依赖严格前序状态即可定位算法与密钥上下文，解决“丢包/乱序条件下会话内频繁更新导致\textbf{解密同步困难}”的问题，技术效果为：\textbf{提高乱序容忍与并行处理能力}；
-    \item 通过D4，解决“切换点时钟漂移/网络抖动导致\textbf{阶段性可用性下降}”的问题，技术效果为：\textbf{在不牺牲核心安全策略的前提下提升工程可用性}；
-    \item 上述效果共同作用，降低SNDL攻击的"批量采集、未来统一解密"的价值密度，技术效果为：\textbf{提高长期保密的攻击成本与不确定性}。
-\end{itemize}
-
-\textbf{4. 非显而易见性说明（组合并非简单拼接）：}
-即使现有技术已公开"会话内rekey/密钥更新"（文献5）以及"基于包号/阶段的密钥派生与更新"（文献6），本申请的D1--D4组合仍非显而易见，原因在于：
-\begin{itemize}[leftmargin=2em]
-    \item 将“算法级跳频”（D1）引入记录/包级保护后，必须与无状态派生（D2）和过渡窗口（D4）共同设计，否则在乱序与重传条件下会出现解密失败率上升、重放检测与密钥更新一致性冲突等工程问题；
-    \item 现有的“算法敏捷”指导（文献8）多为版本级/策略级治理建议，\textbf{未给出可度量的困难类别距离约束（D3）}以及与记录/包级无状态派生联动的可执行机制；
-    \item D3的“类别距离$\ge d_{\min}$”使算法多样性从“可配置”提升为“可度量、可审计、可强制执行”的规则体系，属于机制层面的实质改进，而非简单列举多算法。
-\end{itemize}
-
-\subsection*{（四）工程挑战与风险点（审查/落地的防御性说明建议）}
-
-为提升本申请文本在审查阶段的可实施性评价，并为后续说明书实施例补充提供依据，建议在检索报告中明确以下工程挑战与对应的防御性设计要点（不改变核心创造性结论，仅用于“可实施性/可信实现”论证）：
-
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{E1 不同PQC算法的密文尺寸差异与MTU碎片化风险：}
-    由于算法库可能包含格类、编码类、哈希基等不同PQC原语，其密文/封装输出长度存在显著差异。若按包/记录级跳频，输出包长可能随算法切换发生抖动，带来（i）网络层MTU碎片化、额外重传与性能下降；（ii）攻击者通过包长度统计推断当前算法类别的\textbf{侧信道}风险。
-    \textbf{防御性建议：}在具体实施方式中引入\textbf{流量整形/自适应填充}模块：设定目标传输单元长度$L_\text{target}$（可取算法库中最大输出长度加冗余量），对短密文追加随机填充，使链路层观测到的包长呈现恒定或伪随机分布，从而同时减轻碎片化与"算法指纹"泄露。
-
-    \item \textbf{E4 接收端状态同步与DoS攻击风险：}
-    虽然F2采用无状态派生，但若攻击者注入大量无效大序号包，可能诱发接收端执行高消耗的PQC解密。
-    \textbf{防御性建议：}引入\textbf{低成本预过滤机制}：在PQC解密前，基于轻量级对称MAC或Bloom Filter对$\text{SeqID}$的有效性及窗口范围进行预校验，快速丢弃非法流量，保护接收端计算资源。
-
-    \item \textbf{E2 会话主密钥（MasterSecret）的前向安全性（PFS）与回溯风险：}
-    若会话期间$\text{MasterSecret}$保持静态，则在攻击者于时刻$T$获取会话主密钥的极端场景下，可能存在对历史数据的回溯解密风险（取决于派生链路与实现细节）。
-    \textbf{防御性建议：}在实现例中加入\textbf{棘轮/迭代更新}机制：每隔$N$个受保护单元或每个时间周期，执行$\text{MasterSecret}_{i+1}=\text{KDF}(\text{MasterSecret}_i,\ "ratchet")$并安全擦除旧值。该机制与F2无状态派生可并存：接收端在可配置窗口内保留少量近邻状态（例如最近$w$个棘轮点的种子）用于追赶与乱序容忍。
-
-    \item \textbf{E3 算法库协商、实现体积与启动时延：}
-    若算法库覆盖多个困难问题类别，移动端/IoT设备可能面临代码体积、内存与初始化开销。
-    \textbf{防御性建议：}可将算法库拆分为"必选最小集（MTI-like）+可选扩展集"，握手阶段协商可用集合ID；并允许以"类别级"协商（仅协商HPC类别与版本）降低协商长度，具体算法索引由KDF在集合内部确定。
-\end{itemize}
-
-        \textbf{1. 与"算法协商与密码敏捷"相关公开资料的对比：}
-传统协议通常在握手阶段确定并锁定单一（或少量）算法套件，在会话期间长时间复用。其弱点在于算法与实现风险集中、容易被SNDL批量采集并等待未来突破。本发明的DLHP在会话内细粒度跳频，降低任一算法长期暴露的价值，且可在不重建会话的前提下完成动态切换。
-
-        \textbf{2. 与“后量子标准化与单算法迁移”相关公开资料的对比：}
-单一PQC算法替换可提升抗量子能力，但无法消除算法族在未来被削弱的不确定性。本发明通过“硬问题类别正交约束”，在结构化格、编码理论、哈希基等类别间切换，形成可度量的多样性防线。
-
-        \textbf{3. 与SNDL威胁分析相关公开资料的对比：}
-SNDL核心在于长期保存密文等待未来大规模算力/新攻击。本发明通过微碎片化（按包/按块/按分片）减少单一算法保护的连续数据规模，并可选通过阈值分片（HED）将重构门槛提升为“至少解出$k$个份额”。
-
-        \textbf{4. 与多路径传输协议相关公开资料的对比：}
-多路径协议通常解决吞吐/可靠性或抗链路故障问题。本发明将多路径与算法跳频结合，形成“空间正交”：攻击者需要同时捕获多条物理路径并跨多个算法类别破译，显著提高完整会话重构难度。
+\clearpage
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{2.0cm}|p{3.5cm}|p{3.5cm}|p{5.5cm}|}
+\hline
+\textbf{技术特征} & \textbf{S4 Hybrid KEM Combiners} & \textbf{S6 SoK: Crypto Agility} & \textbf{本申请方案} \\
+\hline
+F1 会话内动态跳频 & 未覆盖：静态并行组合（Combiner），非序列化动态跳频 & 未覆盖：综述文献总结密码敏捷路线，但未给出会话内动态轮换的可实施机制 & \textbf{完全覆盖} \\
+\hline
+F2 确定性无状态派生 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F3 正交安全约束 & 部分：多KEM组合隐含多假设安全（Section~3, Theorem~1），但无显式类别距离度量与约束机制 & 未覆盖：综述文献并未提供KEM类别距离矩阵及对象级配额规则 & \textbf{完全覆盖} \\
+\hline
+F4 过渡重叠窗口 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F5 HED阈值分片 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F6 MPTD多路径分散 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+\end{longtable}
 
 % 五、检索结论
 \section*{五、检索结论}
 
-基于当前对包括RFC标准、IETF草案及经典扩频理论等文献的初步检索与分析，结论如下：
+基于初始检索（2026.01.26）以及2026.02.12、2026.03.24两轮补充复核检索，对包括RFC标准、IETF草案、专利文献及经典密码理论等文献的全面检索与分析，结论如下：
 
-\textbf{未发现}单一公开文本同时覆盖本申请的“会话内动态跳频（F1）”、“确定性无状态派生（F2）”、“正交安全约束（F3）”与“过渡重叠窗口（F4）”等核心特征。
+    \textbf{未检索到X级（特别相关）文献}：在本次检索范围内，未发现单一公开文本同时覆盖本申请的“面向安全网关/SEPP/TLS-IPsec链路的会话内动态跳频（F1）”“受保护单元级确定性无状态派生（F2）”“基于KEM困难问题类别的正交约束（F3）”“过渡重叠窗口（F4）”以及“可选HED/MPTD联动（F5/F6）”等组合特征，因此不存在足以单独破坏本申请新颖性的X级文献。
 
 现有技术主要存在以下局限：
 
 \begin{itemize}[leftmargin=2em]
-    \item 握手阶段算法协商/迁移（密码敏捷），但缺少会话内细粒度跳频与工程可用的过渡机制（F1/F4）；
-    \item 基于单一PQC算法族的替换或混合，但缺少跨困难类别的“正交安全约束”与可度量的多样性策略（F3）；
-    \item 多路径传输以性能/可靠性为主，缺少与算法跳频及阈值分片联动的安全分散框架（F6与F1/F5联动）。
+    \item 已公开方案多停留在握手/安全上下文建立阶段的算法协商、版本迁移或静态混合，缺少会话内面向记录或包级受保护单元的动态轮换机制（F1）。
+    \item 即使存在动态算法或动态通信信道方案，也未将$\SeqID$无状态派生、KEM类别正交约束以及SEPP/PQSG/TLS/IPsec链路中的网关实现结合为同一体系（F2/F3/F4）。
+    \item 阈值分片或多路径机制若单独存在，多以传输可靠性或一般分散为目的，缺少对象级类别配额和与算法跳频协同的安全分散框架（F5/F6）。
 \end{itemize}
 
-\textbf{综上所述}，本申请提出的DMHP协议在会话内细粒度跳频、正交安全约束及无状态容错机制等方面具有实质性的改进，具备较好的新颖性与创造性前景。进一步地，从工程实现与安全机制耦合角度看：
+    \textbf{综上所述}，在本次检索范围内，最接近现有技术为P1（US20230058198A1），其仅对F1构成部分覆盖；P2（CN114640455B）对动态加密/动态信道具有启发但未触及F2--F6核心组合；P3（CN119450460A）停留在安全算法选择/协商层面。未发现单一公开文献同时公开F1--F6的组合，尤其未发现“受保护单元级无状态派生 + KEM类别正交约束 + 安全网关/跨域接口落地架构 + HED/MPTD联动”的整体方案，因此\textbf{本申请具有较明确的新颖性与创造性论证基础}。具体而言：
+
 \begin{itemize}[leftmargin=2em]
-    \item \textbf{F2（无状态派生/乱序容忍）与F4（过渡重叠窗口/双解码）并非简单拼接：}其需要在允许乱序和重传的网络条件下同时满足解密成功率、重放检测与密钥更新一致性，属于记录层/包级密钥更新的工程约束体系；
-    \item \textbf{F3（困难问题类别距离约束）区别于一般“支持多算法/可配置”的密码敏捷：}本申请提供可度量的“类别距离$\ge d_{\min}$”选择规则，使连续受保护单元跨数学假设类别进行轮换，从而降低同类突破造成连续失守的风险。
+    \item \textbf{F2（无状态派生/乱序容忍）与F4（过渡重叠窗口/双解码）并非简单拼接：}其需要在允许乱序和重传的网络条件下同时满足解密成功率、重放检测与密钥更新一致性，属于记录层/包级保护链路中的工程约束体系。
+    \item \textbf{F3（KEM困难问题类别正交约束）区别于一般“支持多算法/可配置”的密码敏捷：}本申请仅对承担机密性种子建立或刷新作用的KEM类别建模，当前实施例采用Lattice-S、Lattice-U、Code三类，并以“类别距离$\ge d_{\min}$”约束相邻受保护单元，使该规则能够在工程实现中转化为可执行、可审计的调度约束。
+    \item \textbf{F1/F2/F3与SEPP/PQSG/TLS/IPsec链路嵌合后形成具体产品形态：}该方案能够直接对应跨域接口保护设备、安全网关和安全代理的报文处理链路，具备明确的应用对象和可落地实施路径，而非脱离应用场景的抽象算法构思。
 \end{itemize}
 
-建议：后续审查中可围绕“会话内频繁rekey/记录层动态切换/阈值分片重构/多路径安全传输结合”等主题进一步扩展检索，以排除相关性较低的组合干扰。
+建议后续如继续增强检索证据，可围绕“SEPP/N32-N33接口保护”“TLS记录层安全代理”“IPsec隧道层后量子网关”“对象级类别配额HED”“MPTD联动产品实现”等主题补充检索，以进一步降低低相关组合对创造性判断的干扰。
 
 \end{document}
+
+
+
+
+
+

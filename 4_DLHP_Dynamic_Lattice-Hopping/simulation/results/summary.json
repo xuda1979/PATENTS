@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "seed": 20260324,
+    "schedule_samples": 20000,
+    "transition_trials": 5000,
+    "session_trials_per_interval": 300,
+    "session_duration_s": 3600,
+    "baseline_raw_throughput_gbps": 8.2,
+    "library": [
+      "ML-KEM-768",
+      "NTRU-HPS-677",
+      "Classic McEliece",
+      "BIKE-L3"
+    ]
+  },
+  "functional_validation": {
+    "payload_len": 32,
+    "threshold_k": 3,
+    "total_n": 5,
+    "reconstruction_with_k_shares": true,
+    "under_threshold_information_theoretic_security": true,
+    "single_path_capture_reconstructable": false
+  },
+  "schedule_randomness": {
+    "sample_count": 20000,
+    "counts": {
+      "ML-KEM-768": 5032,
+      "NTRU-HPS-677": 4961,
+      "Classic McEliece": 4992,
+      "BIKE-L3": 5015
+    },
+    "entropy_bits": 1.99998,
+    "entropy_max_bits": 2.0,
+    "chi_square": 0.5668,
+    "chi_square_p_approx": 0.902124,
+    "serial_correlation": -0.346445,
+    "runs": 13478,
+    "runs_p_approx": 0.0,
+    "average_selection_retries": 0.6647,
+    "max_selection_retries": 8,
+    "orthogonality_violations": 0
+  },
+  "algorithm_distribution": {
+    "interval_s": 60,
+    "session_duration_s": 3600,
+    "total_hops": 60,
+    "sampled_sessions": 300,
+    "mean_path_counts_per_session": {
+      "5G": 15.233,
+      "Satellite": 14.997,
+      "WiFi": 29.77
+    },
+    "distribution": [
+      {
+        "algorithm": "ML-KEM-768",
+        "mean_hops_per_session": 15.233,
+        "data_gb": 8.328,
+        "percentage": 25.389,
+        "preferred_path": "5G"
+      },
+      {
+        "algorithm": "NTRU-HPS-677",
+        "mean_hops_per_session": 14.837,
+        "data_gb": 8.111,
+        "percentage": 24.728,
+        "preferred_path": "WiFi"
+      },
+      {
+        "algorithm": "Classic McEliece",
+        "mean_hops_per_session": 14.997,
+        "data_gb": 8.198,
+        "percentage": 24.994,
+        "preferred_path": "Satellite"
+      },
+      {
+        "algorithm": "BIKE-L3",
+        "mean_hops_per_session": 14.933,
+        "data_gb": 8.164,
+        "percentage": 24.889,
+        "preferred_path": "WiFi"
+      }
+    ]
+  },
+  "transition_results": [
+    {
+      "overlap_window_s": 0.5,
+      "trials": 5000,
+      "success_rate_pct": 95.9,
+      "late_rate_pct": 2.9,
+      "early_rate_pct": 1.2,
+      "success_ci95_low_pct": 95.3504,
+      "success_ci95_high_pct": 96.4496
+    },
+    {
+      "overlap_window_s": 1.0,
+      "trials": 5000,
+      "success_rate_pct": 98.88,
+      "late_rate_pct": 0.86,
+      "early_rate_pct": 0.26,
+      "success_ci95_low_pct": 98.5883,
+      "success_ci95_high_pct": 99.1717
+    },
+    {
+      "overlap_window_s": 2.0,
+      "trials": 5000,
+      "success_rate_pct": 99.84,
+      "late_rate_pct": 0.14,
+      "early_rate_pct": 0.02,
+      "success_ci95_low_pct": 99.7292,
+      "success_ci95_high_pct": 99.9508
+    },
+    {
+      "overlap_window_s": 5.0,
+      "trials": 5000,
+      "success_rate_pct": 99.98,
+      "late_rate_pct": 0.02,
+      "early_rate_pct": 0.0,
+      "success_ci95_low_pct": 99.9408,
+      "success_ci95_high_pct": 100.0
+    }
+  ],
+  "handshake_results": [
+    {
+      "network_profile": "LAN",
+      "handshake_mean_ms": 13.984,
+      "handshake_p95_ms": 15.637,
+      "handshake_ci95_low_ms": 13.884,
+      "handshake_ci95_high_ms": 14.083,
+      "sync_overhead_mean_ms": 2.018
+    },
+    {
+      "network_profile": "WAN-50ms",
+      "handshake_mean_ms": 167.643,
+      "handshake_p95_ms": 175.401,
+      "handshake_ci95_low_ms": 167.141,
+      "handshake_ci95_high_ms": 168.145,
+      "sync_overhead_mean_ms": 8.008
+    },
+    {
+      "network_profile": "WAN-100ms",
+      "handshake_mean_ms": 324.803,
+      "handshake_p95_ms": 340.526,
+      "handshake_ci95_low_ms": 323.854,
+      "handshake_ci95_high_ms": 325.752,
+      "sync_overhead_mean_ms": 15.023
+    },
+    {
+      "network_profile": "WAN-200ms",
+      "handshake_mean_ms": 640.653,
+      "handshake_p95_ms": 672.57,
+      "handshake_ci95_low_ms": 638.715,
+      "handshake_ci95_high_ms": 642.591,
+      "sync_overhead_mean_ms": 28.114
+    }
+  ],
+  "interval_results": [
+    {
+      "interval_s": 120,
+      "trials": 300,
+      "throughput_mean_gbps": 8.1504,
+      "throughput_p95_gbps": 8.1582,
+      "throughput_ci95_low_gbps": 8.1499,
+      "throughput_ci95_high_gbps": 8.151,
+      "overhead_mean_pct": 0.6046,
+      "avg_latency_mean_ms": 0.1302,
+      "p99_latency_mean_ms": 0.3119,
+      "jitter_mean_ms": 0.0498,
+      "avg_transition_latency_ms": 1.3932,
+      "avg_schedule_retries": 0.630667
+    },
+    {
+      "interval_s": 60,
+      "trials": 300,
+      "throughput_mean_gbps": 8.1012,
+      "throughput_p95_gbps": 8.1136,
+      "throughput_ci95_low_gbps": 8.1003,
+      "throughput_ci95_high_gbps": 8.1021,
+      "overhead_mean_pct": 1.205,
+      "avg_latency_mean_ms": 0.138,
+      "p99_latency_mean_ms": 0.3391,
+      "jitter_mean_ms": 0.0599,
+      "avg_transition_latency_ms": 1.3942,
+      "avg_schedule_retries": 0.640556
+    },
+    {
+      "interval_s": 30,
+      "trials": 300,
+      "throughput_mean_gbps": 8.0045,
+      "throughput_p95_gbps": 8.0283,
+      "throughput_ci95_low_gbps": 8.0029,
+      "throughput_ci95_high_gbps": 8.0061,
+      "overhead_mean_pct": 2.3838,
+      "avg_latency_mean_ms": 0.1619,
+      "p99_latency_mean_ms": 0.4184,
+      "jitter_mean_ms": 0.0902,
+      "avg_transition_latency_ms": 1.3929,
+      "avg_schedule_retries": 0.651806
+    },
+    {
+      "interval_s": 10,
+      "trials": 300,
+      "throughput_mean_gbps": 7.7991,
+      "throughput_p95_gbps": 7.8388,
+      "throughput_ci95_low_gbps": 7.7963,
+      "throughput_ci95_high_gbps": 7.8019,
+      "overhead_mean_pct": 4.8891,
+      "avg_latency_mean_ms": 0.2097,
+      "p99_latency_mean_ms": 0.6767,
+      "jitter_mean_ms": 0.1492,
+      "avg_transition_latency_ms": 1.3902,
+      "avg_schedule_retries": 0.667361
+    },
+    {
+      "interval_s": 5,
+      "trials": 300,
+      "throughput_mean_gbps": 7.5039,
+      "throughput_p95_gbps": 7.5738,
+      "throughput_ci95_low_gbps": 7.4991,
+      "throughput_ci95_high_gbps": 7.5087,
+      "overhead_mean_pct": 8.4893,
+      "avg_latency_mean_ms": 0.2812,
+      "p99_latency_mean_ms": 1.1147,
+      "jitter_mean_ms": 0.2404,
+      "avg_transition_latency_ms": 1.3894,
+      "avg_schedule_retries": 0.664944
+    }
+  ],
+  "threat_adaptation": {
+    "levels": [
+      {
+        "label": "0-3 (Low)",
+        "interval_s": 60,
+        "throughput_gbps": 8.084,
+        "overhead_pct": 1.2,
+        "chaff_rate": 0.05
+      },
+      {
+        "label": "4-6 (Medium)",
+        "interval_s": 30,
+        "throughput_gbps": 8.042,
+        "overhead_pct": 2.4,
+        "chaff_rate": 0.1
+      },
+      {
+        "label": "7-9 (High)",
+        "interval_s": 10,
+        "throughput_gbps": 7.77,
+        "overhead_pct": 4.9,
+        "chaff_rate": 0.25
+      },
+      {
+        "label": "10 (Emergency)",
+        "interval_s": 5,
+        "throughput_gbps": 7.51,
+        "overhead_pct": 8.5,
+        "chaff_rate": 0.5
+      }
+    ],
+    "threat_event_time_s": 15.0,
+    "detection_latency_ms": 31.378,
+    "rtt_ms": 93.671,
+    "frequency_adjustment_message_ms": 51.836,
+    "schedule_update_ms": 1.341,
+    "control_plane_response_ms": 53.176
+  },
+  "security_effectiveness": {
+    "sampled_sessions": 300,
+    "broken_algorithm": "ML-KEM-768",
+    "static_single_algorithm_exposure_pct": 100.0,
+    "simple_hopping_exposure_pct": 25.1,
+    "hed_exposure_pct_if_1_algorithm_broken": 0.0,
+    "hed_exposure_pct_if_2_algorithms_broken": 0.0,
+    "hed_joint_work_factor_bits_for_threshold_attack": 384,
+    "storage_cost_multiplier_with_50pct_chaff": 2.167
+  }
+}

@@ -122,7 +122,26 @@ For clarity, in certain embodiments the system distinguishes between:
 * **KEM operations**: mechanisms that encapsulate or decapsulate a shared secret (or refresh seed material), typically used during handshake and/or periodic refresh.
 * **DEM / AEAD operations**: mechanisms that encrypt and authenticate payload-bearing protected units using per-unit keying material derived from session secret material.
 
-### 5.1 Protocol Phases
+### 5.1 Taxonomy of Hard Problems
+
+To enforce the orthogonality constraint, the system categorizes cryptographic algorithms into distinct hard-problem classes. The following table illustrates an exemplary taxonomy used by the Orthogonality Enforcement Module to ensure that adjacent protected units do not share the same mathematical foundation:
+
+| Hard-Problem Class | Sub-Class | Example Algorithms |
+|--------------------|-----------|--------------------|
+| **Lattice-based** | Structured Lattices (Module-LWE) | ML-KEM (Kyber), ML-DSA (Dilithium) |
+| | Unstructured Lattices (Plain LWE) | FrodoKEM |
+| | NTRU Lattices | NTRU-HPS, NTRU Prime |
+| **Code-based** | Quasi-Cyclic MDPC | BIKE |
+| | Quasi-Cyclic | HQC |
+| | Goppa Codes | Classic McEliece |
+| **Isogeny-based** | Supersingular Isogenies | SQIsign |
+| **Multivariate** | Multivariate Polynomials | SLH-DSA (SPHINCS+) |
+| **Hash-based** | Hash Functions | SHA-3, Blake3 (used for DEMs/MACs) |
+| **Symmetric** | Block Ciphers | AES-GCM, ChaCha20-Poly1305 |
+
+The system ensures that a transition from, for example, ML-KEM to FrodoKEM is permitted (if configured to distinguish sub-classes) or prohibited (if configured to strictly separate broad classes), while a transition from ML-KEM to BIKE is always permitted as they belong to fundamentally different mathematical classes.
+
+### 5.2 Protocol Phases
 
 #### Phase 1: Initial Handshake
 ```
@@ -167,7 +186,7 @@ An orthogonality constraint may be enforced by limiting consecutive selections t
 #### Phase 3: Synchronized Communication
 
 **Macro-Hopping (Time-Based):**
-Used for lower security levels or high-latency links.
+Used for lower security levels or high-latency links. In this mode, the system primarily hops between Key Encapsulation Mechanisms (KEMs) to periodically refresh the shared seed material.
 
 | Time | Active Algorithm | Action |
 |------|-----------------|--------|
@@ -176,9 +195,9 @@ Used for lower security levels or high-latency links.
 | ... | ... | Continue cycling |
 
 **Nano-Hopping (Sequence-Based):**
-Used for high-security "Paranoid Mode". Every packet $P_i$ uses Algorithm $A_{(i \pmod N)}$ or a pseudo-random selection.
+Used for high-security "Paranoid Mode". Every packet $P_i$ uses Algorithm $A_{(i \pmod N)}$ or a pseudo-random selection. To avoid the prohibitive computational overhead of asymmetric KEM operations on a per-packet basis, nano-hopping primarily hops between symmetric Data Encapsulation Mechanisms (DEMs) and Authenticated Encryption with Associated Data (AEAD) algorithms (e.g., AES-GCM, ChaCha20-Poly1305, Camellia-GCM, ARIA-GCM) derived from the master secret, while KEM hopping is reserved for periodic seed refreshes (macro-hopping).
 
-### 5.3 Transition Protocol
+### 5.4 Transition Protocol
 
 ```
 Time: T_switch - W/2                    T_switch + W/2
@@ -191,9 +210,15 @@ Receiver:│  Accept both, identify from header │
          │                                    │
 ```
 
-### 5.4 Cognitive Threat Adaptation
+**Downgrade Attack Mitigation during Transition:**
+To prevent an attacker from intentionally delaying packets to force the receiver to accept multiple algorithms (potentially opening up downgrade attacks), the receiver enforces strict sequence number progression and cryptographic authentication. The receiver will only accept a packet encrypted with `Algo_old` during the overlap window if its `SeqID` is strictly greater than the highest successfully processed `SeqID` and if the packet's MAC/AEAD tag validates correctly. Once a packet encrypted with `Algo_new` is successfully processed, the receiver immediately closes the overlap window for `Algo_old`, rejecting any subsequent packets using the older algorithm regardless of their arrival time.
+
+### 5.5 Cognitive Threat Adaptation
 
 In some embodiments, the system includes a threat analysis module configured to monitor one or more conditions associated with secure communication over a network, including at least one of latency, jitter, packet loss, reordering, or timing anomaly indicators, and to compute a threat indicator value as a function of the monitored one or more conditions.
+
+**Downgrade Attack Mitigation for Threat Indicators:**
+To prevent an attacker from artificially manipulating network conditions (e.g., injecting latency or dropping packets) to force the system into a specific, potentially vulnerable state, the threat analysis module employs a one-way security ratchet. The system can automatically escalate to a higher-security mode (e.g., from macro-hopping to nano-hopping) based on detected anomalies, but it requires a sustained period of clean network conditions, or an explicit, cryptographically authenticated control message, to de-escalate to a lower-security mode. Furthermore, the algorithm selection schedule remains deterministic and orthogonal regardless of the hopping frequency, ensuring that even if an attacker forces a state change, they cannot force the selection of a specific, weaker algorithm.
 
 Upon detecting elevated threat indicator values, the system may trigger a higher-security operating mode (e.g., increasing the frequency of algorithm rotation from macro-hopping to nano-hopping) and prioritize algorithms having higher security margins.
 
@@ -203,25 +228,25 @@ The adaptation logic may be expressed as:
 $$Schedule_{t+1} = \text{Hash}(Schedule_t \oplus \text{Threat\_Indicator}_t \oplus \text{Environmental\_Entropy})$$
 where the threat indicator value is derived from the monitored conditions.
 
-### 5.5 Spatial Transport Dispersion
+### 5.6 Spatial Transport Dispersion
 
 In embodiments utilizing multi-path transport protocols (e.g., MPTCP, QUIC), the system implements Transport Dispersion. The encrypted stream is split across physically distinct network paths (e.g., 5G, Wi-Fi, Satellite).
 
 The scheduler may assign specific algorithm classes to specific paths—for example, structured-lattice-based protection for Path A and code-based protection for Path B. This can increase the difficulty of reconstructing a complete stream from a partial capture by requiring collection from multiple paths and successful defeat of the protections applied to the collected protected units.
 
-### 5.6 Holographic Entropy Dispersion (HED)
+### 5.7 Holographic Entropy Dispersion (HED)
 
 To further mitigate SNDL attacks, the system may employ Holographic Entropy Dispersion. In such embodiments, a plaintext payload is first split into $n$ shares using a $(k, n)$ threshold scheme, including secret sharing (e.g., Shamir's Secret Sharing) or erasure coding (e.g., Reed-Solomon), and each share is protected as a protected unit.
 
 In embodiments using secret sharing, any subset of fewer than $k$ shares provides no information about the payload under the properties of the threshold secret sharing scheme. In embodiments using erasure coding, successful reconstruction generally requires at least $k$ valid shares. The system may select protections for shares such that (i) share protections are diversified across hard-problem classes and/or (ii) adjacent shares satisfy an orthogonality constraint.
 
-### 5.7 Active Defense: Decoy Injection (Chaffing)
+### 5.8 Active Defense: Decoy Injection (Chaffing)
 
 The system includes a Decoy Injection Engine configured to intersperse synthetic "chaff" packets within the legitimate traffic stream. These decoys are generated to match the statistical entropy and timing characteristics of valid ciphertext but decrypt to noise or non-operative content (or utilize invalid keys).
 
 The rate of chaff injection is dynamically adjusted based on the identified threat indicator value. This technique dilutes the value of intercepted data, forcing an adversary to waste computational resources attempting to decrypt and distinguish valid data from decoys. In some embodiments, the decoys emulate protocol message shapes and timing patterns while remaining non-operative for an intended application, thereby increasing adversary processing burden without requiring use of intentionally weakened cryptographic algorithms.
 
-### 5.8 Hardware Entanglement (Optional)
+### 5.9 Hardware Entanglement (Optional)
 
 To prevent key cloning and software emulation, certain embodiments bind the root of the hopping schedule to a Physical Unclonable Function (PUF) or a Trusted Platform Module (TPM).
 
@@ -229,7 +254,7 @@ The `Hopping_Seed` is derived as a function of the session key and a device-spec
 $$ \text{Seed} = \text{KDF}(\text{Session\_Key} || \text{PUF\_Response}) $$
 This can bind derivation of schedule keying material to device-specific entropy and can increase resistance to key cloning and software-based emulation.
 
-### 5.9 Schedule Ratcheting for Forward Secrecy
+### 5.10 Schedule Ratcheting for Forward Secrecy
 
 To prevent historical compromise in the event of a device capture, the Hopping Schedule Generator employs a cryptographic ratchet mechanism. Unlike static schedule generation where $Schedule_t = F(Key_{static}, t)$, the invention utilizes an evolving key state:
 
