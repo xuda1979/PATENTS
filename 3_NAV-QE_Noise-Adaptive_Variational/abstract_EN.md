@@ -6,7 +6,7 @@
 
 ### Abstract
 
-A pioneering noise-adaptive variational quantum encryption (NAV-QE) system and method for generating unforgeable, hardware-bound cryptographic keys by harnessing the intrinsic quantum processor noise characteristics. The system comprises a quantum processor executing parameterized circuits including variational quantum circuits (VQC) and polymorphic calibration sequences, a highly advanced machine learning characterization module that dynamically extracts multi-dimensional device-specific noise profiles including spatio-temporal T1/T2 relaxation times, decoherence fluctuations, non-Markovian gate error rates, and quantum crosstalk topographies. An intelligent error-mapping module transforms these complex noise profiles into cryptographic fingerprints through adaptive normalization, continuous variable quantization, and post-quantum cryptographic hashing. A key generation module derives high-entropy, zero-trust encryption keys physically bound to the specific quantum hardware's unique atomic imperfections. A critical tamper detection module continuously monitors noise profile deviations using advanced multidimensional distance metrics (e.g., Mahalanobis or Wasserstein continuous monitoring), instantly invalidating keys upon detection of physical tampering, electromagnetic interference, or environmental intrusion. This groundbreaking invention transforms quantum hardware noise—typically a computational impediment—into an impenetrable security asset, providing absolute hardware-rooted device authentication, unclonable device fingerprints, and autonomous tamper-evident key management essential for zero-trust quantum cloud computing, distributed quantum ledgers, and ultra-secure communications.
+A hardware-agnostic, noise-adaptive variational quantum encryption (NAV-QE) system and method for generating hardware-bound cryptographic keys by exploiting intrinsic quantum processor noise characteristics across diverse architectures including superconducting, photonic, neutral-atom, trapped-ion, topological, and spin-qubit platforms. The system comprises a quantum processor executing parameterized circuits and calibration sequences, a machine-learning characterization module extracting device-specific noise profiles including T1/T2 relaxation parameters, gate error rates, readout errors, and crosstalk coefficients, an error-mapping module transforming the extracted profile into a reproducible hardware fingerprint, and a key-generation module deriving post-quantum-compatible cryptographic material physically bound to the underlying device. A tamper-detection module continuously monitors deviations between current and enrolled baseline profiles and invalidates keys upon detection of physical interference or unauthorized manipulation. The invention converts quantum noise from a computational limitation into a deployable security primitive for device authentication, attestation, and hardware-rooted key management. The architecture is expressly structured for industrial conversion through cloud APIs, middleware adapters, verifier services, and embedded quantum hardware security modules (qHSM), thereby supporting staged deployment in quantum cloud computing, regulated infrastructure, secure communications, and post-quantum migration programs.
 
 **(Word count: 184)**
 
@@ -14,7 +14,7 @@ A pioneering noise-adaptive variational quantum encryption (NAV-QE) system and m
 
 ### Keywords
 
-NISQ; Variational Quantum Circuit; Hardware fingerprinting; Quantum noise; T1/T2 relaxation; Decoherence; Machine learning; Physical Unclonable Function; Device authentication; Tamper detection; Key derivation; Quantum cloud security; Hardware attestation
+NISQ; Variational Quantum Circuit; Hardware Fingerprinting; Quantum Noise Characterization; Machine Learning; Physical Unclonable Function; Device Authentication; Key Derivation; Tamper Detection; Quantum Cloud Security; Hardware Attestation; Post-Quantum Cryptography
 
 ---
 
@@ -29,6 +29,10 @@ NISQ; Variational Quantum Circuit; Hardware fingerprinting; Quantum noise; T1/T2
 **Figure 4**: Device fingerprinting and challenge-response authentication protocol (400) between quantum device and verifier
 
 **Figure 5**: Tamper detection (500) through continuous noise profile monitoring with Mahalanobis distance comparison against baseline
+
+**Figure 6**: Entropy extraction and key derivation pipeline (600) showing raw noise measurements flowing through parameter estimation, min-entropy assessment, correlation analysis, entropy conditioning, and HKDF key expansion
+
+**Figure 7**: Multi-device authentication network (700) showing enrollment, challenge-response verification, and attestation certificate issuance across multiple quantum processors
 
 ---
 

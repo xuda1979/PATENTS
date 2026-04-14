@@ -1,51 +1,58 @@
 # Patent Claims Document
 # Noise-Adaptive Variational Quantum Encryption (NAV-QE)
 
+*This document is the authoritative claims reference, unified with patent_draft.md v3.0.*
+
 ---
 
 ## Independent Claims
 
 ### Claim 1 (System Claim)
 
-An ultra-secure, zero-trust noise-adaptive variational quantum encryption system, comprising:
+A noise-adaptive variational quantum encryption system, comprising:
 
-a) a quantum processor comprising a plurality of topologically structured physical qubits, each qubit exhibiting a highly stable yet fundamentally unique, multi-dimensional device-specific noise profile dynamically characterized by at least a continuous longitudinal relaxation time (T1), a continuous transverse dephasing time (T2), dynamic non-Markovian single and multi-qubit gate error rates, and polymorphic inter-qubit spatio-temporal crosstalk correlation coefficients, wherein said multi-dimensional noise profile is definitively determined by irreproducible hardware manufacturing variations and inherent atomic imperfections of the quantum processor;
+a) a quantum processor comprising a plurality of physical qubits, each qubit exhibiting a device-specific noise profile dynamically characterized by at least a continuous temporal decoherence metric (such as a longitudinal relaxation time (T1) or equivalent loss parameter), a transverse dephasing parameter (T2) or indistinguishability profile, one or more gate error rates or unitary imperfections, and inter-qubit crosstalk coefficients, wherein said noise profile is determined by irreproducible manufacturing variations of the quantum processor;
 
-b) a polymorphic parameterized circuit execution module operably coupled to said quantum processor, the module configured to execute randomly generated, dynamically adaptive parameterized quantum circuits, variational quantum circuits (VQC), and polymorphic multi-qubit calibration sequences intertwining logic and noise probes on said quantum processor, wherein an aggregation of the multidimensional circuit outputs continuously encodes both computational state results and said dynamic device-specific noise signatures fundamentally inseparable from the computational output without advanced machine learning extraction;
+b) a parameterized circuit execution module operably coupled to said quantum processor, the module configured to execute parameterized quantum circuits, variational quantum circuits (VQC), or multi-qubit calibration sequences on said quantum processor, wherein circuit outputs encode both computational results and device-specific noise signatures that are inseparable from the computational output;
 
-c) an advanced machine learning characterization module comprising an adaptive spatio-temporal neural network configured to:
-   - instantaneously receive non-linear output probability distributions from the parameterized circuit execution module;
-   - fundamentally decouple and differentiate coherent quantum computational signals from complex incoherent and coherent noise contributions using a continuously self-updating deep statistical noise model;
-   - rigorously extract a high-fidelity quantitative noise profile comprising per-qubit T1/T2 multi-dimensional relaxation topographies, per-gate non-linear error matrices, deep inter-qubit correlation coefficients, and dynamic measurement crosstalk arrays;
-   - autonomously and adaptively update the trained deep statistical noise model in real-time to accurately track legitimate temporal device drift versus artificial tampering;
+c) a machine learning characterization module configured to:
+   - receive output probability distributions from the parameterized circuit execution module;
+   - distinguish between coherent computational signal and incoherent noise contributions using a trained statistical noise model;
+   - extract a quantitative noise profile comprising per-qubit T1/T2 parameters, per-gate error rates, inter-qubit crosstalk coefficients, and per-qubit readout error probabilities;
+   - adaptively update the trained statistical noise model as device characteristics drift over time;
 
-d) a highly robust error-mapping module configured to securely convert the high-dimensional extracted quantitative noise profile into mathematically unique, high-entropy cryptographic primitives, comprising:
-   - a continuous fingerprint extractor that dynamically self-assembles a multi-dimensional continuous variable noise fingerprint tensor from the exact extracted quantitative noise profile;
-   - a dynamic non-linear adaptive quantizer that securely converts said high-dimensional, continuous variable noise fingerprint tensor into a statistically balanced, quantized discrete representation having highly uniform discrete bit parity distributions;
-   - a post-quantum cryptographic signature generator that definitively produces a mathematically deterministic, unforgeable hardware-bound cryptographic signature exclusively from said quantized representation;
+d) an error-mapping module configured to convert the extracted quantitative noise profile into unique cryptographic primitives, comprising:
+   - a fingerprint extractor that assembles a continuous multi-dimensional noise fingerprint vector from the quantitative noise profile;
+   - a quantizer that converts said continuous multi-dimensional noise fingerprint vector to a quantized fingerprint having discrete bit representations;
+   - a signature generator that produces a deterministic cryptographic signature from said quantized fingerprint;
 
-e) a quantum-secured key generator module configured to securely derive ultra-high-entropy post-quantum cryptographic keys from the generated cryptographic signature using an adaptive, salt-enhanced quantum-resistant key derivation function (KDF), wherein said generated keys are physically and irreversibly bound to the specific quantum processor via its inherent chaotic quantum variations, such that reproduction, cloning, or spoofing of functionally equivalent keys on structurally equivalent or simulated quantum hardware is physically impossible and mathematically computationally infeasible.
+e) a key generation module configured to derive high-entropy cryptographic keys from the cryptographic signature using a key derivation function (KDF), wherein said keys are physically bound to the specific quantum processor such that reproduction of equivalent keys on different quantum hardware is computationally infeasible;
+
+f) a tamper detection module configured to:
+   - continuously or periodically monitor the quantitative noise profile during operation of the quantum processor;
+   - compute a statistical deviation metric between a current quantitative noise profile and an adaptively maintained baseline noise profile that accounts for natural temporal device drift;
+   - trigger a security response comprising at least one of key invalidation, security alert generation, and re-enrollment initiation when said statistical deviation metric exceeds a predetermined threshold.
 
 ### Claim 2 (Method Claim)
 
-A method for dynamically generating zero-trust, mathematically unforgeable, hardware-bound cryptographic keys using a continuously adaptive noise-adaptive variational quantum encryption architecture, comprising the highly secured steps of:
+A method for generating hardware-bound cryptographic keys using noise-adaptive variational quantum encryption, comprising the steps of:
 
-S1) executing one or more stochastically parameterized algorithmic quantum circuits, deeply entangled variational quantum circuits, or polymorphic multi-qubit calibration sequences on an advanced quantum processor comprising a plurality of topologically connected physical qubits, said circuits explicitly configured to deeply probe both coherent errors and complex incoherent device-specific quantum decoherence noise characteristics of the exact quantum processor;
+S1) executing one or more parameterized algorithmic circuits, variational quantum circuits, or multi-qubit calibration sequences on a quantum processor comprising a plurality of physical qubits, said circuits being configured to probe device-specific noise characteristics of the quantum processor;
 
-S2) precisely measuring output qubit states across a statistically rigorous distribution of parameterized repetitions to probabilistically map multidimensional distributions explicitly reflecting the intrinsically combined, non-commutative superposition of both the intended logical circuit computation and the precise atomic-level, hardware-specific noise tensor of said continuous quantum processor;
+S2) measuring output qubit states across a statistically significant number of repetitions to obtain probability distributions that reflect both the intended circuit computation and hardware-specific noise of said quantum processor;
 
-S3) dynamically applying an advanced polymorphic machine learning classification analysis comprising Bayesian network structures or recurrent deep neural networks to accurately dissect the measured probability distributions to continuously extract a robust high-dimensional quantitative device noise tensor definitively bounding the inherent chaotic profile of the device, comprising at least continuously sampled values of:
-   - multi-dimensional longitudinal stochastic relaxation parameters and time topography (T1);
-   - non-Markovian transverse coherent dephasing fluctuation parameters (T2);
-   - non-linear time-dependent single-qubit and deeply entangled two-qubit quantum gate error rates representing continuous deviations;
-   - fundamentally intrinsic stochastically correlated measurement and readout error probabilities;
-   - multi-partite deeply-entangled spatio-temporal crosstalk coefficients explicitly bound between topologically coupled qubit interaction pairs;
+S3) applying a statistical extraction engine or machine learning analysis to the measured probability distributions to extract a quantitative device noise profile comprising at least:
+   - per-qubit temporal decoherence metrics (such as longitudinal relaxation parameters (T1) or photon loss);
+   - per-qubit transverse dephasing parameters (T2) or indistinguishability profiles;
+   - single-qubit and two-qubit gate error rates or equivalent unitary imperfections;
+   - measurement/detection error probabilities;
+   - correlation/crosstalk coefficients between interacting qubits;
 
-S4) rapidly assembling and condensing the exact extracted quantitative dynamic device noise tensor into a secure, unclonable, multidimensional continuous noise hardware fingerprint vector, and mathematically mapping said hardware explicitly to a purely random cryptographic signature through an irreversible deterministic topological transformation comprising non-linear multidimensional normalization, adaptive threshold parameter quantization rigorously scaled against environmental thermal noise, and a mathematically secure post-quantum deterministic cryptographic hashing framework;
+S4) assembling the extracted quantitative device noise profile into a noise fingerprint vector and mapping said noise fingerprint vector to a cryptographic signature through a deterministic transformation comprising normalization, quantization, and cryptographic hashing;
 
-S5) deterministically deriving an entropy-bounded collection of one or more robust physical cryptographic keys directly driven from said mathematical cryptographic signature exclusively utilizing an adaptive, high entropy derivation function heavily reliant on zero-knowledge entropy conditioning, wherein the deterministically derived robust one or more cryptographic keys explicitly and permanently inherit the mathematically unique, purely unforgeable continuous hardware-specific uniqueness tensor of said precise quantitative chaotic device noise profile;
+S5) deriving one or more cryptographic keys from said cryptographic signature using a key derivation function, wherein the derived one or more cryptographic keys inherit hardware-specific uniqueness of said quantitative device noise profile;
 
-S6) implementing a fully autonomous continuous zero-trust security monitoring structure of the precise unforgeable quantitative chaotic device noise profile dynamically during concurrent operational workloads, robustly detecting any form of physical, environmental, or algorithmic tampering attempts by dynamically computing a rigorous advanced multidimensional statistical manifold deviation metric (such as a normalized Mahalanobis distance matched with a non-linear Wasserstein tensor) firmly calculated directly between a freshly recorded current extracted quantitative dynamic hardware device continuous noise profile and an advanced autogenously and adaptively updated stored statistical baseline noise profile specifically modeled using advanced temporal neural networks to accurately categorize natural topological temporal quantum device drift independent from invasive attacks, and immediately triggering an automated pre-configured irreversible critical security response mechanism that mathematically purges and definitively permanently invalidates any currently generated or previously utilized bound physical continuous variables exclusively when said advanced rigorous continuous multidimensional statistical continuous deviation metric definitively rapidly exceeds a precise continuously mathematically simulated dynamic predetermined non-linear deviation threshold strictly isolated using physical bounds testing.
+S6) continuously or periodically monitoring the quantitative device noise profile during operation and detecting tampering attempts by computing a statistical deviation metric between a current quantitative device noise profile and an adaptively updated stored baseline noise profile that accounts for natural temporal device drift, and triggering a security response when said statistical deviation metric exceeds a predetermined threshold.
 
 ---
 
@@ -72,10 +79,10 @@ comprising relaxation times for $n$ qubits, error rates for $g$ gates, and cross
 $$K = \text{KDF}(\text{Hash}(\mathbf{f}) \| \text{salt} \| \text{context})$$
 wherein $\mathbf{f}$ is the noise fingerprint vector and KDF is a cryptographic key derivation function.
 
-**Claim 7.** The system according to claim 1, further comprising a tamper detection module configured to:
-- continuously monitor the quantitative noise profile during operation to obtain a current quantitative noise profile;
-- compute a deviation metric $d(\mathbf{f}_{current}, \mathbf{f}_{baseline})$ between said current quantitative noise profile and a baseline noise profile;
-- trigger a security alert when said deviation metric exceeds a threshold $\tau$;
+**Claim 7.** The system according to claim 1, wherein the tamper detection module of element (f) is further configured to:
+- maintain a sliding window of historical noise profiles for trend analysis;
+- distinguish between gradual natural drift and abrupt step-changes indicative of physical tampering;
+- trigger graduated security responses comprising warning, key suspension, key invalidation, and mandatory re-enrollment based on the magnitude and pattern of the detected deviation;
 - invalidate derived cryptographic keys upon tampering detection.
 
 **Claim 8.** The system according to claim 7, wherein tampering detection uses a Mahalanobis distance metric as the deviation metric:
@@ -123,29 +130,36 @@ wherein SHAKE256 acts as a randomness extractor.
 - key refresh incorporates both baseline and current noise measurements;
 - old keys are securely erased after refresh.
 
+**Claim 16A.** The method according to claim 2, further comprising an operational deployment procedure including:
+- enrolling a target quantum processor by collecting baseline noise profiles under approved calibration conditions;
+- storing an enrolled profile in association with a device identity and policy record;
+- issuing attestation outputs or derived keys to downstream enterprise interfaces using standardized APIs;
+- re-enrolling the target quantum processor after maintenance, cooldown, remapping, or firmware update events; and
+- revoking enrolled trust material when a deviation threshold, retirement condition, or policy violation is detected.
+
 ### Application-Specific Claims
 
-**Claim 17.** The system according to claim 1, applied to quantum computing as a service (QCaaS), wherein:
-- cloud quantum processors are uniquely identified by noise fingerprints;
-- users can verify they are accessing the designated hardware;
-- computation results are bound to specific hardware attestation.
+**Claim 17.** The system according to claim 1, applied to Quantum Computing as a Service (QCaaS) or multi-tenant cloud quantum environments, wherein:
+- cloud-hosted quantum processors are authenticated by their noise fingerprints via standardized API interfaces;
+- enterprise users verify that computations executed on a designated physical quantum processor rather than a simulator or different hardware unit;
+- multi-tenant workload results are cryptographically bound to a hardware attestation certificate derived from the noise fingerprint of the executing processor.
 
 **Claim 18.** The system according to claim 1, applied to secure quantum communication, wherein:
-- quantum channel endpoints are authenticated via noise fingerprints;
+- quantum channel endpoints are authenticated via their respective noise fingerprints;
 - session keys are derived from endpoint noise characteristics;
-- man-in-the-middle detection through fingerprint verification.
+- man-in-the-middle attacks are detectable through comparison of noise fingerprints at each endpoint.
 
-**Claim 19.** The system according to claim 1, applied to quantum-safe key generation, wherein:
-- noise-derived keys provide entropy source for post-quantum cryptography;
-- hardware binding prevents key extraction attacks;
-- tamper detection provides physical security layer.
+**Claim 19.** The system according to claim 1, applied to distributed ledger or blockchain technologies, wherein:
+- network node identity is verified via hardware-bound noise fingerprints acting as physical unclonable identifiers;
+- cryptographic keys derived from noise fingerprints are used for transaction signing, preventing key exfiltration;
+- hardware binding ensures that node identity cannot be transferred or duplicated to unauthorized hardware.
 
 ### Security Claims
 
-**Claim 20.** The system according to claim 1, wherein security is provided through:
-- physical unclonable function (PUF) properties of quantum noise;
-- manufacturing variation ensuring unique device characteristics;
-- fundamental impossibility of duplicating quantum noise signatures.
+**Claim 20.** The system according to claim 1, wherein security against cloning attacks is provided through:
+- physical unclonable function (PUF) properties of quantum noise arising from irreproducible manufacturing variations;
+- infeasibility of simulating the exact noise profile of a specific quantum processor on different hardware;
+- the quantum no-cloning theorem preventing exact reproduction of unknown quantum states, such that any attempt to characterize the noise profile through measurement necessarily perturbs the measured system.
 
 **Claim 21.** The system according to claim 1, wherein tamper resistance is provided through:
 - invasive probing altering decoherence characteristics;
@@ -213,8 +227,8 @@ Claim 1 (System - Independent)
 ├── Claim 11 (Superconducting Qubits)
 ├── Claim 17 (QCaaS Application)
 ├── Claim 18 (Quantum Communication)
-├── Claim 19 (Key Generation Application)
-├── Claim 20 (PUF Properties)
+├── Claim 19 (Blockchain Application)
+├── Claim 20 (PUF / No-Cloning Security)
 ├── Claim 21 (Tamper Resistance)
 ├── Claim 22 (Entropy Bound)
 └── Claim 26 (Multi-Platform Qubits)
@@ -225,6 +239,7 @@ Claim 2 (Method - Independent)
 ├── Claim 14 (Entropy Conditioning)
 ├── Claim 15 (Continuous Monitoring)
 ├── Claim 16 (Key Refresh)
+├── Claim 16A (Operational Deployment)
 ├── Claim 23 (Baseline Refresh with Drift Adaptation)
 ├── Claim 27 (Challenge-Response Authentication)
 └── Claim 28 (Thermal Variance Compensation)
