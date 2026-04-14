@@ -1,0 +1,175 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{setspace}
+\usetikzlibrary{positioning,arrows.meta}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+\title{\textbf{发明专利技术交底书}\\[0.5em]\Large 基于边缘 AI 微秒级突发流量预测的无固定时隙量子与经典光信号动态共纤时分复用系统及方法}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{发明名称}
+基于边缘 AI 微秒级突发流量预测的无固定时隙量子与经典光信号动态共纤时分复用系统及方法。
+
+\textbf{英文名称}: Dynamic Co-Fiber Time-Division Multiplexing System and Method for Quantum and Classical Optical Signals Without Fixed Slots Based on Edge AI Microsecond Bursty Traffic Prediction.
+
+\section{申请人信息}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+申请人名称 & 待补充 \\
+\hline
+申请人类型 & 企业或研究机构，待补充 \\
+\hline
+国籍或注册地 & 待补充 \\
+\hline
+通讯地址 & 待补充 \\
+\hline
+联系人及电话 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{发明人信息}
+\subsection{第一发明人}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+姓名 & 待补充 \\
+\hline
+工作单位 & 待补充 \\
+\hline
+联系电话 & 待补充 \\
+\hline
+电子邮箱 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{技术领域}
+本申请涉及量子密钥分发、DWDM/OTN/城域和骨干光网络、边缘 AI 流量预测、高速光开关控制和量子经典融合传输技术，尤其涉及在同一光纤中动态插入量子信号。
+
+\section{背景技术}
+\subsection{现有技术的局限性}
+量子信号极弱，经典光业务功率高且突发性明显，同纤时容易产生拉曼散射、串扰和探测噪声，导致量子误码率升高。现有工程常采用暗纤、静态波长隔离或固定时隙 TDM，这些方案成本高、资源利用率低，且难以匹配业务突发性。
+
+\subsection{相关技术路线与工程瓶颈}
+现网经典业务并非连续平滑流，而是在微秒至毫秒尺度呈现突发和静默窗口。传统固定时隙方案为了保证量子链路安全，需要设置较大保护间隔，从而浪费可用时窗。与此同时，光网络流量预测和边缘 AI 已在资源编排中被研究，但尚未与量子插入窗口和量子侧反馈形成闭环。
+
+\subsection{审查中可能关注的现有技术边界}
+公开资料已经分别覆盖量子与经典同纤共存、固定时隙 TDM、光网络流量预测和高速门控控制，但尚未发现把“微秒级流量预测、无固定时隙的窗口在线生成、光层门控执行和量子侧 QBER 或成钥反馈”统一成一体化系统方案。
+
+\section{发明内容}
+\subsection{发明目的}
+本申请的目的在于，在不新增暗纤的前提下，利用经典业务流量突发性形成的短时静默窗口，通过边缘 AI 预测、光层快速门控和量子侧闭环反馈，实现量子信号在同一光纤中的动态插入与稳定传输。
+
+\subsection{技术方案}
+\subsubsection{创新点 A：面向突发流量的微秒级短期预测}
+在光节点边缘控制器中采集端口吞吐、队列深度、OTN 帧空闲指示、光功率变化率等特征，对未来短时间窗内的业务静默区间进行预测。
+
+\subsubsection{创新点 B：无固定时隙的在线窗口生成}
+系统不预设周期性时隙表，而是根据预测结果即时生成可变长度、非周期的量子插入窗口，并配置保护间隔与置信度阈值。
+
+\subsubsection{创新点 C：光层门控执行与经典整形}
+通过高速光开关、电光调制器、可变衰减器或 SOA 门控控制量子脉冲插入，同时在必要时对经典业务做短时缓存、平滑发送或功率下探。
+
+\subsubsection{创新点 D：量子侧反馈闭环}
+系统读取量子误码率、成钥率与告警，把这些指标反馈给边缘 AI 控制器，自适应调整保护间隔、窗口密度和置信度阈值。
+
+\subsubsection{创新点 E：保守回退机制}
+当预测失败、QBER 升高或链路告警触发时，系统切换到保守模式，扩大保护间隔、降低插入密度或直接回退到独立量子通道。
+
+\subsubsection{创新点 F：可取证的窗口计划与设备日志}
+控制器下发的窗口计划、光开关时间戳、经典侧整形动作和量子侧统计形成完整证据链，便于后续侵权识别与审计。
+
+\section{附图说明}
+图1示出无固定时隙量子与经典共纤时分复用系统架构。图2示出预测、执行与反馈闭环流程。
+
+\section{具体实施方式}
+\subsection{系统架构}
+系统由经典业务承载子系统、QKD 子系统、共纤执行器件和边缘 AI 控制器组成。边缘 AI 根据实时特征预测短时静默窗口，执行器件完成量子插入和经典整形，量子侧则提供误码率和成钥反馈。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1cm]
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm] (a) {经典业务设备};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, right=of a] (b) {边缘 AI 控制器};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, right=of b] (c) {高速光开关或门控器件};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, below=of b] (d) {QKD 发端与收端};
+\draw[->, thick] (a) -- (b);
+\draw[->, thick] (b) -- (c);
+\draw[->, thick] (b) -- (d);
+\draw[->, thick] (d) -| (c);
+\end{tikzpicture}
+\caption{图1 无固定时隙量子与经典共纤时分复用系统架构}
+\end{figure}
+
+\subsection{实施步骤}
+\subsubsection{实施例 1：城域单纤量子增强链路}
+节点 A 与节点 B 之间单纤同时承载 100G 或 400G 经典业务和一套 QKD 链路。控制器采集微秒级特征后预测未来低占用窗口，并在满足阈值时下发量子插入计划与经典整形动作。
+
+\subsubsection{实施例 2：量子侧闭环优化}
+系统持续读取 QBER、成钥率和告警，若指标恶化则自动增大保护间隔或降低窗口密度，必要时回退到单独波长或暗纤。
+
+\subsubsection{实施例 3：现场抓取和取证}
+运维或检测机构可从控制器日志、tap 光功率轨迹和量子链路统计中还原窗口执行情况，验证是否实施了预测驱动的动态插入方案。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm]
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm] (s1) {采集经典业务实时特征};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s1] (s2) {边缘 AI 预测短时静默窗口};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s2] (s3) {光层执行量子插入与经典整形};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s3] (s4) {读取 QBER 或成钥率并调整下一轮策略};
+\draw[->, thick] (s1) -- (s2);
+\draw[->, thick] (s2) -- (s3);
+\draw[->, thick] (s3) -- (s4);
+\end{tikzpicture}
+\caption{图2 预测、执行与反馈闭环流程示意图}
+\end{figure}
+
+\section{技术效果}
+\subsection{安全效果}
+本申请避免了暗纤依赖，通过动态窗口选择在同纤环境中为量子信号争取更低噪声区间，并利用量子侧反馈控制误码和成钥状态。其安全价值来自“预测、执行、闭环”的系统调度能力，而非单一器件突破。
+
+\subsection{产业化与经济可行性}
+运营商和设备商可在现网光层执行器件和控制器基础上叠加软件升级，优先在短距机房互联、城域专线和关键控制平面中部署。商业价值体现在节省专用纤芯、提高现网可复用性和形成控制器软件许可。
+
+\subsection{可取证性与实施稳定性}
+取证时可通过窗口计划、光开关时间戳、经典业务缓存动作、功率轨迹及量子 QBER 或成钥率相关性证明实施事实。系统保守回退机制也使工程风险受控。
+
+\section{权利要求书}
+\subsection{独立权利要求}
+\begin{itemize}
+\item 一种量子与经典光信号动态共纤时分复用方法，其特征在于，利用边缘 AI 对经典业务突发流量进行短期预测，并据此在线生成非固定时隙的量子插入窗口。
+\item 通过高速光开关、电光调制器、SOA 门控或其组合执行量子插入并对经典业务做短时整形。
+\item 一种动态共纤系统，包括边缘 AI 控制器、光层门控器件、QKD 子系统和特征采集模块。
+\item 根据量子误码率和成钥率反馈动态调整窗口策略。
+\end{itemize}
+
+\subsection{从属权利要求}
+\begin{itemize}
+\item 预测特征包括端口吞吐、队列深度、OTN 帧空闲指示和光功率变化率中的至少一种。
+\item 系统根据置信度阈值和保护间隔阈值决定是否执行插入。
+\item 系统在异常时进入保守回退模式。
+\item 控制器输出窗口计划、执行时间戳和量子侧统计日志。
+\end{itemize}
+
+\section{说明书摘要}
+本申请公开了一种基于边缘 AI 微秒级突发流量预测的无固定时隙量子与经典光信号动态共纤时分复用系统及方法。该方案针对经典业务突发性，在边缘控制器侧实时预测短时静默窗口，并据此在线生成非周期、可变长度的量子插入窗口，通过高速光层门控器件执行量子脉冲插入，并依据 QBER 和成钥率反馈自适应调整策略。与暗纤或固定时隙方案相比，本申请更突出系统级节省纤芯资源与现网可落地性。
+\end{document}
