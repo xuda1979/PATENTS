@@ -1,0 +1,97 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{cm_patent_template}[2026/03/25 China Mobile patent template recreation]
+
+\RequirePackage{geometry}
+\RequirePackage{array}
+
+\geometry{
+  a4paper,
+  top=25.4mm,
+  bottom=25.4mm,
+  left=31.75mm,
+  right=31.75mm
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.35}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newlength{\cmcoverlabelwidth}
+\newlength{\cmcovervaluewidth}
+\newlength{\cmnoticewidth}
+\AtBeginDocument{%
+  \setlength{\cmcoverlabelwidth}{3.2cm}%
+  \setlength{\cmcovervaluewidth}{\dimexpr\textwidth-\cmcoverlabelwidth-4\tabcolsep-3\arrayrulewidth\relax}%
+  \setlength{\cmnoticewidth}{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}%
+}
+
+\newcommand{\cmcovermaintitle}[1]{%
+  \begin{center}
+    {\heiti\fontsize{22pt}{24pt}\selectfont #1\par}
+  \end{center}
+}
+
+\newcommand{\cmcoversubtitle}[1]{%
+  \begin{center}
+    {\heiti\fontsize{22pt}{24pt}\selectfont #1\par}
+  \end{center}
+}
+
+\newcommand{\cmcovercompany}[1]{%
+  \begin{center}
+    {\heiti\fontsize{16pt}{18pt}\selectfont #1\par}
+  \end{center}
+}
+
+\newcommand{\cmdisclosuresection}[1]{%
+  \vspace{8pt}
+  {\heiti\fontsize{12pt}{24pt}\selectfont\hspace*{2em}#1\par}
+  \vspace{2pt}
+}
+
+\newcommand{\cmdisclosurepara}[1]{%
+  {\fangsong\fontsize{12pt}{24pt}\selectfont\hspace*{2em}#1\par}
+}
+
+\newcommand{\cmdisclosureplain}[1]{%
+  {\fangsong\fontsize{12pt}{24pt}\selectfont #1\par}
+}
+
+\newcommand{\cmsearchsection}[1]{%
+  \vspace{8pt}
+  {\fangsong\fontsize{12pt}{18pt}\selectfont\hspace*{2em}#1\par}
+  \vspace{2pt}
+}
+
+\newcommand{\cmsearchpara}[1]{%
+  {\fangsong\fontsize{12pt}{18pt}\selectfont\hspace*{2em}#1\par}
+}
+
+\newcommand{\cmsearchplain}[1]{%
+  {\fangsong\fontsize{12pt}{18pt}\selectfont #1\par}
+}
+
+\newcommand{\cmsmallnote}[1]{%
+  {\fangsong\fontsize{10.5pt}{16pt}\selectfont #1\par}
+}
+
+\newenvironment{cmcoverinfo}
+  {\begin{tabular}{|L{\cmcoverlabelwidth}|L{\cmcovervaluewidth}|}\hline}
+  {\end{tabular}}
+
+\newcommand{\cmcoverrow}[2]{#1 & #2 \\\hline}
+
+\newenvironment{cmnoticebox}
+  {\begin{tabular}{|L{\cmnoticewidth}|}\hline}
+  {\\\hline\end{tabular}}
+
+\newcommand{\cmdisclosurelistitem}[1]{%
+  {\fangsong\fontsize{12pt}{24pt}\selectfont\hspace*{2em}#1\par}
+}
+
+\newcommand{\cmsearchlistitem}[1]{%
+  {\fangsong\fontsize{12pt}{18pt}\selectfont\hspace*{2em}#1\par}
+}

@@ -1,0 +1,54 @@
+\documentclass[UTF8,a4paper,12pt]{ctexart}
+\usepackage{cm_patent_template}
+\usepackage{amsmath}
+
+\begin{document}
+\sloppy
+
+\cmcovermaintitle{中国移动专利申请}
+\cmcoversubtitle{检索报告}
+
+\begin{cmcoverinfo}
+\cmcoverrow{发明名称}{一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法}
+\cmcoverrow{申报单位}{研究院}
+\cmcoverrow{检索人}{许达、xudayj@chinamobile.com、+86-13521894156}
+\cmcoverrow{检索日期}{2026.03.20}
+\end{cmcoverinfo}
+
+\vspace{10pt}
+\begin{cmnoticebox}
+\cmsmallnote{注意事项1．检索应当针对发明的关键点充分选取关键词，关键词应使用所属技术领域通用技术术语，而非直接用发明名称或自行命名的系统名称进行检索。2．请按照集团公司提供的本检索报告模板逐项填写，缺检索报告的专利申请，集团公司不予立案；检索报告存在明显问题的，要求重新进行检索。3．检索报告文件命名要求：发明名称＋短横线（半角）＋检索报告＋版本号。}
+\end{cmnoticebox}
+
+\cmsearchsection{一、使用的中文与外文检索关键词}
+\cmsearchpara{中文检索表达式（关键词的逻辑组合关系）：}
+\cmsearchlistitem{1．“神经网络执行” and “临时权重描述子” and “片上局部存储器” and “不回写”；}
+\cmsearchlistitem{2．“Transformer 前馈网络” and “运行时生成权重” and “分块执行” and “键值缓存”；}
+\cmsearchlistitem{3．“反向重算” and “局部梯度” and “优化器状态” and “同步豁免”。}
+\cmsearchpara{英文检索表达式：}
+\cmsearchlistitem{1．“runtime generated weight descriptors” and “transformer” and “local memory” and “no write back”；}
+\cmsearchlistitem{2．“on-chip ephemeral weights” and\\ “feed-forward network” and “associative matrix execution”；}
+\cmsearchlistitem{3．“backward recomputation” and “generated weights” and “all-reduce bypass”.}
+
+\cmsearchsection{二、相关专利文献}
+\cmsearchpara{本次检索以 Google Patents、WIPO PATENTSCOPE 以及公开网络可获得的专利页面为主要来源，对动态权重生成、低秩压缩、Transformer FFN 参数优化、片上局部存储执行以及训练通信优化等方向进行了组合检索。经人工筛选和比对后，选出与本申请提案最相关的专利文献如下。}
+\cmsearchpara{文献1：US20210264271A1，题为 Adaptable neural network，公开日为 2021-08-26。该文献公开了第二神经网络根据查询或任务信息为第一神经网络生成任务相关参数，可为第一神经网络各层生成权重和偏置。该文献对“一个网络为另一个网络生成权重”的宽泛表述形成较强压力，但未突出 Transformer 前馈网络执行场景、片上局部存储生命周期、用后释放以及不回写外部存储器。}
+\cmsearchpara{文献2：US20240078417A1，题为 Neural network accelerator with parameters resident on chip，公开日为 2024-03-07。该文献强调权重分布在 tile 的本地存储中，执行时不从非本地存储读取权重，本地存储可为 SRAM。该文献对“片上常驻权重/本地存储权重执行”形成较强压力，但其权重对象为预先分发的静态权重，而非运行时生成并即时销毁的临时权重描述子。}
+\cmsearchpara{文献3：WO2024072001A1，题为 Apparatus and method for sharing and pruning weights for vision and language models，公开日为 2024-04-04。该文献使用 Hypernetwork 生成 sharing vector 和 pruning vector，作用对象包括 Transformer 的 MSA 和 FFN 层，重心在跨模态与跨层的权重共享/剪枝。该文献对“Transformer + Hypernetwork + FFN”这一宽泛组合形成中高压力，但未限定片上生成后消费的生命周期。}
+\cmsearchpara{文献4：WO2022245502A1，题为 Low-rank adaptation of neural network models，公开日为 2022-11-24。该文献为基模型权重矩阵引入低秩分解矩阵，保持基础权重不变并训练低秩因子。该文献对“低秩因子”本身形成强压力，但属于静态适配/微调路径，不涉及运行时生成临时权重描述子块，不涉及片上局部驻留与不回写。}
+\cmsearchpara{文献5：US20250021826A1，题为 Low-Rank Compression of Neural Networks，公开日为 2025-01-16。该文献使用 Hypernetwork 生成层级压缩 mask，并结合 SVD/低秩分解为不同层分配不同 rank。该文献对“Hypernetwork + low-rank”组合形成中高压力，但其核心是压缩 mask 学习，不是执行时动态生成临时权重分块。}
+\cmsearchpara{文献6：US20250029005A1。该文献题为 Dynamic low-rank estimation for transformer-based language models，公开日为 2025-01-23。该文献面向 Transformer 语言模型的动态低秩估计，根据 rank budget 动态调整压缩分配。该文献对“动态低秩 Transformer”表述形成中高压力，但未限定 token/层条件下的运行时临时生成、片上转换与全生命周期不回写。}
+
+\cmsearchsection{三、分析评述}
+\cmsearchpara{综合检索结果看，动态生成权重、低秩因子、Transformer 参数优化、片上本地权重执行等单点均已有较强公开基础。如果权利要求仅写成“由超网络生成另一网络权重”“使用低秩因子减少参数量”“将权重放在局部存储中执行”等宽泛表述，极易受到上述文献影响。}
+\cmsearchpara{但是，本次检索未发现一篇公开专利文献完整披露如下全组合：根据激活特征表示和层标识在执行时生成临时权重描述子块；仅在片上局部存储器中将其转换为临时目标权重分块或者等效因子分块；按块完成片上消费和用后释放；并且在全生命周期内不将对应完整物理形态写回外部存储器。尤其是把前向执行、解码缓存受益、训练反向重算以及训练通信门控统一到同一底层执行架构中的公开较少。}
+\cmsearchpara{从风险角度看，最需要回避的是把新颖性押在数学形式本身或单个概念词本身，例如 Hypernetwork、low-rank、Transformer FFN、SRAM resident 等。更适合主张的边界，应当是“物理内存层级 + 片上生成后消费 + 生命周期控制 + 不回写 + 可选反向重算 + 可选通信豁免”的系统执行路径。}
+\cmsearchpara{本次检索中还参考了 HyperNetworks、LoRA、FlashAttention 等非专利文献，用于辅助判断“动态生成权重”“低秩适配”“通过 SRAM/tiling 降低 HBM 访问”等思想是否已成为公知背景。这些文献进一步表明，本申请提案不能把创造性重心放在单个概念点上，而应放在组合式物理数据流与控制流上。}
+
+\cmsearchsection{四、检索结论}
+\cmsearchpara{1．截至 2026 年 3 月 20 日的本次初步检索表明，动态生成权重、低秩因子、Transformer 参数优化以及片上权重执行等单点均已有较强现有技术基础。}
+\cmsearchpara{2．本申请提案若要提高授权概率，应当避免以“泛 Hypernetwork”“泛 low-rank”“泛 on-chip execution”等宽泛概念作为主权项中心。}
+\cmsearchpara{3．当前最值得押注的技术边界是：在加速器上根据条件信号生成临时权重描述子块，在片上局部存储器中转换并消费，并在当前块计算完成后对其执行释放、覆写或清零流程且在对应片上缓冲区被重用前完成所述流程，同时在全生命周期内不将其完整物理形态写回外部存储器；在此基础上，进一步覆盖解码场景下的键值缓存重分配以及训练场景下的反向重算、优化器状态截断和跨节点同步豁免。}
+\cmsearchpara{4．据此判断，本申请提案适合作为系统/执行路径类专利继续推进，但本报告属于公开网络初步检索结果，正式申请前仍建议围绕 generated weights + local memory、hypernetwork + SRAM、matrix product without materialization、backward recomputation + communication bypass 等主题开展更深一层的分类号和法域级检索。}
+
+\end{document}
