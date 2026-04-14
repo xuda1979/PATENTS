@@ -1,0 +1,126 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{面向大模型投机解码的非对称推理微架构及单周期回滚引擎方法与装置} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.04.02} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明不依赖新材料与量子器件，属于成熟 CMOS 数字逻辑可落地的芯片微架构与软硬协同设计，面向大模型推理中的投机解码（Speculative Decoding）加速场景。通过非对称草稿核/验证核、硬件影子队列（Shadow FIFO）、硬件拒绝采样器以及单周期回滚引擎，将原本软件实现的候选缓存、概率比较、接受/拒绝判定与回滚提交闭环下沉至硬件，实现低延迟、稳定尾延迟与更高能效。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 二、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 投机解码, 大语言模型推理, 解码加速 \\
+(2) 非对称微架构, 草稿模型, 验证模型, 异构多核 \\
+(3) 影子队列, Shadow FIFO, 候选Token缓存 \\
+(4) 硬件拒绝采样, 接受判定, 概率比较, 采样器 \\
+(5) 单周期回滚, 检查点, 提交边界, 精确回滚 \\
+
+\textbf{外文检索关键词：}
+(1) speculative decoding, large language model inference, decoding acceleration \\
+(2) asymmetric microarchitecture, draft model, verify model, heterogeneous cores \\
+(3) shadow FIFO, candidate token buffer, checkpoint \\
+(4) hardware rejection sampling, accept/reject decision, rollback engine \\
+(5) precise commit, pipeline flush, program counter reset \\
+
+% 三、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{Fast Inference from Transformers via Speculative Decoding} \newline arXiv, 2023 \newline Leviathan, Y., Kalman, M., Matias, Y. \\
+\hline
+2 & A (基础技术) & \textbf{Computer Architecture: A Quantitative Approach} \newline 教材/专著 \newline Hennessy, J., Patterson, D. \\
+\hline
+3 & Y (相关技术) & \textbf{Two-Level Adaptive Training Branch Prediction} \newline MICRO, 1991 \newline Yeh, T.-Y., Patt, Y.-N. \\
+\hline
+4 & Y (相关技术) & \textbf{Speculative execution with checkpoint and rollback (general techniques)} \newline 处理器体系结构公开资料/专利族方向 \newline（分支预测/投机执行/精确异常相关） \\
+\hline
+5 & Y (相关技术) & \textbf{Heterogeneous multi-core execution (big.LITTLE style concepts)} \newline 工业白皮书/公开资料 \newline ARM 等 \\
+\hline
+\end{longtable}
+
+% 四、分析评述
+\section*{三、分析评述}
+
+\textbf{1. 与文献1（投机解码算法）对比分析：}
+文献1提出了投机解码的算法框架：草稿模型生成候选，目标模型验证并按接受准则提交。该文献主要集中于算法与系统层面的加速思想，通常默认在通用硬件上实现，仍需要软件完成候选缓存、概率对齐、逐 Token 接受/拒绝判定以及验证失败后的回滚清理。本申请提案的核心改进在于将上述控制路径“算法硅化”，提出非对称草稿核/验证核与硬件影子队列、硬件拒绝采样器，并通过单周期回滚引擎实现软件零参与的快速回滚，从而提升吞吐并稳定尾延迟。
+
+\textbf{2. 与文献2（通用处理器架构基础）对比分析：}
+文献2总结了处理器投机执行、精确提交与回滚等通用思想，但其对象通常是通用指令流与分支预测，并未面向大模型投机解码的“候选 Token 流 + 概率接受判定 + KV 增量状态”这一特定数据流与状态集合。本申请提案将精确提交/回滚机制重定向到投机解码的状态机与存储元数据管理，形成面向 LLM 解码的专用微架构与数据通路。
+
+\textbf{3. 与文献3（分支预测相关）对比分析：}
+文献3属于分支预测基础研究，提供了投机与回滚在通用处理器中的背景。与其不同，本申请提案的“投机”对象并非程序控制分支，而是草稿模型产生的候选 Token 序列；其“验证”并非条件分支判断，而是目标模型概率分布对候选的接受判定；其“回滚”不仅涉及 PC/流水线，还涉及候选队列指针、提交边界与投机 KV 增量区指针回收。本申请通过 Shadow FIFO 与提交/回滚控制器将上述状态纳入单周期硬件闭环。
+
+\textbf{4. 与文献4/5（通用投机回滚与异构多核方向）对比分析：}
+现有投机回滚与异构多核通常服务于通用工作负载的吞吐与能效优化，缺乏针对投机解码的“草稿核与验证核并发协同”“硬件拒绝采样判定”“候选缓存与回滚截断”的专用设计。本申请提案在体系结构层面定义了草稿/验证分工、候选元数据格式、采样与回滚状态机，使得投机解码关键路径不依赖软件参与，从而在推理服务场景中获得更稳定的端到端收益。
+
+% 五、检索结论
+\section*{四、检索结论}
+
+经检索，未发现与本申请全部技术特征相同的现有技术。现有公开文献多描述投机解码的算法与系统实现，而未给出将候选缓存、接受判定、拒绝采样与回滚提交机制固化为硬件闭环，并实现单周期回滚的完整非对称微架构方案。本申请提案具有较强的新颖性与创造性，且具备明确的工程可实现性。
+
+\end{document}
