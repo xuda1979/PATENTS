@@ -112,7 +112,7 @@ This category covers expert routing, sparse activation, token-dependent compute 
 
 ### Category F: Kernel Fusion and On-Chip Execution
 
-This includes FlashAttention-style IO-aware kernels, fused MLP kernels, and SRAM-optimized tiling schemes.
+This includes FlashAttention-style 访存感知（IO-aware）内核s, fused MLP kernels, and SRAM-optimized tiling schemes.
 
 **Relevance**:
 
@@ -182,7 +182,7 @@ Static factorization is well known.
 
 ### 5.3 Fused-Kernel Literature
 
-Some IO-aware kernels may already claim on-chip retention of temporary tensors.
+Some 访存感知（IO-aware）内核s may already claim on-chip retention of temporary tensors.
 
 **Mitigation**:
 

@@ -1,0 +1,12 @@
+suite,label,batch_size,seq_len,latency_ms,throughput_tokens_per_s,peak_memory_mib,model_params_m,dense_grad_bytes,dense_grad_mib,mwg_ew_grad_bytes,mwg_ew_grad_mib,reduction_ratio,savings_pct
+pilot_1b,dense_baseline,1,128,0.187,683471.9,72.5,34.6,,,,,,
+pilot_1b,mwg_ew_direct_r32,1,128,0.655,195555.4,437.91,189.27,,,,,,
+pilot_1b,mwg_ew_direct_r64,1,128,0.707,181131.3,799.32,378.01,,,,,,
+pilot_1b,mwg_ew_direct_r128,1,128,1.194,107219.6,1524.0,755.5,,,,,,
+pilot_1b,mwg_ew_direct_r256,1,128,2.251,56854.2,2970.75,1510.47,,,,,,
+patent_8b,dense_baseline,4,512,2.738,747965.2,520.0,176.16,,,,,,
+patent_8b,mwg_ew_basis_bank_r32,4,512,1.124,1822356.7,619.53,15.22,,,,,,
+patent_8b,mwg_ew_basis_bank_r64,4,512,1.043,1962906.6,660.03,29.37,,,,,,
+patent_8b,mwg_ew_basis_bank_r128,4,512,1.625,1260063.4,740.04,57.68,,,,,,
+patent_8b,mwg_ew_basis_bank_r256,4,512,2.979,687405.4,902.04,114.31,,,,,,
+distributed_comm,,,,,,,,352321536,336.0,115367936,110.02,3.05,67.3

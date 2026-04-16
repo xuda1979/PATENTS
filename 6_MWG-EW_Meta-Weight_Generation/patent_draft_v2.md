@@ -204,9 +204,9 @@ This migration path provides support for converting pretrained dense checkpoints
 
 The fused execution engine may be implemented as:
 
-1. a Triton kernel;
-2. a CUDA kernel;
-3. a ROCm or HIP kernel;
+1. a Triton 内核;
+2. a CUDA 内核;
+3. a ROCm or HIP 内核;
 4. an NPU microcode path;
 5. a TPU custom call; or
 6. another accelerator execution path providing matrix-compute units, on-chip local memory, and control of descriptor lifetime.

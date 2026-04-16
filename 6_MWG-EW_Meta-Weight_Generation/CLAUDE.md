@@ -25,3 +25,24 @@ For simulation-strengthening requests, prioritize:
 - evaluation metrics
 - result interpretation text suitable for the disclosure
 - short robustness, complexity, or ablation discussion when supported by the material
+
+## Huanxin ai1 Real Experiments
+
+This workspace now has Huanxin ai1 integration for running real GPU benchmarks:
+
+- **Skill**: `skills/huanxin-s3-ops/` — customized for this patent project
+- **Tools**: `TOOLS.md` — workspace-specific Huanxin and S3 configuration
+- **Scripts**: `scripts/ai1_shell.sh`, `scripts/ai1_job.sh`, `scripts/push_to_s3.sh`, etc.
+- **Browser automation**: `browser-automation/` — local copy for self-contained operation
+- **Experiments**: `experiments/run_real_benchmark.py` — real PyTorch GPU benchmarks for patent evidence
+- **Profiler**: `experiments/profile_descriptor_lifecycle.py` — Nsight-style evidence capture
+
+When the user asks to "run experiments on ai1" or "improve numerical experiments":
+1. Use `scripts/push_to_s3.sh` to sync code to S3
+2. Use `scripts/ai1_sync_from_s3.sh` to pull code to ai1
+3. Use `scripts/ai1_shell.sh` or `scripts/ai1_job.sh` to run experiments remotely
+4. Use `scripts/ai1_push_results_to_s3.sh` to push results back
+5. Use `scripts/pull_from_s3.sh` to fetch results locally
+6. Update the 交底书 with real measured data from `results/`
+
+The analytical simulation (`simulation/mwg_ew_simulation.py`) is for design exploration only. Real patent evidence must come from ai1 GPU measurements.

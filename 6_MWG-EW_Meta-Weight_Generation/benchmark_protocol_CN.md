@@ -20,7 +20,7 @@
 
 建议至少选择以下之一：
 
-1. 1B-3B 级 pilot model，用于 kernel 调试；
+1. 1B-3B 级 pilot model，用于 内核调试；
 2. 7B-8B 级 dense decoder，用于正式专利证据。
 
 ### 2. 比对对象
@@ -61,7 +61,7 @@
 6. batch size；
 7. sequence length；
 8. 精度类型（fp16 / bf16 / mixed precision）；
-9. kernel 版本号；
+9. 内核版本号；
 10. 模型 checkpoint 版本号；
 11. 集群节点数与每节点卡数；
 12. 节点间互连类型；
@@ -273,7 +273,7 @@
 
 1. 不要把 debug 模式结果和正式推理模式结果混在一起；
 2. 若 descriptor 写回仅用于调试，必须单独标注；
-3. 所有结果必须绑定具体 commit / kernel 版本；
+3. 所有结果必须绑定具体 commit / 内核版本；
 4. 同一张表中不要混用不同硬件环境的结果而不标注；
 5. 如果采用 grouped-token reuse，必须单独测开关对比；
 6. 如果采用 optimizer / communication gate，必须单独测开关对比。
@@ -314,7 +314,7 @@
 本执行方案的目的不是单纯得到"更快"的结果，而是得到能支撑专利主张的结果。所有测试都应优先回答以下六个问题：
 
 1. descriptor 是否运行时生成；
-2. descriptor 是否仅在片上局部存储器中存在；
+2. descriptor 是否仅在片上存储器中存在；
 3. descriptor 是否未回写外部存储器；
 4. 节省的外部存储是否真正转化为 KV Cache 或上下文收益；
 5. 训练时目标层局部梯度块是否未进入优化器状态和同步路径；

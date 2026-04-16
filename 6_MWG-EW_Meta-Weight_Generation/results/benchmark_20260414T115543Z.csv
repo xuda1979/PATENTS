@@ -1,0 +1,6 @@
+suite,label,batch_size,seq_len,latency_ms,throughput_tokens_per_s,peak_memory_mib,model_params_m
+patent_8b,dense_baseline,4,512,2.756,742978.7,520.0,176.16
+patent_8b,mwg_ew_basis_bank_r32,4,512,1.201,1704679.8,621.03,15.22
+patent_8b,mwg_ew_basis_bank_r64,4,512,1.184,1729849.4,661.03,29.37
+patent_8b,mwg_ew_basis_bank_r128,4,512,1.611,1271192.4,741.03,57.68
+patent_8b,mwg_ew_basis_bank_r256,4,512,2.977,687970.6,902.04,114.31

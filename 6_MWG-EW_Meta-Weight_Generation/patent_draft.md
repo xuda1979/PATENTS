@@ -160,9 +160,9 @@ Loss functions may include token-level cross-entropy, teacher-logit matching, hi
 
 The fused execution path may be implemented using:
 
-- a Triton kernel,
-- a CUDA kernel,
-- a ROCm/HIP kernel,
+- a Triton 内核,
+- a CUDA 内核,
+- a ROCm/HIP 内核,
 - an NPU microcode path,
 - a TPU custom call,
 - a custom accelerator pipeline,

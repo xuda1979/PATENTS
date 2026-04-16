@@ -1,38 +1,36 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2026.3.27)  14 APR 2026 12:47
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.12)  16 APR 2026 23:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**./一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.tex
-(一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.tex
+**一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.tex
+(./一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.tex
 LaTeX2e <2025-11-01>
-L3 programming layer <2025-10-24>
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctexart.cls
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctexbacken
-d.cfg
+L3 programming layer <2026-03-20>
+(/Users/daxu/Library/texmf/tex/latex/ctex/ctexart.cls
+(/Users/daxu/Library/texmf/tex/latex/ctex/config/ctexbackend.cfg
 File: ctexbackend.cfg 2022/07/14 v2.5.10 Backend configuration file (CTEX)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
-Package: expl3 2025-10-24 L3 programming layer (loader) 
+(/Users/daxu/Library/texmf/tex/latex/l3kernel/expl3.sty
+Package: expl3 2026-03-20 L3 programming layer (loader) 
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-xe
-tex.def
-File: l3backend-xetex.def 2025-10-09 L3 backend support: XeTeX
+(/Users/daxu/Library/texmf/tex/latex/l3backend/l3backend-xetex.def
+File: l3backend-xetex.def 2026-02-18 L3 backend support: XeTeX
 \g__graphics_track_int=\count271
 \g__pdfannot_backend_int=\count272
 \g__pdfannot_backend_link_int=\count273
 ))
 Document Class: ctexart 2022/07/14 v2.5.10 Chinese adapter for class article (C
 TEX)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctexhook.sty
+(/Users/daxu/Library/texmf/tex/latex/ctex/ctexhook.sty
 Package: ctexhook 2022/07/14 v2.5.10 Document and package hooks (CTEX)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctexpatch.sty
+(/Users/daxu/Library/texmf/tex/latex/ctex/ctexpatch.sty
 Package: ctexpatch 2022/07/14 v2.5.10 Patching commands (CTEX)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/base\fix-cm.sty
+(/Users/daxu/Library/texmf/tex/latex/base/fix-cm.sty
 Package: fix-cm 2020/11/24 v1.1t fixes to LaTeX
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1enc.def
+(/Users/daxu/Library/texmf/tex/latex/base/ts1enc.def
 File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
 LaTeX Encoding Info:    Redeclaring text command \capitalcedilla (encoding TS1)
@@ -292,16 +290,16 @@ t line 194.
 ))
 \l__ctex_tmp_int=\count274
 \l__ctex_tmp_box=\box53
-\l__ctex_tmp_dim=\dimen148
+\l__ctex_tmp_dim=\dimen150
 \g__ctex_section_depth_int=\count275
 \g__ctex_font_size_int=\count276
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctexopts.c
-fg
+(/Users/daxu/Library/texmf/tex/latex/ctex/config/ctexopts.cfg
 File: ctexopts.cfg 2022/07/14 v2.5.10 Option configuration file (CTEX)
-) (C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
+)
+(/Users/daxu/Library/texmf/tex/latex/base/article.cls
 Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/base\size12.clo
+(/Users/daxu/Library/texmf/tex/latex/base/size12.clo
 File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count277
@@ -314,22 +312,21 @@ File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 \c@table=\count284
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
-\bibindent=\dimen149
+\bibindent=\dimen151
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/engine\ctex-engin
-e-xetex.def
+(/Users/daxu/Library/texmf/tex/latex/ctex/engine/ctex-engine-xetex.def
 File: ctex-engine-xetex.def 2022/07/14 v2.5.10 XeLaTeX adapter (CTEX)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/xelatex/xecjk\xeCJK.sty
+(/Users/daxu/Library/texmf/tex/xelatex/xecjk/xeCJK.sty
 Package: xeCJK 2022/08/05 v3.9.1 Typesetting CJK scripts with XeLaTeX
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xtemplate\x
-template.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/l3packages/xtemplate/xtempla
+te.sty
 Package: xtemplate 2025-10-09 L3 Experimental prototype document functions
 )
 \l__xeCJK_tmp_int=\count285
 \l__xeCJK_tmp_box=\box54
-\l__xeCJK_tmp_dim=\dimen150
+\l__xeCJK_tmp_dim=\dimen152
 \l__xeCJK_tmp_skip=\skip51
 \g__xeCJK_space_factor_int=\count286
 \l__xeCJK_begin_int=\count287
@@ -345,58 +342,56 @@ Package: xtemplate 2025-10-09 L3 Experimental prototype document functions
 \l__xeCJK_last_skip=\skip52
 \c__xeCJK_none_node=\count289
 \g__xeCJK_node_int=\count290
-\c__xeCJK_CJK_node_dim=\dimen151
-\c__xeCJK_CJK-space_node_dim=\dimen152
-\c__xeCJK_default_node_dim=\dimen153
-\c__xeCJK_CJK-widow_node_dim=\dimen154
-\c__xeCJK_normalspace_node_dim=\dimen155
+\c__xeCJK_CJK_node_dim=\dimen153
+\c__xeCJK_CJK-space_node_dim=\dimen154
+\c__xeCJK_default_node_dim=\dimen155
+\c__xeCJK_CJK-widow_node_dim=\dimen156
+\c__xeCJK_normalspace_node_dim=\dimen157
 \c__xeCJK_default-space_node_skip=\skip53
 \l__xeCJK_ccglue_skip=\skip54
 \l__xeCJK_ecglue_skip=\skip55
 \l__xeCJK_punct_kern_skip=\skip56
 \l__xeCJK_indent_box=\box55
 \l__xeCJK_last_penalty_int=\count291
-\l__xeCJK_last_bound_dim=\dimen156
-\l__xeCJK_last_kern_dim=\dimen157
+\l__xeCJK_last_bound_dim=\dimen158
+\l__xeCJK_last_kern_dim=\dimen159
 \l__xeCJK_widow_penalty_int=\count292
 
 LaTeX template Info: Declaring template type 'xeCJK/punctuation' taking 0
 (template)           argument(s) on line 2396.
 
-\l__xeCJK_fixed_punct_width_dim=\dimen158
-\l__xeCJK_mixed_punct_width_dim=\dimen159
-\l__xeCJK_middle_punct_width_dim=\dimen160
-\l__xeCJK_fixed_margin_width_dim=\dimen161
-\l__xeCJK_mixed_margin_width_dim=\dimen162
-\l__xeCJK_middle_margin_width_dim=\dimen163
-\l__xeCJK_bound_punct_width_dim=\dimen164
-\l__xeCJK_bound_margin_width_dim=\dimen165
-\l__xeCJK_margin_minimum_dim=\dimen166
-\l__xeCJK_kerning_total_width_dim=\dimen167
-\l__xeCJK_same_align_margin_dim=\dimen168
-\l__xeCJK_different_align_margin_dim=\dimen169
-\l__xeCJK_kerning_margin_width_dim=\dimen170
-\l__xeCJK_kerning_margin_minimum_dim=\dimen171
-\l__xeCJK_bound_dim=\dimen172
-\l__xeCJK_reverse_bound_dim=\dimen173
-\l__xeCJK_margin_dim=\dimen174
-\l__xeCJK_minimum_bound_dim=\dimen175
-\l__xeCJK_kerning_margin_dim=\dimen176
+\l__xeCJK_fixed_punct_width_dim=\dimen160
+\l__xeCJK_mixed_punct_width_dim=\dimen161
+\l__xeCJK_middle_punct_width_dim=\dimen162
+\l__xeCJK_fixed_margin_width_dim=\dimen163
+\l__xeCJK_mixed_margin_width_dim=\dimen164
+\l__xeCJK_middle_margin_width_dim=\dimen165
+\l__xeCJK_bound_punct_width_dim=\dimen166
+\l__xeCJK_bound_margin_width_dim=\dimen167
+\l__xeCJK_margin_minimum_dim=\dimen168
+\l__xeCJK_kerning_total_width_dim=\dimen169
+\l__xeCJK_same_align_margin_dim=\dimen170
+\l__xeCJK_different_align_margin_dim=\dimen171
+\l__xeCJK_kerning_margin_width_dim=\dimen172
+\l__xeCJK_kerning_margin_minimum_dim=\dimen173
+\l__xeCJK_bound_dim=\dimen174
+\l__xeCJK_reverse_bound_dim=\dimen175
+\l__xeCJK_margin_dim=\dimen176
+\l__xeCJK_minimum_bound_dim=\dimen177
+\l__xeCJK_kerning_margin_dim=\dimen178
 \g__xeCJK_family_int=\count293
 \l__xeCJK_fam_int=\count294
 \g__xeCJK_fam_allocation_int=\count295
 \l__xeCJK_verb_case_int=\count296
 \l__xeCJK_verb_exspace_skip=\skip57
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.sty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xpar
-se.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2025-10-09 L3 Experimental document command parser
 )
 Package: fontspec 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTeX
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec-xete
-x.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
 Package: fontspec-xetex 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTe
 X
 \l__fontspec_script_int=\count297
@@ -410,115 +405,121 @@ X
 \l__fontspec_emdef_int=\count305
 \l__fontspec_strong_int=\count306
 \l__fontspec_strongdef_int=\count307
-\l__fontspec_tmpa_dim=\dimen177
-\l__fontspec_tmpb_dim=\dimen178
-\l__fontspec_tmpc_dim=\dimen179
- (C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+\l__fontspec_tmpa_dim=\dimen179
+\l__fontspec_tmpb_dim=\dimen180
+\l__fontspec_tmpc_dim=\dimen181
+
+(/Users/daxu/Library/texmf/tex/latex/base/fontenc.sty
 Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.cfg)
-)) (C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/xelatex/xecjk\xeCJK.cfg
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/Users/daxu/Library/texmf/tex/xelatex/xecjk/xeCJK.cfg
 File: xeCJK.cfg 2022/08/05 v3.9.1 Configuration file for xeCJK package
 ))
-\ccwd=\dimen180
+\ccwd=\dimen182
 \l__ctex_ccglue_skip=\skip58
 )
-\l__ctex_ziju_dim=\dimen181
+\l__ctex_ziju_dim=\dimen183
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/zhnumber\zhnumber.sty
+(/Users/daxu/Library/texmf/tex/latex/zhnumber/zhnumber.sty
 Package: zhnumber 2022/07/14 v3.0 Typesetting numbers with Chinese glyphs
 \l__zhnum_scale_int=\count308
 \l__zhnum_tmp_int=\count309
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/zhnumber\zhnumber-utf8
-.cfg
+(/Users/daxu/Library/texmf/tex/latex/zhnumber/zhnumber-utf8.cfg
 File: zhnumber-utf8.cfg 2022/07/14 v3.0 Chinese numerals with UTF8 encoding
 ))
 \l__ctex_heading_skip=\skip59
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/scheme\ctex-schem
-e-chinese-article.def
+(/Users/daxu/Library/texmf/tex/latex/ctex/scheme/ctex-scheme-chinese-article.de
+f
 File: ctex-scheme-chinese-article.def 2022/07/14 v2.5.10 Chinese scheme for art
 icle (CTEX)
-
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctex-name-
-utf8.cfg
+ (/Users/daxu/Library/texmf/tex/latex/ctex/config/ctex-name-utf8.cfg
 File: ctex-name-utf8.cfg 2022/07/14 v2.5.10 Caption with encoding UTF-8 (CTEX)
 ))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/fontset\ctex-font
-set-windows.def
-File: ctex-fontset-windows.def 2022/07/14 v2.5.10 Windows fonts definition (CTE
-X)
+(/Users/daxu/Library/texmf/tex/latex/ctex/fontset/ctex-fontset-mac.def
+File: ctex-fontset-mac.def 2022/07/14 v2.5.10 macOS fonts definition (CTEX)
+
+(/Users/daxu/Library/texmf/tex/latex/ctex/fontset/ctex-fontset-macold.def
+File: ctex-fontset-macold.def 2022/07/14 v2.5.10 macOS fonts definition for Yos
+emite or earlier version (CTEX)
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "KaiTi/B" (it probably doesn't
+(fontspec)             Script 'CJK' not explicitly supported within font
+(fontspec)             'STSong'. Check the typeset output, and if it is okay
+(fontspec)             then ignore this warning. Otherwise a different font
+(fontspec)             should be chosen.
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "STKaiti/B" (it probably doesn't
 (fontspec)             exist).
 
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "SimHei/I" (it probably doesn't
+(fontspec)             Could not resolve font "STHeiti/I" (it probably doesn't
 (fontspec)             exist).
 
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "SimSun/BI" (it probably doesn't
+(fontspec)             Could not resolve font "STSong/BI" (it probably doesn't
 (fontspec)             exist).
 
 
 Package fontspec Info: 
-(fontspec)             Font family 'SimSun(0)' created for font 'SimSun' with
+(fontspec)             Font family 'STSong(0)' created for font 'STSong' with
 (fontspec)             options
-(fontspec)             [Script={CJK},BoldFont={SimHei},ItalicFont={KaiTi}].
+(fontspec)             [Script={CJK},BoldFont={STHeiti},ItalicFont={STKaiti}].
 (fontspec)              
 (fontspec)              This font family consists of the following NFSS
 (fontspec)             series/shapes:
 (fontspec)              
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->"SimSun/OT:script=hani;language=dflt;"
+(fontspec)             <->"STSong/OT:script=hani;language=dflt;"
 (fontspec)             - 'bold' (b/n) with NFSS spec.:
-(fontspec)             <->"SimHei/OT:script=hani;language=dflt;"
+(fontspec)             <->"STHeiti/OT:script=hani;language=dflt;"
 (fontspec)             - 'italic' (m/it) with NFSS spec.:
-(fontspec)             <->"KaiTi/OT:script=hani;language=dflt;"
+(fontspec)             <->"STKaiti/OT:script=hani;language=dflt;"
 
-))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctex.cfg
+)))
+(/Users/daxu/Library/texmf/tex/latex/ctex/config/ctex.cfg
 File: ctex.cfg 2022/07/14 v2.5.10 Configuration file (CTEX)
 )
-(cm_patent_template.sty
+(./cm_patent_template.sty
 Package: cm_patent_template 2026/03/25 China Mobile patent template recreation
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+(/Users/daxu/Library/texmf/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2024/12/12 v1.0g TeX engine tests
 ))
 \Gm@cnth=\count310
 \Gm@cntv=\count311
 \c@Gm@tempcnt=\count312
-\Gm@bindingoffset=\dimen182
-\Gm@wd@mp=\dimen183
-\Gm@odd@mp=\dimen184
-\Gm@even@mp=\dimen185
-\Gm@layoutwidth=\dimen186
-\Gm@layoutheight=\dimen187
-\Gm@layouthoffset=\dimen188
-\Gm@layoutvoffset=\dimen189
+\Gm@bindingoffset=\dimen184
+\Gm@wd@mp=\dimen185
+\Gm@odd@mp=\dimen186
+\Gm@even@mp=\dimen187
+\Gm@layoutwidth=\dimen188
+\Gm@layoutheight=\dimen189
+\Gm@layouthoffset=\dimen190
+\Gm@layoutvoffset=\dimen191
 \Gm@dimlist=\toks18
-
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg)
-) (C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+)
+(/Users/daxu/Library/texmf/tex/latex/tools/array.sty
 Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
-\col@sep=\dimen190
+\col@sep=\dimen192
 \ar@mcellbox=\box56
-\extrarowheight=\dimen191
+\extrarowheight=\dimen193
 \NC@list=\toks19
 \extratabsurround=\skip60
 \backup@length=\skip61
@@ -528,24 +529,24 @@ Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 \cmcovervaluewidth=\skip63
 \cmnoticewidth=\skip64
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+(/Users/daxu/Library/texmf/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2025/07/09 v2.17z AMS math features
 \@mathmargin=\skip65
 
 For additional information on amsmath, use the `?' option.
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(/Users/daxu/Library/texmf/tex/latex/amsmath/amstext.sty
 Package: amstext 2024/11/17 v2.01 AMS text
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+(/Users/daxu/Library/texmf/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks20
-\ex@=\dimen192
+\ex@=\dimen194
 ))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+(/Users/daxu/Library/texmf/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen193
+\pmbraise@=\dimen195
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+(/Users/daxu/Library/texmf/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count313
@@ -565,7 +566,7 @@ LaTeX Info: Redefining \big on input line 721.
 LaTeX Info: Redefining \Big on input line 722.
 LaTeX Info: Redefining \bigg on input line 723.
 LaTeX Info: Redefining \Bigg on input line 724.
-\big@size=\dimen194
+\big@size=\dimen196
 LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
 \macc@depth=\count318
@@ -583,12 +584,12 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \column@=\count323
 \maxfields@=\count324
 \andhelp@=\toks22
-\eqnshift@=\dimen195
-\alignsep@=\dimen196
-\tagshift@=\dimen197
-\tagwidth@=\dimen198
-\totwidth@=\dimen199
-\lineht@=\dimen256
+\eqnshift@=\dimen197
+\alignsep@=\dimen198
+\tagshift@=\dimen199
+\tagwidth@=\dimen256
+\totwidth@=\dimen257
+\lineht@=\dimen258
 \@envbody=\toks23
 \multlinegap=\skip66
 \multlinetaggap=\skip67
@@ -596,78 +597,80 @@ LaTeX Info: Redefining \Relbar on input line 970.
 LaTeX Info: Redefining \[ on input line 2950.
 LaTeX Info: Redefining \] on input line 2951.
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz
-.sty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfrcs.s
-ty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfuti
-l-common.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgfutil-comm
+on.tex
 \pgfutil@everybye=\toks25
-\pgfutil@tempdima=\dimen257
-\pgfutil@tempdimb=\dimen258
+\pgfutil@tempdima=\dimen259
+\pgfutil@tempdimb=\dimen260
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfuti
-l-latex.def
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgfutil-late
+x.def
 \pgfutil@abb=\box60
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs
-.code.tex
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revision.tex
-)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.
+tex (/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/pgf.revision.tex)
 Package: pgfrcs 2025-08-29 v3.1.11a (3.1.11a)
 ))
 Package: pgf 2025-08-29 v3.1.11a (3.1.11a)
-
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore
-.sty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+ (/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty 
+(/Users/daxu/Library/texmf/tex/latex/graphics/graphicx.sty
 Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+(/Users/daxu/Library/texmf/tex/latex/graphics/graphics.sty
 Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+(/Users/daxu/Library/texmf/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.
-cfg
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: xetex.def on input line 106.
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\xetex.def
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/graphics-def/xetex.def
 File: xetex.def 2025/11/01 v5.0p Graphics/color driver for xetex
 ))
-\Gin@req@height=\dimen259
-\Gin@req@width=\dimen260
+\Gin@req@height=\dimen261
+\Gin@req@width=\dimen262
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlayer\pgfsys
-.sty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfs
-ys.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.cod
+e.tex
 Package: pgfsys 2025-08-29 v3.1.11a (3.1.11a)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkey
-s.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code
+.tex
 \pgfkeys@pathtoks=\toks26
 \pgfkeys@temptoks=\toks27
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkey
-slibraryfiltered.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibra
+ryfiltered.code.tex
 \pgfkeys@tmptoks=\toks28
 ))
-\pgf@x=\dimen261
-\pgf@y=\dimen262
-\pgf@xa=\dimen263
-\pgf@ya=\dimen264
-\pgf@xb=\dimen265
-\pgf@yb=\dimen266
-\pgf@xc=\dimen267
-\pgf@yc=\dimen268
-\pgf@xd=\dimen269
-\pgf@yd=\dimen270
+\pgf@x=\dimen263
+\pgf@y=\dimen264
+\pgf@xa=\dimen265
+\pgf@ya=\dimen266
+\pgf@xb=\dimen267
+\pgf@yb=\dimen268
+\pgf@xc=\dimen269
+\pgf@yc=\dimen270
+\pgf@xd=\dimen271
+\pgf@yd=\dimen272
 \w@pgf@writea=\write3
 \r@pgf@reada=\read2
 \c@pgf@counta=\count325
@@ -679,46 +682,44 @@ slibraryfiltered.code.tex
 \t@pgf@tokc=\toks31
 \pgf@sys@id@count=\count329
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.
-cfg
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2025-08-29 v3.1.11a (3.1.11a)
 )
 Driver file for pgf: pgfsys-xetex.def
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfs
-ys-xetex.def
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xet
+ex.def
 File: pgfsys-xetex.def 2025-08-29 v3.1.11a (3.1.11a)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfs
-ys-dvipdfmx.def
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvi
+pdfmx.def
 File: pgfsys-dvipdfmx.def 2025-08-29 v3.1.11a (3.1.11a)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfs
-ys-common-pdf.def
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-com
+mon-pdf.def
 File: pgfsys-common-pdf.def 2025-08-29 v3.1.11a (3.1.11a)
 )
 \pgfsys@objnum=\count330
 )))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfs
-yssoftpath.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoft
+path.code.tex
 File: pgfsyssoftpath.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfsyssoftpath@smallbuffer@items=\count331
 \pgfsyssoftpath@bigbuffer@items=\count332
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfs
-ysprotocol.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprot
+ocol.code.tex
 File: pgfsysprotocol.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 ))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: xetex.def on input line 274.
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx
-)
+(/Users/daxu/Library/texmf/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
 Package xcolor Info: Model `RGB' extended on input line 1365.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
@@ -728,202 +729,197 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-re.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.cod
+e.tex
 Package: pgfcore 2025-08-29 v3.1.11a (3.1.11a)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.cod
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.
+tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathparser.cod
 e.tex
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil
-.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathpars
-er.code.tex
-\pgfmath@dimen=\dimen271
+\pgfmath@dimen=\dimen273
 \pgfmath@count=\count333
 \pgfmath@box=\box61
 \pgfmath@toks=\toks32
 \pgfmath@stack@operand=\toks33
 \pgfmath@stack@operation=\toks34
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.basic.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.trigonometric.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.random.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.comparison.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.base.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.round.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.misc.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunc
-tions.integerarithmetics.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc
-.code.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloa
-t.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+basic.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+trigonometric.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+random.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+comparison.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+base.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+round.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+misc.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.
+integerarithmetics.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.
+tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code
+.tex
 \c@pgfmathroundto@lastzeros=\count334
 ))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code
-.tex)
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-repoints.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoin
+ts.code.tex
 File: pgfcorepoints.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@picminx=\dimen272
-\pgf@picmaxx=\dimen273
-\pgf@picminy=\dimen274
-\pgf@picmaxy=\dimen275
-\pgf@pathminx=\dimen276
-\pgf@pathmaxx=\dimen277
-\pgf@pathminy=\dimen278
-\pgf@pathmaxy=\dimen279
-\pgf@xx=\dimen280
-\pgf@xy=\dimen281
-\pgf@yx=\dimen282
-\pgf@yy=\dimen283
-\pgf@zx=\dimen284
-\pgf@zy=\dimen285
+\pgf@picminx=\dimen274
+\pgf@picmaxx=\dimen275
+\pgf@picminy=\dimen276
+\pgf@picmaxy=\dimen277
+\pgf@pathminx=\dimen278
+\pgf@pathmaxx=\dimen279
+\pgf@pathminy=\dimen280
+\pgf@pathmaxy=\dimen281
+\pgf@xx=\dimen282
+\pgf@xy=\dimen283
+\pgf@yx=\dimen284
+\pgf@yy=\dimen285
+\pgf@zx=\dimen286
+\pgf@zy=\dimen287
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-repathconstruct.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepath
+construct.code.tex
 File: pgfcorepathconstruct.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@path@lastx=\dimen286
-\pgf@path@lasty=\dimen287
+\pgf@path@lastx=\dimen288
+\pgf@path@lasty=\dimen289
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-repathusage.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepath
+usage.code.tex
 File: pgfcorepathusage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@shorten@end@additional=\dimen288
-\pgf@shorten@start@additional=\dimen289
+\pgf@shorten@end@additional=\dimen290
+\pgf@shorten@start@additional=\dimen291
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-rescopes.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescop
+es.code.tex
 File: pgfcorescopes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfpic=\box62
 \pgf@hbox=\box63
 \pgf@layerbox@main=\box64
 \pgf@picture@serial@count=\count335
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-regraphicstate.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregrap
+hicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgflinewidth=\dimen290
+\pgflinewidth=\dimen292
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-retransformations.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretran
+sformations.code.tex
 File: pgfcoretransformations.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@pt@x=\dimen291
-\pgf@pt@y=\dimen292
-\pgf@pt@temp=\dimen293
+\pgf@pt@x=\dimen293
+\pgf@pt@y=\dimen294
+\pgf@pt@temp=\dimen295
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-requick.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequic
+k.code.tex
 File: pgfcorequick.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-reobjects.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobje
+cts.code.tex
 File: pgfcoreobjects.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-repathprocessing.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepath
+processing.code.tex
 File: pgfcorepathprocessing.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-rearrows.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearro
+ws.code.tex
 File: pgfcorearrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowsep=\dimen294
+\pgfarrowsep=\dimen296
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-reshade.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshad
+e.code.tex
 File: pgfcoreshade.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@max=\dimen295
+\pgf@max=\dimen297
 \pgf@sys@shading@range@num=\count336
 \pgf@shadingcount=\count337
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-reimage.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimag
+e.code.tex
 File: pgfcoreimage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-reexternal.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexte
+rnal.code.tex
 File: pgfcoreexternal.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfexternal@startupbox=\box65
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-relayers.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelaye
+rs.code.tex
 File: pgfcorelayers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-retransparency.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretran
+sparency.code.tex
 File: pgfcoretransparency.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-repatterns.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatt
+erns.code.tex
 File: pgfcorepatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfco
-rerdf.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.
+code.tex
 File: pgfcorerdf.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodul
-eshapes.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/modules/pgfmoduleshape
+s.code.tex
 File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfnodeparttextbox=\box66
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodul
-eplot.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.
+code.tex
 File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfc
-omp-version-0-65.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-ve
+rsion-0-65.sty
 Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@nodesepstart=\dimen296
-\pgf@nodesepend=\dimen297
+\pgf@nodesepstart=\dimen298
+\pgf@nodesepend=\dimen299
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfc
-omp-version-1-18.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-ve
+rsion-1-18.sty
 Package: pgfcomp-version-1-18 2025-08-29 v3.1.11a (3.1.11a)
 ))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.s
-ty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.
-sty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkey
-s.code.tex))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfmath.sty
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.cod
-e.tex))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor
-.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code
+.tex)) (/usr/local/texlive/2026basic/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
+)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/utilities/pgffor.code.
+tex
 Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
-\pgffor@iter=\dimen298
-\pgffor@skip=\dimen299
+\pgffor@iter=\dimen300
+\pgffor@skip=\dimen301
 \pgffor@stack=\toks35
 \pgffor@toks=\toks36
 ))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/ti
-kz\tikz.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tik
+z.code.tex
 Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflib
-raryplothandlers.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/libraries/pgflibrarypl
+othandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@plot@mark@count=\count338
-\pgfplotmarksize=\dimen300
+\pgfplotmarksize=\dimen302
 )
-\tikz@lastx=\dimen301
-\tikz@lasty=\dimen302
-\tikz@lastxsaved=\dimen303
-\tikz@lastysaved=\dimen304
-\tikz@lastmovetox=\dimen305
-\tikz@lastmovetoy=\dimen306
-\tikzleveldistance=\dimen307
-\tikzsiblingdistance=\dimen308
+\tikz@lastx=\dimen303
+\tikz@lasty=\dimen304
+\tikz@lastxsaved=\dimen305
+\tikz@lastysaved=\dimen306
+\tikz@lastmovetox=\dimen307
+\tikz@lastmovetoy=\dimen308
+\tikzleveldistance=\dimen309
+\tikzsiblingdistance=\dimen310
 \tikz@figbox=\box67
 \tikz@figbox@bg=\box68
 \tikz@tempbox=\box69
@@ -933,8 +929,8 @@ File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \tikznumberofcurrentchild=\count341
 \tikz@fig@count=\count342
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodul
-ematrix.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/modules/pgfmodulematri
+x.code.tex
 File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfmatrixcurrentrow=\count343
 \pgfmatrixcurrentcolumn=\count344
@@ -942,102 +938,102 @@ File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
 \tikz@expandcount=\count346
 
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/ti
-kz/libraries\tikzlibrarytopaths.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/frontendlayer/tikz/lib
+raries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflib
-raryarrows.meta.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/libraries/pgflibraryar
+rows.meta.code.tex
 File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowinset=\dimen309
-\pgfarrowlength=\dimen310
-\pgfarrowwidth=\dimen311
-\pgfarrowlinewidth=\dimen312
+\pgfarrowinset=\dimen311
+\pgfarrowlength=\dimen312
+\pgfarrowwidth=\dimen313
+\pgfarrowlinewidth=\dimen314
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/ti
-kz/libraries\tikzlibrarycalc.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/frontendlayer/tikz/lib
+raries/tikzlibrarycalc.code.tex
 File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(C:\Users\Lenovo\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/ti
-kz/libraries\tikzlibrarypositioning.code.tex
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgf/frontendlayer/tikz/lib
+raries/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
-(一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux)
+(./一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux)
 \openout1 = `一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
 
 Package fontspec Info: 
 (fontspec)             Adjusting the maths setup (use [no-math] to avoid
 (fontspec)             this).
 
-\symlegacymaths=\mathgroup4
+\symlegacymaths=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 21.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 21.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 21.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 21.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 21.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 21.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 21.
-LaTeX Font Info:    Redeclaring math accent \check on input line 21.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 21.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 21.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 21.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 21.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 21.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 25.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 25.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 25.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 25.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 25.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 25.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 25.
+LaTeX Font Info:    Redeclaring math accent \check on input line 25.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 25.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 25.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 25.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 25.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 25.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 21.
+(Font)              `operators' in the math version `normal' on input line 25.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 21.
+(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 25.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 21.
+(Font)              `operators' in the math version `bold' on input line 25.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 21.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 25.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 21.
+(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 21.
+(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 21.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 21.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 21.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 25.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 21.
+(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 21.
+(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 21.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 25.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 21.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 25.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -1075,93 +1071,127 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "SimHei/BI" (it probably doesn't
-(fontspec)             exist).
+(fontspec)             Script 'CJK' not explicitly supported within font
+(fontspec)             'STHeiti'. Check the typeset output, and if it is okay
+(fontspec)             then ignore this warning. Otherwise a different font
+(fontspec)             should be chosen.
 
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "SimHei/B" (it probably doesn't
-(fontspec)             exist).
-
-
-Package fontspec Info: 
-(fontspec)             Could not resolve font "SimHei/I" (it probably doesn't
-(fontspec)             exist).
-
-
-Package fontspec Info: 
-(fontspec)             Font family 'SimHei(0)' created for font 'SimHei' with
-(fontspec)             options [Script={CJK}].
-(fontspec)              
-(fontspec)              This font family consists of the following NFSS
-(fontspec)             series/shapes:
-(fontspec)              
-(fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->"SimHei/OT:script=hani;language=dflt;"
-
-
-Package fontspec Info: 
-(fontspec)             Could not resolve font "FangSong/BI" (it probably
+(fontspec)             Could not resolve font "STHeiti/BI" (it probably
 (fontspec)             doesn't exist).
 
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "FangSong/B" (it probably
-(fontspec)             doesn't exist).
+(fontspec)             Could not resolve font "STHeiti/B" (it probably doesn't
+(fontspec)             exist).
 
 
 Package fontspec Info: 
-(fontspec)             Could not resolve font "FangSong/I" (it probably
-(fontspec)             doesn't exist).
+(fontspec)             Could not resolve font "STHeiti/I" (it probably doesn't
+(fontspec)             exist).
 
 
 Package fontspec Info: 
-(fontspec)             Font family 'FangSong(0)' created for font 'FangSong'
+(fontspec)             Font family 'STHeiti(0)' created for font 'STHeiti'
 (fontspec)             with options [Script={CJK}].
 (fontspec)              
 (fontspec)              This font family consists of the following NFSS
 (fontspec)             series/shapes:
 (fontspec)              
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
+(fontspec)             <->"STHeiti/OT:script=hani;language=dflt;"
 
-[1
+LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
 
-] [2] [3]
-
-LaTeX Font Warning: Font shape `TU/FangSong(0)/b/n' undefined
-(Font)              using `TU/FangSong(0)/m/n' instead on input line 87.
-
-[4] [5] [6] [7]
-LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 153.
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
 
 
-LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <8.5> not available
-(Font)              size <8> substituted on input line 153.
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 
-[8] [9] [10] [11] [12] [13] [14] [15] [16]
-(一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux)
+Package fontspec Info: 
+(fontspec)             Script 'CJK' not explicitly supported within font
+(fontspec)             'STFangsong'. Check the typeset output, and if it is
+(fontspec)             okay then ignore this warning. Otherwise a different
+(fontspec)             font should be chosen.
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "STFangsong/BI" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "STFangsong/B" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "STFangsong/I" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'STFangsong(0)' created for font
+(fontspec)             'STFangsong' with options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"STFangsong/OT:script=hani;language=dflt;"
+
+ [1
+
+]
+
+LaTeX Font Warning: Font shape `TU/STFangsong(0)/b/n' undefined
+(Font)              using `TU/STFangsong(0)/m/n' instead on input line 56.
+
+[2] [3]
+Overfull \hbox (22.62558pt too wide) in paragraph at lines 95--96
+ [] 
+ []
+
+[4] [5]
+Overfull \hbox (45.38742pt too wide) in paragraph at lines 159--160
+ [] 
+ []
+
+[6] [7] [8]
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 224.
+ [9] [10] [11] [12] [13] [14] [15] [16] [17]
+
+Package fontspec Info: 
+(fontspec)             Script 'CJK' not explicitly supported within font
+(fontspec)             'STFangsong'. Check the typeset output, and if it is
+(fontspec)             okay then ignore this warning. Otherwise a different
+(fontspec)             font should be chosen.
+
+ [18] [19] [20]
+(./一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/07/14>
  ***********
 
 
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 0.5pt have occurred.
-
-
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 20092 strings out of 402987
- 486868 string characters out of 5448317
- 897225 words of memory out of 5000000
- 48473 multiletter control sequences out of 15000+600000
- 637593 words of font info for 109 fonts, out of 8000000 for 9000
- 1348 hyphenation exceptions out of 8191
- 102i,8n,111p,562b,740s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 20871 strings out of 469533
+ 515274 string characters out of 5463838
+ 897667 words of memory out of 5000000
+ 49305 multiletter control sequences out of 15000+600000
+ 642703 words of font info for 136 fonts, out of 8000000 for 9000
+ 319 hyphenation exceptions out of 8191
+ 102i,12n,114p,638b,714s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on 一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.pdf (16 pages).
+Output written on 一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.pdf (20 pages).
 

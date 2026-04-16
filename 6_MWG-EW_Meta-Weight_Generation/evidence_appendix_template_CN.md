@@ -44,7 +44,7 @@
 - 元生成器形式：
 - descriptor 形式：
 - rank：
-- 是否单 kernel：
+- 是否单内核：
 - 是否 grouped-token reuse：
 
 ---
