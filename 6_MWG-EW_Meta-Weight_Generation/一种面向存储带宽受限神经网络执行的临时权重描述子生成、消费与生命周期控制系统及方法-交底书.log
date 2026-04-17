@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.12)  16 APR 2026 23:45
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.12)  17 APR 2026 08:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1153,18 +1153,8 @@ Package fontspec Info:
 LaTeX Font Warning: Font shape `TU/STFangsong(0)/b/n' undefined
 (Font)              using `TU/STFangsong(0)/m/n' instead on input line 56.
 
-[2] [3]
-Overfull \hbox (22.62558pt too wide) in paragraph at lines 95--96
- [] 
- []
-
-[4] [5]
-Overfull \hbox (45.38742pt too wide) in paragraph at lines 159--160
- [] 
- []
-
-[6] [7] [8]
-LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 224.
+[2] [3] [4] [5] [6] [7] [8]
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 261.
  [9] [10] [11] [12] [13] [14] [15] [16] [17]
 
 Package fontspec Info: 
@@ -1173,8 +1163,8 @@ Package fontspec Info:
 (fontspec)             okay then ignore this warning. Otherwise a different
 (fontspec)             font should be chosen.
 
- [18] [19] [20]
-(./一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux)
+
+[18] [19] [20] (./一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/07/14>
@@ -1185,13 +1175,13 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 20871 strings out of 469533
- 515274 string characters out of 5463838
- 897667 words of memory out of 5000000
- 49305 multiletter control sequences out of 15000+600000
+ 20863 strings out of 469533
+ 514691 string characters out of 5463838
+ 896718 words of memory out of 5000000
+ 49297 multiletter control sequences out of 15000+600000
  642703 words of font info for 136 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 102i,12n,114p,638b,714s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,12n,114p,480b,723s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on 一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.pdf (20 pages).
 
