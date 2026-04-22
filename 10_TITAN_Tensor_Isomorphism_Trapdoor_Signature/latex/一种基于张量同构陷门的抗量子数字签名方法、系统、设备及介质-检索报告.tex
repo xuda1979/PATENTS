@@ -1,12 +1,17 @@
 \documentclass[12pt,a4paper]{article}
-\usepackage[UTF8]{ctex}
+\usepackage[UTF8,fontset=none]{ctex}
+\setmainfont{Times New Roman}
+\setCJKmainfont[Path=/System/Library/Fonts/Supplemental/]{Songti.ttc}
+\setCJKsansfont[Path=/System/Library/Fonts/]{STHeiti Medium.ttc}
+\setCJKmonofont[Path=/Library/Fonts/]{Arial Unicode.ttf}
+\setCJKfamilyfont{hei}[Path=/System/Library/Fonts/]{STHeiti Medium.ttc}
+\newcommand{\heiti}{\CJKfamily{hei}}
 \usepackage{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
-\usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{xcolor}
@@ -38,7 +43,7 @@
     \renewcommand{\arraystretch}{2}
     \begin{tabular}{|p{3cm}|p{12cm}|}
         \hline
-        \textbf{发明名称} & \textcolor{blue}{一种基于张量同构陷门的抗量子数字签名方法、系统、设备及介质} \\
+        \textbf{发明名称} & \textcolor{blue}{一种面向异构计算硬件场景的基于张量同构陷门的抗量子数字签名方法、系统、设备及介质} \\
         \hline
         \textbf{申报单位} & \textcolor{blue}{研究院} \\
         \hline
@@ -56,7 +61,7 @@
 \noindent\fbox{\parbox{0.97\textwidth}{
 \textbf{与量子计算的关联说明：}
 
-本申请面向量子计算威胁下的数字签名需求，目标是在量子计算网络、云边协同节点、AI 加速设备及通用软件发布场景中提供抗量子认证能力。与现有主要以后量子格签名为代表的路线不同，本申请拟采用张量同构陷门和零知识应答结构构造签名机制，因此检索重点围绕后量子签名、识别到签名变换、同构类困难问题和多变量/隐藏结构公钥方案展开。
+本申请面向量子计算威胁下的数字签名需求，目标是在量子计算网络、AI 加速设备、模型发布链路以及联邦学习集群等具有硬件边界的场景中提供抗量子认证能力。与现有主要以后量子格签名为代表的路线不同，本申请拟采用张量同构陷门和零知识应答结构构造签名机制，因此检索重点围绕后量子签名、识别到签名变换、同构类困难问题、多变量/隐藏结构公钥方案以及与异构 AI 芯片和联邦学习显存内验签相关的工程化签名结构展开。
 }}
 
 \vspace{1em}
@@ -68,31 +73,33 @@
 (2) 抗量子数字签名，后量子签名，零知识签名，Fiat-Shamir
 (3) 非交换群作用，有限域矩阵，可逆矩阵，张量收缩
 (4) 多变量同构，隐藏结构公钥密码，身份识别到签名变换
+(5) 异构计算芯片，联邦学习梯度验签，显存内原生验签，深度学习框架自定义算子
 
 \textbf{外文检索关键词：}
 (1) tensor isomorphism, tensor trapdoor, tensor signature, mode product
 (2) post-quantum digital signature, zero-knowledge signature, Fiat-Shamir transform
 (3) non-abelian group action, finite-field matrix, invertible matrix, tensor contraction
 (4) hidden-structure public-key cryptography, isomorphism of polynomials, identification to signature
+(5) heterogeneous AI chip, in-memory verification, federated learning gradient signing, custom operator, GPU memory verification
 
 \section*{二、相关专利文献}
 
 \renewcommand{\arraystretch}{1.5}
-\begin{longtable}{|p{1.2cm}|p{5.2cm}|p{7.2cm}|}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
 \hline
 \textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
 \hline
-1 & A（基础技术） & \textbf{How to Prove Yourself: Practical Solutions to Identification and Signature Problems} \newline CRYPTO 1986 \newline Fiat, A.; Shamir, A. \\
+1 & A (基础技术) & \textbf{How to Prove Yourself: Practical Solutions to Identification and Signature Problems} \newline CRYPTO 1986 \newline Fiat, A.; Shamir, A. \\
 \hline
-2 & Y（相关技术） & \textbf{Falcon: Fast-Fourier Lattice-based Compact Signatures over NTRU} \newline NIST Post-Quantum Cryptography Submission, 2020 \newline Fouque, P.-A., et al. \\
+2 & Y (相关技术) & \textbf{Falcon: Fast-Fourier Lattice-based Compact Signatures over NTRU} \newline NIST Post-Quantum Cryptography Submission, 2020 \newline Fouque, P.-A., et al. \\
 \hline
-3 & Y（相关技术） & \textbf{Hidden Fields Equations (HFE) and Isomorphisms of Polynomials (IP):} \newline \textbf{Two New Families of Asymmetric Algorithms} \newline EUROCRYPT 1996 \newline Patarin, J. \\
+3 & Y (相关技术) & \textbf{Hidden Fields Equations (HFE) and Isomorphisms of Polynomials (IP):} \newline \textbf{Two New Families of Asymmetric Algorithms} \newline EUROCRYPT 1996 \newline Patarin, J. \\
 \hline
-4 & A（基础技术） & \textbf{Proofs that Yield Nothing But Their Validity or} \newline \textbf{All Languages in NP Have Zero-Knowledge Proof Systems} \newline Journal of the ACM, 1991 \newline Goldreich, O.; Micali, S.; Wigderson, A. \\
+4 & A (基础技术) & \textbf{Proofs that Yield Nothing But Their Validity or} \newline \textbf{All Languages in NP Have Zero-Knowledge Proof Systems} \newline Journal of the ACM, 1991 \newline Goldreich, O.; Micali, S.; Wigderson, A. \\
 \hline
 \end{longtable}
 
-\section*{三、分析评价}
+\section*{三、分析评述}
 
 \textbf{1. 与文献1（Fiat-Shamir 变换）的对比分析：}
 文献1公开了由身份识别协议转化为数字签名的基础方法，其贡献在于给出了承诺、挑战和响应的非交互化路线。但文献1并未公开任何基于张量同构陷门的具体公钥结构，也未公开“以公开基准张量和公钥张量分别完成双视图承诺重构”的验证机制。本申请虽然可以使用 Fiat-Shamir 作为整体签名框架，但其核心困难问题、密钥关系和验证代数结构均不同于文献1。
@@ -123,8 +130,16 @@
     \item 基于上述结构形成不依赖格噪声采样的抗量子数字签名工程方案。
 \end{itemize}
 
+\textbf{6. 专利客体与审查风险分析：}
+结合中国专利法关于“技术方案”以及“智力活动的规则和方法”的审查逻辑，本申请若仅以张量变换、挑战导出和响应规则描述签名流程，存在被认定为抽象算法的风险。因此，从授权稳定性角度，申请文件应持续强化以下事实：第一，待处理对象并非任意比特串，而是节点认证报文、固件升级清单、模型发布清单和联邦学习梯度载荷等具有明确工程来源的数据；第二，签名和验签动作由节点准入控制器、设备安全启动链/升级代理、模型仓库校验代理以及联邦学习运行时等具体硬件或软件模块执行；第三，验签结果直接触发准入放行、镜像装载阻断、版本回退拦截、模型发布控制和梯度投毒阻断等技术动作；第四，说明书中应保留验证时延、篡改拒绝率、批量处理能力以及总线搬运减少量等可量化技术效果，尤其应突出联邦学习场景下的显存内原生验签。按照上述方式撰写后，本申请更适合作为与具体设备和业务流程紧密结合的技术方案进行审查，而非作为纯数学算法审查。
+
+\textbf{7. 检索对撰写策略的启示：}
+从检索结果看，基础理论文献较多，但尚未看到现有文献把张量同构陷门签名结构与四类工程场景作统一绑定，尤其未见“联邦学习梯度张量 + 显存内原生验签 + 深度学习框架自定义算子”这一组合。因此，后续撰写权利要求时，宜优先选择“1 主 + 4 从属”的多层次布局，并以“异构 AI 计算芯片或可执行张量运算的处理器完成业务载荷验签并输出放行/阻断控制指令”作为独立权利要求的主线；随后通过从属权利要求分别覆盖节点准入、固件升级校验、模型发布完整性校验以及联邦学习显存内梯度验签。独立权利要求中应写入结构化输入字段来源、执行模块和控制动作，避免单纯写成“对消息进行张量签名”的宽泛表述。
+
 \section*{四、检索结论}
 
-经检索，未发现与本申请全部技术特征相同的现有技术。现有公开文献虽分别覆盖了零知识签名变换、格基后量子签名以及多变量隐藏结构公钥思路，但尚未公开本申请所提出的“基于公开基准张量和三模态张量同构陷门的抗量子数字签名”完整技术方案。基于当前检索结果，本申请相对于现有技术具有较好的新颖性检索基础，并具备进一步论证创造性的空间。需要说明的是，本检索结论的依据是现有技术文献与本申请技术结构之间的对应关系和差异关系；交底书中附带的真实实验数据主要用于说明工程可实现性和定量效果，不作为本检索报告判断新颖性的直接依据。
+经检索，未发现与本申请全部技术特征相同的现有技术。现有公开文献虽分别覆盖了零知识签名变换、格基后量子签名以及多变量隐藏结构公钥思路，但尚未公开本申请所提出的“基于公开基准张量和三模态张量同构陷门，并面向异构计算硬件上的节点准入控制、固件升级校验、模型发布完整性校验以及联邦学习梯度显存内原生验签的抗量子数字签名”完整技术方案。基于当前检索结果，本申请相对于现有技术具有较好的新颖性检索基础，并具备进一步论证创造性的空间。
+
+同时，需要从专利客体角度控制撰写风险：若权利要求仅保留张量运算规则、哈希挑战和响应关系，而不体现具体技术场景、执行模块和技术效果，则仍可能面临“属于智力活动规则和方法”的审查意见；若按照交底书当前方向，将签名对象锚定为四类具有物理属性的业务载荷，并将执行主体锚定为控制器、升级代理、校验代理和联邦学习运行时，同时写明验签成功或失败所对应的准入控制、装载阻断、发布控制和梯度阻断动作，尤其写清联邦学习场景中的显存内执行、自定义算子嵌入和避免跨总线搬运，则更有利于被认定为专利法意义上的技术方案。需要说明的是，本检索结论的依据是现有技术文献与本申请技术结构之间的对应关系和差异关系；交底书中附带的真实实验数据主要用于说明工程可实现性和定量效果，不作为本检索报告判断新颖性的直接依据。
 
 \end{document}
