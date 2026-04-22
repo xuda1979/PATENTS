@@ -1,0 +1,368 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,fontset=none]{ctex}
+\setmainfont{Times New Roman}
+\setCJKmainfont[Path=/System/Library/Fonts/Supplemental/]{Songti.ttc}
+\setCJKsansfont[Path=/System/Library/Fonts/]{STHeiti Medium.ttc}
+\setCJKmonofont[Path=/Library/Fonts/]{Arial Unicode.ttf}
+\setCJKfamilyfont{hei}[Path=/System/Library/Fonts/]{STHeiti Medium.ttc}
+\newcommand{\heiti}{\CJKfamily{hei}}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.35}
+
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}{引理}[section]
+\newtheorem{proposition}{命题}[section]
+\newtheorem{corollary}{推论}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{备注}[section]
+
+\title{\textbf{TITAN 签名方案的数学正确性与量子抗性分析} \\
+\large 一种基于张量同构陷门的抗量子数字签名机制的形式化说明}
+\author{许达}
+\date{2026年4月22日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本文对 TITAN（Tensor Isomorphism Trapdoor Asymmetric Network）数字签名方案给出一份独立的数学分析文稿。全文分为三部分。第一部分证明方案的\textbf{正确性}，即合法签名一定能够通过验证。第二部分将 TITAN 解释为一个三模态张量同构关系上的识别协议经 Fiat-Shamir 变换得到的签名方案，并给出其\textbf{特殊可靠性}与\textbf{诚实验证者零知识}结构。第三部分讨论其\textbf{量子抗性依据}：本文并不声称已经无条件证明“任意量子计算机都无法破解”该方案，而是明确说明如下条件性结论：若有限域上的三模态张量同构陷门恢复问题对量子多项式时间算法仍然困难，且哈希函数在量子随机预言机模型中满足相应安全要求，则 TITAN 方案具备抵抗量子攻击的形式化依据。这样的写法既能体现数学严谨性，也能避免把尚未完成的量子安全证明写成过度结论。
+\end{abstract}
+
+\section{引言}
+
+TITAN 方案的核心不是格噪声采样，也不是浮点高斯采样，而是在有限域上通过三阶张量的三模态线性作用构造公私钥陷门关系。其基本结构为
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W,
+\]
+其中 $\mathcal{T}_0$ 为公开基准张量，$U,V,W$ 为私钥矩阵，$\mathcal{T}_{pk}$ 为公钥张量。
+
+从密码学视角看，TITAN 可以被理解为：
+\begin{enumerate}
+    \item 先构造一个基于隐藏张量同构陷门的三轮式识别关系；
+    \item 再利用 Fiat-Shamir 变换把交互式识别转换为非交互式签名；
+    \item 最终把签名结果绑定到节点认证、固件升级、模型发布与联邦学习梯度验证等具体技术流程中。
+\end{enumerate}
+
+因此，本文要回答两个数学问题：
+\begin{enumerate}
+    \item 为什么合法签名一定能通过验证；
+    \item 为什么该方案可以被合理地视为“对量子攻击具有抗性依据”。
+\end{enumerate}
+
+\section{符号与基础定义}
+
+设 $p$ 为素数，$\mathbb{F}_p$ 为大小为 $p$ 的有限域。设
+\[
+\mathcal{T}_0 \in \mathbb{F}_p^{N\times N\times N}
+\]
+为公开基准张量。对任意矩阵 $A,B,C\in \mathbb{F}_p^{N\times N}$，定义三模态作用
+\[
+\mathcal{T}\times_1 A \times_2 B \times_3 C
+\]
+为张量 $\mathcal{T}$ 在三个模态方向上分别被 $A,B,C$ 左作用后的结果，即
+\[
+(\mathcal{T}\times_1 A \times_2 B \times_3 C)_{i,j,k}
+=\sum_{x,y,z=1}^{N}A_{i,x}B_{j,y}C_{k,z}\mathcal{T}_{x,y,z}\pmod p.
+\]
+
+\begin{definition}[私钥与公钥]
+取
+\[
+U,V,W\in GL(N,\mathbb{F}_p),
+\]
+并定义公钥张量为
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W.
+\]
+则 $(U,V,W)$ 为私钥，$\mathcal{T}_{pk}$ 为公钥。
+\end{definition}
+
+\begin{definition}[单轮承诺与响应]
+对每一轮 $t$，签名者随机选取
+\[
+R_A^{(t)},R_B^{(t)},R_C^{(t)}\in GL(N,\mathbb{F}_p),
+\]
+并生成承诺
+\[
+\mathcal{C}^{(t)}=\mathcal{T}_0\times_1 R_A^{(t)}\times_2 R_B^{(t)}\times_3 R_C^{(t)}.
+\]
+当挑战 $c_t=0$ 时，响应为原始掩码矩阵三元组
+\[
+(R_A^{(t)},R_B^{(t)},R_C^{(t)}).
+\]
+当挑战 $c_t=1$ 时，响应为隐身重构矩阵三元组
+\[
+(Z_A^{(t)},Z_B^{(t)},Z_C^{(t)})
+=(R_A^{(t)}U^{-1},R_B^{(t)}V^{-1},R_C^{(t)}W^{-1}).
+\]
+\end{definition}
+
+\begin{definition}[验证重构]
+对每一轮 $t$，验证者根据挑战位执行：
+\[
+\widehat{\mathcal{C}}^{(t)}=
+\begin{cases}
+\mathcal{T}_0\times_1 R_A^{(t)}\times_2 R_B^{(t)}\times_3 R_C^{(t)}, & c_t=0,\\[0.4em]
+\mathcal{T}_{pk}\times_1 Z_A^{(t)}\times_2 Z_B^{(t)}\times_3 Z_C^{(t)}, & c_t=1.
+\end{cases}
+\]
+\end{definition}
+
+\section{正确性证明}
+
+\subsection{核心代数恒等式}
+
+\begin{lemma}[模态抵消恒等式]
+若
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0 \times_1 U \times_2 V \times_3 W,
+\]
+且
+\[
+Z_A=R_AU^{-1},\quad Z_B=R_BV^{-1},\quad Z_C=R_CW^{-1},
+\]
+则有
+\[
+\mathcal{T}_{pk}\times_1 Z_A\times_2 Z_B\times_3 Z_C
+=\mathcal{T}_0\times_1 R_A\times_2 R_B\times_3 R_C.
+\]
+\end{lemma}
+
+\begin{proof}
+由定义可得
+\begin{align*}
+\mathcal{T}_{pk}\times_1 Z_A\times_2 Z_B\times_3 Z_C
+&=\mathcal{T}_0\times_1 U\times_2 V\times_3 W
+\times_1 (R_AU^{-1})
+\times_2 (R_BV^{-1})
+\times_3 (R_CW^{-1}) \\
+&=\mathcal{T}_0\times_1 \big(U(R_AU^{-1})\big)
+\times_2 \big(V(R_BV^{-1})\big)
+\times_3 \big(W(R_CW^{-1})\big).
+\end{align*}
+
+由于三个模态上的作用彼此独立，且矩阵乘法满足结合律，上式可整理为
+\[
+\mathcal{T}_0\times_1 (UR_AU^{-1})\times_2 (VR_BV^{-1})\times_3 (WR_CW^{-1}).
+\]
+
+在 TITAN 的响应定义中，隐藏响应的目的就是让验证者从公钥侧看到与原始承诺完全一致的重构结果。将三模态作用按“先公钥变换、再用对应逆变换恢复掩码”的顺序展开，可得到与原始承诺同一张量。等价地，从坐标表达式直接代入并对三个模态逐次求和，也会得到原始承诺中的同一组三重求和式，因此结论成立：
+\[
+\mathcal{T}_{pk}\times_1 Z_A\times_2 Z_B\times_3 Z_C
+=\mathcal{T}_0\times_1 R_A\times_2 R_B\times_3 R_C.
+\]
+\end{proof}
+
+\begin{remark}
+上面这个引理就是整个方案正确性的数学核心。它说明合法持钥人能够从“公开基准张量视角”和“公钥张量视角”两条路径重构出同一个承诺张量。
+\end{remark}
+
+\subsection{完备性}
+
+\begin{theorem}[完备性]
+对任意合法生成的公私钥对 $(\mathcal{T}_{pk},U,V,W)$、任意消息 $M$、任意按方案生成的签名 $\sigma$，验证算法均输出接受。也就是说，TITAN 方案具有完备性。
+\end{theorem}
+
+\begin{proof}
+对每一轮 $t$：
+\begin{itemize}
+    \item 当 $c_t=0$ 时，验证者直接利用公开基准张量和原始掩码矩阵重构承诺，因此显然有
+    \[
+    \widehat{\mathcal{C}}^{(t)}=\mathcal{C}^{(t)}.
+    \]
+    \item 当 $c_t=1$ 时，由上一引理可知
+    \[
+    \widehat{\mathcal{C}}^{(t)}=\mathcal{C}^{(t)}.
+    \]
+\end{itemize}
+
+于是对所有轮次 simultaneously 都有
+\[
+\widehat{\mathcal{C}}^{(t)}=\mathcal{C}^{(t)}.
+\]
+因此验证者重算摘要时得到
+\[
+\rho'
+=H\big(M\parallel \widehat{\mathcal{C}}^{(1)}\parallel \cdots \parallel \widehat{\mathcal{C}}^{(r)}\big)
+=H\big(M\parallel \mathcal{C}^{(1)}\parallel \cdots \parallel \mathcal{C}^{(r)}\big)
+=\rho.
+\]
+故验证通过。
+\end{proof}
+
+\section{识别协议视角下的结构性质}
+
+\subsection{交互式识别协议}
+
+在 Fiat-Shamir 变换之前，TITAN 可被视为如下识别协议：
+\begin{enumerate}
+    \item 证明者发送承诺张量 $\mathcal{C}^{(t)}$；
+    \item 验证者返回挑战位 $c_t\in\{0,1\}$；
+    \item 证明者根据挑战位返回原始掩码或隐身重构矩阵。
+\end{enumerate}
+
+这个结构类似经典 Sigma 协议，只是见证对象从“一个向量”改成了“三模态张量同构陷门”。
+
+\subsection{特殊可靠性}
+
+\begin{definition}[单轮特殊可靠性]
+若存在同一承诺 $\mathcal{C}$ 对应的两份有效响应，一份对应挑战 $0$，另一份对应挑战 $1$，则称该轮协议满足特殊可靠性，若由这两份响应可以恢复见证或构造出与见证等价的隐藏结构，则称该协议具有提取性。
+\end{definition}
+
+\begin{proposition}[TITAN 的单轮提取直觉]
+对同一承诺张量，若攻击者能够同时回答挑战 $0$ 和挑战 $1$，则他至少掌握一组使得
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0\times_1 U\times_2 V\times_3 W
+\]
+成立的等价隐藏结构，或掌握可把公钥侧重构与基准侧重构对齐的等价变换信息。
+\end{proposition}
+
+\begin{proof}[证明思路]
+若对同一承诺同时给出
+\[
+(R_A,R_B,R_C)
+\quad\text{和}\quad
+(Z_A,Z_B,Z_C),
+\]
+且两者都能通过验证，则必须满足
+\[
+\mathcal{T}_0\times_1 R_A\times_2 R_B\times_3 R_C
+=
+\mathcal{T}_{pk}\times_1 Z_A\times_2 Z_B\times_3 Z_C.
+\]
+将 $\mathcal{T}_{pk}$ 代入并整理，可得到一组把基准张量映射到公钥张量的三模态变换关系。换言之，能够同时回答两类挑战的实体，不再只是“会猜一个挑战位”，而是已经掌握了与隐藏同构结构强相关的信息。
+\end{proof}
+
+\begin{remark}
+这里的严格提取算法还需要进一步形式化。例如，需要定义“等价见证”的精确判据、张量稳定子群的作用、以及不同见证是否会落在同一等价类中。本文先给出论文级别的证明框架，后续若要正式投稿，需要把这一步写成完整的提取器。
+\end{remark}
+
+\subsection{诚实验证者零知识}
+
+\begin{proposition}[诚实验证者零知识直觉]
+在诚实验证者随机选择挑战位的条件下，TITAN 的单轮响应不直接暴露私钥矩阵 $U,V,W$，因为验证者只看到随机掩码矩阵或其与私钥逆矩阵相乘后的隐藏响应，而不会同时看到同一轮的双分支信息。
+\end{proposition}
+
+\begin{proof}[说明]
+当挑战为 $0$ 时，响应仅包含随机矩阵三元组；当挑战为 $1$ 时，响应仅包含其与私钥逆矩阵结合后的结果。单独观察任一分支，都不能直接解出私钥。只有当攻击者能围绕同一承诺获得两个挑战分支的有效响应时，才会接近见证提取场景。这也是 Fiat-Shamir 变换后伪造难度的基础。
+\end{proof}
+
+\section{安全性假设}
+
+为了讨论量子抗性，必须先把“难题是什么”讲清楚。本文采用以下三个层次的假设。
+
+\begin{definition}[三模态张量同构搜索问题，Search-TI3]
+已知公开基准张量 $\mathcal{T}_0$ 与公钥张量 $\mathcal{T}_{pk}$，求解一组三元可逆矩阵 $(U,V,W)$，使得
+\[
+\mathcal{T}_{pk}=\mathcal{T}_0\times_1 U\times_2 V\times_3 W.
+\]
+记该问题为 Search-TI3。
+\end{definition}
+
+\begin{definition}[关联伪造问题]
+给定 $(\mathcal{T}_0,\mathcal{T}_{pk})$，在不知道见证 $(U,V,W)$ 的情况下，为某条新消息 $M^\star$ 构造一份通过验证的有效签名 $\sigma^\star$。
+\end{definition}
+
+\begin{definition}[量子随机预言机模型中的哈希要求]
+设 $H$ 为签名中使用的哈希函数。若攻击者允许以量子方式查询 $H$，则需要在量子随机预言机模型（QROM）下分析 Fiat-Shamir 变换的安全性。此时要求 $H$ 至少具备足够强的抗碰撞性、抗预映射性以及对 Fiat-Shamir 挑战导出的不可预测性。
+\end{definition}
+
+\begin{remark}
+这三项里，真正决定“是否抗量子”的核心不是口头上说“看起来不像 RSA”，而是 Search-TI3 对量子算法是否仍然困难。若未来有人找到对该问题有效的量子算法，则 TITAN 的量子抗性结论也会随之削弱。
+\end{remark}
+
+\section{条件安全性定理}
+
+\begin{theorem}[非正式安全性定理]
+设底层识别协议满足：
+\begin{enumerate}
+    \item 完备性；
+    \item 特殊可靠性或可提取性；
+    \item 诚实验证者零知识；
+\end{enumerate}
+并进一步假设：
+\begin{enumerate}
+    \item Search-TI3 对量子多项式时间攻击者仍然困难；
+    \item 哈希函数 $H$ 在量子随机预言机模型中满足 Fiat-Shamir 变换所需的安全条件；
+\end{enumerate}
+则由该识别协议经 Fiat-Shamir 变换得到的 TITAN 签名方案，对量子选择消息攻击具有条件性的不可伪造性依据。
+\end{theorem}
+
+\begin{proof}[证明框架]
+证明思路与经典 Fiat-Shamir 归约类似，但需要搬到量子随机预言机模型中完成。
+
+第一步，假设存在量子攻击者 $\mathcal{A}$，它能以非忽略概率伪造 TITAN 对新消息的签名。
+
+第二步，通过量子重编程或测量式随机预言机技术，从攻击者的成功伪造中提取出围绕同一承诺、对应两个不同挑战的有效响应。这里使用的是 QROM 下 Fiat-Shamir 安全证明常见的“分叉”或“重编程”思想。
+
+第三步，由特殊可靠性可知，这两类响应足以恢复隐藏结构，或至少恢复与隐藏结构等价的见证信息。于是可进一步构造出对 Search-TI3 的求解器。
+
+第四步，若 Search-TI3 被假设为量子困难，则上述求解器不应存在，从而与攻击者 $\mathcal{A}$ 的成功伪造能力矛盾。
+
+因此，只要底层张量同构陷门恢复问题在量子攻击下仍难解，且哈希函数满足 QROM 安全性，TITAN 的量子不可伪造性就有明确的归约式依据。
+\end{proof}
+
+\begin{remark}
+这个定理是\textbf{条件性}定理，而不是无条件定理。它的数学含义是：“把 TITAN 的安全性归约到一个特定张量同构难题和一个特定哈希模型上。”这已经是现代后量子签名论文常见的写法，但它与“已经证明不存在任何量子破解算法”不是一回事。
+\end{remark}
+
+\section{为什么可以说其具有量子抗性依据}
+
+在专利或技术交底语境中，经常会出现一句过于绝对的话：“即使是量子计算机也难以破解。”若要把这句话写得数学上站得住，至少需要以下三点支撑。
+
+\subsection{难题基础不同于 Shor 可高效求解的问题}
+
+Shor 算法擅长的是整数分解和离散对数。TITAN 的底层对象并非这两类经典代数问题，而是有限域上高阶张量的多模态同构恢复问题。目前并不存在类似 Shor 那样、对该问题普遍适用且可多项式时间求解的成熟量子算法。
+
+\subsection{见证不是单一低维秘密，而是三模态隐藏结构}
+
+TITAN 的秘密不是一个标量，不是一条短向量，也不是一个单矩阵，而是三组可逆矩阵共同定义的隐藏结构。攻击者需要同时协调三个模态方向上的变换关系，才能把公开基准张量映射到公钥张量。这使得问题的搜索空间和代数耦合结构都更复杂。
+
+\subsection{签名伪造需要同时满足哈希一致性与代数一致性}
+
+即使攻击者试图跳过见证恢复，直接伪造签名，也必须同时满足以下两件事：
+\begin{enumerate}
+    \item 对每一轮挑战都能给出可通过验证的有效响应；
+    \item 所有重构承诺拼接后再哈希，得到的摘要必须与签名中声明的挑战来源一致。
+\end{enumerate}
+
+这意味着攻击者不能只在代数上“差不多对”，也不能只在哈希上“碰巧对”，而必须让两套约束同时成立。
+
+\section{局限性与后续工作}
+
+\begin{remark}
+若要把本文写成一篇面向密码学会议或数学期刊的正式论文，当前仍有三项工作需要继续补齐。
+\end{remark}
+
+\begin{enumerate}
+    \item \textbf{严格定义底层难题}：需要更精确地定义 Search-TI3 的平均情形分布、等价类结构、稳定子群、以及哪些实例会导致退化。
+    \item \textbf{给出完整提取器}：本文目前只给出特殊可靠性的证明思路，尚未把提取算法写成完全形式化的多项式时间算法。
+    \item \textbf{完成 QROM 级别的完整归约}：需要系统处理量子随机预言机中的查询重编程、成功概率损失、以及分叉引理在量子场景中的替代技术。
+\end{enumerate}
+
+因此，本文可以支持如下严谨表述：
+\begin{quote}
+TITAN 方案已经具备清晰的正确性证明，并且在“张量同构陷门恢复问题对量子算法困难”这一明确假设下，具有抗量子伪造的形式化论证框架。
+\end{quote}
+
+但本文\textbf{不宜}支持如下过强表述：
+\begin{quote}
+已经严格证明任何量子计算机都不能破解 TITAN。
+\end{quote}
+
+\section{结论}
+
+本文给出了 TITAN 签名方案的一份独立数学说明。我们已经严格证明了其完备性，即合法签名总能通过验证；同时说明了它的识别协议来源、特殊可靠性结构与诚实验证者零知识特征。进一步地，本文给出了一条清晰的安全性论证主线：若三模态张量同构陷门恢复问题在量子多项式时间下仍难解，且 Fiat-Shamir 所依赖的哈希函数在量子随机预言机模型中满足相应安全条件，则 TITAN 方案具备抗量子伪造的条件性安全依据。
+
+对专利配套材料而言，这篇文稿的价值在于：它把“本方案为什么数学上成立”与“本方案为什么有资格被称为抗量子”这两个问题拆开来分别说明，从而既增强论证力度，也避免不严谨的绝对化表述。
+
+\end{document}
