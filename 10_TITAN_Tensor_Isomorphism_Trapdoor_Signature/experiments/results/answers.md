@@ -1,4 +1,4 @@
-# Reviewer-Oriented Quantitative Findings
+# -Oriented Quantitative Findings
 
 All numbers in this file come from actual local execution on the current machine.
 

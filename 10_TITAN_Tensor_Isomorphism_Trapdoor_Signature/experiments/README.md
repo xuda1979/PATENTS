@@ -18,7 +18,7 @@ Main files:
   writes raw/summary outputs
 - `results/raw_benchmark.csv` — per-iteration measurements
 - `results/summary.json` — machine-readable aggregate statistics
-- `results/reviewer_answers.md` — reviewer-oriented quantitative findings
+- `results/answers.md` — -oriented quantitative findings
 
 Notes:
 

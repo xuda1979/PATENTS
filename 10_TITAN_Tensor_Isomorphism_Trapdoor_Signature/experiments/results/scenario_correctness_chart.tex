@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}
+\usepackage[UTF8]{ctex}
+\usepackage[paperwidth=18cm,paperheight=10.5cm,margin=0.4cm]{geometry}
+\usepackage{tikz}
+\begin{document}
+\pagestyle{empty}
+\begin{tikzpicture}[x=1cm,y=0.07cm]
+\draw[->, line width=0.5pt] (0,0) -- (13.1,0) node[below right, font=\small] {具体部署场景};
+\draw[->, line width=0.5pt] (0,0) -- (0,108) node[above left, font=\small] {通过率/拒绝率(\%)};
+\foreach \y in {0,20,40,60,80,100} {
+    \draw[gray!35, dashed] (0,\y) -- (12.7,\y);
+    \node[anchor=east, font=\small] at (-0.08,\y) {\y};
+}
+\filldraw[fill=blue!55, draw=black!35] (1.10,0) rectangle (1.44,100.00);
+\node[font=\scriptsize, rotate=90] at (1.27,103.00) {100.0};
+\filldraw[fill=green!60!black, draw=black!35] (1.56,0) rectangle (1.90,100.00);
+\node[font=\scriptsize, rotate=90] at (1.73,103.00) {100.0};
+\filldraw[fill=orange!75, draw=black!35] (2.02,0) rectangle (2.36,100.00);
+\node[font=\scriptsize, rotate=90] at (2.19,103.00) {100.0};
+\filldraw[fill=red!65, draw=black!35] (2.48,0) rectangle (2.82,100.00);
+\node[font=\scriptsize, rotate=90] at (2.65,103.00) {100.0};
+\node[align=center, font=\small] at (1.96,-11.5) {\shortstack{量子计算网络\\节点准入}};
+\filldraw[fill=blue!55, draw=black!35] (5.10,0) rectangle (5.44,100.00);
+\node[font=\scriptsize, rotate=90] at (5.27,103.00) {100.0};
+\filldraw[fill=green!60!black, draw=black!35] (5.56,0) rectangle (5.90,100.00);
+\node[font=\scriptsize, rotate=90] at (5.73,103.00) {100.0};
+\filldraw[fill=orange!75, draw=black!35] (6.02,0) rectangle (6.36,100.00);
+\node[font=\scriptsize, rotate=90] at (6.19,103.00) {100.0};
+\filldraw[fill=red!65, draw=black!35] (6.48,0) rectangle (6.82,100.00);
+\node[font=\scriptsize, rotate=90] at (6.65,103.00) {100.0};
+\node[align=center, font=\small] at (5.96,-11.5) {\shortstack{AI加速设备\\固件升级}};
+\filldraw[fill=blue!55, draw=black!35] (9.10,0) rectangle (9.44,100.00);
+\node[font=\scriptsize, rotate=90] at (9.27,103.00) {100.0};
+\filldraw[fill=green!60!black, draw=black!35] (9.56,0) rectangle (9.90,100.00);
+\node[font=\scriptsize, rotate=90] at (9.73,103.00) {100.0};
+\filldraw[fill=orange!75, draw=black!35] (10.02,0) rectangle (10.36,100.00);
+\node[font=\scriptsize, rotate=90] at (10.19,103.00) {100.0};
+\filldraw[fill=red!65, draw=black!35] (10.48,0) rectangle (10.82,100.00);
+\node[font=\scriptsize, rotate=90] at (10.65,103.00) {100.0};
+\node[align=center, font=\small] at (9.96,-11.5) {\shortstack{模型发布\\完整性校验}};
+\filldraw[fill=blue!55, draw=black!35] (0.60,-18.00) rectangle (1.05,-16.80);
+\node[anchor=west, font=\small] at (1.25,-17.40) {有效载荷策略放行率};
+\filldraw[fill=green!60!black, draw=black!35] (0.60,-22.20) rectangle (1.05,-21.00);
+\node[anchor=west, font=\small] at (1.25,-21.60) {字段级篡改策略拒绝率};
+\filldraw[fill=orange!75, draw=black!35] (0.60,-26.40) rectangle (1.05,-25.20);
+\node[anchor=west, font=\small] at (1.25,-25.80) {原始签名验证成功率};
+\filldraw[fill=red!65, draw=black!35] (0.60,-30.60) rectangle (1.05,-29.40);
+\node[anchor=west, font=\small] at (1.25,-30.00) {篡改消息验签拒绝率};
+\end{tikzpicture}
+\end{document}
