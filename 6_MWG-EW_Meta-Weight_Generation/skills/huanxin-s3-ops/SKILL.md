@@ -10,7 +10,12 @@ Use Huanxin **ai1** for running real numerical experiments that support the pate
 ## Environment
 
 - Primary environment: `ai1`
+- Research-paper environments: `AI`, `ai3`
+- Startable environments: `AI`, `ai3`. If a Huanxin row/page says `已停止`,
+  `stopped`, or shows a start/run control such as `运行`, start the environment
+  and wait for it to become openable before declaring shell access unavailable.
 - Remote workdir: `/root/work/mwg-ew-patent`
+- Research-paper remote workdir: `/vllm-workspace/mwg-ew-transformer-research`
 - S3 relay: `nm-aihuanxin:jtdlp-3ed7854b946a47b1a49ad754baa76cd3/mwg-ew-patent`
 
 ## Default Entry Point
@@ -69,6 +74,9 @@ Use `scripts/ai1_job.sh` instead of raw `nohup` when you need a durable local jo
 
 - Read `TOOLS.md` first for workspace-specific values.
 - Treat Huanxin browser automation as the control plane and S3 as the data plane.
+- Before shell, sync, or training work, verify the target Huanxin environment is
+  authenticated and running. For startable stopped environments, click `运行` or
+  the equivalent start control and wait until the row exposes `打开`.
 - Prefer the repo's sync helpers over manual `rclone` or browser paste.
 - Validate locally before any remote mutation.
 - Use `--dry-run` first for large or risky transfers.

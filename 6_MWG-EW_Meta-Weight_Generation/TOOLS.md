@@ -2,9 +2,14 @@
 
 ## Huanxin
 
-- Available environments: `ai1`
-- Default environment: `ai1`
+- Available environments: `ai1`, `AI`, `ai3`
+- Startable environments: `AI`, `ai3` (if a row/page shows stopped/`已停止`,
+  click the start/run control and wait for the environment to become openable
+  before treating shell access as failed)
+- Default environment: `ai1` for patent evidence; `ai3` for
+  `research_paper_mwg_ew_transformer`
 - Remote root ai1: `/root/work/mwg-ew-patent`
+- Remote root ai3: `/vllm-workspace/mwg-ew-transformer-research`
 - Generic shell wrapper: `scripts/huanxin_shell.sh`
 - ai1 shell shortcut: `scripts/ai1_shell.sh`
 - ai1 job manager: `scripts/ai1_job.sh`
