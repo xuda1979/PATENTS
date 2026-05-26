@@ -1,0 +1,152 @@
+AI3 MWG-EW scaled sweep
+run_id=ai3_scaled_sweep_20260518T065937Z
+project_root=/root/work/software/6_MWG-EW_Meta-Weight_Generation/research_paper_mwg_ew_transformer
+ASCEND_RT_VISIBLE_DEVICES=0,1,2,3
+nproc=4
+log=logs/ai3_scaled_sweep_20260518T065937Z.log
+status=logs/ai3_scaled_sweep_20260518T065937Z.status.json
+Mon May 18 06:59:38 UTC 2026
+torch 2.9.0+cpu
+torch_npu 2.9.0
+npu_count 4
+== remote smoke ==
+<frozen runpy>:128: RuntimeWarning: 'torch.distributed.run' found in sys.modules after import of package 'torch.distributed', but prior to execution of 'torch.distributed.run'; this may result in unpredictable behaviour
+{
+  "event": "start",
+  "env": {
+    "hostname": "dl-c72bd81a96e33134bbe0ae4a478fbab0-r0-02a745e97216-0",
+    "python": "3.11.14",
+    "torch": "2.9.0+cpu",
+    "backend": "hccl",
+    "device_type": "npu",
+    "local_rank": 0,
+    "world_size": 4,
+    "ascend_rt_visible_devices": "0,1,2,3",
+    "pytorch_npu_alloc_conf": "max_split_size_mb:256",
+    "torch_npu": "2.9.0",
+    "npu_count": 4,
+    "npu_available": true,
+    "current_npu_device": 0,
+    "device_name": "Ascend910B2",
+    "npu_device_names": [
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2"
+    ],
+    "memory_gib": 60.96
+  },
+  "config": {
+    "preset": "ai3_smoke",
+    "d": 512,
+    "m": 1408,
+    "ranks": [
+      32,
+      64,
+      128
+    ],
+    "dtype": "float16",
+    "decode_shape": [
+      1,
+      64,
+      512
+    ],
+    "train_shape": [
+      1,
+      128,
+      512
+    ],
+    "warmup": 1,
+    "iters": 4,
+    "train_iters": 2,
+    "comm_iters": 2,
+    "conditioned_generator": true
+  }
+}
+/usr/local/python3.11.14/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+{"event": "dense_done", "parameter_mib": 4.125}
+{"event": "mwg_done", "rank": 32, "parameter_mib": 0.524, "traffic_reduction_x": 11.733, "forward_speedup_x": 0.564, "train_speedup_x": 0.503}
+{"event": "mwg_done", "rank": 64, "parameter_mib": 0.924, "traffic_reduction_x": 5.867, "forward_speedup_x": 0.589, "train_speedup_x": 0.525}
+{"event": "mwg_done", "rank": 128, "parameter_mib": 1.722, "traffic_reduction_x": 2.933, "forward_speedup_x": 0.563, "train_speedup_x": 0.529}
+{
+  "event": "saved",
+  "json": "results/ai3_mwg_transformer_20260518T070003Z.json",
+  "markdown": "results/ai3_mwg_transformer_20260518T070003Z.md"
+}
+== scaled rank sweep ==
+<frozen runpy>:128: RuntimeWarning: 'torch.distributed.run' found in sys.modules after import of package 'torch.distributed', but prior to execution of 'torch.distributed.run'; this may result in unpredictable behaviour
+{
+  "event": "start",
+  "env": {
+    "hostname": "dl-c72bd81a96e33134bbe0ae4a478fbab0-r0-02a745e97216-0",
+    "python": "3.11.14",
+    "torch": "2.9.0+cpu",
+    "backend": "hccl",
+    "device_type": "npu",
+    "local_rank": 0,
+    "world_size": 4,
+    "ascend_rt_visible_devices": "0,1,2,3",
+    "pytorch_npu_alloc_conf": "max_split_size_mb:256",
+    "torch_npu": "2.9.0",
+    "npu_count": 4,
+    "npu_available": true,
+    "current_npu_device": 0,
+    "device_name": "Ascend910B2",
+    "npu_device_names": [
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2"
+    ],
+    "memory_gib": 60.96
+  },
+  "config": {
+    "preset": "ai3_sweep",
+    "d": 4096,
+    "m": 14336,
+    "ranks": [
+      32,
+      64,
+      96,
+      128,
+      192,
+      256,
+      384,
+      512
+    ],
+    "dtype": "float16",
+    "decode_shape": [
+      1,
+      128,
+      4096
+    ],
+    "train_shape": [
+      2,
+      512,
+      4096
+    ],
+    "warmup": 3,
+    "iters": 10,
+    "train_iters": 3,
+    "comm_iters": 5,
+    "conditioned_generator": true
+  }
+}
+/usr/local/python3.11.14/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+{"event": "dense_done", "parameter_mib": 336.0}
+{"event": "mwg_done", "rank": 32, "parameter_mib": 7.564, "traffic_reduction_x": 99.556, "forward_speedup_x": 0.703, "train_speedup_x": 1.502}
+{"event": "mwg_done", "rank": 64, "parameter_mib": 11.127, "traffic_reduction_x": 49.778, "forward_speedup_x": 0.696, "train_speedup_x": 1.57}
+{"event": "mwg_done", "rank": 96, "parameter_mib": 14.691, "traffic_reduction_x": 33.185, "forward_speedup_x": 0.589, "train_speedup_x": 1.538}
+{"event": "mwg_done", "rank": 128, "parameter_mib": 18.254, "traffic_reduction_x": 24.889, "forward_speedup_x": 0.716, "train_speedup_x": 1.572}
+{"event": "mwg_done", "rank": 192, "parameter_mib": 25.38, "traffic_reduction_x": 16.593, "forward_speedup_x": 0.747, "train_speedup_x": 1.571}
+{"event": "mwg_done", "rank": 256, "parameter_mib": 32.507, "traffic_reduction_x": 12.444, "forward_speedup_x": 0.735, "train_speedup_x": 1.486}
+{"event": "mwg_done", "rank": 384, "parameter_mib": 46.76, "traffic_reduction_x": 8.296, "forward_speedup_x": 0.677, "train_speedup_x": 1.498}
+{"event": "mwg_done", "rank": 512, "parameter_mib": 61.013, "traffic_reduction_x": 6.222, "forward_speedup_x": 0.684, "train_speedup_x": 1.495}
+{
+  "event": "saved",
+  "json": "results/ai3_mwg_transformer_20260518T070030Z.json",
+  "markdown": "results/ai3_mwg_transformer_20260518T070030Z.md"
+}
+Mon May 18 07:00:46 UTC 2026

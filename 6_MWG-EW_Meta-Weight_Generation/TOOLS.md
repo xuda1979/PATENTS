@@ -17,7 +17,9 @@
 
 ## S3 Relay
 
-- S3 root: `nm-aihuanxin:jtdlp-3ed7854b946a47b1a49ad754baa76cd3/mwg-ew-patent`
+- S3 endpoint: `https://iner.aihuanxin.cn`
+- S3 rclone remote: `iner-aihuanxin`
+- S3 root: `iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent`
 - Local -> S3 helper: `scripts/push_to_s3.sh`
 - S3 -> local helper: `scripts/pull_from_s3.sh`
 - ai1 sync helper: `scripts/ai1_sync_from_s3.sh`

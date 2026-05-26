@@ -1,0 +1,31 @@
+{
+  "sources": [
+    "research_paper_mwg_ew_transformer/data/heldout/router_train.txt",
+    "research_paper_mwg_ew_transformer/data/heldout/router_eval.txt"
+  ],
+  "unique_rows": 512,
+  "eval_count": 256,
+  "splits": [
+    {
+      "seed": 0,
+      "train_texts": "research_paper_mwg_ew_transformer/data/heldout/router_cv/seed0/router_train.txt",
+      "eval_texts": "research_paper_mwg_ew_transformer/data/heldout/router_cv/seed0/router_eval.txt",
+      "train_count": 256,
+      "eval_count": 256
+    },
+    {
+      "seed": 1,
+      "train_texts": "research_paper_mwg_ew_transformer/data/heldout/router_cv/seed1/router_train.txt",
+      "eval_texts": "research_paper_mwg_ew_transformer/data/heldout/router_cv/seed1/router_eval.txt",
+      "train_count": 256,
+      "eval_count": 256
+    },
+    {
+      "seed": 2,
+      "train_texts": "research_paper_mwg_ew_transformer/data/heldout/router_cv/seed2/router_train.txt",
+      "eval_texts": "research_paper_mwg_ew_transformer/data/heldout/router_cv/seed2/router_eval.txt",
+      "train_count": 256,
+      "eval_count": 256
+    }
+  ]
+}

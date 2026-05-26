@@ -1,0 +1,62 @@
+{
+  "manifest": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/manifest.json",
+  "model_dir": "/root/work/filestorage/Qwen2.5-1.5B-Instruct",
+  "patches": [
+    "16:/vllm-workspace/mwg-ew-transformer-research/results/asi3_persistent_broad_baseline_20260525T114920Z/checkpoints/persistent_low_rank_r384.pt"
+  ],
+  "config": {
+    "manifest": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/manifest.json",
+    "model_dir": "/root/work/filestorage/Qwen2.5-1.5B-Instruct",
+    "patch": [
+      "16:/vllm-workspace/mwg-ew-transformer-research/results/asi3_persistent_broad_baseline_20260525T114920Z/checkpoints/persistent_low_rank_r384.pt"
+    ],
+    "outdir": "results/asi3_broad_validation_20260525T115053Z",
+    "seq": 128,
+    "text_batch": 2,
+    "eval_batches": 128,
+    "dtype": "fp32",
+    "min_texts": 8,
+    "min_chars": 4000
+  },
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/gsm8k_test.txt",
+      "text_count": 260,
+      "char_count": 139393,
+      "path": "results/asi3_broad_validation_20260525T115053Z/ppl_gsm8k_test.json",
+      "dense_ppl": 4.705920497079303,
+      "patched_ppl": 6.08887046916331,
+      "ppl_ratio": 1.2938744870301837,
+      "tokens": 31329
+    },
+    {
+      "name": "mbpp_test",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/mbpp_test.txt",
+      "text_count": 194,
+      "char_count": 29746,
+      "path": "results/asi3_broad_validation_20260525T115053Z/ppl_mbpp_test.json",
+      "dense_ppl": 4.135957676343008,
+      "patched_ppl": 5.387648848320925,
+      "ppl_ratio": 1.302636358959228,
+      "tokens": 12850
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/alpaca_cleaned_train_tail.txt",
+      "text_count": 260,
+      "char_count": 185863,
+      "path": "results/asi3_broad_validation_20260525T115053Z/ppl_alpaca_cleaned_train_tail.json",
+      "dense_ppl": 4.214824329482295,
+      "patched_ppl": 5.253475853402886,
+      "ppl_ratio": 1.246428188395735,
+      "tokens": 22694
+    }
+  ],
+  "aggregate": {
+    "suite_count": 3,
+    "tokens": 66873.0,
+    "token_weighted_ppl_ratio": 1.2794567661724092,
+    "max_ppl_ratio": 1.302636358959228
+  }
+}

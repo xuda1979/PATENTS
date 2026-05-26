@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-S3_ROOT="nm-aihuanxin:jtdlp-3ed7854b946a47b1a49ad754baa76cd3/mwg-ew-patent"
+S3_ROOT="${MWG_EW_S3_ROOT:-iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent}"
 RCLONE_BIN="${RCLONE_BIN:-$(command -v rclone || true)}"
 if [[ -z "$RCLONE_BIN" && -x /Users/daxu/homebrew/bin/rclone ]]; then
   RCLONE_BIN=/Users/daxu/homebrew/bin/rclone
@@ -26,7 +26,7 @@ if [[ ${#REMOTE_PATHS[@]} -eq 0 ]]; then
   REMOTE_PATHS=(results)
 fi
 
-ARGS=(--progress --transfers 8)
+ARGS=(--progress --transfers 8 --s3-no-check-bucket)
 if [[ $DRY_RUN -eq 1 ]]; then
   ARGS+=(--dry-run)
 fi

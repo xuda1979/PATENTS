@@ -1,0 +1,39 @@
+{
+  "seed": 20260526,
+  "purpose": "extra held-out family coverage; separate from the main manifest",
+  "suites": [],
+  "failures": [
+    {
+      "name": "wikitext103_validation_extra",
+      "family": "general_language_modeling",
+      "dataset": "Salesforce/wikitext",
+      "config": "wikitext-103-raw-v1",
+      "split": "validation",
+      "error": "ConnectionError(\"Couldn't reach 'Salesforce/wikitext' on the Hub (LocalEntryNotFoundError)\")"
+    },
+    {
+      "name": "hellaswag_validation_extra",
+      "family": "commonsense_reasoning",
+      "dataset": "Rowan/hellaswag",
+      "config": null,
+      "split": "validation",
+      "error": "ConnectionError(\"Couldn't reach 'Rowan/hellaswag' on the Hub (LocalEntryNotFoundError)\")"
+    },
+    {
+      "name": "daily_dialog_validation_extra",
+      "family": "multi_turn_dialogue",
+      "dataset": "daily_dialog",
+      "config": null,
+      "split": "validation",
+      "error": "ConnectionError(\"Couldn't reach 'daily_dialog' on the Hub (LocalEntryNotFoundError)\")"
+    },
+    {
+      "name": "qasper_validation_extra",
+      "family": "long_context",
+      "dataset": "allenai/qasper",
+      "config": null,
+      "split": "validation",
+      "error": "ConnectionError(\"Couldn't reach 'allenai/qasper' on the Hub (LocalEntryNotFoundError)\")"
+    }
+  ]
+}

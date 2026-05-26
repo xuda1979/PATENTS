@@ -1,0 +1,38 @@
+{
+  "train_sources": [
+    "research_paper_mwg_ew_transformer/data/heldout/router_train.txt",
+    "research_paper_mwg_ew_transformer/data/heldout/router_eval.txt"
+  ],
+  "heldout_dir": "research_paper_mwg_ew_transformer/data/heldout",
+  "manifest": "research_paper_mwg_ew_transformer/data/heldout/manifest.json",
+  "unique_train_source_count": 512,
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "train_texts": "research_paper_mwg_ew_transformer/data/heldout/router_broad_splits/gsm8k_test/router_train.txt",
+      "eval_texts": "research_paper_mwg_ew_transformer/data/heldout/router_broad_splits/gsm8k_test/router_eval.txt",
+      "source_eval_texts": "research_paper_mwg_ew_transformer/data/heldout/gsm8k_test.txt",
+      "train_count": 316,
+      "eval_count": 260,
+      "overlap_removed": 196
+    },
+    {
+      "name": "mbpp_test",
+      "train_texts": "research_paper_mwg_ew_transformer/data/heldout/router_broad_splits/mbpp_test/router_train.txt",
+      "eval_texts": "research_paper_mwg_ew_transformer/data/heldout/router_broad_splits/mbpp_test/router_eval.txt",
+      "source_eval_texts": "research_paper_mwg_ew_transformer/data/heldout/mbpp_test.txt",
+      "train_count": 376,
+      "eval_count": 194,
+      "overlap_removed": 136
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "train_texts": "research_paper_mwg_ew_transformer/data/heldout/router_broad_splits/alpaca_cleaned_train_tail/router_train.txt",
+      "eval_texts": "research_paper_mwg_ew_transformer/data/heldout/router_broad_splits/alpaca_cleaned_train_tail/router_eval.txt",
+      "source_eval_texts": "research_paper_mwg_ew_transformer/data/heldout/alpaca_cleaned_train_tail.txt",
+      "train_count": 332,
+      "eval_count": 260,
+      "overlap_removed": 180
+    }
+  ]
+}

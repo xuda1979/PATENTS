@@ -1,0 +1,61 @@
+{
+  "seed": 20260524,
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "dataset": "openai/gsm8k",
+      "config": "main",
+      "split": "test",
+      "fields": [
+        "question",
+        "answer"
+      ],
+      "selected_items": 260,
+      "characters": 139393,
+      "path": "data/heldout/gsm8k_test.txt"
+    },
+    {
+      "name": "mbpp_test",
+      "dataset": "google-research-datasets/mbpp",
+      "config": "sanitized",
+      "split": "test",
+      "fields": [
+        "text",
+        "code"
+      ],
+      "selected_items": 194,
+      "characters": 29746,
+      "path": "data/heldout/mbpp_test.txt"
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "dataset": "yahma/alpaca-cleaned",
+      "config": null,
+      "split": "train",
+      "fields": [
+        "instruction",
+        "input",
+        "output"
+      ],
+      "selected_items": 260,
+      "characters": 185863,
+      "path": "data/heldout/alpaca_cleaned_train_tail.txt"
+    }
+  ],
+  "failures": [
+    {
+      "name": "wikitext103_validation",
+      "dataset": "Salesforce/wikitext",
+      "split": "validation",
+      "error": "ConnectionError(\"Couldn't reach 'Salesforce/wikitext' on the Hub (LocalEntryNotFoundError)\")"
+    }
+  ],
+  "router": {
+    "train_texts": "data/heldout/router_train.txt",
+    "eval_texts": "data/heldout/router_eval.txt",
+    "train_count": 256,
+    "eval_count": 256,
+    "train_characters": 118630,
+    "eval_characters": 141268
+  }
+}

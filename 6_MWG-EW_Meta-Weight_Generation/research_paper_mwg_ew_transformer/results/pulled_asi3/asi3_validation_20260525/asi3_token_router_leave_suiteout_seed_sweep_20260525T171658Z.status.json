@@ -1,0 +1,19 @@
+{
+  "run_id": "asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z",
+  "state": "done",
+  "updated_at": "2026-05-25T17:41:59Z",
+  "heldout_manifest": "data/heldout/manifest.json",
+  "train_sources": "data/heldout/router_train.txt,data/heldout/router_eval.txt",
+  "split_prep_script": "experiments/prepare_router_leave_suiteout_splits.py",
+  "patch": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260525T102958Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+  "seeds": "0,1,2",
+  "train_fraction": "0.75",
+  "max_train_count": "0",
+  "outdir": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z",
+  "seed_summaries": [
+    "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/token_router_broad_summary.json",
+    "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/token_router_broad_summary.json",
+    "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/token_router_broad_summary.json"
+  ],
+  "summary_json": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/token_router_broad_seed_sweep_summary.json"
+}

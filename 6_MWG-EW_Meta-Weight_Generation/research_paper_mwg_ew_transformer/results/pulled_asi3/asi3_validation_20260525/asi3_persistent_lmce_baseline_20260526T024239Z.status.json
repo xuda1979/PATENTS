@@ -1,0 +1,18 @@
+{
+  "run_id": "asi3_persistent_lmce_baseline_20260526T024239Z",
+  "state": "done",
+  "updated_at": "2026-05-26T02:45:09Z",
+  "outdir": "results/asi3_persistent_lmce_baseline_20260526T024239Z",
+  "manifest": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/manifest.json",
+  "train_texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_train.txt",
+  "layer": 16,
+  "rank": 384,
+  "base_checkpoint": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_persistent_broad_baseline_20260525T114920Z/checkpoints/persistent_low_rank_r384.pt",
+  "lmce_checkpoint": "results/asi3_persistent_lmce_baseline_20260526T024239Z/checkpoints/persistent_low_rank_r384_lmce.pt",
+  "result_json": [
+    "results/asi3_persistent_lmce_baseline_20260526T024239Z/persistent_low_rank_r384_lmce.json"
+  ],
+  "checkpoints": [
+    "results/asi3_persistent_lmce_baseline_20260526T024239Z/checkpoints/persistent_low_rank_r384_lmce.pt"
+  ]
+}

@@ -21,7 +21,7 @@
 
 \title{\bf Ephemeral Meta-Weights for Bandwidth-Aware Transformer Feed-Forward Networks}
 \author{Anonymous Authors}
-\date{April 2026}
+\date{May 2026}
 
 \begin{document}
 \maketitle
@@ -30,28 +30,42 @@
 Transformer inference and training increasingly run into a weight-bandwidth
 limit: feed-forward network (FFN) projections are large, reused at every token,
 and repeatedly streamed from off-chip memory. We study \mwg{}, a neural
-architecture that replaces persistent FFN matrices with conditional
+architecture that replaces selected persistent FFN matrices with conditional
 low-rank meta-weights. A small generator produces rank-$r$ descriptors for the
-current layer and token group; a fused associative kernel immediately consumes
-the descriptors as $(XU_r)V_r$ and discards them. The dense FFN matrix is never
-stored or synchronized as a trainable object in the transformed block.
+current layer and token group; the target runtime consumes those descriptors
+with an associative $(XU_r)V_r$ schedule and a no-write-back lifecycle. In the
+transformed block, the dense FFN matrix is no longer stored or synchronized as
+a trainable object, while the present prototype measures an unfused
+associative path and still requires fused-kernel counter validation.
 
 This paper makes three contributions. First, we define a generator-conditioned
 Transformer FFN that preserves differentiability while exposing rank, token
 reuse, and basis-bank size as architecture knobs. Second, we give an
-infrastructure contract for ephemeral descriptor execution and derive bandwidth,
-latency, memory, and gradient-communication scaling laws. Third, we provide an
-AI3/Huanxin Ascend 910B2 evaluation harness that runs on all visible NPUs and
-reports wall-clock latency, traffic estimates, and communication volume for
-8B-scale FFN geometry. On four Huanxin AI3 Ascend 910B2 NPUs, the current
-PyTorch-NPU prototype at $r=128$ reduces descriptor traffic by 24.9x and
-trainable FFN state by 18.4x, improves the measured training step by 1.52x, and
-reduces measured all-reduce latency by 9.1x. The same experiment also shows
-that the unfused forward path is still slower than dense execution, making
-kernel fusion and no-write-back enforcement a precise systems target rather
-than an afterthought. The central claim is not that static low rank is enough;
-it is that learned conditional generation plus a no-write-back operand lifecycle
-can make parameter movement an architectural design variable.
+infrastructure contract for ephemeral descriptor execution and derive compute,
+bandwidth, memory, latency, and gradient-communication scaling laws. Third, we
+provide a distributed evaluation harness and report wall-clock latency, traffic
+estimates, communication volume, checkpoint-backed approximation quality, and
+small end-to-end perplexity gates on a patched Qwen2.5-1.5B-Instruct model.
+On an eight-accelerator ASI1 Ascend 910B2 prototype, the current implementation
+at $r=128$ reduces estimated descriptor bytes by 24.9x and trainable FFN state
+by 18.4x, improves the measured training step by $1.542\pm0.196$x, and reduces
+measured all-reduce latency by 5.4x. The fastest measured point, $r=256$,
+reaches $1.572\pm0.165$x training speedup; the lower-rank $r=64$ point gives
+49.8x estimated descriptor-byte reduction. A checkpoint-backed Qwen2.5-1.5B FFN
+distillation experiment shows that short low-rank distillation improves over
+static SVD but remains far from dense-output fidelity on early layers. A
+quality-gated ASI3 probe identifies layer 16 as the least brittle replacement
+candidate, while a two-layer patch that looked strong on a 4080-token diagnostic
+gate does not generalize to a more diverse text stress set. Direct LM-CE
+calibration improves layer 16 on the original held-out instruction slice, but a
+new manifest-driven broad validation still degrades GSM8K, MBPP, and Alpaca-tail
+suites, and a deployable router stays close to dense only when it patches a very
+small token fraction. The central claim is therefore a feasibility case and
+negative validation study rather than a final deployment claim: learned
+conditional generation, eligibility selection, and a no-write-back operand
+lifecycle can make parameter movement an architectural design variable, provided
+future training, fused kernels, and hardware counters close the current quality
+and traffic-evidence gaps.
 \end{abstract}
 
 \section{Introduction}
@@ -81,11 +95,13 @@ parameters or fewer bits per parameter, but shorter parameter lifetimes.
 
 The proposal is close in spirit to hypernetworks \cite{ha2017hypernetworks},
 low-rank adaptation \cite{hu2022lora}, and IO-aware kernels such as
-FlashAttention \cite{dao2022flashattention}, but it combines different
-constraints. Hypernetworks usually materialize generated weights as ordinary
-model tensors. LoRA stores low-rank factors as persistent adapter parameters.
-FlashAttention optimizes attention activation traffic. \mwg{} instead treats
-generated FFN factors as volatile kernel operands.
+FlashAttention \cite{dao2022flashattention}, and it is complementary to
+attention-side KV-cache compression such as Multi-head Latent Attention
+\cite{deepseek2024v2}. Hypernetworks usually materialize generated weights as
+ordinary model tensors. LoRA stores low-rank factors as persistent adapter
+parameters. FlashAttention optimizes attention activation traffic, while MLA
+compresses attention keys and values during autoregressive decoding. \mwg{}
+instead treats generated FFN factors as volatile kernel operands.
 
 \paragraph{Contributions.}
 We make the following contributions:
@@ -95,13 +111,15 @@ We make the following contributions:
   \item A no-write-back descriptor lifecycle that connects the neural
   architecture to memory traffic and distributed synchronization.
   \item Scaling laws for parameter bytes, descriptor bytes, latency in the
-  memory-bound regime, KV-cache capacity recovery, and all-reduce volume.
-  \item A distributed Ascend NPU benchmark that uses all visible AI3 NPUs and
-  records environment, latency, and communication evidence in machine-readable
-  form.
-  \item A negative static-SVD baseline showing why the method should be judged
-  as conditional generation and lifecycle control rather than ordinary
-  low-rank compression.
+  memory-bound regime, and all-reduce volume.
+  \item A distributed benchmark that records latency, memory-traffic estimates,
+  and communication evidence in machine-readable form.
+  \item A negative static-SVD baseline and end-to-end patch tests showing why
+  the method should be judged as conditional generation, eligibility
+  selection, patch-aware calibration, and lifecycle control rather than
+  ordinary low-rank compression.
+  \item A manifest-driven broad-validation and deployable-router study showing
+  that the current layer-16 checkpoint is not yet broadly quality preserving.
 \end{itemize}
 
 \section{Architecture}
@@ -148,9 +166,11 @@ The runtime contract is simple and testable:
 \begin{enumerate}
   \item Read token context $c_t$ and layer id $\ell$.
   \item Generate descriptor factors $(U_r,V_r)$ for each FFN projection.
-  \item Store the descriptors in an on-chip scratch region.
+  \item Store descriptor tiles in an on-chip scratch region when the target
+  accelerator exposes such memory; otherwise keep the same volatile lifecycle
+  at the closest available cache level.
   \item Compute each projection with the associative schedule $(XU_r)V_r$.
-  \item Release or overwrite the scratch region before the next token group.
+  \item Release or overwrite each scratch tile before the next token group.
   \item Synchronize gradients only for generator and basis-bank parameters.
 \end{enumerate}
 
@@ -198,6 +218,45 @@ descriptor-bank parameters, whose leading term is $6r(d+m)$ plus the small MLP
 state. The same ratio $\Gamma(r)$ controls the dominant gradient-byte reduction.
 This is orthogonal to optimizer sharding and tensor parallelism: those systems
 can still be used on the remaining generator parameters.
+
+\subsection{Computational Complexity}
+
+Let $T=BS$ be the number of tokens processed by one FFN call and let $q$ be the
+token-group reuse factor for a generated descriptor. The dense gated FFN
+performs three large matrix products and has leading compute
+\begin{equation}
+\mathcal{C}_{\mathrm{dense}} = \Theta(3Tdm)
+\end{equation}
+multiply-accumulate operations. The associative \mwg{} path computes
+$XU_r$ and then $ZV_r$ for the up, gate, and down projections:
+\begin{equation}
+\mathcal{C}_{\mathrm{mwg,assoc}} = \Theta(3Tr(d+m)).
+\end{equation}
+If a basis bank with $K$ entries is explicitly blended once per token group,
+the descriptor-generation term is
+\begin{equation}
+\mathcal{C}_{\mathrm{gen}} =
+\Theta\!\left(3\left\lceil T/q\right\rceil K r(d+m) +
+\left\lceil T/q\right\rceil C_G\right),
+\end{equation}
+where $C_G$ is the small context-network cost. Kernels that generate only
+rank-channel scales or tile-local residuals replace the $Kr(d+m)$ term by the
+corresponding tile size. Thus the leading compute ratio, ignoring amortized
+generation, is again $\Gamma(r)=r(d+m)/(dm)$. The method is attractive when
+$r \ll \min(d,m)$ and $q$ is large enough to amortize generation; it can be
+unattractive when descriptors are regenerated for very small token groups or
+when unfused factor matmuls lose accelerator utilization.
+
+\subsection{Working-Set Complexity}
+
+The persistent FFN parameter state is $\Theta(3dm)$ elements per layer. A
+fully materialized rank-$r$ descriptor set is only $\Theta(3r(d+m))$ elements,
+and a tiled kernel can reduce the live scratch working set further to
+$\Theta(r(d_{\mathrm{tile}}+m_{\mathrm{tile}}))$. These are storage-footprint
+and traffic estimates. They are not claims that every descriptor or activation
+is resident in on-chip SRAM at once; the no-write-back contract says that
+generated descriptor tiles should be consumed at the closest available
+scratch/cache level and not committed as durable off-chip model weights.
 
 \subsection{Approximation}
 
@@ -261,89 +320,514 @@ counters for off-chip descriptor reads and writes.
 
 \section{Experimental Protocol}
 
-\paragraph{Hardware.}
-The large-scale target is Huanxin AI3 with Ascend 910B2 NPUs. The launcher uses
-all visible NPUs through \texttt{torch.distributed.run} and records the resolved
-device count, device names, memory, PyTorch version, and torch-npu version.
+\paragraph{Execution setup.}
+The large-scale reliability run uses the ASI1 Huanxin environment with eight
+visible Ascend 910B2 NPUs. We evaluate one, two, four, and eight data-parallel
+ranks by setting \texttt{ASCEND\_RT\_VISIBLE\_DEVICES} to the corresponding
+device set and launching PyTorch distributed execution with HCCL. Each
+configuration is repeated three times. The raw artifact records platform
+metadata for reproducibility, but the method and results below are reported in
+terms of model geometry, rank, latency, state size, estimated traffic, and
+collective communication.
 
 \paragraph{Geometry.}
-The default large setting is an 8B-scale FFN block with $d=4096$, $m=14336$,
-decode shape $B=1,S=128$, and training shape $B=2,S=512$. The rank sweep is
-$r\in\{64,128,256\}$ by default.
+The large settings use an 8B-scale FFN block with $d=4096$, $m=14336$, decode
+shape $B=1,S=128$, and training shape $B=2,S=512$. The reliability/scaling
+sweep reported below uses representative ranks $r\in\{64,128,256\}$.
 
-\paragraph{Smoke-to-large path.}
-The benchmark now has two remote presets. \texttt{ai3\_smoke} uses
-$d=512,m=1408$ and short iteration counts to validate the Huanxin session,
-device stack, output writing, and all-reduce path. \texttt{ai3\_large} then
-uses the 8B-scale geometry. This prevents expensive all-NPU runs from being the
-first check after authentication or environment drift.
+\paragraph{Validation path.}
+The benchmark uses a small smoke geometry $(d,m)=(512,1408)$ with short
+iteration counts before running the 8B-scale geometry. This keeps the expensive
+distributed sweep separate from basic checks of output writing, tensor shapes,
+and collective communication.
 
 \paragraph{Metrics.}
 We report forward latency, backward latency, throughput, trainable parameter
 bytes, estimated descriptor traffic, dense-to-\mwg{} speedup, all-reduce
-latency, all-reduce bytes, and KV-cache memory recovered under a fixed budget.
+latency, and all-reduce bytes.
+
+\paragraph{Checkpoint quality and end-to-end probes.}
+To avoid treating systems speed as a proxy for model quality, we separately
+distill the FFN output of layer 0 from a local Qwen2.5-1.5B-Instruct checkpoint
+stored in the ASI1 file system. The teacher uses the checkpoint
+\texttt{gate\_proj}, \texttt{up\_proj}, and \texttt{down\_proj} matrices with
+$d=1536$ and $m=8960$. We compare static truncated SVD, a trainable persistent
+low-rank FFN, and the same low-rank factors with the \mwg{} rank-scale
+generator. The reported run uses eight NPUs, fp32 training for numerical
+stability, ranks $64$ and $128$, 16 short distillation steps, and four
+evaluation batches. We then run a stronger ASI3 quality path on the same
+checkpoint: text-activation distillation, expert-residual \mwg{} students,
+saved student checkpoints, and direct replacement of selected Qwen MLP modules
+followed by causal-language-model perplexity evaluation. This second probe is
+still small, but it is end-to-end: the patched model is evaluated through the
+full Transformer, not only by block MSE.
+
+\paragraph{Validation controls.}
+After auditing an invalid recovery artifact that evaluated on the tiny default
+calibration text stream, all held-out-named recovery and broad-validation
+launchers now require explicit text inputs. The ASI3 recovery path refuses
+\texttt{DEFAULT\_TEXTS} fallback through a \texttt{--require-texts} guard, and a
+manifest-driven broad-validation harness rejects empty or undersized corpora
+before launching PPL evaluation. These controls are procedural rather than new
+quality evidence, but they are important for reproducibility: held-out results
+below are only comparable when the text source and token count are explicit.
+
+\paragraph{Deployable selective routing protocol.}
+The next algorithmic validation step is a non-oracle dense-fallback policy for
+the best current single-layer patch. We added a router evaluation harness that
+uses one explicit text split to label examples by dense-vs-patched loss delta,
+fits a small ridge regressor from features available before the target FFN
+executes, and evaluates thresholded patch fractions on a disjoint held-out
+split. The features are summary statistics of the layer-16 pre-FFN hidden state
+and sequence occupancy, not evaluation-set dense-vs-patched losses or
+post-hoc perplexity comparisons. Its report includes always-dense,
+always-patched, deployable routed, and oracle-frontier rows. This protocol is
+intended to test whether \mwg{} can become a selective runtime optimization
+rather than an indiscriminate layer replacement; it does not add a positive
+claim until broad held-out corpus files and multiple seeds have been run.
+
+\paragraph{Artifact trail.}
+The reported ASI1 systems run is stored under the historical artifact name
+\texttt{ai3\_reliability\_scaling\_20260518T072507Z}. It contains 12 raw JSON
+benchmark artifacts: three repeats each for world sizes 1, 2, 4, and 8, plus an
+aggregate JSON/Markdown summary. The local repository keeps the pulled summary,
+status file, and log under \texttt{results/pulled\_asi1/}; the same experiment
+code and paper artifacts are mirrored to the project S3 folder.
 
 \section{Numerical Evidence}
 
 \paragraph{Evidence status.}
-The results below were measured on Huanxin AI3 on 2026-04-30 using four
-Ascend 910B2 NPUs, \texttt{torch.distributed.run}, fp16 tensors, and logical
-device ids \texttt{0,1,2,3}. The benchmark uses the 8B-scale FFN geometry
+The results below were measured on 2026-05-18 on ASI1 using all eight visible
+NPUs for the largest setting, \texttt{torch.distributed.run}, HCCL, and fp16
+tensors. The benchmark uses the 8B-scale FFN geometry
 $(d,m)=(4096,14336)$, decode shape $(1,128,4096)$, and training shape
-$(2,512,4096)$. The main run used four warmup iterations, twelve forward
-timing iterations, four training iterations, and four all-reduce iterations.
-These measurements establish systems behavior for the associative low-rank path
-and distributed communication. They do not yet establish final language-model
-quality.
+$(2,512,4096)$. Each row reports the mean and standard deviation over three
+independent launches. Each launch used three warmup iterations, ten forward
+timing iterations, three training iterations, and five all-reduce iterations.
+These measurements establish systems behavior for the associative low-rank
+path and distributed communication. They do not yet establish final end-to-end
+language-model quality.
 
 \begin{table}[t]
 \centering
-\caption{Measured 8B-scale FFN execution on four AI3 Ascend 910B2 NPUs. The
-current prototype is a PyTorch-NPU implementation of associative execution, not
-yet a fused no-write-back kernel.}
-\label{tab:latency}
-\begin{tabular}{lrrrrr}
+\caption{Reliability and scaling of 8B-scale FFN training latency. Each cell is
+mean$\pm$std over three launches on ASI1. The current prototype uses unfused
+associative execution, not yet a fused no-write-back kernel.}
+\label{tab:scaling}
+\begin{tabular}{rrrrr}
 \toprule
-Method & Rank & Fwd ms & Fwd speedup & Train ms & Train speedup \\
+World & Rank & Train ms & Train speedup & Train tok/s \\
 \midrule
-Dense FFN & -- & 0.9275 & 1.000x & 5.4483 & 1.000x \\
-\mwg{} & 64 & 1.3920 & 0.666x & 3.6486 & 1.493x \\
-\mwg{} & 128 & 1.5094 & 0.614x & 3.5931 & 1.516x \\
-\mwg{} & 256 & 1.2347 & 0.751x & 3.8407 & 1.419x \\
+1 & -- & $4.9742\pm0.0239$ & 1.000x & 0.206M \\
+1 & 64 & $3.3785\pm0.1928$ & $1.475\pm0.075$x & 0.304M \\
+1 & 128 & $3.2545\pm0.1694$ & $1.531\pm0.071$x & 0.315M \\
+1 & 256 & $3.2879\pm0.1327$ & $1.514\pm0.055$x & 0.312M \\
+2 & -- & $5.8624\pm0.7332$ & 1.000x & 0.353M \\
+2 & 64 & $3.9907\pm0.1104$ & $1.472\pm0.211$x & 0.513M \\
+2 & 128 & $4.7966\pm1.5295$ & $1.268\pm0.214$x & 0.453M \\
+2 & 256 & $3.8896\pm0.0662$ & $1.507\pm0.181$x & 0.527M \\
+4 & -- & $6.1351\pm1.1496$ & 1.000x & 0.682M \\
+4 & 64 & $4.1078\pm0.1168$ & $1.497\pm0.303$x & 0.998M \\
+4 & 128 & $4.4547\pm0.6583$ & $1.412\pm0.423$x & 0.932M \\
+4 & 256 & $4.1109\pm0.0797$ & $1.496\pm0.312$x & 0.997M \\
+8 & -- & $6.4874\pm0.8606$ & 1.000x & 1.279M \\
+8 & 64 & $4.8044\pm1.1034$ & $1.373\pm0.182$x & 1.760M \\
+8 & 128 & $4.2047\pm0.0299$ & $1.542\pm0.196$x & 1.948M \\
+8 & 256 & $4.1222\pm0.2432$ & $1.572\pm0.165$x & 1.992M \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[t]
 \centering
-\caption{Measured state size, descriptor traffic, and gradient communication
-for one 8B-scale FFN block on the same four-NPU AI3 run. The all-reduce column
-reports measured latency for reducing a buffer with the corresponding trainable
-state size.}
+\caption{State size, descriptor traffic, and measured all-reduce latency for
+the same ASI1 reliability run. AllReduce latency cells are mean ms over three
+launches for the corresponding world size.}
 \label{tab:statecomm}
+\begin{tabular}{rrrrrrr}
+\toprule
+Rank & Params MiB & Descriptor MiB & Traffic red. & AR 2 & AR 4 & AR 8 \\
+\midrule
+-- & 336.000 & 336.000 & 1.000x & 19.6627 & 11.4896 & 6.9101 \\
+64 & 11.127 & 6.750 & 49.778x & 1.2599 & 1.1655 & 1.1549 \\
+128 & 18.254 & 13.500 & 24.889x & 1.6772 & 1.4632 & 1.2786 \\
+256 & 32.507 & 27.000 & 12.444x & 2.5398 & 1.8239 & 1.4182 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Checkpoint-backed FFN approximation on ASI1 using Qwen2.5-1.5B layer
+0. Lower relative MSE and higher cosine are better. The short eight-NPU
+distillation run improves over static SVD but shows that the current
+rank-scale generator does not yet recover dense FFN fidelity at bandwidth-
+attractive ranks.}
+\label{tab:quality}
 \begin{tabular}{lrrrrr}
 \toprule
-Method & Rank & Params MiB & Descriptor MiB & Traffic red. & AllReduce ms \\
+Method & Rank & Rel. MSE & Cosine & Params MiB & Traffic red. \\
 \midrule
-Dense FFN & -- & 336.000 & 336.000 & 1.000x & 10.9841 \\
-\mwg{} & 64 & 11.127 & 6.750 & 49.778x & 0.9714 \\
-\mwg{} & 128 & 18.254 & 13.500 & 24.889x & 1.2116 \\
-\mwg{} & 256 & 32.507 & 27.000 & 12.444x & 1.5495 \\
+Static SVD & 64 & 0.989094 & 0.133395 & -- & 20.488x \\
+Persistent low-rank & 64 & 0.966727 & 0.225573 & 9.096 & 20.488x \\
+\mwg{} rank-scale & 64 & 0.966702 & 0.225632 & 9.096 & 20.488x \\
+Static SVD & 128 & 0.971749 & 0.187598 & -- & 10.244x \\
+Persistent low-rank & 128 & 0.942873 & 0.257047 & 17.066 & 10.244x \\
+\mwg{} rank-scale & 128 & 0.942804 & 0.257052 & 17.066 & 10.244x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Diagnostic end-to-end Qwen2.5-1.5B perplexity gates for patched
+\mwg{} FFN layers on ASI3. Lower PPL ratio is better. The 1020--4080-token rows
+are not validation claims; they show why early-layer and multi-layer policies
+must be rejected or re-tested on held-out text.}
+\label{tab:ppldiag}
+\begin{tabular}{p{0.40\linewidth}rrrr}
+\toprule
+Patch policy & Rank & Tokens & Dense PPL & Patched PPL / ratio \\
+\midrule
+Layers 0,4,8,12, independent & 128 & 1020 & 314.44 & 2.18M / 6948x \\
+Layers 8,12,16,20, independent & 128 & 1020 & 314.44 & 590.56 / 1.88x \\
+Layers 8,12,16,20, independent & 256 & 1020 & 314.44 & 662.34 / 2.11x \\
+Layers 8,16, independent & 256 & 4080 & 314.44 & 360.50 / 1.146x \\
+Layers 8,16, joint logit-calibrated & 256 & 4080 & 314.44 & 308.76 / 0.982x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Held-out and stress-test Qwen2.5-1.5B perplexity gates for patched
+\mwg{} FFN layers on ASI3. Lower PPL ratio is better. The diverse64 suite is a
+small mixed-domain stress set; heldout12 is a split held out from diverse
+activation capture; Belle256 is a larger instruction-style validation slice.
+The uncalibrated Belle256 rows use the first 50{,}838-token slice, while the
+calibrated and persistent-baseline rows use the 51{,}267-token held-out slice
+reserved for post-calibration evaluation.}
+\label{tab:pplheldout}
+\begin{tabular}{p{0.40\linewidth}rrrr}
+\toprule
+Patch policy & Rank & Tokens & Dense PPL & Patched PPL / ratio \\
+\midrule
+Layers 8,16, joint logit-calibrated, diverse64 & 256 & 5469 & 62.69 & 85.09 / 1.357x \\
+Layer 16 only, diverse64 & 256 & 5469 & 62.69 & 69.24 / 1.105x \\
+Layer 16 only, diverse64 & 384 & 5469 & 62.69 & 69.68 / 1.112x \\
+Layer 16 only, heldout12 & 384 & 2560 & 58.14 & 61.71 / 1.061x \\
+Layer 16 only, Belle256 & 256 & 50838 & 8.37 & 11.77 / 1.406x \\
+Layer 16 only, Belle256 & 384 & 50838 & 8.37 & 10.77 / 1.287x \\
+Layer 16 persistent low-rank, Belle256 & 384 & 51267 & 8.44 & 11.59 / 1.373x \\
+Layer 16 only, Belle256, logit-MSE calibrated & 384 & 51267 & 8.44 & 10.03 / 1.189x \\
+Layer 16 only, Belle256, LM-CE calibrated & 384 & 51267 & 8.44 & 9.96 / 1.180x \\
+Layer 16 only, diverse64, LM-CE calibrated & 384 & 2736 & 62.37 & 67.80 / 1.087x \\
+Layer 16 only, heldout12, LM-CE calibrated & 384 & 1280 & 58.12 & 60.48 / 1.040x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Manifest-driven broad held-out validation for the ASI3 layer-16
+rank-384 LM-CE checkpoint and same-rank persistent low-rank baselines. These
+suites use explicit held-out files and reject empty or undersized text inputs.
+Lower PPL ratio is better. The baseline was launched separately and has
+different evaluated token counts, so it is a broad negative control rather than
+a token-identical paired comparison.}
+\label{tab:broadvalid}
+\begin{tabular}{llrrrr}
+\toprule
+Policy & Suite & Tokens & Dense PPL & Patched PPL & Ratio \\
+\midrule
+MWG LM-CE & GSM8K test & 44{,}708 & 3.4941 & 4.7481 & 1.3589x \\
+MWG LM-CE & MBPP test & 13{,}301 & 3.9877 & 4.5276 & 1.1354x \\
+MWG LM-CE & Alpaca-tail & 33{,}343 & 3.8818 & 4.4249 & 1.1399x \\
+\midrule
+MWG aggregate & -- & 91{,}352 & -- & -- & 1.2464x \\
+\midrule
+Persistent LR & GSM8K test & 31{,}329 & 4.7059 & 6.0889 & 1.2939x \\
+Persistent LR & MBPP test & 12{,}850 & 4.1360 & 5.3876 & 1.3026x \\
+Persistent LR & Alpaca-tail & 22{,}694 & 4.2148 & 5.2535 & 1.2464x \\
+\midrule
+Persistent aggregate & -- & 66{,}873 & -- & -- & 1.2795x \\
+\midrule
+Persist+LMCE & GSM8K test & 44{,}708 & 3.4941 & 5.0680 & 1.4504x \\
+Persist+LMCE & MBPP test & 13{,}301 & 3.9877 & 4.1225 & 1.0338x \\
+Persist+LMCE & Alpaca-tail & 33{,}343 & 3.8818 & 4.7813 & 1.2317x \\
+\midrule
+Persist+LMCE agg. & -- & 91{,}352 & -- & -- & 1.3099x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Token-level dense-fallback router validation on disjoint
+router-train/router-eval text. The router is trained on token CE deltas and
+then evaluated with actual mixed dense/patch forward passes, not offline oracle
+loss mixing. Lower PPL ratio is better.}
+\label{tab:tokenroutervalid}
+\begin{tabular}{rrr}
+\toprule
+Target patch frac. & Actual token patch frac. & PPL ratio \\
+\midrule
+0.01 & 0.0038 & 1.0132x \\
+0.03 & 0.0124 & 1.0249x \\
+0.05 & 0.0193 & 1.0360x \\
+0.10 & 0.0363 & 1.0508x \\
+0.25 & 0.0947 & 1.1665x \\
+0.50 & 0.2485 & 1.6013x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Three-fold token-level router cross-validation over the pooled router
+corpus. The 512 unique router lines are repartitioned into explicit 256/256
+train/eval folds, then evaluated with actual mixed dense/patch forward passes.
+This tests split sensitivity within the router distribution; it is not a
+replacement for independent broad benchmarks. Lower PPL ratio is better.}
+\label{tab:tokencvalid}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Mean actual patch frac. & Mean ratio & Min ratio & Max ratio \\
+\midrule
+0.01 & 0.0009 & 0.9989x & 0.9955x & 1.0009x \\
+0.03 & 0.0038 & 0.9940x & 0.9870x & 1.0009x \\
+0.05 & 0.0075 & 0.9896x & 0.9796x & 1.0007x \\
+0.10 & 0.0193 & 0.9787x & 0.9644x & 0.9974x \\
+0.25 & 0.0695 & 0.9462x & 0.9282x & 0.9618x \\
+0.50 & 0.1766 & 0.9218x & 0.9137x & 0.9373x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Leakage-clean broad token-router validation. For each broad suite, the
+router train pool removes exact lines overlapping that suite's eval file before
+training. Values aggregate GSM8K, MBPP, and Alpaca-tail using token-weighted
+losses. Lower PPL ratio is better.}
+\label{tab:tokenbroadvalid}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Actual patch frac. & Token-weighted ratio & Min suite & Max suite \\
+\midrule
+0.01 & 0.0005 & 1.0010x & 1.0001x & 1.0050x \\
+0.03 & 0.0019 & 1.0008x & 1.0005x & 1.0025x \\
+0.05 & 0.0055 & 0.9989x & 0.9970x & 1.0004x \\
+0.10 & 0.0208 & 0.9916x & 0.9648x & 0.9996x \\
+0.25 & 0.0849 & 0.9868x & 0.9197x & 1.0038x \\
+0.50 & 0.1975 & 1.0140x & 0.8587x & 1.0498x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Three-seed leakage-clean broad token-router sweep. Each seed uses
+75\% of the overlap-clean router train candidates for each broad suite, then
+evaluates actual mixed dense/patch forwards on GSM8K, MBPP, and Alpaca-tail.
+Values report the mean across seeds; min and max are seed-level token-weighted
+broad ratios. Lower PPL ratio is better.}
+\label{tab:tokenbroadseeds}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Mean actual patch frac. & Mean ratio & Min seed & Max seed \\
+\midrule
+0.01 & 0.0007 & 1.0011x & 1.0008x & 1.0013x \\
+0.03 & 0.0021 & 0.9998x & 0.9980x & 1.0013x \\
+0.05 & 0.0049 & 0.9977x & 0.9941x & 0.9997x \\
+0.10 & 0.0182 & 0.9920x & 0.9890x & 0.9952x \\
+0.25 & 0.0852 & 0.9864x & 0.9820x & 0.9929x \\
+0.50 & 0.2168 & 1.0164x & 0.9943x & 1.0312x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Leave-suite-out broad auxiliary token-router sweep. For each target
+broad suite, router training uses the explicit router texts plus the other two
+broad suites, with exact target-suite eval lines removed. Values report the
+mean across three split seeds; min and max are seed-level token-weighted broad
+ratios. Lower PPL ratio is better.}
+\label{tab:tokenleavesuite}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Mean actual patch frac. & Mean ratio & Min seed & Max seed \\
+\midrule
+0.01 & 0.0043 & 1.0007x & 1.0004x & 1.0009x \\
+0.03 & 0.0166 & 0.9989x & 0.9980x & 1.0004x \\
+0.05 & 0.0284 & 0.9975x & 0.9964x & 0.9996x \\
+0.10 & 0.0565 & 0.9926x & 0.9914x & 0.9943x \\
+0.25 & 0.1380 & 0.9943x & 0.9889x & 1.0004x \\
+0.50 & 0.2806 & 1.0274x & 1.0076x & 1.0488x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Deployable dense-fallback router validation on disjoint router
+train/eval text. Values are averages over three launched ASI3 runs, which are
+effectively identical because the current ridge router is deterministic for
+these inputs. Lower PPL ratio is better.}
+\label{tab:routervalid}
+\begin{tabular}{lrrr}
+\toprule
+Policy & Target patch frac. & Actual token patch frac. & PPL ratio \\
+\midrule
+Routed frontier & 0.10 & 0.0169 & 1.0129x \\
+Routed frontier & 0.25 & 0.0345 & 1.0273x \\
+Routed frontier & 0.50 & 0.1453 & 1.1411x \\
+Always patched & 1.00 & 1.0000 & 2.0625x \\
+Oracle frontier & 0.10 & 0.1028 & 1.0139x \\
+Oracle frontier & 0.25 & 0.2517 & 1.0624x \\
+Oracle frontier & 0.50 & 0.5027 & 1.2000x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{ASI3 runtime profiler probe for the current unfused prototype. The
+environment reported 8 visible Ascend 910B2 NPUs and available
+\texttt{npu-smi}/\texttt{msprof}, but this PyTorch-profiler capture exposed
+CPU activities only. It is therefore operator-level evidence, not full
+off-chip hardware-counter validation. Lower time is better.}
+\label{tab:runtimeprobe}
+\begin{tabular}{lrrrr}
+\toprule
+Case & Descriptor MiB & Mean ms & Matmul-like ops & Fused-like op \\
+\midrule
+Dense & 64.50 & 0.3391 & 27 & no \\
+\mwg{} $r=128$ & 5.53 & 0.7638 & 54 & no \\
+\mwg{} $r=256$ & 11.06 & 0.7559 & 54 & no \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{Interpretation.}
-The strongest current operating point for training is $r=128$: it reduces
-descriptor traffic from 336.0 MiB to 13.5 MiB, reduces trainable FFN state from
-336.0 MiB to 18.254 MiB after generator overhead, improves the measured
-training step from 5.4483 ms to 3.5931 ms, and reduces measured all-reduce
-latency from 10.9841 ms to 1.2116 ms. The forward-only path is slower than the
-dense baseline in the longer run because the prototype executes low-rank
-factors as unfused PyTorch operations and still materializes intermediate
-activations. This negative result is useful: it identifies fused descriptor
-generation, on-chip factor consumption, and no descriptor write-back as the
-systems requirements that separate \mwg{} from an ordinary low-rank module.
+The most stable eight-rank point is $r=128$: it reduces descriptor traffic from
+336.0 MiB to 13.5 MiB, reduces trainable FFN state from 336.0 MiB to
+18.254 MiB after generator overhead, improves mean training latency from
+$6.4874\pm0.8606$ ms to $4.2047\pm0.0299$ ms, and increases measured training
+throughput from 1.279M to 1.948M tokens/s across eight ranks. The fastest
+eight-rank point in this suite is $r=256$, reaching $1.572\pm0.165$x training
+speedup and 1.992M tokens/s, while still reducing descriptor traffic by 12.4x
+and trainable FFN state by 10.3x. The lower-rank $r=64$ point gives the
+strongest compression, with 49.8x descriptor-traffic reduction and 30.2x
+trainable-state reduction. Across 2, 4, and 8 ranks, the all-reduce proxy drops
+from dense latencies of 19.66, 11.49, and 6.91 ms to low-rank latencies near
+1--2.5 ms, confirming that the trainable-state reduction translates into a
+distributed communication benefit. The forward-only path remains sensitive to
+unfused factor-matmul overhead; fused descriptor generation, on-chip factor
+consumption, and no descriptor write-back remain the systems requirements that
+separate \mwg{} from an ordinary low-rank module.
+
+Table \ref{tab:quality} is deliberately more conservative. On a real
+Qwen2.5-1.5B FFN layer, static SVD at $r=64$ and $r=128$ is a weak
+approximation despite strong byte savings. Short distillation improves relative
+MSE and cosine, but the current rank-scale \mwg{} generator is almost tied with
+the persistent low-rank baseline. This result prevents an overclaim: the
+present prototype establishes the communication and latency opportunity, while
+future work must use stronger conditional generators, longer distillation, or
+end-to-end training to convert that systems opportunity into language quality.
+
+Tables \ref{tab:ppldiag}, \ref{tab:pplheldout}, \ref{tab:broadvalid},
+\ref{tab:tokenroutervalid}, \ref{tab:tokencvalid},
+\ref{tab:tokenbroadvalid}, \ref{tab:tokenbroadseeds},
+\ref{tab:tokenleavesuite}, and
+\ref{tab:routervalid} show the resulting pivot, while Table
+\ref{tab:runtimeprobe} records the current runtime instrumentation boundary.
+Early-layer replacement is not
+credible: even rank-384 experiments left layer 0 with unacceptable perplexity
+damage, and replacing layers 0, 4, 8, and 12 at rank 128 collapses perplexity.
+The usable regime is instead quality-gated and patch-aware, but the latest
+ASI3 stress test also shows how easy it is to overfit a small gate. Joint
+logit calibration of layers 8 and 16 reaches a 0.982x PPL ratio on the
+4080-token repeated-text gate, but degrades to 1.357x on the diverse64 stress
+set. The more credible current policy is therefore stricter: keep early layers,
+layer 4, layer 8, layer 24, and multi-layer compositions dense unless they pass
+held-out gates, and patch only the safest eligible layer. In these experiments,
+layer 16 is the best candidate: rank 256 gives a 1.105x PPL ratio on diverse64,
+while a rank-384 retraining on diverse activation data gives 1.061x on the
+held-out split. However, the same layer-16 policy is not yet robust: on a
+larger Belle-style instruction slice, rank 384 has a 1.287x PPL ratio before
+logit calibration. End-to-end logit-MSE calibration improves that
+external-corpus gate monotonically in the current sweep, reaching 1.205x after
+400 calibration steps and 1.189x after longer gentle continuation. Direct
+language-model cross-entropy (LM-CE) calibration is the stronger current
+variant: it reduces the Belle held-out ratio to 1.180x and improves the small
+off-distribution checks to 1.087x on diverse64 and 1.040x on heldout12. A
+same-rank persistent low-rank baseline trained on the same layer-16 activation
+cache reaches 1.373x on the Belle held-out gate, so the calibrated MWG variant
+is better than this simple durable low-rank control in the present setting.
+However, the remaining degradation is still material, the diverse checks are
+small, and the result is from one checkpoint and one split. Table
+\ref{tab:broadvalid} is the decisive current counterweight: when the same
+layer-16 checkpoint is evaluated on explicit GSM8K, MBPP, and Alpaca-tail
+held-out files, all three suites degrade, with a 1.246x token-weighted aggregate
+PPL ratio. A same-rank persistent low-rank baseline trained from explicit
+router-train activations also fails the broad manifest, with a 1.279x
+token-weighted ratio in its separate launch; adding direct LM-CE calibration to
+that persistent baseline worsens the broad aggregate to 1.310x over the
+91{,}352-token manifest. Thus the calibrated \mwg{} variant
+is not merely losing to a trivial durable low-rank baseline, but neither method
+is close to broad quality preservation. Tables \ref{tab:tokenroutervalid} and
+\ref{tab:routervalid} show that dense fallback can bound quality loss only by
+patching very few tokens. The stricter token-level router is trained on token
+CE deltas and then evaluated with actual mixed dense/patch forward passes. It
+exposes a large split shift: on router-train the patch is favorable
+(``patched'' PPL ratio 0.437x over 30{,}053 tokens), but on disjoint
+router-eval it is unfavorable (2.062x over 35{,}118 tokens). Mixed forwarding
+keeps ratios near 1.01--1.05x only while patching about 0.4--3.6\% of tokens,
+then degrades to 1.166x at 9.5\% patching and 1.601x at 24.8\% patching.
+However, Table \ref{tab:tokencvalid} shows that this result is split-sensitive
+within the router distribution: when the two router corpora are pooled and
+repartitioned into three explicit train/eval folds, mean mixed-forward ratios
+fall below dense, reaching 0.946x at 6.9\% actual patching and 0.922x at
+17.7\% patching. This is an encouraging signal for risk-aware routing, but it
+does not by itself overturn the negative broad manifest because the folds are
+resamples of the router corpus rather than independent GSM8K, MBPP, or
+Alpaca-style benchmarks. Table \ref{tab:tokenbroadvalid} is the stricter check:
+for each broad suite, exact eval-line overlaps are removed from the router
+train pool before fitting the token router. Always-patched remains negative on
+all suites (1.324x on GSM8K, 1.113x on MBPP, and 1.110x on Alpaca-tail), so the
+patch itself is not broadly quality preserving. Selective routing is better:
+the broad token-weighted frontier reaches 0.992x at 2.1\% actual patching and
+0.987x at 8.5\% actual patching, before degrading to 1.014x at 19.8\% patching.
+Table \ref{tab:tokenbroadseeds} repeats this leakage-clean broad protocol over
+three explicit split seeds using 75\% of each overlap-clean train pool. The
+bounded selective result repeats: target 0.05, 0.10, and 0.25 are below dense on
+every seed, with mean token-weighted ratios of 0.998x, 0.992x, and 0.986x,
+respectively. The high-patching target 0.50 row is unstable, with seed-level
+ratios spanning 0.994x to 1.031x. This supports a bounded selective-routing
+claim rather than an always-patched deployment claim. Table
+\ref{tab:tokenleavesuite} is a stricter distribution-robust check: for each
+target broad suite, the router also trains on the two non-target broad suites
+but removes exact target-suite eval lines. The bounded signal survives at target
+0.05 and 0.10 on every seed, with mean ratios of 0.997x and 0.993x. Target 0.25
+is below dense on average but has one near-neutral/slightly-worse seed, and
+target 0.50 degrades on every seed. The example-level routed frontier similarly
+keeps ratios near
+1.01--1.03x at 1.7--3.5\% actual token patching, reaches 1.141x by 14.5\%
+patching, and always-patched evaluation degrades to 2.063x on the router-eval
+split. The oracle frontier is better at the same nominal target fractions but
+is not deployable because it uses evaluation losses. At the present stage this
+is a reproducible feasibility signal plus a bounded selective-router result,
+not yet a top-journal-quality deployment claim; stronger training, stronger
+baselines, broader independent benchmark families, and hardware-counter or
+fused-kernel evidence remain required. The runtime probe in Table
+\ref{tab:runtimeprobe} sharpens that last limitation: even on an ASI3 host with
+visible Ascend 910B2 NPUs and available \texttt{npu-smi}/\texttt{msprof}, the
+current unfused associative prototype appears as ordinary matmul-like
+operators, doubles the matmul-like op count in this microprobe, and is slower
+than dense. It is useful negative fused-kernel evidence and tool-availability
+evidence, but it is not yet an off-chip traffic counter validation.
 
 \section{Discussion}
 
@@ -358,24 +842,56 @@ to reduce checkpoint size, but to change where parameters live during execution.
 That distinction is why the method belongs partly to neural architecture design
 and partly to model-runtime infrastructure.
 
+\paragraph{Relation to KV-cache compression and MLA.}
+The KV-cache memory used during autoregressive decoding is a different object
+from the FFN weight traffic studied here. A standard attention layer stores
+past keys and values with leading size $\Theta(2L n_h d_h)$ elements for
+sequence length $L$, head count $n_h$, and head dimension $d_h$; in practical
+long-context serving this footprint is usually an off-chip memory allocation,
+although recently accessed tiles may pass through on-chip caches during an
+attention kernel. MLA reduces this attention-side storage by caching a latent
+key-value vector and reconstructing or absorbing key/value projections at
+attention time \cite{deepseek2024v2}. \mwg{} is orthogonal: it targets FFN
+projection weights, does not by itself compress the attention KV cache, and
+uses low-rank generation to change the lifecycle of weight operands rather
+than the representation of past-token activations.
+
 \paragraph{Current limitations.}
-Three gaps are intentionally left visible. First, the measurements are
-single-block systems evidence; full end-to-end language quality still needs a
-stable distillation or training run. Second, descriptor lifecycle claims should
-be confirmed with hardware counters for off-chip reads and writes, not only
-with software-side byte estimates. Third, the current generator and associative
-path are deliberately small and benchmarkable; stronger generators and fused
-kernels may improve both quality and forward latency, but must be measured
-against their own placement and traffic costs.
+Three gaps are intentionally left visible. First, the end-to-end quality
+evidence is still negative outside the narrowest gates: it covers a small
+Qwen2.5-1.5B text gate, a stricter single-layer eligibility policy, one larger
+instruction-style stress test that still shows material degradation, and a
+new broad held-out validation where the same layer-16 checkpoint degrades
+GSM8K, MBPP, and Alpaca-tail. The added manifest harness prevents default-text
+self-evaluation, and the deployable-router harness separates train-time risk
+labels from held-out routing decisions, but the current router preserves dense
+quality only at very small patch-token fractions. Second, descriptor lifecycle
+claims should be confirmed with low-level hardware performance counters for
+off-chip read and write transactions, not only with software-side theoretical
+byte estimates. Third, the current generator and associative path are
+deliberately small and benchmarkable; stronger generators and fused kernels may
+improve both quality and forward latency, but must be measured against their own
+placement and traffic costs.
 
 \section{Conclusion}
 
 This paper reframes Transformer FFN weights as generated ephemeral operands.
 By replacing persistent dense matrices with conditional rank-$r$ descriptors and
 an associative execution path, \mwg{} reduces both memory traffic and
-distributed gradient communication. The AI3 benchmark included with this paper
-is designed to validate the method on all available Ascend NPUs and to produce
-reproducible evidence for the next draft revision.
+distributed gradient communication in an eight-rank 8B-scale FFN systems
+benchmark. A checkpoint-backed Qwen2.5-1.5B probe adds the missing negative
+control: static and short-distilled low-rank FFNs do not recover dense quality
+when applied indiscriminately, especially in early layers or brittle multi-layer
+compositions. The stronger result is a stricter quality-gated policy: layer 16
+alone is the best current candidate on small diverse gates, whereas a two-layer
+calibrated patch overfits the original small gate and the layer-16 patch still
+degrades on a larger instruction-style corpus, although LM-CE calibration
+reduces that degradation and improves the small diverse checks. The accompanying
+benchmark is therefore best read as a reproducible systems case for ephemeral
+operand lifecycles plus an initial algorithmic recipe and negative evidence for
+quality-preserving layer eligibility. Broad dataset validation now shows that
+the present checkpoint is insufficient; stronger training, stronger routing,
+and fused-kernel counter evidence are the next experimental steps.
 
 \bibliographystyle{plain}
 \bibliography{refs}

@@ -16,7 +16,7 @@ Use Huanxin **ai1** for running real numerical experiments that support the pate
   and wait for it to become openable before declaring shell access unavailable.
 - Remote workdir: `/root/work/mwg-ew-patent`
 - Research-paper remote workdir: `/vllm-workspace/mwg-ew-transformer-research`
-- S3 relay: `nm-aihuanxin:jtdlp-3ed7854b946a47b1a49ad754baa76cd3/mwg-ew-patent`
+- S3 relay: `iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent`
 
 ## Default Entry Point
 
@@ -81,6 +81,22 @@ Use `scripts/ai1_job.sh` instead of raw `nohup` when you need a durable local jo
 - Validate locally before any remote mutation.
 - Use `--dry-run` first for large or risky transfers.
 - Do not kill the browser daemon, discard the authenticated profile, or delete remote content unless explicitly instructed.
+
+## Shell Endpoint Recovery
+
+Treat shell-open failures from the Huanxin terminal endpoint as transient until a fresh environment-page retry has failed. Common recoverable symptoms include:
+
+- `getShellVisitUrl`
+- `code=170022`
+- `data=null`
+- `获取shell终端信息失败`
+- a websocket target or terminal URL ending in `/null`
+
+When these appear, do not conclude that the environment is unavailable from the first failure. Close stale train-dev environment tabs for the target env, reopen the environment surface from the train-dev list or exact workspace URL, activate `Shell终端` again, and rerun the command through the workspace wrapper. If the wrapper exposes `HUANXIN_SHELL_OPEN_CYCLES`, raise it for stubborn endpoint retries before falling back to auth repair or manual intervention.
+
+## Multiline Shell Commands
+
+For heredocs or multiline probes, prefer a wrapper that sends the payload as a temporary script rather than embedding the raw command inside marker text. If a terminal command hangs after `python3 - <<'PY'` or another heredoc, interrupt that shell attempt and retry with the current wrapper or an encoded temporary script. Do not treat a heredoc marker hang as evidence that the remote environment or experiment code is broken.
 
 ## When To Load References
 

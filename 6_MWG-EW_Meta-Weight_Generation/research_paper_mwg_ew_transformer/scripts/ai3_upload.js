@@ -9,6 +9,14 @@ process.env.HUANXIN_PROFILE_COPY_NAME = process.env.HUANXIN_PROFILE_COPY_NAME ||
 process.env.HUANXIN_ALLOW_STANDALONE_FALLBACK = process.env.HUANXIN_ALLOW_STANDALONE_FALLBACK || '1';
 process.env.HUANXIN_HEADLESS = process.env.HUANXIN_HEADLESS || '1';
 
+if (process.env.AI3_ALLOW_BROWSER !== '1') {
+  console.error(
+    'Refusing to run ai3_upload.js because it opens Huanxin browser automation. ' +
+      'Use S3 scripts, an existing daemon shell, or set AI3_ALLOW_BROWSER=1 only when browser control is allowed.'
+  );
+  process.exit(2);
+}
+
 const quantumRoot = process.env.QUANTUM_GPT_DIR || '/Users/daxu/software/quantum-gpt';
 const { launchPersistentContext } = require(path.join(quantumRoot, 'browser-automation/huanxin_browser_launch'));
 const { ensureProfileDir } = require(path.join(quantumRoot, 'browser-automation/huanxin_profile'));
@@ -67,7 +75,7 @@ async function main() {
   try {
     const page = context.pages()[0] || (await context.newPage());
     page.setDefaultTimeout(30000);
-    const activePage = await openShell(page, 'ai3');
+    const activePage = await openShell(page, process.env.HUANXIN_ENV_NAME || 'ASI3');
 
     await sendCommand(
       activePage,
@@ -115,4 +123,3 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
-

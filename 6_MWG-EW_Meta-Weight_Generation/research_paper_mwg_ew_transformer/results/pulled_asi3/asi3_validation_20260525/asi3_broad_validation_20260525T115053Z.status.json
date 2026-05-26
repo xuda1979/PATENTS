@@ -1,0 +1,14 @@
+{
+  "run_id": "asi3_broad_validation_20260525T115053Z",
+  "state": "done",
+  "updated_at": "2026-05-25T11:52:49Z",
+  "manifest": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/manifest.json",
+  "patch": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_persistent_broad_baseline_20260525T114920Z/checkpoints/persistent_low_rank_r384.pt",
+  "outdir": "results/asi3_broad_validation_20260525T115053Z",
+  "result_json": [
+    "results/asi3_broad_validation_20260525T115053Z/ppl_alpaca_cleaned_train_tail.json",
+    "results/asi3_broad_validation_20260525T115053Z/ppl_gsm8k_test.json",
+    "results/asi3_broad_validation_20260525T115053Z/ppl_mbpp_test.json",
+    "results/asi3_broad_validation_20260525T115053Z/summary_broad_eval.json"
+  ]
+}

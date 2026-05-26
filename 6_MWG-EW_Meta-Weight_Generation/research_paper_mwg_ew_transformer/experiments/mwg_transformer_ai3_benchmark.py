@@ -367,6 +367,12 @@ def timing_to_dict(value: Timing | None) -> dict[str, Any] | None:
     return asdict(value)
 
 
+def tokens_per_second(tokens: int, timing: Timing | None) -> float | None:
+    if timing is None or timing.mean_ms <= 0:
+        return None
+    return round(tokens * 1000.0 / timing.mean_ms, 2)
+
+
 def run_benchmarks(args: argparse.Namespace) -> dict[str, Any] | None:
     device, rank, local_rank, world_size, backend = setup_runtime()
     dtype = dtype_from_name(args.dtype, device)
@@ -391,6 +397,8 @@ def run_benchmarks(args: argparse.Namespace) -> dict[str, Any] | None:
         "comm_iters": args.comm_iters,
         "conditioned_generator": not args.no_conditioning,
     }
+    decode_tokens_global = args.batch_decode * args.seq_decode * world_size
+    train_tokens_global = args.batch_train * args.seq_train * world_size
 
     if rank == 0:
         print(json.dumps({"event": "start", "env": env, "config": config}, indent=2), flush=True)
@@ -405,6 +413,8 @@ def run_benchmarks(args: argparse.Namespace) -> dict[str, Any] | None:
         "config": config,
         "dense_theoretical_bytes": dense_bytes,
         "dense_theoretical_mib": round(dense_bytes / MIB, 3),
+        "decode_tokens_global": decode_tokens_global,
+        "train_tokens_global": train_tokens_global,
         "results": {},
     }
 
@@ -417,9 +427,15 @@ def run_benchmarks(args: argparse.Namespace) -> dict[str, Any] | None:
         output["results"]["dense"] = {
             "parameter_bytes": dense_param_bytes,
             "parameter_mib": round(dense_param_bytes / MIB, 3),
+            "descriptor_bytes": dense_bytes,
+            "descriptor_mib": round(dense_bytes / MIB, 3),
+            "communication_bytes": dense_param_bytes,
+            "communication_mib": round(dense_param_bytes / MIB, 3),
             "forward": timing_to_dict(dense_forward),
             "train": timing_to_dict(dense_train),
             "allreduce": timing_to_dict(dense_comm),
+            "decode_tokens_per_s": tokens_per_second(decode_tokens_global, dense_forward),
+            "train_tokens_per_s": tokens_per_second(train_tokens_global, dense_train),
         }
         print(
             json.dumps({"event": "dense_done", "parameter_mib": round(dense_param_bytes / MIB, 3)}),
@@ -447,11 +463,16 @@ def run_benchmarks(args: argparse.Namespace) -> dict[str, Any] | None:
                 "parameter_mib": round(param_bytes / MIB, 3),
                 "descriptor_bytes": descriptor_bytes,
                 "descriptor_mib": round(descriptor_bytes / MIB, 3),
+                "communication_bytes": param_bytes,
+                "communication_mib": round(param_bytes / MIB, 3),
                 "traffic_reduction_x": round(dense_bytes / max(descriptor_bytes, 1), 3),
                 "parameter_reduction_x": round(dense_param_bytes / max(param_bytes, 1), 3),
+                "communication_reduction_x": round(dense_param_bytes / max(param_bytes, 1), 3),
                 "forward": timing_to_dict(fwd),
                 "train": timing_to_dict(train),
                 "allreduce": timing_to_dict(comm),
+                "decode_tokens_per_s": tokens_per_second(decode_tokens_global, fwd),
+                "train_tokens_per_s": tokens_per_second(train_tokens_global, train),
             }
             row["forward_speedup_x"] = round(dense_fwd_ms / max(row["forward"]["mean_ms"], 1e-9), 3)
             row["train_speedup_x"] = round(dense_train_ms / max(row["train"]["mean_ms"], 1e-9), 3)
@@ -513,7 +534,7 @@ def write_outputs(payload: dict[str, Any], outdir: Path) -> tuple[Path, Path]:
     ]
     dense = payload["results"]["dense"]
     lines.append(
-        f"| dense | {dense['parameter_mib']} | {payload['dense_theoretical_mib']} | "
+        f"| dense | {dense['parameter_mib']} | {dense['descriptor_mib']} | "
         f"{dense['forward']['mean_ms']} | {dense['train']['mean_ms']} | 1.0 | 1.0 | 1.0 | "
         f"{dense['allreduce']['mean_ms']} |"
     )
@@ -527,13 +548,36 @@ def write_outputs(payload: dict[str, Any], outdir: Path) -> tuple[Path, Path]:
             f"{row['traffic_reduction_x']} | {row['allreduce']['mean_ms']} |"
         )
     lines.append("")
+    lines.extend(
+        [
+            "## Throughput and Communication",
+            "",
+            f"Decode tokens per timed step: `{payload.get('decode_tokens_global')}`",
+            f"Training tokens per timed step: `{payload.get('train_tokens_global')}`",
+            "",
+            "| Method | Decode tok/s | Train tok/s | Communication MiB | Communication reduction |",
+            "|---|---:|---:|---:|---:|",
+            (
+                f"| dense | {dense.get('decode_tokens_per_s')} | {dense.get('train_tokens_per_s')} | "
+                f"{dense.get('communication_mib')} | 1.0 |"
+            ),
+        ]
+    )
+    for key, row in payload["results"].items():
+        if not key.startswith("mwg_r"):
+            continue
+        lines.append(
+            f"| {key} | {row.get('decode_tokens_per_s')} | {row.get('train_tokens_per_s')} | "
+            f"{row.get('communication_mib')} | {row.get('communication_reduction_x')} |"
+        )
+    lines.append("")
     md_path.write_text("\n".join(lines), encoding="utf-8")
     return json_path, md_path
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--preset", choices=["tiny", "ai3_smoke", "ai3_large"], default="tiny")
+    parser.add_argument("--preset", choices=["tiny", "ai3_smoke", "ai3_large", "ai3_sweep"], default="tiny")
     parser.add_argument("--d", type=int, default=None)
     parser.add_argument("--m", type=int, default=None)
     parser.add_argument("--ranks", type=parse_rank_list, default=None)
@@ -582,19 +626,34 @@ def apply_preset(args: argparse.Namespace) -> argparse.Namespace:
             "comm_iters": 2,
         }
     else:
-        defaults = {
-            "d": 4096,
-            "m": 14336,
-            "ranks": [64, 128, 256],
-            "batch_decode": 1,
-            "seq_decode": 128,
-            "batch_train": 2,
-            "seq_train": 512,
-            "warmup": 4,
-            "iters": 12,
-            "train_iters": 4,
-            "comm_iters": 4,
-        }
+        if args.preset == "ai3_large":
+            defaults = {
+                "d": 4096,
+                "m": 14336,
+                "ranks": [64, 128, 256],
+                "batch_decode": 1,
+                "seq_decode": 128,
+                "batch_train": 2,
+                "seq_train": 512,
+                "warmup": 4,
+                "iters": 12,
+                "train_iters": 4,
+                "comm_iters": 4,
+            }
+        else:
+            defaults = {
+                "d": 4096,
+                "m": 14336,
+                "ranks": [32, 64, 96, 128, 192, 256, 384, 512],
+                "batch_decode": 1,
+                "seq_decode": 128,
+                "batch_train": 2,
+                "seq_train": 512,
+                "warmup": 3,
+                "iters": 10,
+                "train_iters": 3,
+                "comm_iters": 5,
+            }
     for key, value in defaults.items():
         if getattr(args, key) is None:
             setattr(args, key, value)
