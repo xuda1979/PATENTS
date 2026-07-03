@@ -9,12 +9,13 @@ fi
 RUN_ID="$1"
 PROJECT_ROOT="${PROJECT_ROOT:-/vllm-workspace/mwg-ew-transformer-research}"
 
-export AI3_ALLOW_BROWSER="${AI3_ALLOW_BROWSER:-0}"
+export ASI3_ALLOW_BROWSER="${ASI3_ALLOW_BROWSER:-0}"
 export HUANXIN_ALLOW_STANDALONE_FALLBACK="${HUANXIN_ALLOW_STANDALONE_FALLBACK:-0}"
 export HUANXIN_WAIT_MS="${HUANXIN_WAIT_MS:-15000}"
+export HUANXIN_DAEMON_HARD_TIMEOUT_MS="${HUANXIN_DAEMON_HARD_TIMEOUT_MS:-30000}"
 
-if [[ "$AI3_ALLOW_BROWSER" == "1" ]]; then
-  echo "ERROR: refusing browser fallback; unset AI3_ALLOW_BROWSER for daemon-only monitor." >&2
+if [[ "$ASI3_ALLOW_BROWSER" == "1" ]]; then
+  echo "ERROR: refusing browser fallback; unset ASI3_ALLOW_BROWSER for daemon-only monitor." >&2
   exit 2
 fi
 
@@ -75,4 +76,4 @@ REMOTE_CMD="${REMOTE_CMD//\$PROJECT_ROOT/$PROJECT_ROOT}"
 REMOTE_CMD="${REMOTE_CMD//\$RUN_ID/$RUN_ID}"
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
-bash scripts/ai3_shell.sh "$REMOTE_CMD"
+bash scripts/ASI3_shell.sh "$REMOTE_CMD"

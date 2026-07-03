@@ -14,6 +14,11 @@ The main comparison is between:
     low-rank FFN baseline
   * mwg_ephemeral: the same low-rank factors plus a small context-conditioned
     rank-scale generator, representing the generated descriptor path
+  * mwg_token_scale: per-token generated rank scales, testing whether the
+    descriptor should adapt at token granularity rather than only from a batch
+    context
+  * mwg_token_rank_mixer: per-token generated rank-channel mixers, testing
+    whether descriptors need cross-rank interactions rather than diagonal scales
   * mwg_token_residual: the rank-scale generator plus a token-conditioned
     low-rank residual descriptor, testing a more expressive generated path
   * mwg_mixture: a token-group router over multiple low-rank basis banks plus
@@ -159,7 +164,10 @@ def safe_torch_load(path: Path) -> dict[str, torch.Tensor]:
     try:
         return torch.load(path, map_location="cpu", weights_only=True)
     except Exception:
-        return torch.load(path, map_location="cpu")
+        try:
+            return torch.load(path, map_location="cpu", weights_only=False)
+        except TypeError:
+            return torch.load(path, map_location="cpu")
 
 
 def iter_state_files(model_dir: Path) -> list[Path]:
@@ -343,8 +351,22 @@ def capture_text_activations(args: argparse.Namespace, device: torch.device, ran
     return activations.float()
 
 
-def svd_factors(weight: torch.Tensor, rank: int) -> tuple[torch.Tensor, torch.Tensor, float]:
-    u, s, vh = torch.linalg.svd(weight.float(), full_matrices=False)
+def svd_factors(
+    weight: torch.Tensor,
+    rank: int,
+    method: str = "exact",
+    oversample: int = 16,
+    niter: int = 2,
+) -> tuple[torch.Tensor, torch.Tensor, float]:
+    matrix = weight.float()
+    if method == "pca_lowrank":
+        q = min(min(matrix.shape), rank + max(0, oversample))
+        u, s, v = torch.pca_lowrank(matrix, q=q, center=False, niter=niter)
+        u = u[:, :rank]
+        s = s[:rank]
+        vh = v[:, :rank].t()
+    else:
+        u, s, vh = torch.linalg.svd(matrix, full_matrices=False)
     total = torch.sum(s.square()).clamp_min(1e-12)
     kept = torch.sum(s[:rank].square())
     root = torch.sqrt(s[:rank])
@@ -377,7 +399,7 @@ class LowRankFFN(nn.Module):
         basis_noise: float = 0.01,
     ):
         super().__init__()
-        if generator not in {"none", "rank_scale", "token_residual", "mixture", "expert_residual"}:
+        if generator not in {"none", "rank_scale", "token_scale", "token_rank_mixer", "token_residual", "mixture", "expert_residual"}:
             raise ValueError(f"unknown generator mode: {generator}")
         self.generator_mode = generator
         self.rank = factors["up"][0].shape[1]
@@ -406,7 +428,10 @@ class LowRankFFN(nn.Module):
         self.down_v = make_bank("down", 1)
         hidden = generator_hidden or min(256, max(32, self.d // 8))
         if generator != "none":
-            out_dim = 6 * self.rank + (self.basis_count if generator in {"mixture", "expert_residual"} else 0)
+            if generator == "token_rank_mixer":
+                out_dim = 3 * self.rank * self.rank
+            else:
+                out_dim = 6 * self.rank + (self.basis_count if generator in {"mixture", "expert_residual"} else 0)
             self.generator = nn.Sequential(
                 nn.Linear(self.d, hidden, dtype=torch.float32),
                 nn.SiLU(),
@@ -473,7 +498,7 @@ class LowRankFFN(nn.Module):
     def _factors(self, x: torch.Tensor) -> tuple[torch.Tensor, ...]:
         if self.generator is None:
             return self.up_u, self.up_v, self.gate_u, self.gate_v, self.down_u, self.down_v
-        context = x.float().mean(dim=(0, 1))
+        context = x.float() if self.generator_mode == "token_scale" else x.float().mean(dim=(0, 1))
         generated = self.generator(context)
         if self.generator_mode in {"mixture", "expert_residual"}:
             scale_logits = generated[: 6 * self.rank]
@@ -512,7 +537,16 @@ class LowRankFFN(nn.Module):
                 self.down_v,
             )
         scales = 1.0 + self.scale_amplitude * torch.tanh(scale_logits).to(dtype=x.dtype)
-        su, sv, sg, sgv, sd, sdv = scales.chunk(6)
+        su, sv, sg, sgv, sd, sdv = scales.chunk(6, dim=-1)
+        if self.generator_mode == "token_scale":
+            return (
+                self.up_u.unsqueeze(0).unsqueeze(0) * su.unsqueeze(-2),
+                self.up_v.unsqueeze(0).unsqueeze(0) * sv.unsqueeze(-1),
+                self.gate_u.unsqueeze(0).unsqueeze(0) * sg.unsqueeze(-2),
+                self.gate_v.unsqueeze(0).unsqueeze(0) * sgv.unsqueeze(-1),
+                self.down_u.unsqueeze(0).unsqueeze(0) * sd.unsqueeze(-2),
+                self.down_v.unsqueeze(0).unsqueeze(0) * sdv.unsqueeze(-1),
+            )
         return (
             up_u * su.view(1, -1),
             up_v * sv.view(-1, 1),
@@ -529,10 +563,34 @@ class LowRankFFN(nn.Module):
         stacked = torch.stack(expert_outputs, dim=0)
         return torch.sum(stacked * alpha.view(self.basis_count, 1, 1, 1), dim=0)
 
+    def _rank_mixers(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        assert self.generator is not None
+        logits = self.generator(x.float()).view(*x.shape[:2], 3, self.rank, self.rank)
+        delta = self.scale_amplitude * torch.tanh(logits).to(dtype=x.dtype)
+        eye = torch.eye(self.rank, device=x.device, dtype=x.dtype).view(1, 1, 1, self.rank, self.rank)
+        mixers = eye + delta
+        return mixers[:, :, 0], mixers[:, :, 1], mixers[:, :, 2]
+
+    def _mix_rank(self, z: torch.Tensor, mixer: torch.Tensor) -> torch.Tensor:
+        return torch.matmul(z.unsqueeze(-2), mixer).squeeze(-2)
+
+    def _forward_token_rank_mixer(self, x: torch.Tensor) -> torch.Tensor:
+        mix_up, mix_gate, mix_down = self._rank_mixers(x)
+        up = self._mix_rank(x @ self.up_u, mix_up) @ self.up_v
+        gate = self._mix_rank(x @ self.gate_u, mix_gate) @ self.gate_v
+        hidden = torch.nn.functional.silu(gate) * up
+        return self._mix_rank(hidden @ self.down_u, mix_down) @ self.down_v
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.generator_mode == "token_rank_mixer":
+            return self._forward_token_rank_mixer(x)
         up_u, up_v, gate_u, gate_v, down_u, down_v = self._factors(x)
-        up = (x @ up_u) @ up_v
-        gate = (x @ gate_u) @ gate_v
+        if self.generator_mode == "token_scale":
+            up = torch.matmul(torch.matmul(x.unsqueeze(-2), up_u), up_v).squeeze(-2)
+            gate = torch.matmul(torch.matmul(x.unsqueeze(-2), gate_u), gate_v).squeeze(-2)
+        else:
+            up = (x @ up_u) @ up_v
+            gate = (x @ gate_u) @ gate_v
         if self.generator_mode in {"token_residual", "mixture"}:
             assert self.residual_gate_a is not None
             assert self.residual_gate_b is not None
@@ -549,7 +607,10 @@ class LowRankFFN(nn.Module):
             gate = gate + self._expert_project(x, self.expert_gate_a, self.expert_gate_b, alpha)
             up = up + self._expert_project(x, self.expert_up_a, self.expert_up_b, alpha)
         hidden = torch.nn.functional.silu(gate) * up
-        out = (hidden @ down_u) @ down_v
+        if self.generator_mode == "token_scale":
+            out = torch.matmul(torch.matmul(hidden.unsqueeze(-2), down_u), down_v).squeeze(-2)
+        else:
+            out = (hidden @ down_u) @ down_v
         if self.generator_mode in {"token_residual", "mixture"}:
             assert self.residual_down_a is not None
             assert self.residual_down_b is not None
@@ -735,7 +796,7 @@ def load_or_build_teacher_and_factors(args: argparse.Namespace, rank: int, world
         rank_factors: dict[str, tuple[torch.Tensor, torch.Tensor]] = {}
         rank_energy: dict[str, float] = {}
         for name, weight in [("gate", gate), ("up", up), ("down", down)]:
-            left, right, energy = svd_factors(weight, r)
+            left, right, energy = svd_factors(weight, r, method=args.svd_method, oversample=args.svd_oversample, niter=args.svd_niter)
             rank_factors[name] = (left, right)
             rank_energy[name] = round(energy, 6)
         factors_by_rank[r] = rank_factors
@@ -837,6 +898,28 @@ def run(args: argparse.Namespace) -> dict[str, Any] | None:
             rows.append(train_student(f"mwg_ephemeral_r{r}", mwg, teacher, args, device, dtype, rank))
             del mwg
             barrier()
+        if "token_scale" in args.students:
+            token_scale = LowRankFFN(
+                factors_by_rank[r],
+                dtype=dtype,
+                generator="token_scale",
+                generator_hidden=args.generator_hidden,
+                scale_amplitude=args.scale_amplitude,
+            ).to(device)
+            rows.append(train_student(f"mwg_token_scale_r{r}", token_scale, teacher, args, device, dtype, rank))
+            del token_scale
+            barrier()
+        if "token_rank_mixer" in args.students:
+            token_rank_mixer = LowRankFFN(
+                factors_by_rank[r],
+                dtype=dtype,
+                generator="token_rank_mixer",
+                generator_hidden=args.generator_hidden,
+                scale_amplitude=args.scale_amplitude,
+            ).to(device)
+            rows.append(train_student(f"mwg_token_rank_mixer_r{r}", token_rank_mixer, teacher, args, device, dtype, rank))
+            del token_rank_mixer
+            barrier()
         if "token_residual" in args.students:
             residual = LowRankFFN(
                 factors_by_rank[r],
@@ -926,6 +1009,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--d", type=int, default=256)
     parser.add_argument("--m", type=int, default=768)
     parser.add_argument("--ranks", type=parse_ints, default=[16, 32, 64])
+    parser.add_argument("--svd-method", choices=["exact", "pca_lowrank"], default="exact")
+    parser.add_argument("--svd-oversample", type=int, default=16)
+    parser.add_argument("--svd-niter", type=int, default=2)
     parser.add_argument("--batch", type=int, default=2)
     parser.add_argument("--seq", type=int, default=64)
     parser.add_argument("--steps", type=int, default=80)
@@ -934,7 +1020,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--weight-decay", type=float, default=0.0)
     parser.add_argument("--grad-clip", type=float, default=1.0)
-    parser.add_argument("--students", type=lambda value: [item.strip() for item in value.split(",") if item.strip()], default=["persistent", "rank_scale", "token_residual"])
+    parser.add_argument("--students", type=lambda value: [item.strip() for item in value.split(",") if item.strip()], default=["persistent", "rank_scale", "token_scale", "token_rank_mixer", "token_residual"])
     parser.add_argument("--generator-hidden", type=int, default=None)
     parser.add_argument("--residual-rank", type=int, default=8)
     parser.add_argument("--scale-amplitude", type=float, default=0.05)

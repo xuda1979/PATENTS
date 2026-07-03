@@ -9,31 +9,29 @@ reduces weight bandwidth and distributed gradient communication.
 
 - `paper/main.tex` - clean paper draft.
 - `paper/refs.bib` - bibliography for the draft.
-- `experiments/mwg_transformer_ai3_benchmark.py` - distributed NPU benchmark.
+- `experiments/mwg_transformer_ASI3_benchmark.py` - distributed NPU benchmark
+  with ASI2 presets for the current training lane.
 - `experiments/mwg_quality_distillation.py` - checkpoint-backed FFN quality and
   low-rank distillation probe.
-- `scripts/ai3_shell.sh` - local AI3 shell wrapper using the robust Huanxin
-  browser automation from `/Users/daxu/software/quantum-gpt`.
-- `scripts/ai3_upload.js` - chunked tar upload into AI3.
-- `scripts/run_ai3_all_npus.sh` - older remote launcher for all AI3 NPUs.
+- `scripts/launch_ASI2_reliability_scaling_detached.sh` - current ASI2 systems
+  replication launcher.
 - `scripts/run_asi1_quality_distillation.sh` - ASI1 quality/distillation
   launcher for Qwen2.5-1.5B FFN weights.
 - `archive/started_drafts/` - earlier paper starts moved out of the repo root.
-- `results/` - local copies of pulled AI3 results.
+- `results/` - local copies of pulled ASI3 results.
 
-## Current ASI1 Target
+## Current ASI2 Target
 
-The current large-experiment target is ASI1 because it exposes eight usable
-Ascend 910B2 NPUs:
+The current training policy is ASI2 only for new MWG-EW Transformer
+experiments. Historical ASI1/ASI3 results may be cited as completed evidence
+but should not be resumed for new training launches.
 
-`https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=ASI1`
+The ASI2 project root is:
 
-The ASI1 project root used by the current experiments is:
-
-`/workspace/software/6_MWG-EW_Meta-Weight_Generation/research_paper_mwg_ew_transformer`
+`/vllm-workspace/mwg-ew-transformer-research`
 
 The strongest current systems artifact is
-`ai3_reliability_scaling_20260518T072507Z`: 1/2/4/8 NPU scaling, three repeats
+`ASI3_reliability_scaling_20260518T072507Z`: 1/2/4/8 NPU scaling, three repeats
 per setting, 8B FFN geometry, and ranks `64,128,256`.
 
 The checkpoint quality artifact is
@@ -46,27 +44,27 @@ rank-scale generator.
 From this folder:
 
 ```bash
-bash scripts/push_ai3_code_to_s3.sh
-./scripts/ai3_shell.sh "cd /vllm-workspace/mwg-ew-transformer-research && bash scripts/ai3_sync_code_from_s3.sh && bash scripts/run_ai3_all_npus.sh"
+bash scripts/push_ASI2_code_to_s3.sh
+../scripts/asi2_shell.sh "cd /vllm-workspace/mwg-ew-transformer-research && bash scripts/ASI2_sync_code_from_s3.sh && bash scripts/launch_ASI2_reliability_scaling_detached.sh"
 ```
 
 For a local smoke test:
 
 ```bash
-python3 experiments/mwg_transformer_ai3_benchmark.py --preset tiny --outdir /tmp/mwg-ew-smoke
+python3 experiments/mwg_transformer_ASI3_benchmark.py --preset tiny --outdir /tmp/mwg-ew-smoke
 ```
 
-For a remote-sized smoke test before the full all-NPU run:
+For a remote-sized ASI2 smoke test before the full all-NPU run:
 
 ```bash
-python3 experiments/mwg_transformer_ai3_benchmark.py --preset ai3_smoke --outdir results
+python3 experiments/mwg_transformer_ASI3_benchmark.py --preset ASI2_smoke --env-label ASI2 --outdir results
 ```
 
-The AI3 launcher writes JSON and Markdown summaries under remote
+The ASI2 launcher writes JSON and Markdown summaries under remote
 `/vllm-workspace/mwg-ew-transformer-research/results/`.
 
 The latest ASI1 pulled systems summary is under
-`results/pulled_asi1/ai3_reliability_scaling_20260518T072507Z/`.
+`results/pulled_asi1/ASI3_reliability_scaling_20260518T072507Z/`.
 
 ## Broad Held-Out Validation
 

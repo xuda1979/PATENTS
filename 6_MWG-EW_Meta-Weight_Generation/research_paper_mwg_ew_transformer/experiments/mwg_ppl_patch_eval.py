@@ -57,7 +57,10 @@ def dummy_factors(d: int, m: int, rank: int) -> dict[str, tuple[torch.Tensor, to
 
 
 def load_student(path: Path, device: torch.device, dtype: torch.dtype) -> tuple[LowRankFFN, dict[str, Any]]:
-    payload = torch.load(path, map_location="cpu")
+    try:
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+    except TypeError:
+        payload = torch.load(path, map_location="cpu")
     init = payload["init"]
     model = LowRankFFN(
         dummy_factors(init["d"], init["m"], init["rank"]),

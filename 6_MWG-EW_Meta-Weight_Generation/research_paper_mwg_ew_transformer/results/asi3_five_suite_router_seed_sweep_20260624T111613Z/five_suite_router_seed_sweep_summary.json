@@ -1,0 +1,76 @@
+{
+  "seed_count": 3,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "paths": [
+    "results/asi3_five_suite_router_seed_sweep_20260624T111613Z/seed0/token_router_five_suite.json",
+    "results/asi3_five_suite_router_seed_sweep_20260624T111613Z/seed1/token_router_five_suite.json",
+    "results/asi3_five_suite_router_seed_sweep_20260624T111613Z/seed2/token_router_five_suite.json"
+  ],
+  "always_patched": {
+    "mean_ppl_ratio": 1.4086268604654324,
+    "min_ppl_ratio": 1.4086268604654324,
+    "max_ppl_ratio": 1.4086268604654324
+  },
+  "suite_summary": {
+    "alpaca_cleaned_train_tail": {
+      "mean_always_patched_ppl_ratio": 1.239753684576782,
+      "min_always_patched_ppl_ratio": 1.239753684576782,
+      "max_always_patched_ppl_ratio": 1.239753684576782,
+      "seed_count": 3
+    },
+    "gsm8k_test": {
+      "mean_always_patched_ppl_ratio": 0.9652366374019129,
+      "min_always_patched_ppl_ratio": 0.9652366374019128,
+      "max_always_patched_ppl_ratio": 0.9652366374019128,
+      "seed_count": 3
+    },
+    "hellaswag_validation_extra": {
+      "mean_always_patched_ppl_ratio": 2.548459924063197,
+      "min_always_patched_ppl_ratio": 2.548459924063197,
+      "max_always_patched_ppl_ratio": 2.548459924063197,
+      "seed_count": 3
+    },
+    "mbpp_test": {
+      "mean_always_patched_ppl_ratio": 1.2162164672851958,
+      "min_always_patched_ppl_ratio": 1.2162164672851958,
+      "max_always_patched_ppl_ratio": 1.2162164672851958,
+      "seed_count": 3
+    },
+    "wikitext103_validation_extra": {
+      "mean_always_patched_ppl_ratio": 1.7973133931907979,
+      "min_always_patched_ppl_ratio": 1.7973133931907979,
+      "max_always_patched_ppl_ratio": 1.7973133931907979,
+      "seed_count": 3
+    }
+  },
+  "mixed_frontier": [
+    {
+      "target_patch_fraction": 0.05,
+      "mean_actual_patch_token_fraction": 0.622898095623987,
+      "mean_ppl_ratio": 1.172459482304508,
+      "min_ppl_ratio": 1.1724594763566052,
+      "max_ppl_ratio": 1.1724594882177743,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.1,
+      "mean_actual_patch_token_fraction": 0.8168874088330632,
+      "mean_ppl_ratio": 1.3423997366194158,
+      "min_ppl_ratio": 1.342399717093782,
+      "max_ppl_ratio": 1.34239975402736,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.25,
+      "mean_actual_patch_token_fraction": 1.0,
+      "mean_ppl_ratio": 1.4116948253808579,
+      "min_ppl_ratio": 1.4116948210285845,
+      "max_ppl_ratio": 1.4116948280657435,
+      "seed_count": 3
+    }
+  ]
+}

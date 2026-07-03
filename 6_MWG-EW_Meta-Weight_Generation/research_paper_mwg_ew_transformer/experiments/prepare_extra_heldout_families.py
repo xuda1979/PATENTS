@@ -33,6 +33,7 @@ class LocalTextSpec:
     name: str
     family: str
     path: Path
+    fields: tuple[str, ...]
 
 
 EXTRA_CORPORA = [
@@ -138,7 +139,7 @@ def load_items(spec: ExtraCorpusSpec, min_chars: int, seed: int) -> tuple[list[s
 def parse_local_text_spec(value: str) -> LocalTextSpec:
     parts = value.split("=", 2)
     if len(parts) != 3:
-        raise argparse.ArgumentTypeError("expected name=family=/path/to/text.txt")
+        raise argparse.ArgumentTypeError("expected name=family=/path/to/data[.txt|.jsonl][:field1,field2]")
     name, family, path = (part.strip() for part in parts)
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", name):
         raise argparse.ArgumentTypeError(f"invalid local suite name: {name!r}")
@@ -146,7 +147,49 @@ def parse_local_text_spec(value: str) -> LocalTextSpec:
         raise argparse.ArgumentTypeError(f"invalid local family: {family!r}")
     if not path:
         raise argparse.ArgumentTypeError("local text path is empty")
-    return LocalTextSpec(name=name, family=family, path=Path(path))
+    field_text = ""
+    path_text = path
+    if ":" in path and not Path(path).exists():
+        candidate_path, candidate_fields = path.rsplit(":", 1)
+        if candidate_fields and all(re.fullmatch(r"[A-Za-z0-9_.-]+", item.strip()) for item in candidate_fields.split(",")):
+            path_text = candidate_path
+            field_text = candidate_fields
+    fields = tuple(item.strip() for item in field_text.split(",") if item.strip())
+    return LocalTextSpec(name=name, family=family, path=Path(path_text), fields=fields)
+
+
+def load_json_rows(path: Path, fields: tuple[str, ...]) -> list[str]:
+    raw = path.read_text(encoding="utf-8", errors="ignore").strip()
+    if not raw:
+        return []
+    values: list[Any] = []
+    if path.suffix.lower() == ".jsonl":
+        for line in raw.splitlines():
+            line = line.strip()
+            if line:
+                values.append(json.loads(line))
+    else:
+        parsed = json.loads(raw)
+        values = parsed if isinstance(parsed, list) else [parsed]
+    rows = []
+    for value in values:
+        if isinstance(value, dict):
+            selected_fields = fields or tuple(value.keys())
+            text = item_text(value, selected_fields)
+        else:
+            text = flatten_value(value)
+        if text:
+            rows.append(text)
+    return rows
+
+
+def load_plain_text_rows(path: Path, paragraph_mode: bool) -> list[str]:
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    if paragraph_mode:
+        chunks = re.split(r"\n\s*\n+", text)
+    else:
+        chunks = text.splitlines()
+    return [normalize(chunk) for chunk in chunks if normalize(chunk)]
 
 
 def load_local_texts(
@@ -154,14 +197,15 @@ def load_local_texts(
     min_chars: int,
     max_items: int,
     seed: int,
+    paragraph_mode: bool,
 ) -> tuple[list[str], dict[str, Any]]:
     if not spec.path.exists():
         raise FileNotFoundError(str(spec.path))
-    rows = [
-        normalize(line)
-        for line in spec.path.read_text(encoding="utf-8", errors="ignore").splitlines()
-        if len(normalize(line)) >= min_chars
-    ]
+    if spec.path.suffix.lower() in {".json", ".jsonl"}:
+        rows = load_json_rows(spec.path, spec.fields)
+    else:
+        rows = load_plain_text_rows(spec.path, paragraph_mode)
+    rows = [row for row in rows if len(row) >= min_chars]
     rng = random.Random(seed)
     rng.shuffle(rows)
     rows = rows[:max_items]
@@ -170,6 +214,8 @@ def load_local_texts(
         "family": spec.family,
         "source_type": "local_text",
         "source_path": str(spec.path),
+        "fields": list(spec.fields),
+        "paragraph_mode": paragraph_mode,
         "selected_items": len(rows),
         "characters": sum(len(row) for row in rows),
     }
@@ -190,11 +236,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-suite-chars", type=int, default=4000)
     parser.add_argument("--local-max-items", type=int, default=260)
     parser.add_argument(
+        "--local-paragraphs",
+        action="store_true",
+        help="For plain-text local sources, split examples on blank-line paragraph blocks instead of lines.",
+    )
+    parser.add_argument(
         "--local-text",
         action="append",
         default=[],
         type=parse_local_text_spec,
-        help="Explicit local corpus source as name=family=/path/to/text.txt; may be repeated.",
+        help="Explicit local source as name=family=/path/to/data[.txt|.jsonl][:field1,field2]; may be repeated.",
     )
     parser.add_argument("--skip-hf", action="store_true", help="Only ingest explicit --local-text sources.")
     parser.add_argument("--allow-partial", action="store_true")
@@ -257,7 +308,13 @@ def main() -> None:
         try:
             if spec.name in seen_names:
                 raise RuntimeError(f"duplicate suite name: {spec.name}")
-            rows, metadata = load_local_texts(spec, args.min_item_chars, args.local_max_items, args.seed)
+            rows, metadata = load_local_texts(
+                spec,
+                args.min_item_chars,
+                args.local_max_items,
+                args.seed,
+                args.local_paragraphs,
+            )
             if len(rows) < args.min_suite_texts:
                 raise RuntimeError(f"only {len(rows)} rows after filtering")
             if sum(len(row) for row in rows) < args.min_suite_chars:

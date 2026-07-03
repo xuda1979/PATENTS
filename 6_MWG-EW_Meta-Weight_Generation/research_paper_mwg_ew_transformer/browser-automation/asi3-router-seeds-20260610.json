@@ -1,0 +1,94 @@
+{
+  "ok": true,
+  "submit": true,
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": null,
+  "taskName": "asi3-router-seeds-20260610",
+  "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+  "resourceGroup": "huanxin-all-resource",
+  "resourceGroupType": "公共资源组",
+  "priority": "中",
+  "resourceConfig": {
+    "instanceCount": 1,
+    "acceleratorCardsPerInstance": 2,
+    "cpuPerInstance": 40,
+    "memoryPerInstance": 480
+  },
+  "usedProfile": {
+    "profileDir": "/var/folders/py/d8v62mnd40vg77h4cls6n0t80000gn/T/huanxin-profile-auto-1781085464665-50745",
+    "isolated": true,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": true,
+    "baseProfileLocked": true
+  },
+  "launchSpec": {
+    "remote_root": "/vllm-workspace/mwg-ew-transformer-research",
+    "output_dir": "",
+    "log_path": "",
+    "job_name": "ASI3-token-router-global",
+    "remote_command": "set -euo pipefail && umask 077 && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf && command -v rclone >/dev/null && rclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress && chmod 700 /tmp/remote_ASI3_token_router_global_payload.sh && HUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260610T020738Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/router_global_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+    "execution_command": "set -euo pipefail\numask 077\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\ncommand -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260610T020738Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/router_global_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+    "executionCommand": "set -euo pipefail\numask 077\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\ncommand -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260610T020738Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/router_global_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh"
+  },
+  "executionCommand": "set -euo pipefail && umask 077 && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf && command -v rclone >/dev/null && rclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress && chmod 700 /tmp/remote_ASI3_token_router_global_payload.sh && HUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260610T020738Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/router_global_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+  "networkEvents": [
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/portal/messagecenter/web/getMailList",
+      "status": 200,
+      "requestPreview": "{\"pageNum\":\"1\",\"pageSize\":\"0\",\"readStatus\":\"0\"}",
+      "responsePreview": "{\"state\":\"OK\",\"requestId\":null,\"body\":{\"pageNum\":1,\"pageSize\":0,\"list\":[{\"mailId\":71446,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 12:40:40\"},{\"mailId\":71443,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 11:04:37\"},{\"mailId\":71378,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】API订购申请审批完成通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-04 16:20:56\"},{\"mailId\":57566,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】资产公开申请审批通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-05-14 15:31:51\"},{\"mailId\":46887,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-28 09:11:12\"},{\"mailId\":45699,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-21 11:32:25\"},{\"mailId\":45441,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】新建项目申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-20 09:07:33\"}],\"total\":7,\"unreadCount\":7},\"errorCode\":null,\"errorMessage\":null,\"errorParams\":null}"
+    }
+  ],
+  "submitResult": {
+    "submitted": false,
+    "blockedReason": "direct_submit_failed",
+    "clickAttempted": false,
+    "drawerOpenAfterClick": false,
+    "postClickNetworkEvents": [],
+    "visibleMessages": [],
+    "resourceState": null,
+    "createPayloadOverride": {
+      "name": "asi3-router-seeds-20260610",
+      "lines": 1,
+      "encodedBytes": 2812,
+      "firstLine": "set -euo pipefail && umask 077 && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'e",
+      "imageId": 395,
+      "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+      "resourceInfo": {
+        "gpuType": "昇腾910B",
+        "gpu": 2,
+        "cpu": 40,
+        "mem": 480
+      },
+      "priority": "med"
+    },
+    "directSubmitOnly": {
+      "attempted": true,
+      "payloadSummary": {
+        "name": "asi3-router-seeds-20260610",
+        "lines": 1,
+        "encodedBytes": 2812,
+        "firstLine": "set -euo pipefail && umask 077 && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'e",
+        "imageId": 395,
+        "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+        "resourceInfo": {
+          "gpuType": "昇腾910B",
+          "gpu": 2,
+          "cpu": 40,
+          "mem": 480
+        },
+        "priority": "med"
+      },
+      "response": {
+        "ok": false,
+        "status": 403,
+        "text": "RBAC: access denied",
+        "json": null
+      }
+    },
+    "taskList": null
+  },
+  "timestamp": "2026-06-10T09:58:03.829Z"
+}

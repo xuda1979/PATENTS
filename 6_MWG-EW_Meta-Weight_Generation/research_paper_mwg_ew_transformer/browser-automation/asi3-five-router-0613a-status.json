@@ -1,0 +1,173 @@
+{
+  "ok": false,
+  "timestamp": "2026-06-13T14:31:22.723Z",
+  "requested": {
+    "taskId": "",
+    "taskName": "asi3-five-router-0613a",
+    "projectId": "21b4208dde424e96b159362ef49c9c96"
+  },
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": {
+    "ok": true,
+    "mode": "safari_sso_bridge",
+    "authUrl": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+    "bridgeAttempt": 1,
+    "maxBridgeAttempts": 2,
+    "safariCapture": {
+      "found": true,
+      "window": 2,
+      "tab": 9,
+      "visit_url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+      "final_url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+      "title": "焕新社区",
+      "callback_url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+      "auth_redirect_url": null,
+      "redirect_samples": [
+        {
+          "t": 7.6,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.65,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.7,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.75,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.8,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.85,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.9,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.95,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        }
+      ],
+      "redirect_samples_truncated": true,
+      "redirect_sample_count": 160
+    },
+    "finalUrl": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI",
+    "finalUrlState": "app_surface",
+    "trace": [
+      {
+        "label": "after_callback_attempt_1",
+        "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+        "classified": "callback",
+        "timestamp": "2026-06-13T14:31:01.235Z"
+      },
+      {
+        "label": "after_retry_train_dev_attempt_1",
+        "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI",
+        "classified": "app_surface",
+        "timestamp": "2026-06-13T14:31:07.360Z"
+      }
+    ],
+    "bodyPreview": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 AI 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回 Jupyter VSCode Shell终端 可视化 保存镜像 任务列表 提交任务",
+    "localStorageKeys": [
+      "JTKL_POOL_ID_KEY",
+      "JTKL_PROJECT_ID_KEY"
+    ],
+    "sessionStorageKeys": [
+      "RECORD_USER_VISIT"
+    ],
+    "cookieNames": [
+      "AUTH_SESSION_ID",
+      "AUTH_SESSION_ID_LEGACY",
+      "KEYCLOAK_IDENTITY",
+      "KEYCLOAK_IDENTITY_LEGACY",
+      "KEYCLOAK_REMEMBER_ME",
+      "KEYCLOAK_SESSION",
+      "KEYCLOAK_SESSION_LEGACY"
+    ]
+  },
+  "currentUrl": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI",
+  "currentUrlClass": "app_surface",
+  "usedProfile": {
+    "profileDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "isolated": false,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": false,
+    "baseProfileLocked": false
+  },
+  "task": null,
+  "taskStatusCode": null,
+  "taskStatusText": "",
+  "pods": null,
+  "uiTaskList": {
+    "clicked": true,
+    "taskRowClicked": false,
+    "taskNameVisible": false,
+    "matched": null,
+    "responses": [
+      {
+        "url": "https://aihuanxin.cn/kunlun/web/task/v1/list",
+        "status": 200,
+        "requestMethod": "POST",
+        "requestPostData": "{\"pageNum\":1,\"pageSize\":10,\"projectId\":[\"21b4208dde424e96b159362ef49c9c96\"],\"status\":[],\"resGroupId\":[],\"order\":null,\"currentUser\":1}",
+        "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"total\":301,\"list\":[{\"id\":\"dt-d571dd7111324e5bbc87f236eb3fc147\",\"name\":\"as1-isq-fs4spd-143954\",\"userName\":\"xuda2025\",\"status\":0,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":20,\"gpu\":4,\"mem\":240,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 14:40:44\",\"startTime\":\"2026-06-11 14:40:53\",\"endTime\":\"2026-06-12 21:16:42\",\"useTime\":\"30:35:49\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-bd1e3bc04ff345a58e1e3a67c8384c61\",\"name\":\"as1-isq-fs4sp-143246\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":20,\"gpu\":4,\"mem\":240,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 14:33:44\",\"startTime\":\"2026-06-11 14:33:57\",\"endTime\":\"2026-06-11 14:34:58\",\"useTime\":\"00:01:01\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-bdfe53d31e554709b56772e987525bb3\",\"name\":\"asi3-pys3-0611c\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":4,\"gpu\":1,\"mem\":16,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 14:17:45\",\"startTime\":\"2026-06-11 14:17:55\",\"endTime\":\"2026-06-11 14:18:25\",\"useTime\":\"00:00:30\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-e38ff064b8bd4c7d849aeee16884117f\",\"name\":\"asi3-pys3-0611b\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":4,\"gpu\":1,\"mem\":16,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 14:14:21\",\"startTime\":\"2026-06-11 14:14:35\",\"endTime\":\"2026-06-11 14:14:35\",\"useTime\":\"00:00:00\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\""
+      }
+    ],
+    "summary": {
+      "title": "焕新社区",
+      "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-9a5a098accce31c28cf4c6ca23391341?name=AI",
+      "bodyPreview": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 AI 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回 Jupyter VSCode Shell终端 可视化 保存镜像 任务列表 提交任务 训练任务列表 仅我创建 训练任务名称 所属资源组 创建人 任务状态 优先级 实例数 单实例资源配置 最近提交时间 服务时长 as1-isq-fs4spd-143954 公共huanxin-all-resource xuda2025 成功 中 1 4加速卡 20核CPU 240GB内存 2026-06-11 14:40:44 30:35:49 as1-isq-fs4sp-143246 公共huanxin-all-resource xuda2025 失败 中 1 4加速卡 20核CPU 240GB内存 2026-06-11 14:33:44 00:01:01 asi3-pys3-0611c 公共huanxin-all-resource xuda2025 失败 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:17:45 00:00:30 asi3-pys3-0611b 公共huanxin-all-resource xuda2025 失败 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:14:21 00:00:00 asi3-pys3-0611a 公共huanxin-all-resource xuda2025 失败 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:10:11 00:00:00 asi3-extra5-1n-0611a 公共huanxin-all-resource xuda2025 失败 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:06:40 00:00:00 as1-isq-fs4rb-135312 公共huanxin-all-resource xuda2025 失败 中 1 4加速卡 20核CPU 240GB内存 2026-06-11 13:54:09 00:30:32 asi3-extra5-2n-0611b 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:53:42 00:00:00 asi3-2min-0611a 公共huanxin-all-resource xuda2025 成功 中 1 2加速卡 8核CPU 32GB内存 2026-06-11 13:50:44 00:00:09 asi3-mincan-0611a 公共huanxin-all-resource xuda2025 成功 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 13:47:38 00:00:09 共 301 条 每页显示 10 条 1 2 3 4 5 ••• 31 跳至页",
+      "buttons": [
+        "项目空间管理",
+        "开发环境",
+        "开发环境详情",
+        "可视化",
+        "保存镜像",
+        "任务列表",
+        "提交任务",
+        "上传附件支持png、jpg、jpeg、PNG、JPG、JPEG格式，最多上传5个文件，每个文件大小不超过10 MB",
+        "上传附件",
+        "取消",
+        "确定",
+        "上传附件支持pdf、doc、docx格式，最多上传5个文件，每个文件大小不超过10 MB",
+        "上传附件",
+        "取消",
+        "确定",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "•••",
+        "31"
+      ]
+    }
+  },
+  "listStatus": {
+    "ok": false,
+    "status": 403
+  },
+  "detailStatus": null,
+  "podStatus": null,
+  "raw": {
+    "list": "RBAC: access denied",
+    "detail": null,
+    "pods": null
+  }
+}

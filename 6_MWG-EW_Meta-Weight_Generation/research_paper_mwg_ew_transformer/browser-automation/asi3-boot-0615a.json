@@ -1,0 +1,101 @@
+{
+  "ok": true,
+  "submit": true,
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": null,
+  "taskName": "asi3-boot-0615a",
+  "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+  "resourceGroup": "huanxin-all-resource",
+  "resourceGroupType": "公共资源组",
+  "priority": "中",
+  "resourceConfig": {
+    "instanceCount": 1,
+    "acceleratorCardsPerInstance": 1,
+    "cpuPerInstance": 4,
+    "memoryPerInstance": 16
+  },
+  "usedProfile": {
+    "profileDir": "/var/folders/py/d8v62mnd40vg77h4cls6n0t80000gn/T/huanxin-profile-auto-1781510325912-59966",
+    "isolated": true,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": true,
+    "baseProfileLocked": true
+  },
+  "launchSpec": {
+    "remote_root": "/vllm-workspace/mwg-ew-transformer-research",
+    "output_dir": "",
+    "log_path": "",
+    "job_name": "ASI3-token-router-global",
+    "remote_command": "set -euo pipefail && umask 077 && echo __ASI3_TASK_COMMAND_BOOT__ && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf && if ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null && rclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress && chmod 700 /tmp/remote_ASI3_token_router_global_payload.sh && HUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0' HUANXIN_ASI3_VISIBLE_DEVICES='0' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+    "execution_command": "set -euo pipefail\numask 077\necho __ASI3_TASK_COMMAND_BOOT__\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\nif ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0' HUANXIN_ASI3_VISIBLE_DEVICES='0' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+    "executionCommand": "set -euo pipefail\numask 077\necho __ASI3_TASK_COMMAND_BOOT__\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\nif ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0' HUANXIN_ASI3_VISIBLE_DEVICES='0' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0 bash /tmp/remote_ASI3_token_router_global_payload.sh"
+  },
+  "executionCommand": "set -euo pipefail && umask 077 && echo __ASI3_TASK_COMMAND_BOOT__ && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf && if ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null && rclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress && chmod 700 /tmp/remote_ASI3_token_router_global_payload.sh && HUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0' HUANXIN_ASI3_VISIBLE_DEVICES='0' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+  "networkEvents": [
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/resource/v1/user/list-all-resource-group",
+      "status": 200,
+      "requestPreview": "{}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":[{\"id\":154,\"groupName\":\"huanxin-all-resource\",\"attribute\":null,\"status\":null,\"clusterId\":null},{\"id\":152,\"groupName\":\"测试资源组\",\"attribute\":null,\"status\":null,\"clusterId\":null},{\"id\":159,\"groupName\":\"研究院未来院专属资源组\",\"attribute\":null,\"status\":null,\"clusterId\":null}],\"traceId\":\"c36db034-9a69-49ed-9827-495169e7dbef\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/develop/v1/list",
+      "status": 200,
+      "requestPreview": "{\"pageNum\":1,\"pageSize\":10,\"projectId\":[\"21b4208dde424e96b159362ef49c9c96\"],\"status\":[],\"resGroupId\":[],\"order\":null,\"currentUser\":1,\"keyword\":\"\"}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"total\":3,\"list\":[{\"id\":\"dl-c72bd81a96e33134bbe0ae4a478fbab0\",\"userName\":\"xuda2025\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"projectName\":\"移动研究院未来院\",\"resGroupId\":159,\"resGroupName\":\"研究院未来院专属资源组\",\"resGroupType\":\"personal\",\"resGroupIsBind\":true,\"name\":\"ASI3\",\"count\":1,\"startTime\":\"2026-06-15 15:48:12\",\"endTime\":null,\"poolId\":null,\"poolName\":null,\"resType\":null,\"status\":2,\"jupyterUrl\":\"https://aihuanxin.cn/kunlun/ingress/68b329/21b4208dde424e96b159362ef49c9c96/dl-c72bd81a96e33134bbe0ae4a478fbab0-0/lab\",\"vscodeUrl\":\"https://aihuanxin.cn/kunlun/ingress/68b329/21b4208dde424e96b159362ef49c9c96/dl-c72bd81a96e33134bbe0ae4a478fbab0-1/\",\"failedMessage\":null,\"resourceInfo\":{\"cpu\":160,\"gpu\":8,\"mem\":1920,\"gpuType\":\"昇腾910B\"},\"gpuUsageRate\":null,\"gpuMemUsageRate\":null,\"cpuUsageRate\":null,\"memUsageRate\":null},{\"id\":\"dl-9a5a098accce31c28cf4c6ca23391341\",\"userName\":\"xuda2025\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"projectName\":\"移动研究院未来院\",\"resGroupId\":159,\"resGroupName\":\"研究院未来院专属资源组\",\"resGroupType\":\"personal\",\"resGroupIsBind\":true,\"name\":\"ASI1\",\"count\":1,\"startTime\":\"2026-06-15 10:42:29\",\"endTime\":null,\"poolId\":null,\"poolName\":null,\"resType\":null,\"status\":2,\"jupyterUrl\":\"https://aihuanxin.cn/kunlun/ingress/68b329/21b4208dde424e96b159362ef49c9c96/dl-9a5a098accce31c28cf4c6ca23391341-0/lab\",\"vscodeUrl\":\"https://aihuanxin.cn/kunlun/ingress/68b329/21b4208dde424e96b159362ef49c9c96/dl-9a5a098accce31c28cf4c6ca23391341-1/\",\"failedMessage\":null,\"resourceInfo\":{\"cpu\":80,\"gpu\":4,\"mem\":960,\"gpuType\":\"昇腾910B\"},\"gpuUsageRate\":null,\"gpuMemUsageRate\":null,\"cpuUsageRate\":null,\"memUsageRate\":null},{\"id\":\"dl-868c196fb82d3e0b8cfbbe826d8afd0a\",\"userName\":\"xuda2025\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"projectName\":\"移动研究院未来院\",\"resGroupId\":159,\"resGroupName\":\"研究院未来院专属资源组\",\"resGroupType\":\"personal\",\"resGroupIsBind\":true,\"name\":\"ASI2\",\"count\":1,\"startTime\":\"2026-06-11 08:30:18\",\"endTime\":\"2026-06-11 21:00:06\",\"poolId\":null,\"poolName\":null,\"resType\":null,\"status\":4,\"jupyterUrl\":null,\"vscodeUrl\":null,\"failedMessage\":null,\"resourceInfo\":{\"cpu\":160,\"gpu\":8,\"mem\":1920,\"gpuType\":\"昇腾910B\"},\"gpuUsageRate\":null,\"gpuMemUsageRate\":null,\"cpuUsageRate\":null,\"memUsageRate\":null}]},\"traceId\":\"156fa156-fadc-4c72-87dc-73a0da77bad3\"}"
+    }
+  ],
+  "submitResult": {
+    "submitted": false,
+    "blockedReason": "direct_submit_failed",
+    "clickAttempted": false,
+    "drawerOpenAfterClick": false,
+    "postClickNetworkEvents": [],
+    "visibleMessages": [],
+    "resourceState": null,
+    "createPayloadOverride": {
+      "name": "asi3-boot-0615a",
+      "lines": 1,
+      "encodedBytes": 4568,
+      "firstLine": "set -euo pipefail && umask 077 && echo __ASI3_TASK_COMMAND_BOOT__ && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' ",
+      "imageId": 395,
+      "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+      "resourceInfo": {
+        "gpuType": "昇腾910B",
+        "gpu": 1,
+        "cpu": 4,
+        "mem": 16
+      },
+      "priority": "med"
+    },
+    "directSubmitOnly": {
+      "attempted": true,
+      "payloadSummary": {
+        "name": "asi3-boot-0615a",
+        "lines": 1,
+        "encodedBytes": 4568,
+        "firstLine": "set -euo pipefail && umask 077 && echo __ASI3_TASK_COMMAND_BOOT__ && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' ",
+        "imageId": 395,
+        "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+        "resourceInfo": {
+          "gpuType": "昇腾910B",
+          "gpu": 1,
+          "cpu": 4,
+          "mem": 16
+        },
+        "priority": "med"
+      },
+      "response": {
+        "ok": false,
+        "status": 403,
+        "text": "RBAC: access denied",
+        "json": null
+      }
+    },
+    "taskList": null
+  },
+  "timestamp": "2026-06-15T07:58:58.189Z"
+}

@@ -44,6 +44,9 @@ async function main() {
 
   const headless = process.env.HUANXIN_HEADLESS !== '0';
   const holdOpen = process.env.HUANXIN_HOLD_OPEN === '1';
+  const trainDevUrl =
+    process.env.HUANXIN_TRAIN_DEV_LIST_URL ||
+    'https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev';
 
   const { profileDir } = ensureProfileDir();
   const context = await chromium.launchPersistentContext(profileDir, {
@@ -54,15 +57,24 @@ async function main() {
 
   const page = context.pages()[0] || (await context.newPage());
   page.setDefaultTimeout(30000);
-  await page.goto(
-    'https://aihuanxin.cn/kunlun/kl-web?poolId=1&projectId=3ed7854b946a47b1a49ad754baa76cd3#/train-dev',
-    { waitUntil: 'networkidle', timeout: 180000 }
-  );
+  await page.goto(trainDevUrl, { waitUntil: 'networkidle', timeout: 180000 });
   await page.waitForTimeout(2000);
 
   const row = page.locator('tr', { hasText: envName }).first();
   await row.waitFor({ state: 'visible' });
-  await row.getByRole('button', { name: '打开' }).click();
+  const actionNames = ['打开', '启动', '运行', '进入'];
+  let clicked = false;
+  for (const actionName of actionNames) {
+    const button = row.getByRole('button', { name: actionName }).first();
+    if (await button.count()) {
+      await button.click();
+      clicked = true;
+      break;
+    }
+  }
+  if (!clicked) {
+    throw new Error(`Could not find an open/start button for environment: ${envName}`);
+  }
   await page.waitForTimeout(5000);
 
   const pages = context.pages();

@@ -1,0 +1,37 @@
+{
+  "ok": true,
+  "envName": "ASI3",
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5Bredacted%5D&session_state=%5Bredacted%5D&code=%5Bredacted%5D",
+  "command": "cd /vllm-workspace/mwg-ew-transformer-research && latest=$(ls -t results/ASI3_mwg_transformer_*.json | head -n 1); echo LATEST=$latest; cat \"$latest\"\necho __ASI3_RUN_1780629050853835000__",
+  "output": "\"mean_ms\": 1.6237,\n            \"median_ms\": 1.6053,\n            \"min_ms\": 1.599,\n            \"max_ms\": 1.6599\n          },\n          {\n            \"rank\": 5,\n            \"mean_ms\": 1.6249,\n            \"median_ms\": 1.6043,\n            \"min_ms\": 1.5972,\n            \"max_ms\": 1.6609\n          },\n          {\n            \"rank\": 6,\n            \"mean_ms\": 1.6293,\n            \"median_ms\": 1.6143,\n            \"min_ms\": 1.6016,\n            \"max_ms\": 1.6593\n          },\n          {\n            \"rank\": 7,\n            \"mean_ms\": 1.6342,\n            \"median_ms\": 1.6145,\n            \"min_ms\": 1.608,\n            \"max_ms\": 1.6721\n          }\n        ]\n      },\n      \"decode_tokens_per_s\": 831844.03,\n      \"train_tokens_per_s\": 2559120.3,\n      \"forward_speedup_x\": 0.725,\n      \"train_speedup_x\": 1.992,\n      \"allreduce_reduction_x\": 3.702\n    }\n  },\n  \"env_label\": \"ASI3\"\n}__ASI3_RUN_1780629050853835000__",
+  "commandStatus": 0,
+  "commandOk": true,
+  "before": "root:/vllm-workspace# ^C\nroot:/vllm-workspace#",
+  "after": "          {\n            \"rank\": 4,\n            \"mean_ms\": 1.6237,\n            \"median_ms\": 1.6053,\n            \"min_ms\": 1.599,\n            \"max_ms\": 1.6599\n          },\n          {\n            \"rank\": 5,\n            \"mean_ms\": 1.6249,\n            \"median_ms\": 1.6043,\n            \"min_ms\": 1.5972,\n            \"max_ms\": 1.6609\n          },\n          {\n            \"rank\": 6,\n            \"mean_ms\": 1.6293,\n            \"median_ms\": 1.6143,\n            \"min_ms\": 1.6016,\n            \"max_ms\": 1.6593\n          },\n          {\n            \"rank\": 7,\n            \"mean_ms\": 1.6342,\n            \"median_ms\": 1.6145,\n            \"min_ms\": 1.608,\n            \"max_ms\": 1.6721\n          }\n        ]\n      },\n      \"decode_tokens_per_s\": 831844.03,\n      \"train_tokens_per_s\": 2559120.3,\n      \"forward_speedup_x\": 0.725,\n      \"train_speedup_x\": 1.992,\n      \"allreduce_reduction_x\": 3.702\n    }\n  },\n  \"env_label\": \"ASI3\"\n}__ASI3_RUN_1780629050853835000__\n__OC_1780629067618_wv23yq_STATUS__:0\n__OC_1780629067618_wv23yq_END__\nroot:/vllm-workspace#",
+  "debug": {
+    "before": {
+      "rowCount": 43,
+      "accessibilityCount": 0,
+      "rowTextLength": 47,
+      "accessibilityTextLength": 0,
+      "helperValue": "\u0003",
+      "activeTag": "TEXTAREA",
+      "activeClassName": "xterm-helper-textarea"
+    },
+    "after": {
+      "rowCount": 43,
+      "accessibilityCount": 0,
+      "rowTextLength": 1000,
+      "accessibilityTextLength": 0,
+      "helperValue": "",
+      "activeTag": "TEXTAREA",
+      "activeClassName": "xterm-helper-textarea"
+    }
+  },
+  "durationMs": 3251,
+  "startedAt": "2026-06-05T03:11:06.251Z",
+  "completedAt": "2026-06-05T03:11:09.502Z",
+  "transport": "daemon"
+}

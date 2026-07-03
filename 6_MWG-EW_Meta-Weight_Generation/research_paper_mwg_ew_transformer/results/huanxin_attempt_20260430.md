@@ -4,13 +4,13 @@
 
 The benchmark script passed two local CPU smoke runs before remote execution:
 
-- `python3 experiments/mwg_transformer_ai3_benchmark.py --preset tiny --outdir /tmp/mwg-ew-smoke`
-- `python3 experiments/mwg_transformer_ai3_benchmark.py --preset ai3_smoke --outdir /tmp/mwg-ew-ai3-smoke-local`
+- `python3 experiments/mwg_transformer_ASI3_benchmark.py --preset tiny --outdir /tmp/mwg-ew-smoke`
+- `python3 experiments/mwg_transformer_ASI3_benchmark.py --preset ASI3_smoke --outdir /tmp/mwg-ew-ASI3-smoke-local`
 
-The new `ai3_smoke` preset completed and wrote:
+The new `ASI3_smoke` preset completed and wrote:
 
-- `/tmp/mwg-ew-ai3-smoke-local/ai3_mwg_transformer_20260430T040141Z.json`
-- `/tmp/mwg-ew-ai3-smoke-local/ai3_mwg_transformer_20260430T040141Z.md`
+- `/tmp/mwg-ew-ASI3-smoke-local/ASI3_mwg_transformer_20260430T040141Z.json`
+- `/tmp/mwg-ew-ASI3-smoke-local/ASI3_mwg_transformer_20260430T040141Z.md`
 
 Summary from the local smoke run:
 
@@ -22,16 +22,16 @@ Summary from the local smoke run:
 
 ## Huanxin Control-Plane Status
 
-The Huanxin profile was stale for the exact AI3 URL:
+The Huanxin profile was stale for the exact ASI3 URL:
 
-`https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ai3`
+`https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3`
 
 The probe returned `login_required`. I then ran the Safari SSO repair flow:
 
 ```bash
-HUANXIN_TRAIN_DEV_URL='https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ai3' \
-HUANXIN_PROFILE_REPAIR_RESULT_PATH=/tmp/mwg-ew-huanxin-repair-ai3.json \
-HUANXIN_PROFILE_REPAIR_STATE_PATH=/tmp/mwg-ew-huanxin-repair-ai3-state.json \
+HUANXIN_TRAIN_DEV_URL='https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3' \
+HUANXIN_PROFILE_REPAIR_RESULT_PATH=/tmp/mwg-ew-huanxin-repair-ASI3.json \
+HUANXIN_PROFILE_REPAIR_STATE_PATH=/tmp/mwg-ew-huanxin-repair-ASI3-state.json \
 HUANXIN_REPAIR_RUN_PROBE=1 \
 HUANXIN_PROFILE_REPAIR_PRINT_RESULT=1 \
 HUANXIN_REPAIR_RESTART_DAEMON_ON_SUCCESS=0 \
@@ -48,13 +48,13 @@ paper environments were already running:
 
 | Environment | Status | Resources | Last start |
 |---|---|---:|---|
-| `ai3` | `运行中` | 4 accelerator cards | 2026-04-30 14:38:05 |
+| `ASI3` | `运行中` | 4 accelerator cards | 2026-04-30 14:38:05 |
 | `AI` | `运行中` | 8 accelerator cards | 2026-04-30 14:38:00 |
 
-The AI3 shell then reached a prompt and reported:
+The ASI3 shell then reached a prompt and reported:
 
 ```text
-__MWG_AI3_READY__ /vllm-workspace
+__MWG_ASI3_READY__ /vllm-workspace
 dl-c72bd81a96e33134bbe0ae4a478fbab0-r0-24e1e34c015d-0
 2026-04-30T06:44:08Z
 ```
@@ -67,19 +67,19 @@ The research-paper workspace uploaded successfully to:
 
 The upload included `README.md`, `paper/`, `experiments/`, and `scripts/`.
 
-## Remote Single-Process AI3 Smoke
+## Remote Single-Process ASI3 Smoke
 
 Command:
 
 ```bash
 cd /vllm-workspace/mwg-ew-transformer-research &&
-python3 experiments/mwg_transformer_ai3_benchmark.py --preset ai3_smoke --outdir results
+python3 experiments/mwg_transformer_ASI3_benchmark.py --preset ASI3_smoke --outdir results
 ```
 
 The run completed successfully and wrote:
 
-- `results/ai3_mwg_transformer_20260430T064933Z.json`
-- `results/ai3_mwg_transformer_20260430T064933Z.md`
+- `results/ASI3_mwg_transformer_20260430T064933Z.json`
+- `results/ASI3_mwg_transformer_20260430T064933Z.md`
 
 Summary:
 
@@ -90,7 +90,7 @@ Summary:
 | mwg_r64 | 0.924 | 0.703 | 0.7967 | 2.8769 | 0.391 | 0.446 | 5.867 |
 | mwg_r128 | 1.722 | 1.406 | 0.7764 | 2.7362 | 0.401 | 0.469 | 2.933 |
 
-This small geometry validates the AI3 runtime, fp16 NPU execution, result
+This small geometry validates the ASI3 runtime, fp16 NPU execution, result
 writing, and descriptor/parameter accounting. It is not intended as the headline
 performance configuration.
 
@@ -105,8 +105,8 @@ export ASCEND_RT_VISIBLE_DEVICES=1,3,5,6 \
        HCCL_CONNECT_TIMEOUT=1800 \
        OMP_NUM_THREADS=1 &&
 python3 -m torch.distributed.run --nproc_per_node=4 \
-  experiments/mwg_transformer_ai3_benchmark.py \
-  --preset ai3_smoke --outdir results --warmup 1 --iters 2 --train-iters 1 --comm-iters 1
+  experiments/mwg_transformer_ASI3_benchmark.py \
+  --preset ASI3_smoke --outdir results --warmup 1 --iters 2 --train-iters 1 --comm-iters 1
 ```
 
 The initial 4-NPU distributed launch failed with `ChildFailedError`; local ranks
@@ -117,15 +117,15 @@ problem:
 |---|---:|---|---|
 | `1,3` | 2 | pass | HCCL/distributed path works on first tested pair |
 | `5,6` | 2 | pass | also passed when `--dtype fp16` was forced |
-| `0,1,2,3` | 4 | pass | correct logical four-card mapping for current AI3 runtime |
+| `0,1,2,3` | 4 | pass | correct logical four-card mapping for current ASI3 runtime |
 | `1,3,5,6` | 4 | fail | older physical-looking mapping; ranks 2/3 exited |
 
 The launcher has been updated to default to `ASCEND_RT_VISIBLE_DEVICES=0,1,2,3`.
 
 Latest successful 4-NPU smoke:
 
-- `results/ai3_mwg_transformer_20260430T083252Z.json`
-- `results/ai3_mwg_transformer_20260430T083252Z.md`
+- `results/ASI3_mwg_transformer_20260430T083252Z.json`
+- `results/ASI3_mwg_transformer_20260430T083252Z.md`
 
 Summary for the successful logical-ID 4-NPU smoke:
 
@@ -143,16 +143,16 @@ Command shape:
 cd /vllm-workspace/mwg-ew-transformer-research &&
 export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3 &&
 python3 -m torch.distributed.run --nproc_per_node=4 \
-  experiments/mwg_transformer_ai3_benchmark.py \
-  --preset ai3_smoke --d 1024 --m 2816 --ranks 32,64,128 \
+  experiments/mwg_transformer_ASI3_benchmark.py \
+  --preset ASI3_smoke --d 1024 --m 2816 --ranks 32,64,128 \
   --batch-decode 1 --seq-decode 128 --batch-train 1 --seq-train 256 \
   --warmup 1 --iters 2 --train-iters 1 --comm-iters 1 --outdir results
 ```
 
 The run completed successfully and wrote:
 
-- `results/ai3_mwg_transformer_20260430T084229Z.json`
-- `results/ai3_mwg_transformer_20260430T084229Z.md`
+- `results/ASI3_mwg_transformer_20260430T084229Z.json`
+- `results/ASI3_mwg_transformer_20260430T084229Z.md`
 
 Summary:
 
@@ -176,15 +176,15 @@ Command shape:
 cd /vllm-workspace/mwg-ew-transformer-research &&
 export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3 &&
 python3 -m torch.distributed.run --nproc_per_node=4 \
-  experiments/mwg_transformer_ai3_benchmark.py \
-  --preset ai3_large --ranks 64,128,256 \
+  experiments/mwg_transformer_ASI3_benchmark.py \
+  --preset ASI3_large --ranks 64,128,256 \
   --warmup 1 --iters 2 --train-iters 1 --comm-iters 1 --outdir results
 ```
 
 The run completed successfully and wrote:
 
-- `results/ai3_mwg_transformer_20260430T084455Z.json`
-- `results/ai3_mwg_transformer_20260430T084455Z.md`
+- `results/ASI3_mwg_transformer_20260430T084455Z.json`
+- `results/ASI3_mwg_transformer_20260430T084455Z.md`
 
 Summary:
 
@@ -195,7 +195,7 @@ Summary:
 | mwg_r128 | 18.254 | 13.500 | 1.2936 | 3.8167 | 1.172 | 2.093 | 24.889 | 1.2024 |
 | mwg_r256 | 32.507 | 27.000 | 1.2697 | 3.7759 | 1.194 | 2.115 | 12.444 | 1.6092 |
 
-This short run established the headline 8B geometry on all four AI3 NPUs and
+This short run established the headline 8B geometry on all four ASI3 NPUs and
 showed forward and training speedups under short timing counts. Because the
 iteration counts are low, a longer reproduction was launched before inserting
 numbers into the paper.
@@ -206,11 +206,11 @@ Command:
 
 ```bash
 cd /vllm-workspace/mwg-ew-transformer-research &&
-bash scripts/run_ai3_all_npus.sh
+bash scripts/run_ASI3_all_npus.sh
 ```
 
 The script resolved `ASCEND_RT_VISIBLE_DEVICES=0,1,2,3`, launched four ranks,
-and used the full `ai3_large` defaults:
+and used the full `ASI3_large` defaults:
 
 - warmup iterations: 4
 - forward timing iterations: 12
@@ -219,8 +219,8 @@ and used the full `ai3_large` defaults:
 
 The run completed successfully and wrote:
 
-- `results/ai3_mwg_transformer_20260430T092119Z.json`
-- `results/ai3_mwg_transformer_20260430T092119Z.md`
+- `results/ASI3_mwg_transformer_20260430T092119Z.json`
+- `results/ASI3_mwg_transformer_20260430T092119Z.md`
 
 Summary:
 

@@ -1,0 +1,82 @@
+{
+  "manifest": "data/heldout/router_global_splits/manifest.json",
+  "train_key": "train_texts",
+  "eval_key": "eval_texts",
+  "train_total": 357,
+  "train_unique_total": 357,
+  "eval_total": 357,
+  "eval_unique_total": 357,
+  "train_eval_overlap_unique": 0,
+  "clean_train_total_after_eval_union_removal": 357,
+  "train_suites": [
+    {
+      "name": "gsm8k_test",
+      "path": "data/heldout/router_global_splits/gsm8k_test/router_train.txt",
+      "count": 130,
+      "unique_count": 130
+    },
+    {
+      "name": "mbpp_test",
+      "path": "data/heldout/router_global_splits/mbpp_test/router_train.txt",
+      "count": 97,
+      "unique_count": 97
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "path": "data/heldout/router_global_splits/alpaca_cleaned_train_tail/router_train.txt",
+      "count": 130,
+      "unique_count": 130
+    }
+  ],
+  "eval_suites": [
+    {
+      "name": "gsm8k_test",
+      "path": "data/heldout/router_global_splits/gsm8k_test/router_eval.txt",
+      "count": 130,
+      "unique_count": 130
+    },
+    {
+      "name": "mbpp_test",
+      "path": "data/heldout/router_global_splits/mbpp_test/router_eval.txt",
+      "count": 97,
+      "unique_count": 97
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "path": "data/heldout/router_global_splits/alpaca_cleaned_train_tail/router_eval.txt",
+      "count": 130,
+      "unique_count": 130
+    }
+  ],
+  "suite_cleanup": [
+    {
+      "name": "gsm8k_test",
+      "train_count": 130,
+      "train_unique_count": 130,
+      "own_eval_count": 130,
+      "own_overlap_count": 0,
+      "removed_against_eval_union": 0,
+      "clean_train_count": 130
+    },
+    {
+      "name": "mbpp_test",
+      "train_count": 97,
+      "train_unique_count": 97,
+      "own_eval_count": 97,
+      "own_overlap_count": 0,
+      "removed_against_eval_union": 0,
+      "clean_train_count": 97
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "train_count": 130,
+      "train_unique_count": 130,
+      "own_eval_count": 130,
+      "own_overlap_count": 0,
+      "removed_against_eval_union": 0,
+      "clean_train_count": 130
+    }
+  ],
+  "combined_manifest_ready": true,
+  "claim_boundary": "ready for one combined router train/eval run"
+}

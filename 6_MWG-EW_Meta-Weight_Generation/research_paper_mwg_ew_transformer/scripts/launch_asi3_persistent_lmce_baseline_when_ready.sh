@@ -13,13 +13,14 @@ MANIFEST="${MANIFEST:-$PROJECT_ROOT/data/heldout/manifest.json}"
 BASE_CKPT="${BASE_CKPT:-$PROJECT_ROOT/results/asi3_persistent_broad_baseline_20260525T114920Z/checkpoints/persistent_low_rank_r384.pt}"
 LMCE_STEPS="${LMCE_STEPS:-1200}"
 
-export AI3_ALLOW_BROWSER="${AI3_ALLOW_BROWSER:-0}"
+export ASI3_ALLOW_BROWSER="${ASI3_ALLOW_BROWSER:-0}"
 export HUANXIN_ALLOW_STANDALONE_FALLBACK="${HUANXIN_ALLOW_STANDALONE_FALLBACK:-0}"
 export HUANXIN_WAIT_MS="${HUANXIN_WAIT_MS:-15000}"
+export HUANXIN_DAEMON_HARD_TIMEOUT_MS="${HUANXIN_DAEMON_HARD_TIMEOUT_MS:-30000}"
 HEALTH_RETRIES="${HEALTH_RETRIES:-3}"
 
-if [[ "$AI3_ALLOW_BROWSER" == "1" ]]; then
-  echo "ERROR: refusing browser fallback; unset AI3_ALLOW_BROWSER for daemon-only launch." >&2
+if [[ "$ASI3_ALLOW_BROWSER" == "1" ]]; then
+  echo "ERROR: refusing browser fallback; unset ASI3_ALLOW_BROWSER for daemon-only launch." >&2
   exit 2
 fi
 if [[ ! -f "$LOCAL_LAUNCHER" ]]; then
@@ -28,22 +29,22 @@ if [[ ! -f "$LOCAL_LAUNCHER" ]]; then
 fi
 
 if ps -axo pid=,command= | awk '
-  /huanxin_shell_exec\.js ai3 --require-daemon/ && !/awk / {
+  /huanxin_shell_exec\.js ASI3 --require-daemon/ && !/awk / {
     print
     found = 1
   }
   END { exit found ? 0 : 1 }
 '; then
-  echo "ERROR: another local ai3 daemon shell command is already running; refusing to queue launch." >&2
+  echo "ERROR: another local ASI3 daemon shell command is already running; refusing to queue launch." >&2
   exit 3
 fi
 
 cd "$ROOT_DIR"
 
-echo "Checking daemon-only ai3 health..."
+echo "Checking daemon-only ASI3 health..."
 health_ok=0
 for attempt in $(seq 1 "$HEALTH_RETRIES"); do
-  health_output="$(bash scripts/ai3_shell.sh "printf AI3_HEALTH_OK" 2>&1)" && {
+  health_output="$(bash scripts/ASI3_shell.sh "printf ASI3_HEALTH_OK" 2>&1)" && {
     printf '%s\n' "$health_output"
     health_ok=1
     break
@@ -55,25 +56,25 @@ for attempt in $(seq 1 "$HEALTH_RETRIES"); do
   sleep 2
 done
 if [[ "$health_ok" -ne 1 ]]; then
-  echo "ERROR: ai3 health check did not succeed." >&2
+  echo "ERROR: ASI3 health check did not succeed." >&2
   exit 1
 fi
 
 if ps -axo pid=,command= | awk '
-  /huanxin_shell_exec\.js ai3 --require-daemon/ && !/awk / {
+  /huanxin_shell_exec\.js ASI3 --require-daemon/ && !/awk / {
     print
     found = 1
   }
   END { exit found ? 0 : 1 }
 '; then
-  echo "ERROR: ai3 daemon shell became busy after health probe; refusing upload/launch." >&2
+  echo "ERROR: ASI3 daemon shell became busy after health probe; refusing upload/launch." >&2
   exit 3
 fi
 
 echo "Uploading persistent LM-CE launcher via daemon transport..."
-node scripts/ai3_daemon_upload_files.js --file "$LOCAL_LAUNCHER" "$REMOTE_LAUNCHER"
+node scripts/ASI3_daemon_upload_files.js --file "$LOCAL_LAUNCHER" "$REMOTE_LAUNCHER"
 
-echo "Launching persistent LM-CE baseline on ai3..."
+echo "Launching persistent LM-CE baseline on ASI3..."
 REMOTE_CMD=$(cat <<EOF
 cd "$PROJECT_ROOT" && \
 chmod +x "$REMOTE_LAUNCHER" && \
@@ -84,4 +85,4 @@ LMCE_STEPS="$LMCE_STEPS" \
 bash "$REMOTE_LAUNCHER"
 EOF
 )
-bash scripts/ai3_shell.sh "$REMOTE_CMD"
+bash scripts/ASI3_shell.sh "$REMOTE_CMD"

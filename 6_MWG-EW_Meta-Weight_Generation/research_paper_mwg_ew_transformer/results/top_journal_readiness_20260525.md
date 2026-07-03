@@ -25,7 +25,7 @@ true:
 
 ## Steps And Execution Status
 
-1. Restore ASI3 access and use the exact `ai3` environment.
+1. Restore ASI3 access and use the exact `ASI3` environment.
    Status: done. Remote shell works through the Huanxin daemon.
 
 2. Populate `/vllm-workspace/mwg-ew-transformer-research` on ASI3.
@@ -87,7 +87,7 @@ true:
     Status: done for one ASI3 run. Added
     `experiments/mwg_token_router_gate_eval.py`,
     `scripts/launch_asi3_token_router_validation_detached.sh`, and daemon-only
-    upload helper `scripts/ai3_daemon_upload_files.js`. Launched
+    upload helper `scripts/ASI3_daemon_upload_files.js`. Launched
     `asi3_token_router_validation_20260525T125011Z` with explicit
     `router_train.txt`, disjoint `router_eval.txt`, and the exact layer-16
     r384 LM-CE checkpoint. The run evaluates actual mixed dense/patch forward
@@ -154,7 +154,7 @@ true:
     whether the observed MWG advantage survives a fairer durable low-rank
     calibration baseline. The local script passed `bash -n`; ASI3 launch was
     not attempted because the daemon-required health probe reported that the
-    `ai3` daemon was not available.
+    `ASI3` daemon was not available.
 
 18. Audit broad held-out family coverage.
     Status: done locally. Added `experiments/audit_heldout_manifest.py` and
@@ -179,7 +179,7 @@ true:
 
 20. Preserve an offline path for extra held-out corpora.
     Status: done locally, with no new broad-family evidence yet. The ASI3
-    daemon-only health probe still reports that the `ai3` daemon is unavailable,
+    daemon-only health probe still reports that the `ASI3` daemon is unavailable,
     so the persistent LM-CE baseline remains unlaunched. Local and S3 discovery
     found no usable Wikitext/HellaSwag/DailyDialog/Qasper-style text corpora
     beyond the existing empty `heldout_extra` blocker record; the Wikitext hits
@@ -204,17 +204,17 @@ true:
 22. Guard the pending persistent LM-CE baseline launch.
     Status: done locally; remote launch still blocked by daemon availability.
     Added `scripts/launch_asi3_persistent_lmce_baseline_when_ready.sh`, a
-    daemon-only wrapper that first probes `ai3`, then uploads/chmods
+    daemon-only wrapper that first probes `ASI3`, then uploads/chmods
     `scripts/launch_asi3_persistent_lmce_baseline_detached.sh` with
     SHA-verified daemon upload, and finally launches the exact explicit
     `TRAIN_TEXTS`, `MANIFEST`, `BASE_CKPT`, and `LMCE_STEPS=1200` command. A
     local guard test passed: with the current unavailable daemon, the wrapper
-    exits at `AI3_HEALTH_OK` and performs no upload or remote launch.
+    exits at `ASI3_HEALTH_OK` and performs no upload or remote launch.
 
 23. Add a daemon-only persistent-baseline monitor helper.
     Status: done locally; no remote query was possible while the daemon is
     unavailable. Added `scripts/monitor_asi3_persistent_lmce_baseline.sh`, which
-    accepts a persistent LM-CE run id and uses `scripts/ai3_shell.sh` to emit a
+    accepts a persistent LM-CE run id and uses `scripts/ASI3_shell.sh` to emit a
     JSON snapshot of remote status, wrapper-log tail, result JSON paths,
     checkpoint count, and any nested broad-validation run id parsed from
     `broad_validation_launch.txt`. The helper refuses browser fallback and does
@@ -223,17 +223,17 @@ true:
 
 24. Harden the persistent LM-CE launch guard against local daemon contention.
     Status: done locally after the daemon briefly returned. The guarded
-    launcher reached `AI3_HEALTH_OK`, but daemon upload timed out while another
-    local `huanxin_shell_exec.js ai3 --require-daemon` process was running an
+    launcher reached `ASI3_HEALTH_OK`, but daemon upload timed out while another
+    local `huanxin_shell_exec.js ASI3 --require-daemon` process was running an
     unrelated ALPHAQUBIT command. No MWG upload or launch completed. Updated
     `scripts/launch_asi3_persistent_lmce_baseline_when_ready.sh` to fail early
-    if a local ai3 daemon shell command is already running before the health
+    if a local ASI3 daemon shell command is already running before the health
     check, or appears between health and upload. Also added a bounded health
     retry for the known recoverable `stale_daemon_state_recovered` response.
 
 25. Launch persistent LM-CE baseline when daemon became available.
     Status: completed on ASI3. The guarded daemon-only wrapper passed
-    `AI3_HEALTH_OK`, SHA-verified upload of
+    `ASI3_HEALTH_OK`, SHA-verified upload of
     `scripts/launch_asi3_persistent_lmce_baseline_detached.sh`, and launched
     `asi3_persistent_lmce_baseline_20260526T024239Z` with pid 27467. Config:
     `TRAIN_TEXTS=/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_train.txt`,
@@ -260,6 +260,132 @@ true:
     larger LM-CE JSON and broad summary/status timed out through the sticky
     daemon, so those artifacts still need a later SHA-verified fetch.
 
+27. Define the K/V projection claim boundary.
+    Status: done locally. Added
+    `results/mwg_kv_claim_boundary_20260528.md` to separate the architectural
+    motivation from confirmed real-LM evidence. K/V projection matrices remain
+    natural MWG targets because they are large projection paths, and local
+    synthetic attention probes show signal for V and K+V: K always residual
+    improves 0.281%, V always residual improves 1.431%, K+V always residual
+    improves 1.567%, and supervised K+V routing improves 0.286%, 0.682%, and
+    0.879% at 10%, 25%, and 50% budgets. The safe boundary is that current
+    real-LM ASI3 evidence validates bounded selective routing around the
+    layer-16 checkpoint, not a clean K/V replacement claim on held-out
+    Transformer benchmarks.
+
+28. Prepare a global suite-aware router split.
+    Status: done locally. Added
+    `experiments/create_global_router_split_manifest.py` and generated
+    `data/heldout/router_global_splits/manifest.json`, plus audit artifacts
+    `results/router_global_split_audit_20260528.{json,md}`. The manifest has
+    357 train and 357 eval unique rows with zero train/eval overlap, balanced
+    across GSM8K, MBPP, and Alpaca-tail. This enables a cleaner combined
+    suite-aware router run with `--suite-split-manifest`,
+    `--suite-balanced-sampling`, `--suite-balanced-ridge`, and
+    `--fail-on-suite-overlap`. It is not new independent broad-family evidence;
+    it is a safer repartition of the existing math/code/instruction manifest.
+
+29. Add a detached launcher for the global suite-aware router run.
+    Status: done locally; not launched on ASI3. Added executable script
+    `scripts/launch_asi3_token_router_global_suite_balanced_detached.sh`.
+    The launcher runs `experiments/mwg_token_router_gate_eval.py` once against
+    `data/heldout/router_global_splits/manifest.json` using
+    `--suite-split-manifest`, `--suite-balanced-sampling`,
+    `--suite-balanced-ridge`, `--fail-on-suite-overlap`, and `--require-texts`.
+    It preserves the exact checkpoint through required `PATCH=...`, writes
+    `logs/asi3_token_router_global_suite_balanced_*.status.json`, and emits
+    `results/asi3_token_router_global_suite_balanced_*/token_router_global_suite_balanced.json`.
+    Local `bash -n` passed. This should be uploaded/launched only after the
+    `ASI3` daemon health guard allows fresh commands; no browser fallback is
+    needed or allowed.
+
+30. Add a daemon-only guarded launcher for the global suite-aware router run.
+    Status: done locally; not executed. Added executable script
+    `scripts/launch_asi3_token_router_global_suite_balanced_when_ready.sh`.
+    It follows the persistent-baseline guard pattern: refuses
+    `ASI3_ALLOW_BROWSER=1`, sets `HUANXIN_ALLOW_STANDALONE_FALLBACK=0`, checks
+    that no local `huanxin_shell_exec.js ASI3 --require-daemon` command is
+    already active, probes `scripts/ASI3_shell.sh "printf ASI3_HEALTH_OK"` with
+    bounded retries for recoverable stale-daemon responses, uploads the
+    detached launcher through `scripts/ASI3_daemon_upload_files.js`, and then
+    launches it with explicit `SPLIT_MANIFEST`, `PATCH`, and `LAYER`. Local
+    `bash -n` passed. This wrapper is the preferred entry point when the daemon
+    becomes healthy, but it should not be run while the health guard reports a
+    busy, pending, or incomplete command state.
+
+31. Harden the guarded global-router launcher dependency upload.
+    Status: done locally; not executed. Updated
+    `scripts/launch_asi3_token_router_global_suite_balanced_when_ready.sh` so
+    the daemon upload step sends the detached launcher, the current
+    `experiments/mwg_token_router_gate_eval.py`, the global split manifest, and
+    all six train/eval text files referenced by that manifest. A local manifest
+    dependency check found six unique split text paths and no missing files;
+    local `bash -n` passed. This prevents a stale remote evaluator or missing
+    `data/heldout/router_global_splits/*/router_{train,eval}.txt` file from
+    invalidating the next suite-balanced run.
+
+32. Add a daemon-only guarded fetch wrapper for persistent LM-CE artifacts.
+    Status: done locally; not executed. Added executable script
+    `scripts/fetch_asi3_persistent_lmce_artifacts_when_ready.sh`, which refuses
+    browser fallback, checks for an idle `ASI3` daemon shell path, probes
+    `scripts/ASI3_shell.sh "printf ASI3_HEALTH_OK"` with bounded stale-daemon
+    retries, and then uses `scripts/ASI3_daemon_fetch_files.js` to SHA-verify
+    three artifacts: `logs/asi3_broad_validation_20260526T024509Z.status.json`,
+    `results/asi3_broad_validation_20260526T024509Z/summary_broad_eval.json`,
+    and
+    `results/asi3_persistent_lmce_baseline_20260526T024239Z/persistent_low_rank_r384_lmce.json`.
+    Local `bash -n` passed. The broad status and broad summary are already
+    present locally under `results/pulled_asi3/asi3_validation_20260525/`; the
+    persistent calibration JSON remains missing locally and is the main reason
+    to run this wrapper when the daemon is clean.
+
+33. Record exact next daemon-safe actions.
+    Status: done locally. Added
+    `results/asi3_next_daemon_safe_actions_20260529.md`, a compact checklist
+    for the next healthy `ASI3` daemon window. It names only two preferred
+    script-only actions: the guarded persistent-LMCE artifact fetch and the
+    guarded global suite-balanced router launch. It repeats the no-browser,
+    no-fallback, no-relaunch, explicit-text, and daemon-health guardrails, and
+    records the local global-split audit totals.
+
+34. Validate local suite-balanced router launch hygiene.
+    Status: done locally. Added
+    `results/local_suite_balanced_router_hygiene_20260529.md`. Python compile
+    checks passed for the token-router evaluator, global split creator, and
+    router split auditor. Shell syntax checks have passed for the detached
+    global router launcher, guarded global router launcher, and guarded
+    persistent-LMCE fetch wrapper. The global split manifest still references
+    six existing train/eval files with expected row counts: GSM8K 130/130,
+    MBPP 97/97, and Alpaca-tail 130/130. No ASI3 command, upload, fetch, or
+    browser action was run for this check.
+
+35. Refresh broad-family blocker audit.
+    Status: done locally. Added
+    `results/local_broad_family_blocker_audit_20260529.md` and regenerated
+    `results/heldout_manifest_audit_with_extra_20260529.{json,md}` with
+    `--include-extra`. The audit still has only math_reasoning,
+    code_generation, and instruction_following suites; extra manifest suite
+    count remains zero. Missing recommended families remain
+    general_language_modeling, commonsense_reasoning, multi_turn_dialogue, and
+    long_context. Recorded dataset-access failures total five, so
+    `ready_for_broad_family_claim=false` remains the correct boundary.
+
+36. Add conservative suite-aware router threshold policy.
+    Status: done locally. Added `--threshold-policy` to
+    `experiments/mwg_token_router_gate_eval.py` with default `global` behavior
+    preserved for existing launchers. New policies include `suite_min`,
+    `suite_mean`, and `suite_median`; `suite_min` selects the strictest
+    per-suite train-score quantile and is intended to reduce over-patching on
+    suite-balanced robustness runs. Updated
+    `scripts/launch_asi3_token_router_global_suite_balanced_detached.sh` to
+    default to `THRESHOLD_POLICY=suite_min`. Added
+    `tests/test_token_router_threshold_policy.py` and
+    `results/local_router_threshold_policy_20260529.md`. Verification passed:
+    `python3 -m pytest -q tests/test_token_router_threshold_policy.py` reported
+    `3 passed`; `python3 -m py_compile experiments/mwg_token_router_gate_eval.py`
+    and `bash -n scripts/launch_asi3_token_router_global_suite_balanced_detached.sh`
+    also passed. No ASI3 command, upload, fetch, or browser action was run.
+
 ## Current Claim Boundary
 
 The strongest always-patched algorithmic result remains layer-16 rank-384
@@ -270,6 +396,18 @@ selective rather than always-patched: leakage-clean token routing repeats a
 small token-weighted broad gain across three split seeds at limited patch
 fractions. Together these are promising but still not enough for a top-journal
 deployment claim.
+
+The K/V projection story should be framed as a next scaling target, not as a
+validated real-LM result. Local attention-path probes support V and K+V as
+plausible MWG targets, but the paper should not claim broad K/V replacement,
+K/V perplexity improvement, latency improvement, or off-chip traffic reduction
+until those are shown with real held-out LM experiments and hardware-counter or
+fused-kernel evidence.
+
+The next router-training milestone is now a suite-aware combined split rather
+than another per-suite split. The prepared global split has no train/eval row
+overlap and should be used for target-0.25 robustness work once ASI3 is healthy,
+while preserving `--require-texts` and explicit manifest paths.
 
 ## ASI3 Broad/Router Results From 2026-05-25
 
@@ -383,3 +521,13 @@ broad split seeds and a leave-suite-out auxiliary broad protocol.
 Quality-preserving ephemeral FFN replacement still needs stronger training,
 stronger baselines, and hardware-counter/fused-kernel evidence before
 top-journal deployment claims.
+
+2026-05-30 update: added
+`experiments/summarize_publishable_positive_regime.py` and regenerated
+`results/publishable_positive_regime_20260530.{json,md}` from the pulled ASI3
+result JSONs. The machine-generated boundary is now explicit: the current work
+is ready to support a scoped positive case study around benefit-supervised
+token-level selective routing with dense fallback, with stable positive targets
+0.05 and 0.10. It is not ready for a broad top-journal claim that MWG works well
+in all scenarios. The paper should present the negative always-patched and
+persistent low-rank results as boundary evidence, not hide them.

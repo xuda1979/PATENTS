@@ -1,3 +1,14 @@
 {
-  "suites": []
+  "suites": [
+    {
+      "name": "wikitext103_validation_extra",
+      "family": "general_language_modeling",
+      "texts": "wikitext103_validation_extra.txt"
+    },
+    {
+      "name": "hellaswag_validation_extra",
+      "family": "commonsense_reasoning",
+      "texts": "hellaswag_validation_extra.txt"
+    }
+  ]
 }

@@ -1,0 +1,311 @@
+{
+  "created_from": {
+    "base": "results/pulled_asi3/asi3_validation_20260525",
+    "broad_seed_sweep": "results/pulled_asi3/asi3_validation_20260525/token_router_broad_seed_sweep_20260525T161810Z.summary.json",
+    "leave_suiteout_seed_sweep": "results/pulled_asi3/asi3_validation_20260525/token_router_leave_suiteout_seed_sweep_20260525T171658Z.summary.json",
+    "cv_summary": "results/pulled_asi3/asi3_validation_20260525/token_router_cv_20260525T131335Z.summary.json",
+    "always_patched_broad": "results/pulled_asi3/asi3_validation_20260525/summary_broad_eval.json",
+    "persistent_broad": "results/pulled_asi3/asi3_validation_20260525/summary_broad_eval_persistent_r384_20260525T115053Z.json",
+    "persistent_lmce_broad": "results/pulled_asi3/asi3_validation_20260525/summary_broad_eval_persistent_lmce_20260526T024509Z.json",
+    "runtime_probe": "results/pulled_asi3/asi3_validation_20260525/runtime_profiler_probe_20260525T192357Z.latest.json"
+  },
+  "paper_answer": "A top-journal paper can center on scoped positive scenarios, but the current evidence supports bounded selective routing only. It does not support broad always-patched replacement or systems deployment claims yet.",
+  "publishable_positive_regime": {
+    "algorithm": "MWG-EW with benefit-supervised token routing and dense fallback",
+    "stable_or_weak_positive_targets": [
+      0.05,
+      0.1
+    ],
+    "strongest_target": 0.1,
+    "router": {
+      "claim": "bounded_selective_routing",
+      "stable_positive_targets": [
+        0.05,
+        0.1
+      ],
+      "weak_positive_targets": [],
+      "promising_but_unstable_targets": [
+        0.03,
+        0.25
+      ],
+      "targets": [
+        {
+          "target_patch_fraction": 0.01,
+          "status": "negative_or_unready",
+          "broad_seed_sweep": {
+            "target_patch_fraction": 0.01,
+            "mean_actual_patch_token_fraction": 0.00067296056483306,
+            "mean_ratio": 1.001073383200274,
+            "min_ratio": 1.0008236795050531,
+            "max_ratio": 1.0013027912832124,
+            "replicate_count": 3
+          },
+          "leave_suite_out": {
+            "target_patch_fraction": 0.01,
+            "mean_actual_patch_token_fraction": 0.004301136872261996,
+            "mean_ratio": 1.0006589182949768,
+            "min_ratio": 1.00043010811762,
+            "max_ratio": 1.0009153158495343,
+            "replicate_count": 3
+          },
+          "cv": {
+            "target_patch_fraction": 0.01,
+            "mean_actual_patch_token_fraction": 0.0009206136067708334,
+            "mean_ratio": 0.998931400192986,
+            "min_ratio": 0.9955374613808883,
+            "max_ratio": 1.000935748819207,
+            "replicate_count": 3
+          },
+          "mean_broad_gain_percent": -0.10733832002740584,
+          "mean_leave_suite_out_gain_percent": -0.06589182949767736
+        },
+        {
+          "target_patch_fraction": 0.03,
+          "status": "promising_but_unstable",
+          "broad_seed_sweep": {
+            "target_patch_fraction": 0.03,
+            "mean_actual_patch_token_fraction": 0.0020500233547386484,
+            "mean_ratio": 0.9998249559467753,
+            "min_ratio": 0.9979812670454756,
+            "max_ratio": 1.0012616535470373,
+            "replicate_count": 3
+          },
+          "leave_suite_out": {
+            "target_patch_fraction": 0.03,
+            "mean_actual_patch_token_fraction": 0.016572384803654732,
+            "mean_ratio": 0.9988722212035192,
+            "min_ratio": 0.9979941963168598,
+            "max_ratio": 1.0003995874587712,
+            "replicate_count": 3
+          },
+          "cv": {
+            "target_patch_fraction": 0.03,
+            "mean_actual_patch_token_fraction": 0.0038299560546875,
+            "mean_ratio": 0.9940455987583335,
+            "min_ratio": 0.987043762433481,
+            "max_ratio": 1.0008522441527048,
+            "replicate_count": 3
+          },
+          "mean_broad_gain_percent": 0.017504405322466,
+          "mean_leave_suite_out_gain_percent": 0.11277787964808494
+        },
+        {
+          "target_patch_fraction": 0.05,
+          "status": "stable_positive",
+          "broad_seed_sweep": {
+            "target_patch_fraction": 0.05,
+            "mean_actual_patch_token_fraction": 0.004926473144521021,
+            "mean_ratio": 0.9976707948154142,
+            "min_ratio": 0.9941316551365046,
+            "max_ratio": 0.9997415382050775,
+            "replicate_count": 3
+          },
+          "leave_suite_out": {
+            "target_patch_fraction": 0.05,
+            "mean_actual_patch_token_fraction": 0.028394127009138587,
+            "mean_ratio": 0.9974733843936064,
+            "min_ratio": 0.9964000075194411,
+            "max_ratio": 0.9996097279806914,
+            "replicate_count": 3
+          },
+          "cv": {
+            "target_patch_fraction": 0.05,
+            "mean_actual_patch_token_fraction": 0.007497151692708333,
+            "mean_ratio": 0.9895612092204845,
+            "min_ratio": 0.9796434739981641,
+            "max_ratio": 1.000674296123139,
+            "replicate_count": 3
+          },
+          "mean_broad_gain_percent": 0.2329205184585792,
+          "mean_leave_suite_out_gain_percent": 0.25266156063935563
+        },
+        {
+          "target_patch_fraction": 0.1,
+          "status": "stable_positive",
+          "broad_seed_sweep": {
+            "target_patch_fraction": 0.1,
+            "mean_actual_patch_token_fraction": 0.018239352411322036,
+            "mean_ratio": 0.9919918475694319,
+            "min_ratio": 0.9889570626157076,
+            "max_ratio": 0.995171910708928,
+            "replicate_count": 3
+          },
+          "leave_suite_out": {
+            "target_patch_fraction": 0.1,
+            "mean_actual_patch_token_fraction": 0.05649228405750309,
+            "mean_ratio": 0.9925789098469298,
+            "min_ratio": 0.9914371522093527,
+            "max_ratio": 0.9943023796862104,
+            "replicate_count": 3
+          },
+          "cv": {
+            "target_patch_fraction": 0.1,
+            "mean_actual_patch_token_fraction": 0.0193023681640625,
+            "mean_ratio": 0.9787042611355421,
+            "min_ratio": 0.9644483419801422,
+            "max_ratio": 0.9974468710340151,
+            "replicate_count": 3
+          },
+          "mean_broad_gain_percent": 0.8008152430568072,
+          "mean_leave_suite_out_gain_percent": 0.7421090153070242
+        },
+        {
+          "target_patch_fraction": 0.25,
+          "status": "promising_but_unstable",
+          "broad_seed_sweep": {
+            "target_patch_fraction": 0.25,
+            "mean_actual_patch_token_fraction": 0.08520765288365317,
+            "mean_ratio": 0.9863594488935852,
+            "min_ratio": 0.9819957373902646,
+            "max_ratio": 0.992898603053277,
+            "replicate_count": 3
+          },
+          "leave_suite_out": {
+            "target_patch_fraction": 0.25,
+            "mean_actual_patch_token_fraction": 0.13800370650554053,
+            "mean_ratio": 0.9943143017354902,
+            "min_ratio": 0.9889479763637836,
+            "max_ratio": 1.0003762604683915,
+            "replicate_count": 3
+          },
+          "cv": {
+            "target_patch_fraction": 0.25,
+            "mean_actual_patch_token_fraction": 0.0694580078125,
+            "mean_ratio": 0.9461559538207461,
+            "min_ratio": 0.9281834131776614,
+            "max_ratio": 0.9618471591457837,
+            "replicate_count": 3
+          },
+          "mean_broad_gain_percent": 1.3640551106414822,
+          "mean_leave_suite_out_gain_percent": 0.568569826450982
+        },
+        {
+          "target_patch_fraction": 0.5,
+          "status": "negative_or_unready",
+          "broad_seed_sweep": {
+            "target_patch_fraction": 0.5,
+            "mean_actual_patch_token_fraction": 0.21676099816038885,
+            "mean_ratio": 1.0164078384538833,
+            "min_ratio": 0.9942783343779483,
+            "max_ratio": 1.0312238416718362,
+            "replicate_count": 3
+          },
+          "leave_suite_out": {
+            "target_patch_fraction": 0.5,
+            "mean_actual_patch_token_fraction": 0.28058634839221946,
+            "mean_ratio": 1.027400959765694,
+            "min_ratio": 1.007604329375782,
+            "max_ratio": 1.048763279698716,
+            "replicate_count": 3
+          },
+          "cv": {
+            "target_patch_fraction": 0.5,
+            "mean_actual_patch_token_fraction": 0.17660013834635416,
+            "mean_ratio": 0.9218474963913327,
+            "min_ratio": 0.9137481495704877,
+            "max_ratio": 0.9372640916055954,
+            "replicate_count": 3
+          },
+          "mean_broad_gain_percent": -1.6407838453883272,
+          "mean_leave_suite_out_gain_percent": -2.74009597656939
+        }
+      ]
+    }
+  },
+  "negative_boundaries": [
+    {
+      "name": "always_patched_mwg",
+      "token_weighted_ppl_ratio": 1.2464137210285102,
+      "max_ppl_ratio": 1.358870252704977,
+      "tokens": 91352,
+      "suite_count": 3,
+      "all_suites_negative": true,
+      "suites": [
+        {
+          "name": "gsm8k_test",
+          "tokens": 44708,
+          "ppl_ratio": 1.358870252704977
+        },
+        {
+          "name": "mbpp_test",
+          "tokens": 13301,
+          "ppl_ratio": 1.135378992413463
+        },
+        {
+          "name": "alpaca_cleaned_train_tail",
+          "tokens": 33343,
+          "ppl_ratio": 1.139919593539
+        }
+      ]
+    },
+    {
+      "name": "persistent_low_rank_r384",
+      "token_weighted_ppl_ratio": 1.2794567661724092,
+      "max_ppl_ratio": 1.302636358959228,
+      "tokens": 66873,
+      "suite_count": 3,
+      "all_suites_negative": true,
+      "suites": [
+        {
+          "name": "gsm8k_test",
+          "tokens": 31329,
+          "ppl_ratio": 1.2938744870301837
+        },
+        {
+          "name": "mbpp_test",
+          "tokens": 12850,
+          "ppl_ratio": 1.302636358959228
+        },
+        {
+          "name": "alpaca_cleaned_train_tail",
+          "tokens": 22694,
+          "ppl_ratio": 1.246428188395735
+        }
+      ]
+    },
+    {
+      "name": "persistent_low_rank_r384_lmce",
+      "token_weighted_ppl_ratio": 1.30994521656061,
+      "max_ppl_ratio": 1.450438150478733,
+      "tokens": 91352,
+      "suite_count": 3,
+      "all_suites_negative": true,
+      "suites": [
+        {
+          "name": "gsm8k_test",
+          "tokens": 44708,
+          "ppl_ratio": 1.450438150478733
+        },
+        {
+          "name": "mbpp_test",
+          "tokens": 13301,
+          "ppl_ratio": 1.0337963697060117
+        },
+        {
+          "name": "alpaca_cleaned_train_tail",
+          "tokens": 33343,
+          "ppl_ratio": 1.231724832144138
+        }
+      ]
+    }
+  ],
+  "systems_boundary": {
+    "hardware_counter_complete": false,
+    "dense_mean_ms": 0.3391496022231877,
+    "mwg_mean_ms": {
+      "mwg_r128": 0.7638063980266452,
+      "mwg_r256": 0.755859405035153
+    },
+    "fused_like_observed": false
+  },
+  "readiness": {
+    "ready_for_top_journal_broad_claim": false,
+    "ready_for_scoped_positive_case_study": true,
+    "missing_for_stronger_claim": [
+      "broader independent benchmark families",
+      "distribution-robust target 0.25 without unstable seeds",
+      "stronger paired baselines beyond current persistent low-rank controls",
+      "device hardware-counter or fused-kernel evidence"
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "created_at": "20260610T020848Z",
+  "env": {
+    "hostname": "dl-c72bd81a96e33134bbe0ae4a478fbab0-r0-032326d18a8f-0",
+    "python": "3.11.14",
+    "torch": "2.9.0+cpu",
+    "backend": "hccl",
+    "device_type": "npu",
+    "local_rank": 0,
+    "world_size": 1,
+    "ascend_rt_visible_devices": "0",
+    "torch_npu": "2.9.0",
+    "npu_count": 1,
+    "device_name": "Ascend910B2"
+  },
+  "teacher": {
+    "gate": "model.layers.16.mlp.gate_proj.weight",
+    "up": "model.layers.16.mlp.up_proj.weight",
+    "down": "model.layers.16.mlp.down_proj.weight",
+    "state_file": "/root/work/filestorage/Qwen2.5-1.5B-Instruct/model.safetensors",
+    "layer": "16"
+  },
+  "config": {
+    "d": 1536,
+    "m": 8960,
+    "ranks": [
+      384
+    ],
+    "batch": 1,
+    "seq": 128,
+    "steps": 5000,
+    "eval_batches": 128,
+    "dtype": "float32",
+    "lr": 0.0002,
+    "weight_decay": 0.0,
+    "students": [
+      "expert_residual"
+    ],
+    "generator_hidden": null,
+    "residual_rank": 32,
+    "scale_amplitude": 0.1,
+    "activation_source": "text",
+    "activation_cache_shape": [
+      256,
+      256,
+      1536
+    ],
+    "basis_count": 4,
+    "basis_noise": 0.01
+  },
+  "dense_parameter_mib": 157.5,
+  "results": {
+    "static_svd_r384": {
+      "rank": 384,
+      "svd_energy": {
+        "gate": 0.508384,
+        "up": 0.453496,
+        "down": 0.494729
+      },
+      "metrics": {
+        "mse": 0.2893543839454651,
+        "relative_mse": 0.8366815447807312,
+        "cosine": 0.40446776151657104
+      },
+      "descriptor_mib": 46.125,
+      "traffic_reduction_x": 3.415
+    },
+    "mwg_expert_residual_r384": {
+      "student": "mwg_expert_residual_r384",
+      "train_loss_trace": [
+        0.32256466150283813,
+        0.0899953842163086,
+        0.0729198008775711,
+        0.07261952757835388,
+        0.08721228688955307,
+        0.036259282380342484,
+        0.0334138423204422,
+        0.03203459456562996,
+        0.04280894622206688,
+        0.04435824975371361,
+        0.06632509082555771,
+        0.052224092185497284,
+        0.03565194085240364,
+        0.04435019567608833,
+        0.05268150195479393,
+        0.06365149468183517,
+        0.03568641096353531,
+        0.04186612367630005,
+        0.038783520460128784,
+        0.04582652449607849,
+        0.025914136320352554
+      ],
+      "elapsed_s": 53.185,
+      "metrics": {
+        "mse": 0.03522295504808426,
+        "relative_mse": 0.1018487960100174,
+        "cosine": 0.9477105736732483
+      },
+      "parameter_bytes": 67449616,
+      "parameter_mib": 64.325,
+      "checkpoint": "results/asi3_layer16_recovery_20260610T020738Z/layer16/checkpoints/mwg_expert_residual_r384.pt",
+      "rank": 384,
+      "descriptor_mib": 46.125,
+      "traffic_reduction_x": 3.415
+    }
+  }
+}

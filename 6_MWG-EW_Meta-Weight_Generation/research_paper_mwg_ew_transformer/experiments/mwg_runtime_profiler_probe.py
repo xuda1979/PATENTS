@@ -24,7 +24,7 @@ from typing import Any
 import torch
 from torch.profiler import ProfilerActivity, profile
 
-from mwg_transformer_ai3_benchmark import (
+from mwg_transformer_ASI3_benchmark import (
     DenseGatedFFN,
     EphemeralMetaWeightFFN,
     capture_env,

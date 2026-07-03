@@ -1,0 +1,42 @@
+[
+  {
+    "path": "research_paper_mwg_ew_transformer/results/asi3_next_daemon_safe_actions_20260529.md",
+    "bytes": 3295,
+    "sha256": "8337ec996d2157daf2c05f76543634a134864ced689d3e92384c25c6fe2e5c78"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/results/heldout_manifest_audit_with_extra_20260529.json",
+    "bytes": 4648,
+    "sha256": "051a6544a3998395b9c65adaffc88c675abe2faa2180a499a8de0b44a7ce67bc"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/results/heldout_manifest_audit_with_extra_20260529.md",
+    "bytes": 1688,
+    "sha256": "d02f3500b363a39e9db95ae6de7df2277ccc844c59039d9e9c19256cb190bfdc"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/results/local_broad_family_blocker_audit_20260529.md",
+    "bytes": 1261,
+    "sha256": "3473808d27a8f5b40bd2b30f4a81c6e6bc8f0b8f7c59652b885701f022c3d64e"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/results/local_suite_balanced_router_hygiene_20260529.md",
+    "bytes": 1078,
+    "sha256": "fcabca1bc4f64b59c6e83019af9383400d03017e0d347a0e65b30e2f003b1f66"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/scripts/fetch_asi3_persistent_lmce_artifacts_when_ready.sh",
+    "bytes": 2740,
+    "sha256": "c19f782d2f279a92bb5887d40ef052b7e03dd0c7bac15bbe26b50e5d109b1b9e"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/scripts/launch_asi3_token_router_global_suite_balanced_detached.sh",
+    "bytes": 4128,
+    "sha256": "83b1de4e8e80529b68717343494e265429f07c667fcf6da540e461ebcf9bb4e9"
+  },
+  {
+    "path": "research_paper_mwg_ew_transformer/scripts/launch_asi3_token_router_global_suite_balanced_when_ready.sh",
+    "bytes": 4117,
+    "sha256": "76bf11675a8ec8de49d32408a9bb08f39c4474dbf0d1afc16ddee58fc70c9ba5"
+  }
+]

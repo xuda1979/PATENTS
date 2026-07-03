@@ -1,0 +1,479 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" class=""><head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <link href="/auth/resources/ynuul/login/huanxin-0901-theme/font/iconfont.css" rel="stylesheet">
+    <link href="/auth/resources/ynuul/login/huanxin-0901-theme/css/base.css" rel="stylesheet">
+    <link href="/auth/resources/ynuul/login/huanxin-0901-theme/css/antd.min.css" rel="stylesheet">
+    <style>
+    .agreement{
+    }
+    </style>
+<script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/vue.min.js"></script><script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/antd.min.js"></script><script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/axios.min.js"></script><script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/browserdetect.js"></script><script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/constants.js"></script><script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/utils.js"></script><link rel="icon" href="/auth/resources/ynuul/login/huanxin-0901-theme/img/favicon.ico"></head>
+
+
+
+
+
+
+
+
+<body>
+    <div class="content-box"><title>焕新社区</title> <div class="content-wrap"><link href="/auth/resources/ynuul/login/huanxin-0901-theme/css/common.css" rel="stylesheet"> <link href="/auth/resources/ynuul/login/huanxin-0901-theme/css/loginnew.css" rel="stylesheet"> <img src="/auth/resources/ynuul/login/huanxin-0901-theme/img/ai-header-logo.png" alt="" class="ai-header-logo"> <section><div class="login-box"><p class="login-box-title">焕新社区</p> <form id="kc-form-login" onsubmit="login.disabled = true; return true;" action="https://aihuanxin.cn/auth/realms/TechnicalMiddlePlatform/login-actions/authenticate?session_code=sSTMMw-YLIHUTEnZh8iYKO68mdLvjsYaeNzOaQabFhQ&amp;execution=ee74efb9-0fd3-4ef7-95ca-4bd29d84ad22&amp;client_id=kunlun-front&amp;tab_id=0XNVFrqBCEU" method="post"><div><ul class="nav nav-pills nav-justified login-box-select"><li role="presentation" class="login-box-select-item active"><a href="#">短信登录</a></li> <li role="presentation" class="login-box-select-item"><a href="#">密码登录</a></li></ul> <div style="height: 40px;"></div></div> <div><div class="input-row"><span class="iconfont iconshouji"><img src="/auth/resources/ynuul/login/huanxin-0901-theme/img/mobile.png"></span> <input placeholder="手机号" type="text" id="phoneNumber" name="phoneNumber" autofocus="autofocus" class="input" style=""> <!----></div> <div class="input-row captcha-code"><span class="iconfont icona-safetycertificate"></span> <input placeholder="图形验证码" tabindex="3" id="captchaCode" name="captchaCode" type="text" autocomplete="off" class="input " style=""> <img src="data:image/png;base64,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" alt="图形验证码"> <!----></div> <div class="input-row sms-code-row"><div class="input-row col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="iconfont iconsuo"></span> <input id="code" placeholder="短信验证码" name="code" tabindex="3" autofocus="autofocus" class="input" style=""></div> <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button disabled="disabled" type="button" class="ant-btn" style="width: 113px; height: 40px;"><span>获取验证码</span></button></div> <!----></div> <div class="alert"><!----></div></div> <div class="input-row kc-form-options"><div id="kc-form-options"><div class="checkbox"><label class="ant-checkbox-wrapper ant-checkbox-wrapper-checked"><span class="ant-checkbox ant-checkbox-checked"><input name="rememberMe" id="rememberMe" type="checkbox" class="ant-checkbox-input" value="" style=""><span class="ant-checkbox-inner"></span></span><span>
+                                            下次自动登录
+                                        </span></label></div></div> <!----></div> <div class="checkbox"><label class="ant-checkbox-wrapper"><span class="ant-checkbox"><input type="checkbox" class="ant-checkbox-input" value="" style=""><span class="ant-checkbox-inner"></span></span><span><span class="agreement">
+                                         我已阅读并同意焕新社区
+                                         </span> <a href="https://aihuanxin.cn/portal/common-helpcenter#/document/40?unread-message=%2Fportal%2Fcommon-components%23%2F&amp;platformCode=JTRGZNPTFWXY&amp;error=login_required&amp;state=b2457970-ab75-412b-8596-95caa4011dfc" target="_blank">《服务协议及隐私政策》</a></span></label></div> <span id="code-error" style="margin-left: 28px; display: none;"></span> <div id="kc-form-buttons" style="margin-top: 30px;"><input type="hidden" id="id-hidden-input" name="credentialId" style=""> <span tabindex="4" name="login" id="kc-login" class="button" style="background: rgb(240, 240, 240); color: rgb(160, 160, 160); cursor: not-allowed;">登录</span> <input type="hidden" id="loginType" name="loginType" value="phone" style=""></div> <div class="register"><a>取消登录</a> <span>
+                                    没有账号？
+                                    <a tabindex="6" href="/auth/realms/TechnicalMiddlePlatform/login-actions/registration?client_id=kunlun-front&amp;tab_id=0XNVFrqBCEU&amp;redirect_uri=https%3A%2F%2Faihuanxin.cn%2Fkunlun%2Fkl-web%3FpoolId%3D1%26projectId%3D3ed7854b946a47b1a49ad754baa76cd3%23%2Ftrain-dev" class="link-button">立即注册</a></span></div></form></div> <p class="copy-right">©2025 焕新社区 版权所有京ICP备05002571号-27</p></section></div> <!----></div>
+
+
+<script type="text/javascript">
+    var app = new Vue({
+        el: '.content-box',
+        async mounted () {
+            this.getHeadIcon();
+            this.isH5 = false;
+            if(this.isH5){
+                setH5FontSize();
+                this.getServiceTerms();
+                this.get9981ServiceTerms();
+            }
+            const lastType = window.localStorage.getItem("lastType")
+            // 如果没有这段内容，页面进入后呢第一次点击图形验证码输入框会闪烁一下tooltip，后续再点则没有问题
+            setTimeout(()=>{
+                this.toggleLogin(1);
+                setTimeout(()=>{
+                    this.toggleLogin(1);
+                },100)
+            },100)
+            
+            saveRedirect_uri();
+        },
+        watch: {
+            isPwsLoginType(newValue) {
+                window.localStorage.setItem("lastType",newValue);
+                this.resetForm();
+            },
+            'form.password'(){
+                this.passwordErrorTip = '';
+            },
+            'form.username'(){
+                this.usernameErrorTip = '';
+            },
+            'form.captchaCode'(){
+                this.captchaCodeErrorTip = '';
+            },
+            'form.vetifyCode'(newValue){
+                this.smsErrorTip = '';
+            },
+            'form.terms'(newValue){
+                console.log('%c [ newValue ]-340', 'font-size:13px; background:pink; color:#bf2c9f;', newValue)
+                if(newValue){
+                    this.termsTipDisplay = false;
+                }
+            },
+        },
+        data(){
+            return {
+                disabledStyle:{
+                    background:'#f0f0f0',
+                    color:'#a0a0a0',
+                    cursor:'not-allowed'
+                },
+                agreement:false,
+                captchaImgTooltipDisplay:false,
+                captchaImgTooltipDisplayTimer:null,
+                captchaInputRef:null,
+                captchaImg: '', // 图形验证码base64
+                captchaId: '', // 图形验证码id
+                platformMap,
+                platformParams:platformMap.SASAC,
+                isH5:false,
+                phoneWrongText:"手机号码格式错误",
+                codeErrorText:"",
+                origin:"phone",
+                showPassword: false,
+                showErrorMsg:true,
+                errorMessage: '',
+                freezeSendCodeSeconds: 0,
+                isPwsLoginType: false,
+                passwordErrorTip:'',
+                usernameErrorTip:'',
+                captchaCodeErrorTip:'',
+                smsErrorTip:'',
+                sendButtonText: '获取验证码',
+                initSendButtonText: '获取验证码',
+                showSendCodeTip:false,
+                serviceTermsDisplay:false,
+                serviceTermsDisplay9981:false,
+                termsTipDisplay:false,
+                rememberMe:true,
+                form:{
+                    captchaCode:"",
+                    phoneNumber: '',
+                    terms:false,
+                    vetifyCode:'',
+
+                    username:'',
+                    password:'',
+                },
+                serviceTermsContent:{
+                    pageName:'焕新社区服务协议及隐私政策',
+                    pageContent:'',
+                },
+                serviceTerms9981Content:{
+                    pageName:'9981隐私政策',
+                    pageContent:'',
+                },
+                phoneValidator: /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/,
+                usernameText: '手机/用户名',
+                agreementErrorText:""
+            }
+        },
+        computed:{
+            /*
+            * 根据端口号区分环境，跳转不同的页面，有端口号为测试环境，否则为生产环境
+            */
+            agreementPrefix(){
+                const redirect_uri = new URLSearchParams(location.search).get('redirect_uri') || sessionStorage.redirectUri;
+                if(redirect_uri){
+                    return new URL(redirect_uri)?.origin;
+                }
+                return '';
+            },
+            testFormData(){
+                let flag = false;
+                if(this.isPwsLoginType){
+                    if(!this.form.password){
+                        flag = true;
+                        this.passwordErrorTip = '请输入';
+                    }
+                    if(!this.form.username){
+                        flag = true;
+                        this.usernameErrorTip = '请输入';
+                    }
+                }else{
+                    if(!this.form.phoneNumber){
+                        this.checkPhoneNumber({target:{value:this.form.phoneNumber}});
+                        flag = true;
+                    }
+                    
+                    if(!this.form.vetifyCode){
+                        this.smsErrorTip = '请输入正确的短信验证码';
+                        flag = true;
+                    }
+                }
+                if(this.testCaptchaCodeAndTerms){
+                    flag = true;
+                }
+                return flag;
+            },
+            testCaptchaCodeAndTerms(){
+                this.captchaCodeErrorTip = '';
+                this.termsTipDisplay = false;
+                let flag = false;
+                if(!this.form.terms || !this.form.captchaCode){
+                    if(!this.form.terms){
+                        this.termsTipDisplay = true;
+                    }
+                    if(!this.form.captchaCode){
+                        this.captchaCodeErrorTip = '请输入正确的图形验证码';
+                    }
+                    flag = true;
+                }
+                return flag;
+            },
+        },
+        methods: {
+            goBack(){
+                window.history.go(-1)
+            },
+            captchaImgInputBlur(){
+                this.captchaImgTooltipDisplayTimer = setTimeout(()=>{
+                    this.captchaImgTooltipDisplay = false;
+                },100);
+            },
+            clearCaptchaImgTooltipDisplayTimer(){
+                clearTimeout(this.captchaImgTooltipDisplayTimer);
+                this.captchaImgTooltipDisplayTimer = null;
+            },
+            resetForm(){
+                this.form = {
+                    captchaCode:"",
+                    phoneNumber: '',
+                    terms:true,
+                    vetifyCode:'',
+                    password:'',
+                };
+                this.termsTipDisplay = false;
+                this.smsErrorTip = '';
+                this.codeErrorText = '';
+                this.passwordErrorTip = '';
+                this.captchaCodeErrorTip = '';
+                this.phoneWrongText = '';
+                this.errorMessage = '';
+                this.usernameErrorTip = '';
+                this.captchaImgTooltipDisplay = false;
+            },
+            getHeadIcon(){
+                const link = document.createElement('link');
+                link.rel = 'icon';
+                link.href = '/auth/resources/ynuul/login/huanxin-0901-theme/img/favicon.ico';
+                document.head.appendChild(link);
+            },
+            saveRedirect_uri,
+            getUrlWithQuery,
+            headerImage(){
+                return '/auth/resources/ynuul/login/huanxin-0901-theme/img/ai-header-logo.png'
+            },
+            returnToHome,
+            returnToPreviousPage,
+            async get9981ServiceTerms(){
+                const serviceTerms = (await axios.get('/auth/resources/ynuul/login/huanxin-0901-theme/9981serviceTerm.json')).data.data;
+                this.serviceTerms9981Content.pageContent = serviceTerms;
+            },
+            async getServiceTerms(){
+                try{
+                    // 此处的url为固定值，不要尝试修改为kc变量！
+                    const serviceTermsList = await axios.get(window.location.origin + '/auth/realms/TechnicalMiddlePlatform/themeapi/listPage', {params:{platform:'JTRGZNPTFWXY'}});
+                    console.log('%c [ serviceTermsList ]-464', 'font-size:13px; background:pink; color:#bf2c9f;', serviceTermsList)
+                    if(serviceTermsList.data.state === 'OK'){
+                        let content = '';
+                        for(const j in serviceTermsList.data?.body){
+                            const _temp = serviceTermsList.data?.body[j];
+                            console.log('%c [ _temp ]-423', 'font-size:13px; background:pink; color:#bf2c9f;', _temp)
+                            for(const i in _temp?.children){
+                                const item = _temp?.children[i];
+                                console.log(item)
+                                const tempId = item.id;
+                                // 此处的url为固定值，不要尝试修改为kc变量！
+                                const _serviceTermsContent = await axios.get(window.location.origin + '/auth/realms/TechnicalMiddlePlatform/themeapi/getPage',{ params:{pageId:tempId}});
+                                console.log('%c [ _serviceTermsContent ]-476', 'font-size:13px; background:pink; color:#bf2c9f;', _serviceTermsContent)
+                                if(_serviceTermsContent.data.state === 'OK'){
+                                    content += '<h3 style="margin-top:.5em">' + _serviceTermsContent.data.body.pageName + '</h3>';
+                                    content += _serviceTermsContent.data.body.pageContent;
+                                }
+                            }
+                        }
+                        this.serviceTermsContent.pageContent = content;
+                        console.log('%c [ this.serviceTermsContent ]-481', 'font-size:13px; background:pink; color:#bf2c9f;', this.serviceTermsContent)
+                    }
+                }catch(err){
+                    throw Error(err);
+                }
+            },
+            checkPhoneNumber(e){
+                this.showErrorMsg = false;
+                const phone = e.target.value;
+                const ifValidated=this.phoneValidator.test(phone);
+                console.log('%c [ ifValidated ]-476', 'font-size:13px; background:pink; color:#bf2c9f;', ifValidated)
+                if(!ifValidated){
+                    this.phoneWrongText ="请确保手机号格式正确";
+                }else{
+                    this.phoneWrongText ="";
+                }
+            },
+            disableSend(seconds) {
+                console.log('%c [ seconds ]-330', 'font-size:13px; background:pink; color:#bf2c9f;', seconds)
+                if (seconds <= 0) {
+                    this.sendButtonText = this.initSendButtonText;
+                    this.freezeSendCodeSeconds = 0;
+                } else {
+                    this.sendButtonText = String(seconds) + '秒后重发';
+                    setTimeout(function() {
+                        app.disableSend(seconds - 1);
+                    }, 1000);
+                }
+            },
+            toggleLogin(type,orign='auto') {
+                this.resetForm();
+                this.getImgCaptcha();
+                this.form.captchaCode = '';
+                if(+type===1){
+                    this.origin="phone"
+                    this.isPwsLoginType = false
+                }else{
+                    this.origin="password"     
+                    this.isPwsLoginType = true
+                }
+                if(orign==='click'){
+                    this.showErrorMsg = false;
+                }
+                this.captchaCodeErrorTip = '';
+            },
+            // 获取图形验证码
+            async getImgCaptcha(event,showTooltip){
+                this.clearCaptchaImgTooltipDisplayTimer();
+                if(showTooltip){
+                    this.$refs.captchaInputRef.focus();
+                }
+                try {
+                    const res = await axios.get(window.location.origin + '/auth/realms/TechnicalMiddlePlatform/themeapi/captcha')
+                    console.log('%c [ res ]-561', 'font-size:13px; background:pink; color:#bf2c9f;', res)
+                    this.captchaImg = 'data:image/png;base64,' + res.data.body.captchaData
+                    this.captchaId = res.data.body.captchaId;
+                    if(ERROR_CODE_MAP.getCaptchaCode.find(x=>x === res.data.errorCode)){
+                        this.captchaCodeErrorTip = res.data.errorMessage;
+                    }
+                } catch (err) {
+                    if(err.code >= 500){
+                        this.codeErrorText = '系统出错，请联系相应人员'
+                    }else{
+                        this.codeErrorText = err.response.data
+                    }
+                }
+            },
+            async sendVerificationCode() {
+                if(!this.agreement){
+                    this.agreementErrorText = '确保勾选同意协议'
+                    return 
+                }
+                this.codeErrorText = '';
+                this.smsErrorTip = '';
+                if(this.testCaptchaCodeAndTerms){return;};
+                const phoneNumber = this.form.phoneNumber.trim();
+                if (!phoneNumber) {
+                    this.errorMessage = 'requirePhoneNumber';
+                    document.getElementById('phoneNumber').focus();
+                    return;
+                }
+                if (this.sendButtonText !== this.initSendButtonText) {
+                    return;
+                }
+                const params = new URLSearchParams();
+                const publicKey = await this.getPubilcKey();
+                params.append('phoneNumber', await getEncodeValue(publicKey,this.form.phoneNumber));
+                params.append('captchaCode', this.form.captchaCode);
+                params.append('captchaId', this.captchaId);
+                params.append('flag', SMSCODE_FLAG_MAP.LOGIN);
+
+                axios
+                    .post(window.location.origin + '/auth/realms/TechnicalMiddlePlatform/themeapi/smscode', params)
+                    .then(res => {
+                        console.log('%c [ res ]-592', 'font-size:13px; background:pink; color:#bf2c9f;', res)
+                        if(res.data.errorCode){
+                            if(ERROR_CODE_MAP.smsFast.find(x=> x === res.data.errorCode)){
+                                res.data.errorMessage = '短信验证码发送过于频繁';
+                            }
+                            if(ERROR_CODE_MAP.captchaCode.find(x=> x === res.data.errorCode)){
+                                this.captchaCodeErrorTip = res.data.errorMessage;
+                            }else if(ERROR_CODE_MAP.phoneNumber.find(x=> x === res.data.errorCode)){
+                                this.phoneWrongText = res.data.errorMessage;
+                            }else{
+                                this.smsErrorTip = res.data.errorMessage;
+                            }
+                            this.getImgCaptcha();
+                            app.disableSend(0);
+                            return;
+                        }
+                        app.disableSend(60)
+                        console.log('%c [ res ]-357', 'font-size:13px; background:pink; color:#bf2c9f;', res)
+                        this.initSendButtonText = '重新获取';
+                        setTimeout(()=>{
+                            this.showSendCodeTip = true;
+                        },1000)
+                    }).catch(err => {
+                        console.log('%c [ err ]-363', 'font-size:13px; background:pink; color:#bf2c9f;', err)
+                        if(err.code >= 500){
+                            this.smsErrorTip = '系统出错，请联系相应人员'
+                        }else{
+                            this.smsErrorTip = err.response.data
+                        }
+                        app.disableSend(0);
+                    }).finally(()=>{
+                        setTimeout(()=>{
+                            this.showSendCodeTip = false;
+                        },3000)
+                    })
+            },
+            async getPubilcKey(){
+                try{
+                    return getPubilcKeyFromBack('TechnicalMiddlePlatform');
+                }catch(err){
+                    console.log('%c [ err ]-525', 'font-size:13px; background:pink; color:#bf2c9f;', err)
+                    if(err.code >= 500){
+                        this.codeErrorText = '系统出错，请联系相应人员'
+                    }else{
+                        this.codeErrorText = err.response.data
+                    }
+                    app.disableSend(0)
+                    return Promise.reject(err);
+                }
+            },
+            login(needEncrypt = true){
+                if(!this.agreement){
+                    return
+                }
+                
+                console.log('%c [ this.testFormData ]-707', 'font-size:13px; background:pink; color:#bf2c9f;', this.testFormData)
+                if(this.testFormData){return;};
+                if(!needEncrypt){
+                    const kcFormLogin = document.querySelector('#kc-form-login');
+                    let params = {}
+                    if(this.isPwsLoginType){
+                        params = {
+                            username: this.form.username,
+                            password: this.form.password,
+                            loginType:this.origin
+                        }
+                    }else{
+                        params = {
+                            phoneNumber: this.form.phoneNumber,
+                            code: this.form.vetifyCode,
+                            loginType:this.origin
+                        }
+                    }
+                    if(this.rememberMe){
+                        params.rememberMe = 'on';
+                    }
+                    submitForm(kcFormLogin.action, params, kcFormLogin.method);
+                }else{
+                    const kcFormLogin = document.querySelector('#kc-form-login');
+                    this.getPubilcKey().then(async (publicKey) => {
+                        console.log('%c [ publicKey ]-52222284', 'font-size:13px; background:pink; color:#bf2c9f;', publicKey)
+                        let params = {}
+                        if(this.isPwsLoginType){
+                            params = {
+                                username: await getEncodeValue(publicKey,this.form.username),
+                                password: await getEncodeValue(publicKey,this.form.password),
+                                captchaCode:this.form.captchaCode,
+                                captchaId:this.captchaId,
+                                loginType:this.origin
+                            }
+                        }else{
+                            params = {
+                                phoneNumber: await getEncodeValue(publicKey,this.form.phoneNumber),
+                                code: await getEncodeValue(publicKey,this.form.vetifyCode),
+                                // code: this.form.vetifyCode,
+                                captchaCode:this.form.captchaCode,
+                                captchaId:this.captchaId,
+                                loginType:this.origin
+                            }
+                            this.checkPhoneNumber({target:{value:this.form.phoneNumber}})           
+                            if(!this.form.vetifyCode){
+                                this.codeErrorText = '请输入正确的短信验证码'
+                            }
+                            if(this.ifWrongPhone){
+                                return;
+                            }
+                        }
+                        if(this.rememberMe){
+                            params.rememberMe = 'on';
+                        }
+                        console.log('%c [ params ]-605', 'font-size:13px; background:pink; color:#bf2c9f;', params)
+                        submitForm(kcFormLogin.action, params, kcFormLogin.method);
+                    }).catch(err=>{
+                        console.log('%c [ err ]-474', 'font-size:13px; background:pink; color:#bf2c9f;', err)
+                        if(err.response.status === 404){
+                            this.login(false);
+                        }
+                    })
+                }
+
+            }
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/forge.min.js" defer=""></script>
+<script type="text/javascript" src="/auth/resources/ynuul/login/huanxin-0901-theme/js/antd-with-locales.min.js" defer=""></script>
+</body></html>
