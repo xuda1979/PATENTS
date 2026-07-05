@@ -19,6 +19,22 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+try:
+    import torch_npu  # type: ignore
+
+    if hasattr(torch, "npu") and torch.npu.is_available():
+        try:
+            torch.serialization.add_safe_globals(
+                [
+                    torch_npu.utils.storage._rebuild_npu_tensor,
+                    torch_npu.npu._format.Format,
+                ]
+            )
+        except Exception:
+            pass
+except Exception:
+    pass
+
 from mwg_ppl_patch_eval import PatchedMLP, load_student, setup_device, sync_device
 from mwg_quality_distillation import DEFAULT_TEXTS, dtype_from_name, parse_texts
 

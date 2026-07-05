@@ -57,6 +57,16 @@ try:
     import torch_npu  # type: ignore
 
     HAS_NPU = hasattr(torch, "npu") and torch.npu.is_available()
+    if HAS_NPU:
+        try:
+            torch.serialization.add_safe_globals(
+                [
+                    torch_npu.utils.storage._rebuild_npu_tensor,
+                    torch_npu.npu._format.Format,
+                ]
+            )
+        except Exception:
+            pass
 except Exception:
     torch_npu = None  # type: ignore
     HAS_NPU = False
@@ -161,6 +171,11 @@ def dtype_from_name(name: str, device: torch.device) -> torch.dtype:
 
 
 def safe_torch_load(path: Path) -> dict[str, torch.Tensor]:
+    if HAS_NPU:
+        try:
+            return torch.load(path, map_location="cpu", weights_only=False)
+        except TypeError:
+            return torch.load(path, map_location="cpu")
     try:
         return torch.load(path, map_location="cpu", weights_only=True)
     except Exception:

@@ -17,6 +17,16 @@ try:
     import torch_npu  # type: ignore
 
     HAS_NPU = hasattr(torch, "npu") and torch.npu.is_available()
+    if HAS_NPU:
+        try:
+            torch.serialization.add_safe_globals(
+                [
+                    torch_npu.utils.storage._rebuild_npu_tensor,
+                    torch_npu.npu._format.Format,
+                ]
+            )
+        except Exception:
+            pass
 except Exception:
     torch_npu = None  # type: ignore
     HAS_NPU = False
