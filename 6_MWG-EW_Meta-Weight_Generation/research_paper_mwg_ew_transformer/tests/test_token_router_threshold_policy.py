@@ -70,6 +70,39 @@ def test_suite_local_risk_budget_keeps_per_suite_thresholds() -> None:
     assert row["threshold"] == pytest.approx(-0.4)
 
 
+def test_risk_budget_suite_min_uses_strictest_suite_quantile() -> None:
+    # Two suites with per-suite 0.5 quantiles -0.4 and -0.2. suite_min should
+    # pick the strictest (most negative) threshold, which is -0.4.
+    predicted_delta = torch.tensor([-0.4, 0.2, -0.2, 0.1])
+    suites = ["a", "a", "b", "b"]
+    row = threshold_for_risk_budget(predicted_delta, suites, 0.0, 0.5, "suite_min")
+    assert row["policy"] == "risk_suite_min"
+    assert row["suite_thresholds"] == pytest.approx({"a": -0.4, "b": -0.2})
+    assert row["threshold"] == pytest.approx(-0.4)
+
+
+def test_risk_budget_suite_mean_uses_average_suite_quantile() -> None:
+    # Per-suite 0.5 quantiles -0.4 and -0.2. suite_mean should use the average:
+    # (-0.4 + -0.2) / 2 = -0.3.
+    predicted_delta = torch.tensor([-0.4, 0.2, -0.2, 0.1])
+    suites = ["a", "a", "b", "b"]
+    row = threshold_for_risk_budget(predicted_delta, suites, 0.0, 0.5, "suite_mean")
+    assert row["policy"] == "risk_suite_mean"
+    assert row["suite_thresholds"] == pytest.approx({"a": -0.4, "b": -0.2})
+    assert row["threshold"] == pytest.approx(-0.3)
+
+
+def test_risk_budget_suite_median_uses_median_suite_quantile() -> None:
+    # Three suites with per-suite 0.5 quantiles -0.5, -0.3, -0.1. The median of
+    # [-0.5, -0.3, -0.1] is -0.3 (middle element after sorting).
+    predicted_delta = torch.tensor([-0.5, 0.2, -0.3, 0.2, -0.1, 0.2])
+    suites = ["a", "a", "b", "b", "c", "c"]
+    row = threshold_for_risk_budget(predicted_delta, suites, 0.0, 0.5, "suite_median")
+    assert row["policy"] == "risk_suite_median"
+    assert row["suite_thresholds"] == pytest.approx({"a": -0.5, "b": -0.3, "c": -0.1})
+    assert row["threshold"] == pytest.approx(-0.3)
+
+
 def test_joint_budget_masks_bad_tokens_before_fraction_quantile() -> None:
     predicted_delta = torch.tensor([-0.5, -0.2, 0.1, 0.4])
     row = threshold_for_joint_budget(predicted_delta, [], 0.0, 0.5, "global")

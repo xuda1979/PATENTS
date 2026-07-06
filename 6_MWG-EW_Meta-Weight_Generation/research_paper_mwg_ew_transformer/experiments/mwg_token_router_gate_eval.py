@@ -470,7 +470,22 @@ def threshold_for_risk_budget(
         mask = torch.tensor([item == suite_id for item in suite_ids], dtype=torch.bool)
         suite_thresholds[suite_id] = choose_threshold(scores[mask])
     finite = [value for value in suite_thresholds.values() if math.isfinite(value)]
-    threshold = min(finite) if finite else float("-inf")
+    if not finite:
+        threshold = float("-inf")
+    elif policy == "suite_min":
+        threshold = min(finite)
+    elif policy == "suite_mean":
+        threshold = sum(finite) / len(finite)
+    elif policy == "suite_median":
+        ordered = sorted(finite)
+        threshold = ordered[len(ordered) // 2]
+    elif policy == "suite_local":
+        # suite_local applies per-suite thresholds at evaluation time via
+        # thresholds_by_example; the summary threshold is the strictest
+        # (min) so that the scalar `threshold` field remains informative.
+        threshold = min(finite)
+    else:
+        threshold = min(finite)
     return {
         "threshold": threshold,
         "policy": "risk_suite_local" if policy == "suite_local" else f"risk_{policy}",
