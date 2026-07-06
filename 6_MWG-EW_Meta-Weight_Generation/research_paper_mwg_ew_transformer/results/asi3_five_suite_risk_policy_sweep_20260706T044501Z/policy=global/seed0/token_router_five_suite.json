@@ -1,0 +1,369 @@
+{
+  "dense": {
+    "loss": 2.042110214661717,
+    "ppl": 7.7068551703830215,
+    "tokens": 74456
+  },
+  "patched": {
+    "loss": 2.384725586718233,
+    "ppl": 10.85608320271842,
+    "tokens": 74456,
+    "ppl_ratio": 1.4086268604654324
+  },
+  "router": {
+    "mean": [
+      0.2811590347445922,
+      0.5679340006913302,
+      0.004159726293470057,
+      0.5519687682953471,
+      0.5521270267797956,
+      0.3712994454936038,
+      7.304486451025393,
+      0.9184661081767991,
+      0.5521269909050972
+    ],
+    "std": [
+      0.24035835767622044,
+      0.3040345583758076,
+      0.012543911166242884,
+      0.0362579332846213,
+      0.036256834604293894,
+      0.047089224210931445,
+      2.2854045849058444,
+      0.12802739142640437,
+      0.036256832291520956
+    ],
+    "coef": [
+      0.42354056952485,
+      0.05197276702757439,
+      -0.2247359859605101,
+      0.02458893515543632,
+      4.385393372277381,
+      -2.1845332581571846,
+      0.42020783278158175,
+      0.14566252636227228,
+      -0.2404972213205939,
+      -2.185034257490375
+    ],
+    "train_mse": 4.762231031779294,
+    "train_weighted_mse": 5.716860464914905,
+    "train_corr": 0.08120330423116684,
+    "suite_balanced_ridge": true,
+    "suite_weight_summary": {
+      "gsm8k_test": {
+        "examples": 130,
+        "tokens": 22693,
+        "dense_loss": 1.2255023372486922,
+        "patched_loss": 1.195302770908211,
+        "patched_ppl_ratio": 0.9702518846082895,
+        "positive_delta_fraction": 0.28264222447450754
+      },
+      "mbpp_test": {
+        "examples": 97,
+        "tokens": 4816,
+        "dense_loss": 1.3891856575329042,
+        "patched_loss": 1.8694540414699288,
+        "patched_ppl_ratio": 1.616508188811555,
+        "positive_delta_fraction": 0.30419435215946844
+      },
+      "alpaca_cleaned_train_tail": {
+        "examples": 130,
+        "tokens": 17059,
+        "dense_loss": 1.3620741039320623,
+        "patched_loss": 1.4600250137230317,
+        "patched_ppl_ratio": 1.1029086417637988,
+        "positive_delta_fraction": 0.3706547863297966
+      },
+      "wikitext103_validation_extra": {
+        "examples": 130,
+        "tokens": 18328,
+        "dense_loss": 2.7428667284109247,
+        "patched_loss": 3.331643666101303,
+        "patched_ppl_ratio": 1.801783373886445,
+        "positive_delta_fraction": 0.5559253601047578
+      },
+      "hellaswag_validation_extra": {
+        "examples": 130,
+        "tokens": 10120,
+        "dense_loss": 3.6454060339644965,
+        "patched_loss": 4.626312239273735,
+        "patched_ppl_ratio": 2.666871880689109,
+        "positive_delta_fraction": 0.6178853754940712
+      }
+    }
+  },
+  "mixed_frontier": [
+    {
+      "tokens": 75073.0,
+      "loss": 2.0768328461566146,
+      "ppl": 7.979157633328409,
+      "actual_patch_token_fraction": 0.11199604943273905,
+      "target_patch_fraction": 0.05,
+      "train_score_threshold": -0.016802340745925903,
+      "threshold_policy": "global",
+      "threshold_details": {
+        "threshold": -0.016802340745925903,
+        "policy": "risk_global",
+        "global_threshold": -0.016802340745925903,
+        "suite_thresholds": {},
+        "max_predicted_delta": 0.0,
+        "max_patch_fraction": 0.05
+      },
+      "delta_loss": 0.03472263149489763,
+      "ppl_ratio": 1.0353325003422706
+    },
+    {
+      "tokens": 75073.0,
+      "loss": 2.0849721943206454,
+      "ppl": 8.044367799476245,
+      "actual_patch_token_fraction": 0.1258800141815235,
+      "target_patch_fraction": 0.1,
+      "train_score_threshold": -9.924173355102539e-06,
+      "threshold_policy": "global",
+      "threshold_details": {
+        "threshold": -9.924173355102539e-06,
+        "policy": "risk_global",
+        "global_threshold": -9.924173355102539e-06,
+        "suite_thresholds": {},
+        "max_predicted_delta": 0.0,
+        "max_patch_fraction": 0.1
+      },
+      "delta_loss": 0.04286197965892846,
+      "ppl_ratio": 1.0437938201291577
+    },
+    {
+      "tokens": 75073.0,
+      "loss": 2.0849721930419793,
+      "ppl": 8.044367789190185,
+      "actual_patch_token_fraction": 0.1258800141815235,
+      "target_patch_fraction": 0.25,
+      "train_score_threshold": -9.924173355102539e-06,
+      "threshold_policy": "global",
+      "threshold_details": {
+        "threshold": -9.924173355102539e-06,
+        "policy": "risk_global",
+        "global_threshold": -9.924173355102539e-06,
+        "suite_thresholds": {},
+        "max_predicted_delta": 0.0,
+        "max_patch_fraction": 0.25
+      },
+      "delta_loss": 0.0428619783802624,
+      "ppl_ratio": 1.043793818794494
+    }
+  ],
+  "feature_names": [
+    "position",
+    "fill_ratio",
+    "hidden_mean",
+    "hidden_std",
+    "hidden_rms",
+    "hidden_abs_mean",
+    "hidden_abs_max",
+    "hidden_abs_q95",
+    "hidden_l2"
+  ],
+  "train_summary": {
+    "split": "train",
+    "examples": 617,
+    "tokens": 73016,
+    "dense_loss": 1.984483336075329,
+    "patched_loss": 2.3134040227730264,
+    "patched_ppl_ratio": 1.389467647949601,
+    "positive_delta_fraction": 0.41968883532376466,
+    "suite_metrics": {
+      "gsm8k_test": {
+        "examples": 130,
+        "tokens": 22693,
+        "dense_loss": 1.2255023372486922,
+        "patched_loss": 1.195302770908211,
+        "patched_ppl_ratio": 0.9702518846082895,
+        "positive_delta_fraction": 0.28264222447450754
+      },
+      "mbpp_test": {
+        "examples": 97,
+        "tokens": 4816,
+        "dense_loss": 1.3891856575329042,
+        "patched_loss": 1.8694540414699288,
+        "patched_ppl_ratio": 1.616508188811555,
+        "positive_delta_fraction": 0.30419435215946844
+      },
+      "alpaca_cleaned_train_tail": {
+        "examples": 130,
+        "tokens": 17059,
+        "dense_loss": 1.3620741039320623,
+        "patched_loss": 1.4600250137230317,
+        "patched_ppl_ratio": 1.1029086417637988,
+        "positive_delta_fraction": 0.3706547863297966
+      },
+      "wikitext103_validation_extra": {
+        "examples": 130,
+        "tokens": 18328,
+        "dense_loss": 2.7428667284109247,
+        "patched_loss": 3.331643666101303,
+        "patched_ppl_ratio": 1.801783373886445,
+        "positive_delta_fraction": 0.5559253601047578
+      },
+      "hellaswag_validation_extra": {
+        "examples": 130,
+        "tokens": 10120,
+        "dense_loss": 3.6454060339644965,
+        "patched_loss": 4.626312239273735,
+        "patched_ppl_ratio": 2.666871880689109,
+        "positive_delta_fraction": 0.6178853754940712
+      }
+    }
+  },
+  "eval_summary": {
+    "split": "eval",
+    "examples": 617,
+    "tokens": 74456,
+    "dense_loss": 2.042110214661717,
+    "patched_loss": 2.384725586718233,
+    "patched_ppl_ratio": 1.4086268604654324,
+    "positive_delta_fraction": 0.4177635113355539,
+    "suite_metrics": {
+      "gsm8k_test": {
+        "examples": 130,
+        "tokens": 22551,
+        "dense_loss": 1.273678502054956,
+        "patched_loss": 1.2382965144558782,
+        "patched_ppl_ratio": 0.9652366374019128,
+        "positive_delta_fraction": 0.2699658551727196
+      },
+      "mbpp_test": {
+        "examples": 97,
+        "tokens": 4772,
+        "dense_loss": 1.451784905324138,
+        "patched_loss": 1.6475296888847064,
+        "patched_ppl_ratio": 1.2162164672851958,
+        "positive_delta_fraction": 0.2567057837384744
+      },
+      "alpaca_cleaned_train_tail": {
+        "examples": 130,
+        "tokens": 16583,
+        "dense_loss": 1.3480522787442277,
+        "patched_loss": 1.5629649971590063,
+        "patched_ppl_ratio": 1.239753684576782,
+        "positive_delta_fraction": 0.361816317915938
+      },
+      "wikitext103_validation_extra": {
+        "examples": 130,
+        "tokens": 19386,
+        "dense_loss": 2.758699519634493,
+        "patched_loss": 3.344992510221893,
+        "patched_ppl_ratio": 1.7973133931907979,
+        "positive_delta_fraction": 0.5601464974724027
+      },
+      "hellaswag_validation_extra": {
+        "examples": 130,
+        "tokens": 11164,
+        "dense_loss": 3.633269155209144,
+        "patched_loss": 4.568758380579633,
+        "patched_ppl_ratio": 2.548459924063197,
+        "positive_delta_fraction": 0.6210139734862057
+      }
+    }
+  },
+  "suite_sources": {
+    "train": [
+      {
+        "suite": "gsm8k_test",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/gsm8k_test/router_train.txt",
+        "count": 130
+      },
+      {
+        "suite": "mbpp_test",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/mbpp_test/router_train.txt",
+        "count": 97
+      },
+      {
+        "suite": "alpaca_cleaned_train_tail",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/alpaca_cleaned_train_tail/router_train.txt",
+        "count": 130
+      },
+      {
+        "suite": "wikitext103_validation_extra",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/wikitext103_validation_extra/router_train.txt",
+        "count": 130
+      },
+      {
+        "suite": "hellaswag_validation_extra",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/hellaswag_validation_extra/router_train.txt",
+        "count": 130
+      }
+    ],
+    "eval": [
+      {
+        "suite": "gsm8k_test",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/gsm8k_test/router_eval.txt",
+        "count": 130
+      },
+      {
+        "suite": "mbpp_test",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/mbpp_test/router_eval.txt",
+        "count": 97
+      },
+      {
+        "suite": "alpaca_cleaned_train_tail",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/alpaca_cleaned_train_tail/router_eval.txt",
+        "count": 130
+      },
+      {
+        "suite": "wikitext103_validation_extra",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/wikitext103_validation_extra/router_eval.txt",
+        "count": 130
+      },
+      {
+        "suite": "hellaswag_validation_extra",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/hellaswag_validation_extra/router_eval.txt",
+        "count": 130
+      }
+    ]
+  },
+  "checkpoint": "/root/work/filestorage/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260624T110725Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+  "checkpoint_student": "mwg_expert_residual_r384",
+  "config": {
+    "model_dir": "/root/work/filestorage/Qwen2.5-1.5B-Instruct",
+    "layer": 16,
+    "checkpoint": "/root/work/filestorage/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260624T110725Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+    "train_texts": [],
+    "eval_texts": [],
+    "suite_split_manifest": "data/heldout/combined_extra_splits/manifest.json",
+    "suite_train_key": "train_texts",
+    "suite_eval_key": "eval_texts",
+    "suite_balanced_sampling": true,
+    "suite_balanced_ridge": true,
+    "fail_on_suite_overlap": true,
+    "require_texts": true,
+    "seq": 256,
+    "train_examples": 0,
+    "eval_examples": 0,
+    "fractions": [
+      0.1,
+      0.25,
+      0.5
+    ],
+    "risk_budgets": [
+      0.05,
+      0.1,
+      0.25
+    ],
+    "joint_budgets": [],
+    "risk_max_predicted_delta": 0.0,
+    "threshold_policy": "global",
+    "seed": 0,
+    "ridge_l2": 1.0,
+    "dtype": "fp32",
+    "out_json": "results/asi3_five_suite_risk_policy_sweep_20260706T044501Z/policy=global/seed0/token_router_five_suite.json"
+  }
+}
