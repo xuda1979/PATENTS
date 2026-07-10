@@ -1360,7 +1360,10 @@ future work. Fourth, always-patched replacement is broadly safe only for the
 calibrated layer-16 checkpoint and only in aggregate over the five-suite
 manifest, with Wikitext-103 and HellaSwag individually regressing; the robust
 positive result is the \emph{selective}, budgeted router regime at small actual
-patch fractions. Fifth, the broad held-out manifest currently covers math
+patch fractions, and the 2026-07-08 tighter-eligibility Pareto sweep
+(Table~\ref{tab:tighterpareto}) establishes that such a net five-suite win is
+recoverable at $\Delta_{\max}=-0.20$ under a policy-invariant threshold.
+Fifth, the broad held-out manifest currently covers math
 reasoning, code generation, and instruction following plus two added general/
 commonsense suites, but does not yet cover dialogue or long-context families,
 so we do not make a broad-family deployment claim. We report all of these as
@@ -1412,10 +1415,12 @@ that path operationally: the same rank family scales repeatably across one,
 two, four, and eight-device settings, and the widest ASI3 rank sweep shows a
 stable 1.5x--1.65x training-side improvement across a broad rank range. It still
 does not license stronger decode claims. The highest-value follow-up
-experiments are suite-robust eligibility policies that recover a net five-suite
-selective win, a fused no-write-back kernel with hardware-counter confirmation
+experiments are a fused no-write-back kernel with hardware-counter confirmation
 of off-chip descriptor traffic, and multi-layer budget allocation across the
-FFN stack. Each of these targets a specific boundary stated in the evidence
+FFN stack. The 2026-07-08 tighter-eligibility Pareto sweep has already closed
+the suite-robust eligibility gap: a policy-invariant net five-suite selective
+win of $0.9923\times$ at $\sim$2\% actual patching is now established under
+three seeds. Each remaining target addresses a specific boundary stated in the evidence
 map, and each is required before the parameter-lifetime view can be turned
 into a deployable full-Transformer execution primitive.
 
