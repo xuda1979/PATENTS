@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "source_manifest": "data/heldout/manifest_with_extra.json",
+  "source_manifest_sha256": "ed0563b672892dcbeacd81bfcd6aa9918d09bbda1d52c4eb3ea708ceeaf181b1",
+  "sources": [
+    {
+      "suite": "gsm8k_test",
+      "path": "data/heldout/gsm8k_test.txt",
+      "rows": 260,
+      "sha256": "3412766bbb80d294dd09ea0a2df484386f05cedbb14c5d2ec566f97d87565daf"
+    },
+    {
+      "suite": "mbpp_test",
+      "path": "data/heldout/mbpp_test.txt",
+      "rows": 194,
+      "sha256": "99797cbab0fdb5a5d1ccf4d8ac014723e41fe201ca1417c6af3bc2896b19bba1"
+    },
+    {
+      "suite": "alpaca_cleaned_train_tail",
+      "path": "data/heldout/alpaca_cleaned_train_tail.txt",
+      "rows": 260,
+      "sha256": "a271576b55e5c2f3abbbd05cb260792bc59a4a297a19b020abde3d8d0f0efe2e"
+    },
+    {
+      "suite": "wikitext103_validation_extra",
+      "path": "data/heldout_extra/wikitext103_validation_extra.txt",
+      "rows": 260,
+      "sha256": "cd2b06ddbf229f83c2a79b986a757b8c8630f62279bd1b2b0da2989d247a7e90"
+    },
+    {
+      "suite": "hellaswag_validation_extra",
+      "path": "data/heldout_extra/hellaswag_validation_extra.txt",
+      "rows": 260,
+      "sha256": "aa7dea2658bd8adfb488cf23833dced8b8654f68fc4a5656695997d253e158b1"
+    }
+  ],
+  "seed": 20260823,
+  "fractions": {
+    "train": 0.5,
+    "dev": 0.25,
+    "test": 0.25
+  },
+  "deduplication": {
+    "normalization": "Unicode NFKC, whitespace collapse, case-fold for comparison",
+    "volatile_mask": "decimal and integer substrings replaced by #",
+    "ngram_width": 4,
+    "near_duplicate_threshold": 0.82,
+    "input_records": 1234,
+    "duplicate_components": 1233,
+    "records_removed": 1,
+    "exact_duplicate_links": 0,
+    "near_duplicate_links": 1
+  },
+  "outputs": {
+    "train": {
+      "path": "data/quality/train.txt",
+      "rows": 630,
+      "characters": 317472,
+      "sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+      "suite_counts": {
+        "alpaca_cleaned_train_tail": 128,
+        "gsm8k_test": 136,
+        "hellaswag_validation_extra": 133,
+        "mbpp_test": 96,
+        "wikitext103_validation_extra": 137
+      }
+    },
+    "dev": {
+      "path": "data/quality/dev.txt",
+      "rows": 300,
+      "characters": 143391,
+      "sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+      "suite_counts": {
+        "alpaca_cleaned_train_tail": 66,
+        "gsm8k_test": 59,
+        "hellaswag_validation_extra": 62,
+        "mbpp_test": 54,
+        "wikitext103_validation_extra": 59
+      }
+    },
+    "test": {
+      "path": "data/quality/test.txt",
+      "rows": 303,
+      "characters": 162189,
+      "sha256": "8e2acce8615c34c742b59f8840c63d3cf1ac841d1308d502ba31a0c114147b4e",
+      "suite_counts": {
+        "alpaca_cleaned_train_tail": 66,
+        "gsm8k_test": 65,
+        "hellaswag_validation_extra": 65,
+        "mbpp_test": 43,
+        "wikitext103_validation_extra": 64
+      }
+    }
+  },
+  "test_policy": "Frozen before model fitting. Test rows and labels must not be used for training, hyperparameter selection, threshold calibration, or early stopping. Evaluate once after the method and routing policy are fixed."
+}

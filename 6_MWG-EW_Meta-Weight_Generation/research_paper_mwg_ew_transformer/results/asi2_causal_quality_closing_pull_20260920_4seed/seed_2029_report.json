@@ -1,0 +1,64 @@
+ive_mse_p95": 1.0455950498580933,
+        "token_relative_mse_p99": 1.1389226913452148
+      },
+      "persistent_factor_elements": 12091392,
+      "persistent_factor_mib": 46.125,
+      "rank": 384,
+      "svd_energy": {
+        "down": 0.494729,
+        "gate": 0.508384,
+        "up": 0.453496
+      }
+    },
+    "static_svd_r401": {
+      "analytic_dense_to_factor_payload_ratio": 3.27,
+      "metrics": {
+        "cosine": 0.42674314975738525,
+        "mse": 0.14661946892738342,
+        "relative_mse": 0.8232832551002502,
+        "token_relative_mse_max": 1.3576416969299316,
+        "token_relative_mse_p50": 0.8504504561424255,
+        "token_relative_mse_p90": 0.9958452582359314,
+        "token_relative_mse_p95": 1.0400793552398682,
+        "token_relative_mse_p99": 1.129870891571045
+      },
+      "persistent_factor_elements": 12626688,
+      "persistent_factor_mib": 48.167,
+      "rank": 401,
+      "svd_energy": {
+        "down": 0.509046,
+        "gate": 0.522541,
+        "up": 0.468278
+      }
+    },
+    "static_svd_r512": {
+      "analytic_dense_to_factor_payload_ratio": 2.561,
+      "metrics": {
+        "cosine": 0.5025743842124939,
+        "mse": 0.1339184045791626,
+        "relative_mse": 0.7519655227661133,
+        "token_relative_mse_max": 1.3212312459945679,
+        "token_relative_mse_p50": 0.775597095489502,
+        "token_relative_mse_p90": 0.9372047781944275,
+        "token_relative_mse_p95": 0.9788819551467896,
+        "token_relative_mse_p99": 1.0703730583190918
+      },
+      "persistent_factor_elements": 16121856,
+      "persistent_factor_mib": 61.5,
+      "rank": 512,
+      "svd_energy": {
+        "down": 0.595561,
+        "gate": 0.607444,
+        "up": 0.558106
+      }
+    }
+  },
+  "teacher": {
+    "down": "model.layers.16.mlp.down_proj.weight",
+    "gate": "model.layers.16.mlp.gate_proj.weight",
+    "layer": "16",
+    "model_digest": "b6c944482ac7fe5c54afe482fadc7cf9a100a652a79ca1fbe684e268261c1c40",
+    "state_file": "/root/work/filestorage/Qwen2.5-1.5B-Instruct/model.safetensors",
+    "up": "model.layers.16.mlp.up_proj.weight"
+  }
+}

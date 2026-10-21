@@ -1,0 +1,91 @@
+[2026-10-08T09:44:08Z] device-gate: no trainer/tenant processes detected
+[2026-10-08T09:44:08Z] fixed v4 source verified: 701e9be098b51b13ac89409384735e2d
+[2026-10-08T09:44:08Z] v1 baseline verified (source 59cf1751d920f5f90851b117f7483d6c, /root/work/mwg_torch_ext/build/libcustom_ops.so)
+[2026-10-08T09:44:08Z] staged /root/work/mwg_v4_torch_ext from fixed sources
+[2026-10-08T09:44:08Z] cmake configure
+[2026-10-08T09:44:11Z] cmake rc=0
+[2026-10-08T09:44:11Z] make
+[2026-10-08T09:45:58Z] make rc=0
+[2026-10-08T09:45:58Z] V4_SO=/root/work/mwg_v4_torch_ext/build/libcustom_ops_v4.so
+[2026-10-08T09:45:58Z] warmup-fix string count in v4 .so: 1
+[2026-10-08T09:45:58Z] settling 60s post-build
+[2026-10-08T09:46:58Z] running test_v4_multicore_v2.py
+Traceback (most recent call last):
+  File "/tmp/test_v4_multicore_v2.py", line 348, in <module>
+    main()
+  File "/tmp/test_v4_multicore_v2.py", line 336, in main
+    parser = argparse.ArgumentParser(description="Test v4 multi-core epilogue (hardened v2)")
+             ^^^^^^^^
+NameError: name 'argparse' is not defined
+[ERROR] 2026-10-08-09:47:06 (PID:20556, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception
+[2026-10-08T09:47:08Z] test rc=1
+[2026-10-08T09:47:08Z] === v4 ASI2 decisive worker v2 done ===
+[2026-10-08T13:43:54Z] device-gate: no trainer/tenant processes detected
+[2026-10-08T13:43:54Z] fixed v4 source verified: 701e9be098b51b13ac89409384735e2d
+[2026-10-08T13:43:54Z] v1 baseline verified (source 59cf1751d920f5f90851b117f7483d6c, /root/work/mwg_torch_ext/build/libcustom_ops.so)
+[2026-10-08T13:43:55Z] staged /root/work/mwg_v4_torch_ext from fixed sources
+[2026-10-08T13:43:55Z] cmake configure
+[2026-10-08T13:43:57Z] cmake rc=0
+[2026-10-08T13:43:57Z] make
+[2026-10-08T13:45:47Z] make rc=0
+[2026-10-08T13:45:47Z] V4_SO=/root/work/mwg_v4_torch_ext/build/libcustom_ops_v4.so
+[2026-10-08T13:45:47Z] warmup-fix string count in v4 .so: 1
+[2026-10-08T13:45:47Z] settling 60s post-build
+[2026-10-08T13:46:47Z] running test_v4_multicore_v2.py
+preflight: device healthy (baseline matmul finite & deterministic)
+
+=== probe_T128: T=128, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.001953
+  v1 median = 0.1323 ± 0.0024 ms
+  v4 max_err = 0.001953
+  v4 median = 0.1170 ± 0.0006 ms
+  v1-vs-v4 max_err = 0.000000
+  speedup = 1.130x
+
+=== large_T512: T=512, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.001953
+  v1 median = 0.1674 ± 0.0002 ms
+  v4 max_err = 0.001953
+  v4 median = 0.1212 ± 0.0038 ms
+  v1-vs-v4 max_err = 0.000000
+  speedup = 1.381x
+
+=== large_T1024: T=1024, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.003906
+  v1 median = 0.2232 ± 0.0105 ms
+  v4 max_err = 0.003906
+  v4 median = 0.1310 ± 0.0005 ms
+  v1-vs-v4 max_err = 0.000000
+  speedup = 1.705x
+
+=== large_T2048: T=2048, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.003906
+  v1 median = 0.3317 ± 0.0047 ms
+  v4 max_err = 0.003906
+  v4 median = 0.1553 ± 0.0148 ms
+  v1-vs-v4 max_err = 0.000000
+  speedup = 2.136x
+
+=== large_T4096: T=4096, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.003906
+  v1 median = 0.5434 ± 0.0077 ms
+  v4 max_err = 0.003906
+  v4 median = 0.1794 ± 0.0009 ms
+  v1-vs-v4 max_err = 0.000000
+  speedup = 3.029x
+
+=== SUMMARY ===
+Config                    v1 ms      v4 ms    Speedup
+------------------------------------------------------
+probe_T128               0.1323     0.1170     1.130x
+large_T512               0.1674     0.1212     1.381x
+large_T1024              0.2232     0.1310     1.705x
+large_T2048              0.3317     0.1553     2.136x
+large_T4096              0.5434     0.1794     3.029x
+
+=== STABILITY: 1000 sequential calls at T=4096 ===
+  completed 1000/1000 calls, final max_err = nan, FAIL
+
+Results saved to /root/work/filestorage/mwg-ew-transformer-research/results/v4_multicore_benchmark_asi2_v2_20261008.json
+[2026-10-08T13:47:03Z] test rc=0
+[2026-10-08T13:47:03Z] === v4 ASI2 decisive worker v2 done ===

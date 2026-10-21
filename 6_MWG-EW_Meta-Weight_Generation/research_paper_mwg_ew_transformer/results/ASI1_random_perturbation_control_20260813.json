@@ -1,0 +1,94 @@
+{
+ "run": "random_perturbation_control",
+ "platform": "Huanxin ASI1, single Ascend 910B2, torch 2.7.1/torch_npu 2.7.1",
+ "layer": 16,
+ "checkpoint": "results/asi3_layer16_recovery_20260624T110725Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+ "suite_split_manifest": "data/heldout/combined_extra_splits/manifest.json",
+ "seq": 256,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "fractions": [
+  0.01,
+  0.02,
+  0.05
+ ],
+ "dense": {
+  "tokens": 75073.0,
+  "loss": 2.043709,
+  "ppl": 7.71821488704669
+ },
+ "always_patched": {
+  "tokens": 75073.0,
+  "ppl_ratio": 1.4096170748392756,
+  "actual_patch_token_fraction": 1.0
+ },
+ "cells": [
+  {
+   "patch_fraction_target": 0.01,
+   "seed": 0,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0104,
+   "ppl_ratio": 1.000752
+  },
+  {
+   "patch_fraction_target": 0.01,
+   "seed": 1,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0102,
+   "ppl_ratio": 1.000804
+  },
+  {
+   "patch_fraction_target": 0.01,
+   "seed": 2,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0098,
+   "ppl_ratio": 1.000158
+  },
+  {
+   "patch_fraction_target": 0.02,
+   "seed": 0,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0205,
+   "ppl_ratio": 1.00022
+  },
+  {
+   "patch_fraction_target": 0.02,
+   "seed": 1,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.02,
+   "ppl_ratio": 1.000981
+  },
+  {
+   "patch_fraction_target": 0.02,
+   "seed": 2,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0198,
+   "ppl_ratio": 1.00152
+  },
+  {
+   "patch_fraction_target": 0.05,
+   "seed": 0,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0504,
+   "ppl_ratio": 1.00224
+  },
+  {
+   "patch_fraction_target": 0.05,
+   "seed": 1,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0492,
+   "ppl_ratio": 1.000974
+  },
+  {
+   "patch_fraction_target": 0.05,
+   "seed": 2,
+   "tokens": 75073.0,
+   "actual_patch_token_fraction": 0.0503,
+   "ppl_ratio": 1.002015
+  }
+ ],
+ "note": "ppl_ratio = random-mixed PPL / dense PPL. Raw artifact preserved on ASI1 at results/asi1_reviewer_controls_20260813T080428Z/random_perturbation_control.json (terminal capture truncates >4KB, so this local file was reconstructed from the printed per-cell summary of the raw JSON)."
+}

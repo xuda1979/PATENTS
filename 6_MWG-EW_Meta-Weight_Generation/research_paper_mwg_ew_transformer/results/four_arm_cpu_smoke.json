@@ -1,0 +1,308 @@
+{
+  "schema_version": "mwg-four-arm-lifetime-v1",
+  "created_at": "20260824T024439Z",
+  "run_label": "",
+  "counter_metric": "",
+  "counter_pair_id": "",
+  "environment": {
+    "hostname": "Mac.mshome.net",
+    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7",
+    "torch": "2.12.1",
+    "device": "cpu",
+    "device_type": "cpu",
+    "ascend_rt_visible_devices": "",
+    "tool_paths": {
+      "npu-smi": null,
+      "msprof": null,
+      "msopgen": null,
+      "ccec": null
+    }
+  },
+  "config": {
+    "d": 512,
+    "m": 1408,
+    "rank": 128,
+    "controller_hidden": 128,
+    "batch": 1,
+    "seq": 128,
+    "amplitude": 0.05,
+    "dtype": "auto",
+    "seed": 1234
+  },
+  "execution": {
+    "arms": [
+      "dense",
+      "persistent",
+      "materialized"
+    ],
+    "warmup": 3,
+    "iters": 5,
+    "repeats": 1,
+    "inference_only": true,
+    "dense_control_scope": "dense matrices are exact products of the shared factors; this isolates representation/execution and is not an independent full-rank checkpoint baseline"
+  },
+  "logical_core_accounting": {
+    "core_elements_all_three_projections": 49152,
+    "core_bytes_one_copy": 196608,
+    "materialized_store_plus_reload_bytes": 393216,
+    "fused_scheduled_core_store_plus_reload_bytes": null,
+    "not_hardware_counter_measurement": true
+  },
+  "backend_contract": {
+    "validated": false,
+    "arm4_executed": false,
+    "reason": "fused arm not selected"
+  },
+  "arms": {
+    "dense": {
+      "arm": "dense",
+      "timing": {
+        "mean_ms": 0.3957334,
+        "median_ms": 0.382375,
+        "min_ms": 0.371166,
+        "max_ms": 0.434459,
+        "p05_ms": 0.3721578,
+        "p95_ms": 0.4304756,
+        "std_ms": 0.027476939755001827,
+        "samples_ms": [
+          0.382375,
+          0.434459,
+          0.414542,
+          0.376125,
+          0.371166
+        ],
+        "sample_count": 5,
+        "repeats": [
+          {
+            "mean_ms": 0.3957334,
+            "median_ms": 0.382375,
+            "min_ms": 0.371166,
+            "max_ms": 0.434459,
+            "p05_ms": 0.3721578,
+            "p95_ms": 0.4304756,
+            "std_ms": 0.027476939755001827,
+            "samples_ms": [
+              0.382375,
+              0.434459,
+              0.414542,
+              0.376125,
+              0.371166
+            ],
+            "sample_count": 5
+          }
+        ],
+        "timer": "host_perf_counter_ns_with_device_synchronize",
+        "warmup_iterations": 3,
+        "iterations_per_repeat": 5,
+        "repeat_count": 1,
+        "memory": {
+          "baseline": {
+            "allocated_bytes": null,
+            "reserved_bytes": null
+          },
+          "peak": {
+            "max_allocated_bytes": null,
+            "max_reserved_bytes": null
+          },
+          "peak_allocated_delta_bytes": null
+        }
+      },
+      "persistent_state_bytes": 8650752,
+      "output_shape": [
+        1,
+        128,
+        512
+      ],
+      "output_dtype": "float32",
+      "output_sha256_fp32": "ea3019c8f59c10ede19af0f1fdc38950fbb75764ebc2ed23c3628e60d4550bd5",
+      "core_global_tensor_metadata": [],
+      "lifetime": "durable_dense_weights",
+      "representation": "dense_matrices_W_equal_UV_exact_factor_product_control"
+    },
+    "persistent": {
+      "arm": "persistent",
+      "timing": {
+        "mean_ms": 0.228725,
+        "median_ms": 0.239417,
+        "min_ms": 0.208291,
+        "max_ms": 0.244042,
+        "p05_ms": 0.2091078,
+        "p95_ms": 0.2431336,
+        "std_ms": 0.016955093880601187,
+        "samples_ms": [
+          0.244042,
+          0.212375,
+          0.208291,
+          0.2395,
+          0.239417
+        ],
+        "sample_count": 5,
+        "repeats": [
+          {
+            "mean_ms": 0.228725,
+            "median_ms": 0.239417,
+            "min_ms": 0.208291,
+            "max_ms": 0.244042,
+            "p05_ms": 0.2091078,
+            "p95_ms": 0.2431336,
+            "std_ms": 0.016955093880601187,
+            "samples_ms": [
+              0.244042,
+              0.212375,
+              0.208291,
+              0.2395,
+              0.239417
+            ],
+            "sample_count": 5
+          }
+        ],
+        "timer": "host_perf_counter_ns_with_device_synchronize",
+        "warmup_iterations": 3,
+        "iterations_per_repeat": 5,
+        "repeat_count": 1,
+        "memory": {
+          "baseline": {
+            "allocated_bytes": null,
+            "reserved_bytes": null
+          },
+          "peak": {
+            "max_allocated_bytes": null,
+            "max_reserved_bytes": null
+          },
+          "peak_allocated_delta_bytes": null
+        }
+      },
+      "persistent_state_bytes": 2949120,
+      "output_shape": [
+        1,
+        128,
+        512
+      ],
+      "output_dtype": "float32",
+      "output_sha256_fp32": "26382f52ffc3096698d73a6f724d365a4772b66b045941d5f61590435e57318e",
+      "core_global_tensor_metadata": [],
+      "lifetime": "durable_low_rank_factors_no_generated_core",
+      "representation": "associative_factors_for_the_same_W_as_dense"
+    },
+    "materialized": {
+      "arm": "materialized",
+      "timing": {
+        "mean_ms": 0.4292666,
+        "median_ms": 0.423667,
+        "min_ms": 0.399333,
+        "max_ms": 0.482917,
+        "p05_ms": 0.4017914,
+        "p95_ms": 0.47209179999999995,
+        "std_ms": 0.03208268066730085,
+        "samples_ms": [
+          0.482917,
+          0.428791,
+          0.411625,
+          0.423667,
+          0.399333
+        ],
+        "sample_count": 5,
+        "repeats": [
+          {
+            "mean_ms": 0.4292666,
+            "median_ms": 0.423667,
+            "min_ms": 0.399333,
+            "max_ms": 0.482917,
+            "p05_ms": 0.4017914,
+            "p95_ms": 0.47209179999999995,
+            "std_ms": 0.03208268066730085,
+            "samples_ms": [
+              0.482917,
+              0.428791,
+              0.411625,
+              0.423667,
+              0.399333
+            ],
+            "sample_count": 5
+          }
+        ],
+        "timer": "host_perf_counter_ns_with_device_synchronize",
+        "warmup_iterations": 3,
+        "iterations_per_repeat": 5,
+        "repeat_count": 1,
+        "memory": {
+          "baseline": {
+            "allocated_bytes": null,
+            "reserved_bytes": null
+          },
+          "peak": {
+            "max_allocated_bytes": null,
+            "max_reserved_bytes": null
+          },
+          "peak_allocated_delta_bytes": null
+        }
+      },
+      "persistent_state_bytes": 3409920,
+      "output_shape": [
+        1,
+        128,
+        512
+      ],
+      "output_dtype": "float32",
+      "output_sha256_fp32": "fbdbbe33db7ec5ec401d0bf4c0db20d920bf728b747dd6966a1ec1ab2bdef995",
+      "core_global_tensor_metadata": [
+        {
+          "projection": "up",
+          "shape": [
+            1,
+            128,
+            128
+          ],
+          "dtype": "float32",
+          "data_ptr": 30472519680,
+          "bytes": 65536,
+          "global_framework_tensor": true
+        },
+        {
+          "projection": "gate",
+          "shape": [
+            1,
+            128,
+            128
+          ],
+          "dtype": "float32",
+          "data_ptr": 30472519680,
+          "bytes": 65536,
+          "global_framework_tensor": true
+        },
+        {
+          "projection": "down",
+          "shape": [
+            1,
+            128,
+            128
+          ],
+          "dtype": "float32",
+          "data_ptr": 30472519680,
+          "bytes": 65536,
+          "global_framework_tensor": true
+        }
+      ],
+      "lifetime": "generated_core_ordinary_global_framework_tensor",
+      "representation": "persistent_UV_plus_token_local_diagonal_core"
+    }
+  },
+  "validations": {
+    "dense_vs_persistent_factorization": {
+      "passed": true,
+      "max_abs": 5.0067901611328125e-06,
+      "mean_abs": 6.419485316655482e-07,
+      "max_rel": 0.000512576662003994,
+      "rtol": 0.005,
+      "atol": 0.005
+    }
+  },
+  "claim_boundary": {
+    "arm4_implemented_in_repository": false,
+    "arm4_execution_observed": false,
+    "hardware_counter_complete": false,
+    "no_store_claim_ready": false,
+    "reason": "A validated compiled-op execution is necessary but not sufficient. Parsed arm-3/arm-4 HBM and L2 counters are still required."
+  }
+}

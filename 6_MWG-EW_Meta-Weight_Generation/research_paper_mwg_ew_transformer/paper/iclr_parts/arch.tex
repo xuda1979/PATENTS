@@ -1,0 +1,106 @@
+\section{Architecture}
+
+\subsection{Baseline Gated FFN}
+
+A gated Transformer FFN \cite{shazeer2020gptj} maps hidden states
+$X\in\R^{B\times S\times d}$ to
+\begin{equation}
+Y = \left(\phi(XW_{\mathrm{gate}})\odot XW_{\mathrm{up}}\right)W_{\mathrm{down}},
+\end{equation}
+where $W_{\mathrm{up}}, W_{\mathrm{gate}}\in\R^{d\times m}$,
+$W_{\mathrm{down}}\in\R^{m\times d}$, and $\phi$ is typically SiLU. With fp16
+weights, these three matrices store exactly $6dm$ bytes, excluding metadata and
+alignment.
+
+\subsection{Ephemeral-Core FFN}
+
+For $p\in\{u,g,d\}$, let $U_p\in\R^{d_{\rm in}\times r}$,
+$V_p\in\R^{r\times d_{\rm out}}$ be persistent factors, and a generator
+emits $M_{p,\mathcal G}\in\mathcal M_r$ from causal group context, layer id,
+and projection id:
+\begin{equation}
+\widetilde Y_{\mathcal G}=
+\bigl(\phi(\Pi_{g,\mathcal G}(X_{\mathcal G}))\odot
+\Pi_{u,\mathcal G}(X_{\mathcal G})\bigr)
+U_dM_{d,\mathcal G}V_d.
+\label{eq:core-ffn}
+\end{equation}
+The structured family controls descriptor size and expressivity: a diagonal
+core $\operatorname{Diag}(z)$ emits $r$ scalars per projection with
+$\Theta(r)$ core work per token; block-diagonal ($b$-blocks, $rb$ scalars),
+low-rank-plus-identity ($I+AB^\top$, $2rk$), and dense ($r^2$) families trade
+expressivity for payload. We adopt the diagonal family as canonical.
+Generating complete factors $(U_{p,\mathcal G},V_{p,\mathcal G})$ is a more
+ambitious alternative, not the implemented method: it emits $r(d+m)$ scalars
+per projection and exposes a severe reuse requirement
+(Section~\ref{sec:analysis})---which is exactly why a small core, rather
+than a full generated factor pair, is the practical object for the proposed
+lifetime contract.
+
+\subsection{Causal Token-Local Replacement}
+\label{sec:causal-token}
+
+The historical \texttt{expert\_residual} mode formed its context as the
+full-sequence-and-batch mean $\bar x$, which is not valid for causal
+evaluation (position $t$'s control depends on later positions and unrelated
+examples); we retain it only for checkpoint compatibility. The replacement
+mode \texttt{token\_diag\_core} applies a controller independently per
+pre-FFN token state:
+\begin{equation}
+(z_u,z_g,z_d)_{b,t}=G_\theta(x_{b,t}),\qquad
+P(x;U,V,z)=((xU)\odot z)V,
+\label{eq:diag-core}
+\end{equation}
+using the bounded parameterization $z=\mathbf 1+a\tanh(h)$, with $a$ a
+recorded amplitude. It emits $3r$ values (vs.\ $6r+K$), uses no residual
+expert bank, and has $q=1$: because a decoder state depends only on its
+prefix, the output is independent of later positions and companion batch
+examples. A future shared core with $q>1$ is causal only if its context is
+available before the first token in the group. Tests compare full-sequence
+and prefix-only calls, perturb unrelated batch members, verify
+Eq.~\eqref{eq:diag-core} explicitly, and round-trip checkpoints. The legacy
+mode remains loadable only for compatibility; its head cannot generally be
+converted into an affine $3r$ head, so the redesigned mode needs fresh
+training (redundancy proposition, Appendix~\ref{app:causal}).
+
+\subsection{Descriptor Lifecycle}
+
+The inference operator enforces the following contract:
+(i) a causal router dispatches each call before either FFN branch launches
+(the unselected branch must not run); (ii) persistent $U_p,V_p,\theta$ may
+traverse HBM and cache, while the generator emits $M_{p,\mathcal G}$ directly
+into kernel-local scratch; (iii) the fused projection consumes $M_{p,\mathcal G}$
+without returning, aliasing, or registering it as model state, and without
+storing it in a global-memory descriptor buffer; and (iv) scratch is
+overwritten before the next group, with device counters and an instrumented
+address range distinguishing this arm from an otherwise identical
+materialized-core arm.
+
+The contract is made operational by a single entry point
+$\mathsf{ephemeral\_ffn}$ with signature
+\begin{equation}
+y_{\mathcal G},\ \mathsf{counters}\;\leftarrow\;
+\mathsf{ephemeral\_ffn}\!\left(X_{\mathcal G};\ U_p,V_p,\theta;\ g(x);\ \mathsf{mode}\right),
+\label{eq:operator-api}
+\end{equation}
+where $g(x)\in\{0,1\}$ is the causal dispatch decision and $\mathsf{mode}$
+selects inference, save-core, or rematerialize-core backward semantics. Its
+preconditions are that $g(x)$ is computed before either branch launches, that
+$U_p,V_p,\theta$ are durable model state, and that the core family
+$\mathcal M_r$ and output tolerance are declared with the operator. Its
+postconditions are that the returned $y_{\mathcal G}$ matches the selected
+branch within tolerance, that in inference mode no core buffer is returned,
+aliased, registered as model state, or written outside the declared scratch
+range, and that $\mathsf{counters}$ reports reads/writes of the core region.
+These last postconditions are the testable content of the no-store contract: a
+kernel that fails them is an ordinary materialized generator, not an \mwg
+operator. The target memory hierarchy is depicted in
+Figure~\ref{fig:lifecycle} (Appendix~\ref{app:lifecycle}).
+
+Training requires different semantics.  \texttt{save-core} retains each core
+until backward and weakens the strict no-store claim; alternatively,
+\texttt{rematerialize-core} retains the causal source activation and
+deterministic RNG/replay metadata, regenerates the core in backward, and
+propagates generator gradients through the replayed computation. Neither
+option is implemented by the target kernel, so we restrict the principal
+lifecycle claim to inference.

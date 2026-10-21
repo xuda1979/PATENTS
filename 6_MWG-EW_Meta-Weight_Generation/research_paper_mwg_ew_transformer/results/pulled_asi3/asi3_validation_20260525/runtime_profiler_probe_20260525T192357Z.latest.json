@@ -1,0 +1,732 @@
+{
+  "created_at": "20260525T192410Z",
+  "purpose": "operator-level runtime profiler probe; negative fused-kernel evidence unless fused_like ops are observed",
+  "env": {
+    "hostname": "dl-c72bd81a96e33134bbe0ae4a478fbab0-r0-b9aa825b43b4-0",
+    "python": "3.11.14",
+    "torch": "2.9.0+cpu",
+    "backend": "hccl",
+    "device_type": "npu",
+    "local_rank": 0,
+    "world_size": 1,
+    "ascend_rt_visible_devices": "",
+    "pytorch_npu_alloc_conf": "",
+    "torch_npu": "2.9.0",
+    "npu_count": 8,
+    "npu_available": true,
+    "current_npu_device": 0,
+    "device_name": "Ascend910B2",
+    "npu_device_names": [
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2",
+      "Ascend910B2"
+    ],
+    "memory_gib": 60.96,
+    "tool_paths": {
+      "npu-smi": "/usr/local/bin/npu-smi",
+      "msprof": "/usr/local/Ascend/cann-8.5.0/bin/msprof",
+      "msnpureport": null,
+      "python3": "/usr/local/python3.11.14/bin/python3"
+    },
+    "npu_smi_info_head": {
+      "cmd": [
+        "npu-smi",
+        "info"
+      ],
+      "available": true,
+      "returncode": 0,
+      "output_head": "+------------------------------------------------------------------------------------------------+\n| npu-smi 25.5.2                   Version: 25.5.2                                               |\n+---------------------------+---------------+----------------------------------------------------+\n| NPU   Name                | Health        | Power(W)    Temp(C)           Hugepages-Usage(page)|\n| Chip                      | Bus-Id        | AICore(%)   Memory-Usage(MB)  HBM-Usage(MB)        |\n+===========================+===============+====================================================+\n| 0     910B2               | OK            | 101.4       47                0    / 0             |\n| 0                         | 0000:C1:00.0  | 0           0    / 0          3610 / 65536         |\n+===========================+===============+====================================================+\n| 1     910B2               | OK            | 92.4        44                0    / 0             |\n| 0                         | 0000:C2:00.0  | 0           0    / 0          3379 / 65536         |\n+===========================+===============+====================================================+\n| 2     910B2               | OK            | 86.6        45                0    / 0             |\n| 0                         | 0000:81:00.0  | 0           0    / 0          3379 / 65536         |\n+===========================+===============+====================================================+\n| 3     910B2               | OK            | 89.8        32                0    / 0             |\n| 0                         | 0000:82:00.0  | 0           0    / 0          3379 / 65536         |\n+===========================+===============+====================================================+\n| 4     910B2               | OK            | 93.4        48                0    / 0             |\n| 0                         | 0000:01:00.0  | 0           0    / 0          3379 / 65536         |\n+===========================+===============+====================================================+\n| 5     910B2               | OK            | 92.1        47                0    / 0             |\n| 0                         | 0000:02:00.0  | 0           0    / 0          3379 / 65536         |\n+===========================+===============+====================================================+\n| 6     910B2               | OK            | 89.3        50                0    / 0             |\n| 0                         | 0000:41:00.0  | 0           0    / 0          3379 / 65536         |\n+===========================+===============+====================================================+\n| 7     910B2               | OK            | 88.4        34                0    / 0             |\n| 0                         | 0000:42:00.0  | 0           0    / 0          3378 / 65536         |\n+===========================+===============+====================================================+\n+---------------------------+---------------+----------------------------------------------------+\n| NPU     Chip              | Process id    | Process name             | Process memory(MB)      |\n+===========================+===============+====================================================+\n| 0       0                 | 25586         | python3                  | 136                     |\n| 0       0                 | 18912         | python                   | 114                     |\n| 0       0                 | 19723         | python                   | 114                     |\n+===========================+===============+====================================================+\n| No running processes found in NPU 1                                                            |\n+===========================+===============+====================================================+\n| No running processes found in NPU 2                                                            |\n+===========================+==========="
+    }
+  },
+  "config": {
+    "outdir": "results/asi3_runtime_profiler_probe_20260525T192357Z",
+    "d": 2048,
+    "m": 5504,
+    "ranks": "128,256",
+    "batch": 1,
+    "seq": 128,
+    "dtype": "auto",
+    "mode": "forward",
+    "warmup": 3,
+    "iters": 10,
+    "profile_iters": 3,
+    "top_k": 20,
+    "seed": 1234,
+    "export_traces": false
+  },
+  "input_shape": [
+    1,
+    128,
+    2048
+  ],
+  "dtype": "float16",
+  "cases": [
+    {
+      "name": "dense",
+      "mode": "forward",
+      "timing": {
+        "mean_ms": 0.3391496022231877,
+        "min_ms": 0.30942203011363745,
+        "max_ms": 0.41323399636894464,
+        "iters": 10
+      },
+      "parameter_bytes": 67633152,
+      "profiler_activities": [
+        "CPU"
+      ],
+      "profiler_error": "",
+      "profiler_summary": {
+        "top_ops": [
+          {
+            "key": "aten::linear",
+            "count": 9,
+            "cpu_time_total_us": 543.8209999999999,
+            "self_cpu_time_total_us": 69.78999999999985,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::matmul",
+            "count": 9,
+            "cpu_time_total_us": 306.1910000000001,
+            "self_cpu_time_total_us": 162.62100000000032,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::t",
+            "count": 9,
+            "cpu_time_total_us": 167.83999999999992,
+            "self_cpu_time_total_us": 57.439999999999884,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "empty_tensor",
+            "count": 15,
+            "cpu_time_total_us": 112.49099999999981,
+            "self_cpu_time_total_us": 112.49099999999981,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::transpose",
+            "count": 9,
+            "cpu_time_total_us": 110.40000000000003,
+            "self_cpu_time_total_us": 62.279999999999916,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::silu",
+            "count": 3,
+            "cpu_time_total_us": 80.8209999999998,
+            "self_cpu_time_total_us": 39.33099999999996,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::mul",
+            "count": 3,
+            "cpu_time_total_us": 78.6830000000001,
+            "self_cpu_time_total_us": 42.47200000000032,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMatmul",
+            "count": 9,
+            "cpu_time_total_us": 70.5299999999998,
+            "self_cpu_time_total_us": 70.5299999999998,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::as_strided",
+            "count": 9,
+            "cpu_time_total_us": 48.12000000000012,
+            "self_cpu_time_total_us": 48.12000000000012,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnSilu",
+            "count": 3,
+            "cpu_time_total_us": 19.329999999999927,
+            "self_cpu_time_total_us": 19.329999999999927,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMul",
+            "count": 3,
+            "cpu_time_total_us": 18.919999999999845,
+            "self_cpu_time_total_us": 18.919999999999845,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          }
+        ],
+        "matmul_like_op_count": 27,
+        "matmul_like_keys": [
+          {
+            "key": "aten::linear",
+            "count": 9,
+            "cpu_time_total_us": 543.8209999999999,
+            "self_cpu_time_total_us": 69.78999999999985,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::matmul",
+            "count": 9,
+            "cpu_time_total_us": 306.1910000000001,
+            "self_cpu_time_total_us": 162.62100000000032,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMatmul",
+            "count": 9,
+            "cpu_time_total_us": 70.5299999999998,
+            "self_cpu_time_total_us": 70.5299999999998,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          }
+        ],
+        "fused_like_keys": [],
+        "observed_fused_like_op": false
+      },
+      "trace_path": "",
+      "descriptor_bytes": 67633152
+    },
+    {
+      "name": "mwg_r128",
+      "mode": "forward",
+      "timing": {
+        "mean_ms": 0.7638063980266452,
+        "min_ms": 0.7338860305026174,
+        "max_ms": 0.8073070202954113,
+        "iters": 10
+      },
+      "parameter_bytes": 8687616,
+      "profiler_activities": [
+        "CPU"
+      ],
+      "profiler_error": "",
+      "profiler_summary": {
+        "top_ops": [
+          {
+            "key": "aten::mul",
+            "count": 24,
+            "cpu_time_total_us": 564.745,
+            "self_cpu_time_total_us": 265.8910000000004,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::linear",
+            "count": 6,
+            "cpu_time_total_us": 401.3620000000004,
+            "self_cpu_time_total_us": 85.30999999999983,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::matmul",
+            "count": 18,
+            "cpu_time_total_us": 392.8119999999999,
+            "self_cpu_time_total_us": 199.7909999999988,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "empty_tensor",
+            "count": 69,
+            "cpu_time_total_us": 353.824,
+            "self_cpu_time_total_us": 353.824,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::to",
+            "count": 6,
+            "cpu_time_total_us": 215.33100000000036,
+            "self_cpu_time_total_us": 55.80100000000044,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::chunk",
+            "count": 3,
+            "cpu_time_total_us": 214.07100000000025,
+            "self_cpu_time_total_us": 12.350000000000364,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::split",
+            "count": 3,
+            "cpu_time_total_us": 201.7209999999999,
+            "self_cpu_time_total_us": 43.51000000000022,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::addmm",
+            "count": 6,
+            "cpu_time_total_us": 165.39100000000008,
+            "self_cpu_time_total_us": 89.00000000000017,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "npu::_npu_dtype_cast",
+            "count": 6,
+            "cpu_time_total_us": 159.52999999999992,
+            "self_cpu_time_total_us": 74.79999999999984,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::narrow",
+            "count": 18,
+            "cpu_time_total_us": 158.21099999999967,
+            "self_cpu_time_total_us": 53.35999999999899,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::view",
+            "count": 30,
+            "cpu_time_total_us": 150.57299999999947,
+            "self_cpu_time_total_us": 150.57299999999947,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMul",
+            "count": 21,
+            "cpu_time_total_us": 138.72000000000025,
+            "self_cpu_time_total_us": 138.72000000000025,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::silu",
+            "count": 6,
+            "cpu_time_total_us": 136.962,
+            "self_cpu_time_total_us": 65.16199999999981,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMatmul",
+            "count": 18,
+            "cpu_time_total_us": 115.23999999999978,
+            "self_cpu_time_total_us": 115.23999999999978,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::slice",
+            "count": 18,
+            "cpu_time_total_us": 104.85100000000068,
+            "self_cpu_time_total_us": 67.65100000000086,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::mean",
+            "count": 3,
+            "cpu_time_total_us": 89.55100000000022,
+            "self_cpu_time_total_us": 52.97100000000012,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::add",
+            "count": 3,
+            "cpu_time_total_us": 86.08100000000024,
+            "self_cpu_time_total_us": 41.40000000000077,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::t",
+            "count": 6,
+            "cpu_time_total_us": 73.84000000000032,
+            "self_cpu_time_total_us": 27.14999999999992,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::tanh",
+            "count": 3,
+            "cpu_time_total_us": 65.32999999999981,
+            "self_cpu_time_total_us": 32.1099999999999,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::as_strided",
+            "count": 24,
+            "cpu_time_total_us": 55.34999999999951,
+            "self_cpu_time_total_us": 55.34999999999951,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          }
+        ],
+        "matmul_like_op_count": 54,
+        "matmul_like_keys": [
+          {
+            "key": "aten::linear",
+            "count": 6,
+            "cpu_time_total_us": 401.3620000000004,
+            "self_cpu_time_total_us": 85.30999999999983,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::matmul",
+            "count": 18,
+            "cpu_time_total_us": 392.8119999999999,
+            "self_cpu_time_total_us": 199.7909999999988,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::addmm",
+            "count": 6,
+            "cpu_time_total_us": 165.39100000000008,
+            "self_cpu_time_total_us": 89.00000000000017,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMatmul",
+            "count": 18,
+            "cpu_time_total_us": 115.23999999999978,
+            "self_cpu_time_total_us": 115.23999999999978,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnAddmm",
+            "count": 6,
+            "cpu_time_total_us": 41.021000000000186,
+            "self_cpu_time_total_us": 41.021000000000186,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          }
+        ],
+        "fused_like_keys": [],
+        "observed_fused_like_op": false
+      },
+      "trace_path": "",
+      "rank": 128,
+      "descriptor_bytes": 5799936,
+      "traffic_reduction_x_vs_dense_descriptor": 11.661016949152541
+    },
+    {
+      "name": "mwg_r256",
+      "mode": "forward",
+      "timing": {
+        "mean_ms": 0.755859405035153,
+        "min_ms": 0.7278359844349325,
+        "max_ms": 0.8782880031503737,
+        "iters": 10
+      },
+      "parameter_bytes": 15277056,
+      "profiler_activities": [
+        "CPU"
+      ],
+      "profiler_error": "",
+      "profiler_summary": {
+        "top_ops": [
+          {
+            "key": "aten::mul",
+            "count": 24,
+            "cpu_time_total_us": 552.3049999999997,
+            "self_cpu_time_total_us": 265.8400000000007,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::matmul",
+            "count": 18,
+            "cpu_time_total_us": 394.4139999999993,
+            "self_cpu_time_total_us": 201.28199999999833,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::linear",
+            "count": 6,
+            "cpu_time_total_us": 393.06200000000024,
+            "self_cpu_time_total_us": 74.8699999999996,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "empty_tensor",
+            "count": 69,
+            "cpu_time_total_us": 336.0319999999996,
+            "self_cpu_time_total_us": 336.0319999999996,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::chunk",
+            "count": 3,
+            "cpu_time_total_us": 210.70200000000034,
+            "self_cpu_time_total_us": 12.110999999999876,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::split",
+            "count": 3,
+            "cpu_time_total_us": 198.59100000000046,
+            "self_cpu_time_total_us": 42.111000000000786,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::to",
+            "count": 6,
+            "cpu_time_total_us": 189.75099999999998,
+            "self_cpu_time_total_us": 34.42999999999972,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::addmm",
+            "count": 6,
+            "cpu_time_total_us": 160.91200000000003,
+            "self_cpu_time_total_us": 86.79200000000037,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::narrow",
+            "count": 18,
+            "cpu_time_total_us": 156.47999999999968,
+            "self_cpu_time_total_us": 49.639999999999304,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "npu::_npu_dtype_cast",
+            "count": 6,
+            "cpu_time_total_us": 155.32100000000025,
+            "self_cpu_time_total_us": 72.87100000000046,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::view",
+            "count": 30,
+            "cpu_time_total_us": 151.2510000000001,
+            "self_cpu_time_total_us": 151.2510000000001,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMul",
+            "count": 21,
+            "cpu_time_total_us": 135.87399999999957,
+            "self_cpu_time_total_us": 135.87399999999957,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::silu",
+            "count": 6,
+            "cpu_time_total_us": 131.12099999999992,
+            "self_cpu_time_total_us": 64.94099999999997,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMatmul",
+            "count": 18,
+            "cpu_time_total_us": 116.13100000000054,
+            "self_cpu_time_total_us": 116.13100000000054,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::slice",
+            "count": 18,
+            "cpu_time_total_us": 106.84000000000037,
+            "self_cpu_time_total_us": 68.1400000000001,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::mean",
+            "count": 3,
+            "cpu_time_total_us": 86.23100000000017,
+            "self_cpu_time_total_us": 51.40100000000052,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::add",
+            "count": 3,
+            "cpu_time_total_us": 85.77100000000007,
+            "self_cpu_time_total_us": 42.19099999999969,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::t",
+            "count": 6,
+            "cpu_time_total_us": 75.63000000000028,
+            "self_cpu_time_total_us": 26.490000000000066,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::tanh",
+            "count": 3,
+            "cpu_time_total_us": 64.93100000000038,
+            "self_cpu_time_total_us": 31.64099999999985,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::reshape",
+            "count": 6,
+            "cpu_time_total_us": 57.35000000000042,
+            "self_cpu_time_total_us": 20.540000000000305,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          }
+        ],
+        "matmul_like_op_count": 54,
+        "matmul_like_keys": [
+          {
+            "key": "aten::matmul",
+            "count": 18,
+            "cpu_time_total_us": 394.4139999999993,
+            "self_cpu_time_total_us": 201.28199999999833,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::linear",
+            "count": 6,
+            "cpu_time_total_us": 393.06200000000024,
+            "self_cpu_time_total_us": 74.8699999999996,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aten::addmm",
+            "count": 6,
+            "cpu_time_total_us": 160.91200000000003,
+            "self_cpu_time_total_us": 86.79200000000037,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnMatmul",
+            "count": 18,
+            "cpu_time_total_us": 116.13100000000054,
+            "self_cpu_time_total_us": 116.13100000000054,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          },
+          {
+            "key": "aclnnAddmm",
+            "count": 6,
+            "cpu_time_total_us": 41.73999999999978,
+            "self_cpu_time_total_us": 41.73999999999978,
+            "device_time_total_us": 0,
+            "cpu_memory_usage": 0,
+            "device_memory_usage": 0
+          }
+        ],
+        "fused_like_keys": [],
+        "observed_fused_like_op": false
+      },
+      "trace_path": "",
+      "rank": 256,
+      "descriptor_bytes": 11599872,
+      "traffic_reduction_x_vs_dense_descriptor": 5.830508474576271
+    }
+  ],
+  "claim_boundary": {
+    "hardware_counter_complete": false,
+    "reason": "This probe records profiler operators and tool availability. It is not a full off-chip traffic counter study unless backend device activities and counter tools are available in the captured environment."
+  }
+}

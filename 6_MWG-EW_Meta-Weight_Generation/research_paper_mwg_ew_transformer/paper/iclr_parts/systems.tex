@@ -1,0 +1,151 @@
+\section{Systems Realization and the Four-Arm Measurement}
+\label{sec:systems}
+
+The architectural claim is meaningful only if the runtime enforces the
+no-escape/no-store inference contract (Figure~\ref{fig:lifecycle},
+Appendix~\ref{app:lifecycle}). Production realization requires generator
+placement adjacent to the FFN kernel emitting core values into kernel-local
+scratch; associative execution ($XU_r$, core apply, $ZV_r$); a cheap
+eligibility router in the runtime path; and lifecycle enforcement that
+returns only the FFN output while instrumenting the core address range to
+verify no global store, alias, state registration, or unselected-branch
+launch. If hardware lacks software-managed SRAM, a cache-resident
+implementation may still be useful but cannot claim the strict contract
+without an address trace showing the generated region never reaches HBM.
+
+\paragraph{Four-arm protocol.}
+Isolating lifetime from low rank requires the four arms of
+Table~\ref{tab:four-arms} (Appendix~\ref{app:fourarms}): arm 3 and arm 4
+use the same generator, rank, core values, precision, and output tolerance,
+differing only in whether the generated core is materialized to global
+memory (arm 3) or consumed fused from scratch without a store (arm 4). The
+historical benchmark arm (Appendix~\ref{app:histtables}) is a persistent
+low-rank forward--backward microbenchmark whose speedup does \emph{not}
+isolate ephemerality---which is precisely why the fused arm-4 measurement
+was required.
+
+
+\paragraph{Measured result.}
+Arm 4 has been \emph{executed and measured on device}
+(Table~\ref{tab:fourarmmeasured}): an audited Ascend-C operator (a static
+source audit mechanically enforces the no-store contract; a test suite checks
+the five \texttt{GlobalTensor}s, the single output write, the absence of any
+core \texttt{DataCopy}, and deterministic execution) was validated for
+algebraic equivalence against arm 3 under a hash-bound contract manifest
+(\texttt{max\_abs} $0.00195$, at the fp16 rounding floor) and instrumented
+with matched \texttt{msprof} counter passes at two geometries. The
+\texttt{ephemeral} kernel is visible in the device trace; the arm-3-only core
+round-trip ops (\texttt{Tanh}/\texttt{Muls}/\texttt{Adds}/\texttt{Cast} to
+global memory) are absent in the fused trace---direct counter evidence that
+the core does not escape. The first configuration lost to materialization
+($1.228$ vs.\ $0.847$~ms) entirely because per-call host work (tiling
+generation, workspace allocation, fp32 casts) dominated the loop, not device
+execution. After host fast-pathing (cached tiling/workspace, cached fp16
+weight image), the fused arm reaches \emph{parity} with materialization at
+the probe geometry. Across repeated independent same-session runs the fused
+and materialized medians stay within a $\pm3\%$ band straddling $1.0\times$
+(the final shipped confirmation measures fused $0.823$~ms vs.\ materialized
+$0.851$~ms, i.e.\ $3.2\%$ faster; Table~\ref{tab:fourarmmeasured} row
+4$^\dagger$): once host work is amortized, there is no residual device-side
+penalty for generating and consuming the ephemeral core on chip at
+L2-resident geometries.
+
+The advantage inverts at a $T{=}4096$ geometry.  Note the two memory
+hierarchies separately: the logical per-projection controller output
+$C\in\R^{T\times r}$ is $2$~MiB in fp32 at $T{=}4096$, $r{=}128$ ($6$~MiB
+across the three projections if all were live simultaneously; v1 processes
+them one at a time), and it exceeds the $192$~KiB
+per-core Unified Buffer at every geometry (this is why v1 tiles), while
+L2 residency is not claimed from L2 counters (which read zero under this
+\texttt{msprof} build) but inferred from \texttt{Memory}-pass DRAM byte
+totals (Appendix~\ref{app:counters}); the exact L2 capacity of this
+910B2 is not separately measured here, and UB overflow is not evidence
+of L2 overflow.  At $T{=}4096$ equivalence still
+passes, but the fused arm is $1.93\times$ slower
+($2.682$ vs.\ $1.393$~ms), with matched profiler passes localizing the
+deficit to the v1 kernel's compute-bound single-core epilogue, not memory
+traffic (Figure~\ref{fig:opdecomp}, Appendix~\ref{app:fourarmfig}).  This
+deficit is a critical limitation of the current prototype, not a minor
+tuning gap.
+
+\paragraph{Architectural root cause.}
+The v1 kernel runs the entire pipeline---cube matmul
+($X_{\mathrm{ctrl}} W_{\mathrm{head}}^\top$, producing $C\in\R^{T\times r}$ in fp32),
+elementwise vector epilogue, and output write---on a \emph{single} AICore
+with \texttt{block\_dim}$=1$.  The kernel tiles $T$ at
+\texttt{BASE\_M}$=128$ and holds one $128\times r$ fp32 $C$ tile
+($64$~KiB at $r{=}128$) in the 192~KiB Unified Buffer (UB) at a
+time---the full $C$ is never resident---but at this tile size a second
+$C$ buffer would not fit alongside activation staging, output, and
+matmul scratch, so v1 cannot double-buffer: within each tile the
+cube$\to$vector dependency is strictly serial (\texttt{GetTensorC} must
+complete before \texttt{Tanh} begins), and cube and vector work never
+overlap.  The vector epilogue alone
+consumes more wall time than all library matmuls of either arm combined,
+and the seven idle AICores cannot assist: the no-store contract requires
+the core to be produced and consumed in one kernel invocation, but the
+single-core serial pipeline cannot exploit the available parallelism
+(sizing detail in Appendix~\ref{app:v4design}).
+
+\paragraph{v4 multi-core redesign (summary; full design in
+Appendix~\ref{app:v4design}).}
+An earlier v3 attempt tried N-distribution (splitting the rank dimension
+$r$ across cores) but triggered aicore exception 507015 under sequential
+launches because the KFC matmul workspace was shared across cores without
+isolation; it is archived as v3.  The redesigned v4 kernel addresses both
+the v1 bottleneck and the v3 failure mode through three coordinated
+mechanisms: \emph{M-only multi-core distribution} (each AICore processes a
+disjoint token range, no cross-core synchronization), \emph{per-core
+workspace isolation} (a unique, non-overlapping
+\texttt{REGIST\_MATMUL\_OBJ} workspace slice per core, eliminating the v3
+collision), and a \emph{double-buffered UB pipeline}
+(\texttt{BUFFER\_NUM=2}, overlapping cube and vector work within each core
+at a ${\sim}160$~KiB per-tile footprint within the 192~KiB budget).  The
+design projected ${\sim}5$--$7\times$ over v1 at $T{=}4096$; the measured
+decisive run (2026-10-08, single Ascend~910B2, hardened two-phase-ref
+harness, 30 warmup/200 iterations/5 repeats per config) confirms the
+direction but not the magnitude: v4 is algebraically identical to v1
+($\max|\Delta_{v1-v4}|=0$ at every config) and $1.13\times$, $1.38\times$,
+$1.71\times$, $2.14\times$, and $3.03\times$ faster at $T{=}128$, $512$,
+$1024$, $2048$, and $4096$ respectively---clearing the ${\sim}2\times$
+viability threshold at $T\ge2048$ but falling short of the projection,
+consistent with partial L2-contention saturation from shared-$B$ reads
+(remaining risks: UB capacity would overflow at $r\ge256$ without further
+tiling, and the 1000-call stability check at $T{=}4096$ hit an
+environment-level NaN transient in its unhardened comparison path).
+The no-store contract is preserved: each core computes the matmul and
+epilogue entirely in UB and writes only the final fp16 output to global
+memory.  The v4 kernel source and benchmark harness are archived in
+\texttt{custom\_ops/ephemeral\_core\_apply/torch\_ext/v4\_multicore/}.
+
+\begin{table}[t]
+\centering
+\caption{Measured four-arm ladder on a single Ascend 910B2 (CANN 8.5,
+torch\_npu 2.9), geometry $(d,m)=(4096,14336)$, rank 128, fp16, seed 1234;
+host timer with device synchronize. Arm 4 runs the audited, hash-bound
+Ascend-C operator; equivalence against arm 3 passed at $\max|\Delta|=
+1.95\times10^{-3}$ (fp16 rounding floor; tolerance $5\times10^{-3}$).
+Row 4$^\dagger$ adds the host fast path (cached tiling/workspace, cached
+fp16 weight image), leaving device execution identical; it is from a
+separate confirmation run, so the fused-versus-materialized comparison
+uses same-run pairs: the row-4$^\dagger$ run's matched materialized
+median was $0.8509$~ms (same-run delta $-3.2\%$), and the shipped fused
+arm sits \emph{at parity} with the materialized arm (medians within a
+$\pm3\%$ band straddling $1.0\times$). Full timing protocol in
+Section~\ref{sec:protocol}.}
+\label{tab:fourarmmeasured}
+\begin{tabular}{llrr}
+\toprule
+Arm & Execution & Median ms & $\pm$ std \\
+\midrule
+1 & Dense kernels & 0.4535 & 0.0021 \\
+2 & Persistent low-rank & 0.2469 & 0.0016 \\
+3 & Generated core, global-memory materialization & 0.8689 & 0.0312 \\
+4 & Fused no-store (v1, per-call host setup) & 1.2315 & 0.0315 \\
+4$^\dagger$ & Fused no-store (host fast path, shipped) & 0.8234 & 0.0271 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:positioning} (Appendix~\ref{app:positioning}) places this
+measured status against the closest mechanism-level comparisons.

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "manifest": "data/quality/manifest.json",
+  "manifest_sha256": "f24008c13f8f4abf44541c783211a3932985c3eb9133b84894c02b74a8d0a665",
+  "threshold": 0.82,
+  "ngram_width": 4,
+  "splits": {
+    "train": {
+      "path": "data/quality/train.txt",
+      "rows": 630,
+      "unique_rows": 630,
+      "distinct_templates": 630,
+      "template_compression_ratio": 1.0,
+      "sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494"
+    },
+    "dev": {
+      "path": "data/quality/dev.txt",
+      "rows": 300,
+      "unique_rows": 300,
+      "distinct_templates": 300,
+      "template_compression_ratio": 1.0,
+      "sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995"
+    },
+    "test": {
+      "path": "data/quality/test.txt",
+      "rows": 303,
+      "unique_rows": 303,
+      "distinct_templates": 303,
+      "template_compression_ratio": 1.0,
+      "sha256": "8e2acce8615c34c742b59f8840c63d3cf1ac841d1308d502ba31a0c114147b4e"
+    }
+  },
+  "cross_split": {
+    "train_vs_dev": {
+      "exact_overlap": 0,
+      "near_duplicate_pairs": 0,
+      "max_near_duplicate_score": null
+    },
+    "train_vs_test": {
+      "exact_overlap": 0,
+      "near_duplicate_pairs": 0,
+      "max_near_duplicate_score": null
+    },
+    "dev_vs_test": {
+      "exact_overlap": 0,
+      "near_duplicate_pairs": 0,
+      "max_near_duplicate_score": null
+    }
+  },
+  "failures": [],
+  "ready": true,
+  "claim_boundary": "split integrity and diversity gate only; this audit does not establish model quality"
+}

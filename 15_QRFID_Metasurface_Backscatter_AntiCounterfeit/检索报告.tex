@@ -1,0 +1,145 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{现有技术检索报告}
+\fancyfoot[C]{\thepage}
+\title{\textbf{现有技术检索报告}\\[0.5em]\Large 基于超低功耗可调谐超构表面后向散射的量子防伪射频识别系统及认证方法}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{检索参数 / Search Parameters}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+检索日期 & 2026年3月31日 \\
+\hline
+数据库 & Google Patents、USPTO、WIPO、EPO、IACR ePrint、公开论文数据库 \\
+\hline
+关键词 & quantum readout PUF、metasurface RFID authentication、tunable metasurface tag、backscatter quantum authentication \\
+\hline
+\end{tabular}
+
+\subsection{使用的关键词 / Keywords Used}
+\begin{itemize}
+\item 英文关键词：quantum readout PUF，metasurface RFID authentication，tunable metasurface tag，anti-counterfeit PUF label，backscatter quantum authentication。
+\item 中文关键词：量子读出 PUF，超构表面 RFID 认证，可调谐超构表面标签，防伪 PUF 标签，后向散射量子认证。
+\end{itemize}
+
+\section{A类：基础性现有技术 / Category A: Foundational Prior Art}
+\subsection{A1. 量子读出 PUF}
+Quantum readout of PUFs 等工作说明量子读出 PUF 作为远程认证基础已被提出，但未公开可调谐超构表面标签与后向散射读写器架构。
+
+\subsection{A2. 量子认证数据扩展}
+后续量子读出 PUF 研究说明该方向可以扩展到认证数据和对象，但仍未公开面向供应链的可调谐超构表面无源标签。
+
+\subsection{A3. 经典 PUF 防伪}
+材料级 PUF 防伪标签可量产、可读出，但未引入量子受限读写和统计扰动判决。
+
+\section{B类：相关应用现有技术 / Category B: Related Application Prior Art}
+\subsection{B1. 可调谐超构表面}
+可调谐超构表面作为可控反射结构已有基础专利，但未公开作为量子防伪标签的认证载体。
+
+\subsection{B2. 液晶超构表面}
+超低功耗可调谐超构表面的实现路线明确，但未公开与量子读写协议结合。
+
+\subsection{B3. 量子防伪产业实践}
+供应链对量子或量子衍生防伪存在市场牵引，但公开资料主要是量子 PUF 方向，未公开可调谐超构表面后向散射认证。
+
+\section{C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}
+\subsection{C1. 量子 PUF 读出专利}
+量子手段读出 PUF 的专利方向已知，但往往需要专用量子显微镜，不是低功耗被动标签。
+
+\subsection{C2. RFID 挑战应答方向}
+经典 RFID 和 NFC 挑战应答与后向散射防伪流程成熟，但未公开量子受限挑战与诱骗态统计。
+
+\section{D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}
+\subsection{D1. 供应链验真需求}
+高价值器件和药品防伪溯源明确需要现场快速验真与后台追溯，但现有方案多停留在二维码、NFC 或普通 PUF。
+
+\subsection{D2. 结构与行为双证据}
+产品类专利需要可见结构证据和可测行为证据，现有量子认证文献较少针对该点布局。
+
+\section{E类：专利检索结果 / Category E: Patent Search Results}
+\subsection{USPTO 检索结果}
+代表性结果包括 US11796612（Micromagnet PUF readout using a quantum diamond microscope）和 US11005186B2（Tunable liquid crystal metasurfaces）。其相似度主要落在量子 PUF 或材料层面。
+
+\subsection{EPO 检索结果}
+代表性结果包括 WO2015187221A2（Electrically tunable metasurfaces）以及 quantum readout PUF 方向公开。该类结果未公开量子读写协议与后向散射标签的一体化方案。
+
+\subsection{CNIPA 检索结果}
+国内可检出量子防伪、PUF 标签和超构表面方向的分散公开，但未见供应链标签、量子挑战和统计判决统一耦合。
+
+\section{新颖性分析 / Novelty Analysis}
+\subsection{创新点 A：可调谐超构表面标签}
+可调谐超构表面已有基础专利，但其作为防伪标签核心并与量子认证协议结合未见公开。
+
+\subsection{创新点 B：量子受限挑战序列}
+量子挑战或读出已知，但与低功耗被动超构表面标签结合未见公开。
+
+\subsection{创新点 C：材料指纹与协议绑定}
+结构指纹和协议认证各自已知，但二者与可调谐超构表面协同未检出同构公开。
+
+\subsection{创新点 D：诱骗态统计判决}
+诱骗态和统计检验在量子协议中常见，但用于被动标签防伪的系统级实现未见公开。
+
+\subsection{创新点 E：供应链落地接口}
+现有量子认证研究多为实验或理论，较少公开后台追溯平台接口。
+
+\subsection{创新点 F：结构与行为双证据}
+该点有利于产品类专利取证，现有公开很少系统布局。
+
+\section{可专利性评估 / Patentability Assessment}
+\begin{itemize}
+\item 新颖性：中上。未见可调谐超构表面标签与量子受限读写协议统一公开。
+\item 创造性：中。需应对“量子读出 PUF、超构表面、RFID”组合性对比。
+\item 实用性：明确。适合高价值供应链与军工物流场景。
+\item 公开充分：可补强。建议补充 enrollment、状态切换和统计阈值细节。
+\end{itemize}
+
+\section{权利要求差异化矩阵 / Claim Differentiation Matrix}
+\begin{tabular}{|p{2.8cm}|p{3.8cm}|p{3.8cm}|p{2.8cm}|}
+\hline
+特征 & 本申请 & 相邻技术 & 差异 \\
+\hline
+标签载体 & 可调谐超构表面 & 普通 RFID 天线或经典 PUF & 具备低功耗可控反射能力 \\
+\hline
+读写方式 & 量子受限随机挑战 & 经典挑战应答 & 对窃听与转发更敏感 \\
+\hline
+判决逻辑 & 诱骗态与统计扰动 & 静态比对 & 可量化攻击检测 \\
+\hline
+产品证据 & 结构加行为双取证 & 单一外观或密钥 & 更利于侵权认定 \\
+\hline
+\end{tabular}
+
+\section{关键区别特征 / Key Distinguishing Features}
+\begin{enumerate}
+\item 以可调谐超构表面代替传统被动标签的固定散射结构。
+\item 通过量子受限挑战提升对窃听和转发攻击的敏感度。
+\item 将材料指纹和协议判决绑定，而非单纯静态认证。
+\item 提供适合供应链场景的后台追溯与两级验真流程。
+\item 形成可拆解、可测试的侵权证据链。
+\end{enumerate}
+
+\section{建议申请策略 / Recommended Filing Strategy}
+\begin{enumerate}
+\item 主权利要求聚焦“可调谐超构表面标签、量子受限读写、统计判决”。
+\item 从属权利要求覆盖液晶、MEMS、相变材料实现、诱骗态、后台追溯和双级验真流程。
+\item 根据行业场景准备芯片托盘版、药品冷链版和军工物流版分案。
+\item 避免声称“绝对不可克隆”，应表述为显著提高克隆与转发成本并提高可检测性。
+\end{enumerate}
+
+\section{结论 / Conclusion}
+量子读出 PUF、经典 PUF 防伪和可调谐超构表面均已有公开，但尚未发现将其统一为“低功耗被动标签、量子受限后向散射认证、供应链追溯平台”的一体化系统方案。本申请适合围绕系统耦合与产品取证展开布局，正式申请中应避免绝对化表述，而强调“未检出完全相同公开、相邻技术需要跨域拼接”。
+\end{document}

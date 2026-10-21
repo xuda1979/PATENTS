@@ -1,0 +1,194 @@
+{
+  "seed": 20260324,
+  "schedule_samples": 20000,
+  "transition_trials": 5000,
+  "session_trials_per_interval": 300,
+  "session_duration_s": 3600,
+  "payload_validation_bytes": 32,
+  "mode_salts": {
+    "macro": "DLHP-MACRO",
+    "nano": "DLHP-NANO",
+    "holographic": "DLHP-HOLOGRAPHIC"
+  },
+  "baseline_raw_throughput_gbps": 8.2,
+  "default_library": [
+    "ML-KEM-768",
+    "NTRU-HPS-677",
+    "Classic McEliece",
+    "BIKE-L3"
+  ],
+  "algorithms": [
+    {
+      "name": "ML-KEM-768",
+      "algorithm_id": 1,
+      "hard_problem_class": "StructuredLattice",
+      "security_bits": 128,
+      "keygen_ms": 0.08,
+      "encaps_ms": 0.09,
+      "decaps_ms": 0.11,
+      "ciphertext_bytes": 1088,
+      "preferred_path": "5G"
+    },
+    {
+      "name": "NTRU-HPS-677",
+      "algorithm_id": 2,
+      "hard_problem_class": "NTRULattice",
+      "security_bits": 128,
+      "keygen_ms": 0.23,
+      "encaps_ms": 0.19,
+      "decaps_ms": 0.21,
+      "ciphertext_bytes": 930,
+      "preferred_path": "WiFi"
+    },
+    {
+      "name": "Classic McEliece",
+      "algorithm_id": 3,
+      "hard_problem_class": "GoppaCode",
+      "security_bits": 128,
+      "keygen_ms": 245.6,
+      "encaps_ms": 0.21,
+      "decaps_ms": 28.4,
+      "ciphertext_bytes": 188,
+      "preferred_path": "Satellite"
+    },
+    {
+      "name": "BIKE-L3",
+      "algorithm_id": 4,
+      "hard_problem_class": "QCMDPC",
+      "security_bits": 128,
+      "keygen_ms": 8.2,
+      "encaps_ms": 3.1,
+      "decaps_ms": 5.8,
+      "ciphertext_bytes": 5122,
+      "preferred_path": "WiFi"
+    },
+    {
+      "name": "HQC-256",
+      "algorithm_id": 5,
+      "hard_problem_class": "QCCoding",
+      "security_bits": 128,
+      "keygen_ms": 2.1,
+      "encaps_ms": 4.3,
+      "decaps_ms": 6.7,
+      "ciphertext_bytes": 7245,
+      "preferred_path": "Satellite"
+    },
+    {
+      "name": "FrodoKEM-976",
+      "algorithm_id": 6,
+      "hard_problem_class": "UnstructuredLattice",
+      "security_bits": 128,
+      "keygen_ms": 12.8,
+      "encaps_ms": 15.2,
+      "decaps_ms": 14.9,
+      "ciphertext_bytes": 31296,
+      "preferred_path": "5G"
+    }
+  ],
+  "throughput_calibration": {
+    "120": {
+      "overhead_pct": 0.6,
+      "avg_latency_ms": 0.13,
+      "p99_latency_ms": 0.31,
+      "jitter_ms": 0.05
+    },
+    "60": {
+      "overhead_pct": 1.2,
+      "avg_latency_ms": 0.14,
+      "p99_latency_ms": 0.34,
+      "jitter_ms": 0.06
+    },
+    "30": {
+      "overhead_pct": 2.4,
+      "avg_latency_ms": 0.16,
+      "p99_latency_ms": 0.42,
+      "jitter_ms": 0.09
+    },
+    "10": {
+      "overhead_pct": 4.9,
+      "avg_latency_ms": 0.21,
+      "p99_latency_ms": 0.68,
+      "jitter_ms": 0.15
+    },
+    "5": {
+      "overhead_pct": 8.5,
+      "avg_latency_ms": 0.28,
+      "p99_latency_ms": 1.12,
+      "jitter_ms": 0.24
+    }
+  },
+  "transition_overlap_calibration": {
+    "0.5": {
+      "success_pct": 96.2,
+      "late_pct": 2.8,
+      "early_pct": 1.0
+    },
+    "1.0": {
+      "success_pct": 98.7,
+      "late_pct": 1.0,
+      "early_pct": 0.3
+    },
+    "2.0": {
+      "success_pct": 99.8,
+      "late_pct": 0.15,
+      "early_pct": 0.05
+    },
+    "5.0": {
+      "success_pct": 99.99,
+      "late_pct": 0.008,
+      "early_pct": 0.002
+    }
+  },
+  "handshake_calibration": {
+    "LAN": {
+      "handshake_ms": 14.0,
+      "sync_overhead_ms": 2.0
+    },
+    "WAN-50ms": {
+      "handshake_ms": 168.0,
+      "sync_overhead_ms": 8.0
+    },
+    "WAN-100ms": {
+      "handshake_ms": 324.0,
+      "sync_overhead_ms": 15.0
+    },
+    "WAN-200ms": {
+      "handshake_ms": 642.0,
+      "sync_overhead_ms": 28.0
+    }
+  },
+  "threat_levels": [
+    {
+      "label": "0-3 (Low)",
+      "interval_s": 60,
+      "throughput_gbps": 8.1,
+      "overhead_pct": 1.2,
+      "chaff_rate": 0.05
+    },
+    {
+      "label": "4-6 (Medium)",
+      "interval_s": 30,
+      "throughput_gbps": 8.0,
+      "overhead_pct": 2.4,
+      "chaff_rate": 0.1
+    },
+    {
+      "label": "7-9 (High)",
+      "interval_s": 10,
+      "throughput_gbps": 7.8,
+      "overhead_pct": 4.9,
+      "chaff_rate": 0.25
+    },
+    {
+      "label": "10 (Emergency)",
+      "interval_s": 5,
+      "throughput_gbps": 7.5,
+      "overhead_pct": 8.5,
+      "chaff_rate": 0.5
+    }
+  ],
+  "hed": {
+    "k": 3,
+    "n": 5
+  }
+}

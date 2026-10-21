@@ -1,0 +1,14 @@
+{
+  "run_id": "asi3_token_router_broad_20260525T141738Z",
+  "state": "done",
+  "updated_at": "2026-05-25T14:25:54Z",
+  "split_manifest": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_broad_splits/manifest.json",
+  "patch": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260525T102958Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+  "outdir": "results/asi3_token_router_broad_20260525T141738Z",
+  "result_json": [
+    "results/asi3_token_router_broad_20260525T141738Z/alpaca_cleaned_train_tail/token_router_validation.json",
+    "results/asi3_token_router_broad_20260525T141738Z/gsm8k_test/token_router_validation.json",
+    "results/asi3_token_router_broad_20260525T141738Z/mbpp_test/token_router_validation.json"
+  ],
+  "summary_json": "results/asi3_token_router_broad_20260525T141738Z/token_router_broad_summary.json"
+}

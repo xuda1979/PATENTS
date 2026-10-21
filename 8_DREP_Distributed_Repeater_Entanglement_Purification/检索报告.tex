@@ -1,0 +1,273 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array,tabularx}
+\usepackage{enumitem,hyperref,fancyhdr,xcolor,setspace}
+\usepackage{ragged2e}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & 长距离量子中继器中的分布式纠缠纯化架构 \\
+        \hline
+        \textbf{申报单位} & 研究院 \\
+        \hline
+        \textbf{检索人} & Codex（依据公开专利与论文资料整理） \\
+        \hline
+        \textbf{审核人} & 待补充 \\
+        \hline
+        \textbf{检索日期} & 2026.03.26 \\
+        \hline
+        \textbf{相关项目} & 量子互联网长距离传输与量子中继关键技术研究 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算/量子通信的关联说明：}
+本申请针对的是量子互联网中的长距离纠缠分发与量子中继问题。由于量子态不可复制，无法采用经典链路中的放大器机制，因此量子中继器和纠缠纯化是实现跨城域、跨区域量子通信的关键基础技术。
+}}
+
+\section*{一、发明名称}
+
+长距离量子中继器中的分布式纠缠纯化架构
+
+\section*{二、使用的中文与外文检索词}
+
+\textbf{中文检索词：}
+\begin{enumerate}[label=(\arabic*)]
+    \item 量子中继器，长距离量子通信，纠缠分发，纠缠交换；
+    \item 纠缠纯化，纠缠提纯，保真度提升，量子存储；
+    \item 分布式控制，异步调度，量子节点架构，量子网络；
+    \item 光子芯片，量子门序列，贝尔态测量，综合征消息。
+\end{enumerate}
+
+\textbf{英文检索词：}
+\begin{enumerate}[label=(\arabic*)]
+    \item quantum repeater, long-distance quantum communication, entanglement distribution;
+    \item entanglement purification, entanglement distillation, entanglement swapping;
+    \item distributed architecture, asynchronous scheduling, quantum memory coherence time;
+    \item photonic chip, Bell-state measurement, syndrome exchange.
+\end{enumerate}
+
+\textbf{检索数据库与范围：}
+\begin{itemize}[leftmargin=2em]
+    \item 专利数据库：Google Patents、USPTO、WIPO 以及公开中文检索结果；
+    \item 论文数据库：Physical Review、Nature Communications、arXiv 等公开论文信息；
+    \item 检索时间范围：1998年1月1日至2026年3月26日；
+    \item 检索重点：量子中继、纠缠纯化、纠缠交换、少资源中继架构与分布式控制。
+\end{itemize}
+
+\section*{三、相关专利文献}
+
+\textbf{P1．US7317574B2，Long-distance quantum communication}
+
+公开内容要点：属于量子中继和长距离量子通信的基础性专利文献，公开了通过中间节点实现长距离量子通信的总体思路。
+
+与本申请的相关性：提供了量子中继器方向的基础背景。
+
+与本申请的主要差异：该文献侧重\textbf{中继思想本身}，未公开针对少量量子比特、低相干时间和异步链路条件下的分布式纯化资源组织方式。
+
+\vspace{0.5em}
+\textbf{P2．US8135276B2，Quantum repeater}
+
+公开内容要点：公开了量子中继器装置和相关结构。
+
+与本申请的相关性：属于节点级中继器实现方向的重要专利文献。
+
+与本申请的主要差异：该文献没有公开“锚定对-牺牲对”组织结构，也未公开基于保真度、年龄和失败代价的评分驱动纯化/交换控制。
+
+\vspace{0.5em}
+\textbf{P3．US20250015901A1，Quantum repeater for optical network and method}
+
+公开内容要点：面向光网络环境下的量子中继方案，说明产业界已开始考虑量子中继的系统化部署。
+
+与本申请的相关性：与本申请同属量子中继网络工程化方向。
+
+与本申请的主要差异：尚未检索到其公开\textbf{滚动式小批量纯化、压缩综合征协调、纯化与交换窗口重叠流水线}这一组组合特征。
+
+\section*{四、相关非专利文献}
+
+\textbf{N1．H.-J. Briegel, W. D\"ur, J. I. Cirac, P. Zoller，Quantum Repeaters: The Role of Imperfect Local Operations in Quantum Communication，Physical Review Letters，1998-12-14}
+
+相关性：该论文奠定了量子中继器的基本理论框架，是本申请的理论背景文献。
+
+差异点：其讨论的是量子中继理论模型，并未给出面向有限硬件资源的具体分布式控制架构。
+
+\vspace{0.5em}
+\textbf{N2．W. D\"ur, H.-J. Briegel, J. I. Cirac, P. Zoller，Quantum Repeaters Based on Entanglement Purification，Physical Review A，1999}
+
+相关性：该论文直接讨论纠缠纯化与量子中继的结合，是本申请最接近的学术背景之一。
+
+差异点：其重点是理论协议与纯化流程，并未公开“锚定对-牺牲对”的资源组织、评分决策和异步流水线控制实现。
+
+\vspace{0.5em}
+\textbf{N3．K. Azuma, K. Tamaki, H.-K. Lo，All-Photonic Quantum Repeaters，Nature Communications，2015-04-27}
+
+相关性：该论文试图降低量子存储依赖，说明“降低存储压力”是该领域长期痛点。
+
+差异点：该论文走的是全光子路线，而本申请关注的是\textbf{在仍存在有限量子存储条件下，如何通过分布式架构和滚动纯化降低资源压力}。
+
+\section*{五、特征对比分析}
+
+本申请可抽象为以下五项核心特征：
+\begin{enumerate}[label=F\arabic*.]
+    \item 锚定对-牺牲对式的少资源量子比特组织结构；
+    \item 基于保真度、年龄和失败代价的纯化/交换评分决策；
+    \item 允许异步局部推进的分布式协调机制；
+    \item 压缩综合征驱动的状态上报方式；
+    \item 纯化与交换窗口重叠的流水线执行。
+\end{enumerate}
+
+\renewcommand{\arraystretch}{1.3}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{|L{1.4cm}|L{2.1cm}|L{2.1cm}|L{2.1cm}|L{2.1cm}|X|}
+\hline
+\textbf{文献} & \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4/F5} & \textbf{结论} \\
+\hline
+P1 & 否 & 否 & 否 & 否 & 属于量子中继基础方案，不覆盖本申请的工程控制特征 \\
+\hline
+P2 & 否 & 否 & 部分覆盖（节点结构） & 否 & 节点级方案接近，但缺少资源组织与流水线控制 \\
+\hline
+P3 & 否 & 否 & 部分覆盖（系统部署） & 否 & 面向光网络的中继器方案，但未见本申请组合特征 \\
+\hline
+N1/N2 & 否 & 否 & 否 & 否 & 理论文献，未公开面向少资源节点的具体控制架构 \\
+\hline
+N3 & 否 & 否 & 部分覆盖（缓解存储压力） & 否 & 技术路线不同，不同于本申请的有限存储分布式纯化架构 \\
+\hline
+\end{tabularx}
+\normalsize
+\setlength{\tabcolsep}{6pt}
+
+\section*{六、检索结论}
+
+综合截至\textbf{2026年3月26日}公开的专利和论文资料，可以得出以下初步结论：
+\begin{enumerate}[label=(\arabic*)]
+    \item 量子中继器与纠缠纯化的基础理论已经公开，且部分产业专利已涉及中继节点结构与系统部署；
+    \item 但尚未检索到与本申请\textbf{“锚定对-牺牲对资源组织 + 评分驱动决策 + 压缩综合征协调 + 纯化/交换重叠流水线”}完全相同或实质等同的公开方案；
+    \item 本申请的创新重点更偏向\textbf{工程化控制架构与资源调度方式}，具有较好的专利挖掘空间。
+\end{enumerate}
+
+后续撰写权利要求时，建议优先锁定以下点：
+\begin{itemize}[leftmargin=2em]
+    \item 节点资源组织结构；
+    \item 评分函数与门限触发逻辑；
+    \item 压缩综合征消息结构；
+    \item 局部失败局部恢复与窗口重叠式流水线。
+\end{itemize}
+
+\section*{七、最接近现有技术认定与撰写建议}
+
+结合本次检索结果，建议将\textbf{N2（Quantum Repeaters Based on Entanglement Purification）}作为最接近的理论背景文献，将\textbf{P2（US8135276B2）}作为最接近的节点级专利背景文献。前者解决理论上的纠缠纯化与中继耦合问题，后者解决中继器装置问题，但均未覆盖本申请的工程化控制组合特征。
+
+后续正式撰写时，建议避免以下过宽表述：
+\begin{enumerate}[label=(\arabic*)]
+    \item 单独把“纠缠纯化”作为发明点提出；
+    \item 单独把“量子中继器节点结构”作为发明点提出。
+\end{enumerate}
+
+更稳妥的写法是把以下要素打包成核心组合：
+\begin{enumerate}[label=(\arabic*)]
+    \item 锚定对-牺牲对式量子资源组织；
+    \item 基于保真度、年龄、失败代价和成功概率的评分驱动决策；
+    \item 纯化与交换窗口重叠的流水线执行；
+    \item 压缩综合征消息驱动的分布式协调；
+    \item 局部失败局部恢复而非全局回退。
+\end{enumerate}
+
+\section*{八、现有技术映射与最近似现有技术}
+
+\subsection*{（一）拟独立权利要求的核心要素抽象}
+
+为便于与现有技术进行要素比对，建议将拟独立权利要求（方法类）抽象为至少包括以下要素（示例性抽象，不限定最终写法）：
+\begin{enumerate}[label=E\arabic*.]
+    \item 量子中继网络，包括多个中继节点及相邻节点之间的基本链路段；
+    \item 每个节点维护锚定纠缠对与至少一个候选牺牲纠缠对的资源组织结构，并在有限量子存储条件下滚动更新；
+    \item 根据锚定对保真度/年龄与候选对质量、失败概率、重建代价等计算评分或优先级；
+    \item 当评分满足纯化触发条件时，在相邻节点间执行双边门序列与测量完成纠缠纯化，并仅局部丢弃/重建受影响资源；
+    \item 当满足交换门限时，在中间节点对左右两侧纠缠对执行贝尔态测量完成纠缠交换；
+    \item 纯化与交换以窗口重叠的流水线方式执行，允许异步局部推进而非全局同步推进；
+    \item 节点之间通过压缩综合征消息交换决策充分信息，用于状态更新与调度协同；
+    \item 控制逻辑可由本地控制器（如 FPGA/ASIC/片上控制器）实现并驱动量子操作。
+\end{enumerate}
+
+\subsection*{（二）最近似现有技术认定}
+
+建议的最近似现有技术组合为：\textbf{N2（1999，基于纠缠纯化的量子中继器理论协议）+ P2（节点级量子中继器装置方案）}。其中，N2覆盖了“量子中继+纠缠纯化”的理论协议背景，P2覆盖了“中继器装置/节点结构”的工程背景，但二者均未给出面向少资源节点的\textbf{锚定对-牺牲对组织 + 评分驱动调度 + 压缩综合征协同 + 纯化/交换窗口重叠流水线}的组合控制架构。
+
+\section*{九、区别点与创造性论证要点（供代理人参考）}
+
+\subsection*{（一）相对 N2 的主要区别点}
+
+相对 N2，本申请至少具有以下区别特征（可作为创造性论证的主线）：
+\begin{enumerate}[label=(\arabic*)]
+    \item 将纠缠对缓存组织从“多对等价批处理”转为\textbf{锚定对-牺牲对}的滚动结构，以在少量物理量子比特下持续推进；
+    \item 引入以保真度、年龄（相干时间约束）、失败概率与重建代价为核心的\textbf{评分驱动决策}，实现纯化/交换/丢弃的事件驱动选择；
+    \item 将“纯化阶段”和“交换阶段”由串行栅栏式推进改为\textbf{窗口重叠的流水线推进}，允许局部异步推进并降低等待导致的退相干；
+    \item 采用\textbf{压缩综合征消息}进行跨节点协同，仅交换决策充分信息（例如 BSM 两比特结果、纯化校验帕里蒂等），而非上报大量原始轨迹；
+    \item 失败恢复限定为局部回退（局部丢弃与重建），避免全链路或全层级回退造成的资源浪费。
+\end{enumerate}
+
+\subsection*{（二）相对 P2 的主要区别点}
+
+相对 P2，本申请的差异重点不在“中继器装置是否存在”，而在于节点内部与跨节点的\textbf{控制与调度机制}，尤其是：资源组织结构（锚定/牺牲）、评分触发逻辑、压缩综合征协同机制、以及纯化与交换窗口重叠的流水线时序控制。
+
+\subsection*{（三）创造性论证的建议表述角度}
+
+建议围绕“技术问题-技术手段-技术效果”的闭环组织创造性论证：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{技术问题}：在少量物理量子比特、有限量子存储相干时间、链路异步与建链随机成功的工程条件下，如何仍能实现高保真长距离纠缠对的连续输出；
+    \item \textbf{技术手段}：以锚定对-牺牲对滚动结构承载纠缠资源，评分驱动触发纯化/交换/丢弃，压缩综合征驱动的分布式协同，以及纯化/交换窗口重叠流水线推进；
+    \item \textbf{技术效果}：降低并行存储需求与同步成本，缩短等待时间从而降低退相干损失，缩小失败回退范围提升吞吐，增强异步容忍度并便于控制器工程落地。
+\end{enumerate}
+
+\section*{十、权利要求撰写建议（结构与从属点）}
+
+\subsection*{（一）建议的独立权利要求组}
+
+建议采用“四件套”布局并保持口径一致：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{方法独立项}：限定锚定/牺牲资源组织、评分计算、纯化触发、交换触发、压缩综合征上报与流水线推进的步骤与条件；
+    \item \textbf{装置独立项（节点）}：限定存储单元、候选对管理单元、评分决策单元、时序/状态机单元与量子操作执行接口之间的功能模块关系；
+    \item \textbf{系统独立项（网络）}：限定多个节点之间的消息交互与分布式协调方式（压缩综合征字段、会话标识、租约/超时处理等）；
+    \item \textbf{程序/介质独立项}：覆盖评分驱动调度与状态机控制逻辑的软件实现。
+\end{enumerate}
+
+\subsection*{（二）建议优先布局的从属权利要求点}
+
+建议优先从以下方向挖掘从属项，以扩大保护范围并增强抗无效能力：
+\begin{enumerate}[label=(\arabic*)]
+    \item 评分函数的输入变量与门限：包括保真度区间、年龄/相干时间常数、失败概率、重建代价、经典往返时延等；
+    \item 量子存储约束：包括丢弃阈值 $T_{\mathrm{drop}}$、预测保真度门限与超时回收机制；
+    \item 资源复用：通信量子比特与存储量子比特的 swap-in 机制、辅助量子比特的短时占用与释放策略；
+    \item 压缩综合征消息结构：字段集合（pair\_id、level、session\_id、成功标志、必要测量比特、时间戳、保真度区间）、重放抑制与确认机制；
+    \item 纯化与交换窗口重叠的时序约束：窗口锁定、租约（lease）、并行循环与冲突避免规则；
+    \item 可选门序列与硬件落地：双边纯化门序列（例如 CNOT/受控相位 + 测量）、BSM 的物质实现或光子芯片等效实现、FPGA/ASIC/片上控制器实现的事件驱动调度。
+\end{enumerate}
+
+\end{document}

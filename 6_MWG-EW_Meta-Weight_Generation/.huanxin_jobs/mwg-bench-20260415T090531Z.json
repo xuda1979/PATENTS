@@ -1,0 +1,12 @@
+{
+  "job_id": "mwg-bench-20260415T090531Z",
+  "name": "mwg-bench",
+  "pid": 13750,
+  "log_path": "/root/work/mwg-ew-patent/logs/bench_full.log",
+  "remote_root": "/root/wor",
+  "command": "cd /root/work/mwg-ew-patent && python3 experiments/run_real_benchmark.py --suite all --ranks 32,64,128,256 --output-dir results",
+  "created_at": "2026-04-15T09:05:37.611496+00:00",
+  "transport": "daemon",
+  "duration_ms": 5025,
+  "meta_file": "/Users/daxu/PATENTS/6_MWG-EW_Meta-Weight_Generation/.huanxin_jobs/mwg-bench-20260415T090531Z.json"
+}

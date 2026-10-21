@@ -1,0 +1,56 @@
+{
+  "schema_version": "mwg-four-arm-lifetime-v1",
+  "created_at": "20260828T143549Z",
+  "config": {
+    "d": 4096,
+    "m": 14336,
+    "rank": 128,
+    "controller_hidden": 128,
+    "batch": 1,
+    "seq": 128,
+    "amplitude": 0.05,
+    "dtype": "fp16",
+    "seed": 1234
+  },
+  "validations": {
+    "materialized_vs_fused": {
+      "passed": true,
+      "max_abs": 0.001953125,
+      "mean_abs": 0.00013445966760627925,
+      "max_rel": 0.1949310302734375,
+      "rtol": 0.005,
+      "atol": 0.005
+    }
+  },
+  "arm4_execution_observed": null,
+  "materialized": {
+    "mean_ms": 0.861585766,
+    "median_ms": 0.846706,
+    "min_ms": 0.727276,
+    "max_ms": 5.07744,
+    "p05_ms": 0.822744,
+    "p95_ms": 0.895785,
+    "std_ms": 0.1759392097790055,
+    "sample_count": 1000,
+    "warmup_iterations": 30,
+    "iterations_per_repeat": 200,
+    "repeat_count": 5
+  },
+  "fused": {
+    "mean_ms": 1.232887971,
+    "median_ms": 1.228129,
+    "min_ms": 1.18487,
+    "max_ms": 1.829074,
+    "p05_ms": 1.2005679999999999,
+    "p95_ms": 1.2723719999999998,
+    "std_ms": 0.03153277797316411,
+    "sample_count": 1000,
+    "warmup_iterations": 30,
+    "iterations_per_repeat": 200,
+    "repeat_count": 5
+  },
+  "fused_backend_contract": "f68ef61b74bccff6e0fbaaf1a57fdc5fbb35cff2d760fd31016ed61230ba96fc",
+  "materialized_persistent_bytes": 16451584,
+  "fused_persistent_bytes": 16451584,
+  "no_store_claim_ready": null
+}

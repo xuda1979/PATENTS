@@ -1,0 +1,66 @@
+{
+  "seed": 20260611,
+  "train_fraction": 0.5,
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "family": "",
+      "source_manifest": "data/heldout/manifest.json",
+      "source_texts": "data/heldout/gsm8k_test.txt",
+      "train_texts": "data/heldout/combined_extra_splits/gsm8k_test/router_train.txt",
+      "eval_texts": "data/heldout/combined_extra_splits/gsm8k_test/router_eval.txt",
+      "train_count": 130,
+      "eval_count": 130,
+      "train_chars": 70384,
+      "eval_chars": 69009
+    },
+    {
+      "name": "mbpp_test",
+      "family": "",
+      "source_manifest": "data/heldout/manifest.json",
+      "source_texts": "data/heldout/mbpp_test.txt",
+      "train_texts": "data/heldout/combined_extra_splits/mbpp_test/router_train.txt",
+      "eval_texts": "data/heldout/combined_extra_splits/mbpp_test/router_eval.txt",
+      "train_count": 97,
+      "eval_count": 97,
+      "train_chars": 14811,
+      "eval_chars": 14935
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "family": "",
+      "source_manifest": "data/heldout/manifest.json",
+      "source_texts": "data/heldout/alpaca_cleaned_train_tail.txt",
+      "train_texts": "data/heldout/combined_extra_splits/alpaca_cleaned_train_tail/router_train.txt",
+      "eval_texts": "data/heldout/combined_extra_splits/alpaca_cleaned_train_tail/router_eval.txt",
+      "train_count": 130,
+      "eval_count": 130,
+      "train_chars": 96006,
+      "eval_chars": 89857
+    },
+    {
+      "name": "wikitext103_validation_extra",
+      "family": "general_language_modeling",
+      "source_manifest": "data/heldout_extra/manifest_extra.json",
+      "source_texts": "data/heldout_extra/wikitext103_validation_extra.txt",
+      "train_texts": "data/heldout/combined_extra_splits/wikitext103_validation_extra/router_train.txt",
+      "eval_texts": "data/heldout/combined_extra_splits/wikitext103_validation_extra/router_eval.txt",
+      "train_count": 130,
+      "eval_count": 130,
+      "train_chars": 83436,
+      "eval_chars": 87642
+    },
+    {
+      "name": "hellaswag_validation_extra",
+      "family": "commonsense_reasoning",
+      "source_manifest": "data/heldout_extra/manifest_extra.json",
+      "source_texts": "data/heldout_extra/hellaswag_validation_extra.txt",
+      "train_texts": "data/heldout/combined_extra_splits/hellaswag_validation_extra/router_train.txt",
+      "eval_texts": "data/heldout/combined_extra_splits/hellaswag_validation_extra/router_eval.txt",
+      "train_count": 130,
+      "eval_count": 130,
+      "train_chars": 46006,
+      "eval_chars": 51060
+    }
+  ]
+}

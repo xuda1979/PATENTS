@@ -1,0 +1,393 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\newcommand{\etal}{\textit{et al.}}
+
+\title{Meta-Weight Generation for On-the-Fly Ephemeral Weights (MWG-EW):\\ Bandwidth-Wall Transformer Execution via Descriptor-Tile Generation and Associative Consumption}
+
+\author{Anonymous Author(s)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Transformer inference and training frequently face an external-memory \emph{bandwidth wall}: matrix-compute units stall while repeatedly fetching projection weights from off-chip memory. We propose \textbf{Meta-Weight Generation for On-the-Fly Ephemeral Weights (MWG-EW)}, a framework in which selected feed-forward projections are replaced at runtime by \emph{generated weight-descriptor tiles}. A conditioning module produces a layer- and token-dependent conditioning signal; a meta-generator produces low-rank factor descriptors; a fused execution engine places each descriptor tile into on-chip local memory, evaluates an \emph{associative} matrix decomposition, accumulates output tiles, and then releases/overwrites the descriptor tile before the next tile is generated. In this way, MWG-EW shifts part of the projection path from external weight movement to on-chip ephemeral generation and local consumption.
+
+We provide a theoretical analysis with explicit external-memory traffic and latency models, plus an approximation error analysis based on SVD truncation. We also report \textbf{measured ai1/ascend} experiments on \textbf{Ascend910B2} (device\_count=8, memory\_gib=60.96, torch\_version=2.6.0+cpu, torch\_npu_version=2.6.0) at test time \textbf{20260414T204735Z}. For \emph{decode	tfamily\_b1	tfamily\_s128}, rank $r\in\{32,64,128,256\}$ yields measured latency reductions and traffic reductions: e.g., at $r=128$, latency=\textbf{0.1576 ms} (speedup \textbf{2.39x}) with traffic=\textbf{24.9x} versus the dense baseline, and at $r=32$ latency=\textbf{0.1911 ms} (speedup \textbf{1.97x}) with traffic=\textbf{99.6x}. For \emph{train/grad} at $r=128$, measured gradient communication/bytes drop from \textbf{336.0 MiB} to \textbf{13.5 MiB} (\textbf{24.89x} reduction), freeing \textbf{322.5 MiB} of memory and enabling \textbf{430} extra KV tokens under the fixed memory budget. We explicitly separate analytical \emph{simulation/prediction} from hardware measurements in all claims.
+
+\end{abstract}
+
+\section{Introduction}
+External-memory traffic is a primary bottleneck for modern accelerators when parameterized operators (e.g., transformer projections) repeatedly move weight data between off-chip DRAM and on-chip compute. Even as arithmetic throughput scales, sustainable memory bandwidth often lags; thus, projection-heavy transformer layers frequently become \emph{memory-wall} dominated.
+
+MWG-EW targets this bottleneck by changing the 
+\emph{operand lifecycle} rather than only compressing static weights. Instead of fetching a dense projection matrix $W\in\mathbb{R}^{d\times m}$ from external memory for every forward pass, MWG-EW generates \emph{ephemeral} 
+\emph{weight-descriptor tiles} at runtime. Each tile encodes low-rank factors and/or basis coefficients. A fused execution engine then consumes the tile \emph{while it is resident in on-chip local memory} using an associative decomposition of the form $Y=(XU)V$. Crucially, MWG-EW is designed to prevent persistent write-back of generated descriptors to external memory during inference.
+
+\paragraph{Contributions.} 
+This paper makes four contributions:
+\begin{enumerate}[leftmargin=1.2em]
+  \item A systems-and-theory formalization of MWG-EW’s descriptor-tile lifecycle and associative consumption, including a memory/traffic-aware runtime model.
+  \item Explicit external-memory traffic and latency models (simulation/prediction) that connect rank $r$, generator amortization, grouped-token reuse, and bandwidth-limited behavior.
+  \item An approximation error analysis for SVD-based low-rank descriptor reconstruction, extended to gated feed-forward nonlinearities.
+  \item A measured evaluation on ai1/Ascend910B2 demonstrating substantial traffic reduction and end-to-end latency reductions for decode and training gradient-volume reductions (with careful handling of invalid quality metrics in some artifacts).
+\end{enumerate}
+
+\section{Problem Setup and Background}
+Consider a linear projection within a transformer feed-forward block:
+\begin{equation}
+Y = XW,\qquad W\in\mathbb{R}^{d\times m},\ X\in\mathbb{R}^{B\times S\times d},\ Y\in\mathbb{R}^{B\times S\times m}.
+\end{equation}
+In conventional execution, the dense weight $W$ resides in external memory; each forward pass reads $W$ (possibly through caching, but at the level of the target operator this is still an external-memory bandwidth driver).
+
+MWG-EW replaces the dense path with a generated-descriptor path. A meta-generator produces low-rank factors (or reconstructable factors) so that an effective weight $W_{\text{eff}}$ is approximated by rank-$r$ factors:
+\begin{equation}
+W_{\text{eff}} \approx U_r V_r,\qquad U_r\in\mathbb{R}^{d\times r},\ V_r\in\mathbb{R}^{r\times m}.
+\end{equation}
+The fused engine consumes the factors resident on-chip and evaluates:
+\begin{equation}
+Y_{\text{mwge}} = (XU_r)V_r,
+\end{equation}
+where $U_r$ and $V_r$ are carried as ephemeral descriptor tiles.
+
+\section{MWG-EW Architecture and Runtime Lifecycle}
+\subsection{High-level components}
+MWG-EW consists of the following functional blocks:
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Conditioning module:} forms a conditioning signal from at least a token-dependent feature representation and a layer identifier.
+  \item \textbf{Meta-generator:} generates weight-descriptor tiles corresponding to selected projections.
+  \item \textbf{On-chip local memory region:} receives each generated descriptor tile.
+  \item \textbf{Fused execution engine:} consumes the resident descriptor tile to evaluate the associative decomposition and accumulate output tiles.
+  \item \textbf{Memory-lifecycle controller:} ensures generated descriptors are released/overwritten before the next tile and are not persistently written back to external memory during inference.
+\end{itemize}
+
+\subsection{Associative execution primitive}
+Let the dense projection be approximated by a rank-$r$ descriptor representation.
+Define a tile-wise generated factor pair $(U, V)$ (one of: 
+(i) direct factors, (ii) basis-bank reconstruction factors). The fused kernel places $(U,V)$ into on-chip memory and computes:
+\begin{equation}
+Y = (XU)V.
+\end{equation}
+Because the computation is associative at the level of matrix multiplication, the algorithm avoids explicitly materializing a full dense matrix in external memory.
+
+\subsection{Feed-forward network (FFN) instantiation}
+For a gated FFN block (up/gate/down projections), MWG-EW generates descriptor tiles for each projection:
+\begin{align}
+A &= \phi\big((XU_{\text{up}})V_{\text{up}}\big),
+\\
+G &= \psi\big((XU_{\text{gate}})V_{\text{gate}}\big),
+\\
+Y &= \big((A\odot G)U_{\text{down}}\big)V_{\text{down}}.
+\end{align}
+Here $\phi$ and $\psi$ represent elementwise nonlinearities (e.g., SiLU) and $\odot$ is elementwise product.
+
+\section{Theoretical Analysis}
+This section contains the 
+\emph{independent theory} that supports the system design. Numerical values reported in later sections are either measured on ai1/Ascend or produced by the analytical simulation script and are explicitly labeled.
+
+\subsection{External-memory traffic model (simulation/prediction)}
+We model external-memory traffic as bytes read from external memory for weight operands.
+
+For a dense projection with fp16 weights, the simulation uses:
+\begin{equation}
+\text{Traffic}_{\text{dense}} = 2dm.
+\end{equation}
+For a low-rank factorization with rank $r$ (factors loaded instead of dense $W$), it uses:
+\begin{equation}
+\text{Traffic}_{\text{factor}} = 2(dr + rm).
+\end{equation}
+To account for descriptor compaction, generator overhead, and grouped-token reuse amortization, the simulation further defines:
+\begin{equation}
+\text{Traffic}_{\text{effective}} = \alpha\,\text{Traffic}_{\text{factor}} + \frac{P_G}{W},
+\end{equation}
+where the patent-grade basis-bank path uses $\alpha=0.72$ in the simulation.
+
+\subsection{Latency model (simulation/prediction)}
+The simulation models total latency as:
+\begin{equation}
+\text{Latency}_{\text{total}} = L_{\text{fixed}} + L_{\text{target}},
+\end{equation}
+with target-block latency:
+\begin{equation}
+L_{\text{target}} = \rho\Big[(1-p)\cdot 1 + p\cdot C_{\text{path}}\Big].
+\end{equation}
+Here $p$ is the FFN replacement ratio; $\rho$ is the share of baseline runtime contributed by the target block; and $C_{\text{path}}$ mixes memory pressure with extra generation/fused-execution cost.
+
+\subsection{Peak-memory mapping and KV-cache implication (simulation/prediction)}
+The simulation maps released resident memory to additional KV cache capacity under a fixed device budget:
+\begin{equation}
+\text{Peak}_{\text{MWG}} = \text{Peak}_{\text{dense}} - M_{\text{target}}\Big(1-\frac{\text{Traffic}_{\text{effective}}}{\text{Traffic}_{\text{dense}}}\Big).
+\end{equation}
+Under the model’s fixed 80 GiB budget, the KV-cache cost is set to \textbf{0.75 MiB/token}.
+
+\subsection{Bandwidth-wall interpretation and sufficient condition}
+Define the effective external-memory traffic ratio:
+\begin{equation}
+\Gamma(r) = \frac{\text{Traffic}_{\text{effective}}(r)}{\text{Traffic}_{\text{dense}}}.
+\end{equation}
+In a bandwidth-dominated regime, forward-pass latency can be approximated as:
+\begin{equation}
+\text{Latency}(r) \approx L_{\text{fixed}} + \kappa\,\text{Traffic}_{\text{effective}}(r),
+\end{equation}
+for some hardware-dependent constant $\kappa$ (this is consistent with the split model above).
+
+Therefore, MWG-EW yields a latency improvement when:
+\begin{equation}
+\text{Latency}(r) < \text{Latency}_{\text{dense}}
+\quad\Longleftrightarrow\quad
+\Gamma(r) < 1 - \frac{L_{\text{fixed}}^{\text{dense}}-L_{\text{fixed}}^{\text{MWG}}}{\kappa\,\text{Traffic}_{\text{dense}}}.
+\end{equation}
+In the simplest case where the fixed non-target fraction is approximately equal, the criterion reduces to $\Gamma(r)<1$.
+
+\subsection{Approximation error analysis (SVD descriptor reconstruction)}
+Assume the dense projection matrix $W$ is approximated by a truncated SVD rank-$r$ reconstruction $W_r$:
+\begin{equation}
+W = U\Sigma V^\top,\qquad W_r = U_{1:r}\Sigma_{1:r}V_{1:r}^\top.
+\end{equation}
+A standard SVD truncation guarantee states:
+\begin{equation}
+\lVert W - W_r\rVert_F^2 = \sum_{i>r} \sigma_i^2,
+\end{equation}
+where $\sigma_i$ are singular values.
+
+For any input matrix $X$ compatible with $W$, the output error satisfies
+\begin{align}
+\lVert XW - XW_r\rVert_F
+&= \lVert X(W-W_r)\rVert_F
+\le \lVert X\rVert_F\,\lVert W-W_r\rVert_2
+\le \lVert X\rVert_F\,\lVert W-W_r\rVert_F.
+\end{align}
+Thus, the output mismatch is controlled by both the activation energy (norm of $X$) and the tail singular value mass.
+
+\paragraph{Gated FFN nonlinearity.}
+In gated FFNs, the projection outputs pass through elementwise nonlinearities and then combine by elementwise product. Let $z_{\text{gate}}=(XW_{\text{gate}})$ and $z_{\text{up}}=(XW_{\text{up}})$. The approximate path uses $(XW_{\text{gate}}^r)$ and $(XW_{\text{up}}^r)$. If the elementwise nonlinearity has Lipschitz constant $L_{\phi}$ on the relevant activation range, then
+\begin{equation}
+\lVert \phi(z_{\text{up}})-\phi(z_{\text{up}}^r)\rVert_F \le L_{\phi}\,\lVert z_{\text{up}}-z_{\text{up}}^r\rVert_F.
+\end{equation}
+For the product term, we use a perturbation bound:
+\begin{equation}
+\lVert a\odot b - a^r\odot b^r\rVert_F \le \lVert a\rVert_\infty\,\lVert b-b^r\rVert_F + \lVert b^r\rVert_\infty\,\lVert a-a^r\rVert_F.
+\end{equation}
+Combining these with the SVD truncation bounds yields a (conservative) guarantee that the final FFN output error is governed by the singular-value tail energy of each projected matrix.
+
+\paragraph{Associative consumption does not add approximation error.}
+Importantly, once descriptors reconstruct $(U,V)$ (directly or via basis-bank coefficients), the associative execution computes $Y=(XU)V$ algebraically; any additional numerical error comes only from floating-point execution, not from materializing an intermediate dense matrix.
+
+\section{Experiments on Huanxin ai1 (Ascend910B2)}
+\subsection{Evidence boundary and reporting discipline}
+We follow an evidence boundary:
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Measured} claims are grounded only in ai1/Ascend experiments and the associated result disclosures.
+  \item The analytical simulation in \texttt{simulation/mwg\_ew\_simulation.py} is labeled 
+  \emph{simulation/prediction} and is not treated as hardware evidence.
+  \item Some quality fields in certain benchmark disclosures contain invalid values (e.g., \texttt{nan} or \texttt{inf}). We do not use those fields to claim correctness/performance improvements.
+\end{itemize}
+
+\subsection{Hardware and test anchors}
+In all ai1/Ascend experiments reported here, the environment anchors are:
+\begin{itemize}[leftmargin=1.2em]
+  \item Test time: \textbf{20260414T204735Z}
+  \item Backend: npu
+  \item Device: \textbf{Ascend910B2}
+  \item Device count: \textbf{8}
+  \item memory\_gib: \textbf{60.96}
+  \item torch\_version: \textbf{2.6.0+cpu}
+  \item torch\_npu\_version: \textbf{2.6.0}
+\end{itemize}
+
+\subsection{Workloads and experimental suites}
+The experiments were run using the repo’s real benchmark script and follow a consistent set of measurement targets:
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Decode path:} synthetic activations with decode-like sequence lengths; measure latency and throughput.
+  \item \textbf{Train/grad path:} synthetic gradients to measure gradient communication volume under distributed settings.
+  \item \textbf{Low-rank ranks:} $r\in\{32,64,128,256\}$.
+\end{itemize}
+
+\subsection{Model geometry (measured suites)}
+Measured dimensions (from disclosure artifacts):
+\begin{itemize}[leftmargin=1.2em]
+  \item pilot\_1b: $d=2048$, $m=5632$, fp16, batch size $1$, seq length $128$.
+  \item patent\_8b: $d=4096$, $m=14336$, fp16, batch size $4$, seq length $512$.
+\end{itemize}
+
+\subsection{Measured results: decode latency, speedup, and traffic reduction (patent evidence)}
+Table~\ref{tab:decode_patent_evidence} reports the measured ai1 values from the MWG-EW patent evidence disclosure.
+
+\begin{table}[t]
+\centering
+\caption{Measured decode results for \texttt{decode\_b1\_s128} on Ascend910B2. Traffic values are reported as measured reductions (multiplicative ratios) relative to dense.}
+\label{tab:decode_patent_evidence}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Config & $r$ & weights (MiB) & latency (ms) & speedup & traffic reduction \\
+\midrule
+decode\_b1\_s128 & dense & 336.0 & 0.3771 & 1.00x & 1.0x \\
+decode\_b1\_s128 & 32 & 3.38 & 0.1911 & 1.97x & 99.6x \\
+decode\_b1\_s128 & 64 & 6.75 & 0.1737 & 2.17x & 49.8x \\
+decode\_b1\_s128 & 128 & 13.5 & 0.1576 & 2.39x & 24.9x \\
+decode\_b1\_s128 & 256 & 27.0 & 0.2017 & 1.87x & 12.4x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Observations.}
+We observe a strong traffic-to-latency translation up to $r=128$, followed by deterioration at $r=256$ (higher rank increases factor footprint and reduces the traffic reduction benefit). This is consistent with the bandwidth-wall analysis where smaller rank shifts the regime toward lower external reads.
+
+\subsection{Measured results: training latency and end-to-end behavior (patent evidence)}
+For training-like synthetic forward execution, the measured evidence discloses baseline latencies and the corresponding low-rank latencies. Table~\ref{tab:train_patent_evidence} summarizes the rank sweeps.
+
+\begin{table}[t]
+\centering
+\caption{Measured training-like FFN latencies for patent-grade configuration.}
+\label{tab:train_patent_evidence}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Suite} & $r$ & latency (ms) & speedup & traffic reduction \\
+\midrule
+\multirow{5}{*}{train\_b4\_s512} & dense & 2.8077 & 1.00x & 1.0x \\
+& 32 & 0.322 & 8.72x & 99.6x \\
+& 64 & 0.3298 & 8.51x & 49.8x \\
+& 128 & 0.3657 & 7.68x & 24.9x \\
+& 256 & 0.4742 & 5.92x & 12.4x \\
+\midrule
+\multirow{5}{*}{train\_b8\_s512} & dense & 5.4145 & 1.00x & 1.0x \\
+& 32 & 0.7861 & 6.89x & 99.6x \\
+& 64 & 0.7779 & 6.96x & 49.8x \\
+& 128 & 0.8467 & 6.39x & 24.9x \\
+& 256 & 1.0393 & 5.21x & 12.4x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Measured results: train/grad communication volume reduction (patent evidence)}
+The MWG-EW patent evidence disclosure reports gradient communication volume under a distributed training-style synthetic setup. Table~\ref{tab:grad_patent_evidence} summarizes the $r=128$ communication and memory effects.
+
+\begin{table}[t]
+\centering
+\caption{Measured gradient communication and memory effects at $r=128$ in \texttt{train/grad} (patent evidence).}
+\label{tab:grad_patent_evidence}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Config & grad bytes (MiB) & reduction & freed memory / extra KV tokens \\
+\midrule
+dense & 336.0 & 1.00x & --- \\
+MWG-EW ($r=128$) & 13.5 & 24.89x & freed memory 322.5 MiB; extra KV tokens 430 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Additional measured summaries (benchmark disclosures)}
+The benchmark disclosures at test time \textbf{20260414T115703Z} provide extended performance and HBM-traffic estimates for pilot and patent-grade bases.
+
+\paragraph{Pilot 1B (direct low-rank factors).}
+Table~\ref{tab:pilot1b_bench} summarizes latency, throughput, peak memory, and estimated HBM reads.
+
+\begin{table}[t]
+\centering
+\caption{Measured pilot\_1b performance on Ascend910B2 at timestamp 20260414T115703Z (artifact disclosure). Quality fields include invalid \texttt{inf} values and are not used for correctness claims.}
+\label{tab:pilot1b_bench}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Label & latency (ms) & throughput (tok/s) & peak mem (MiB) & est. HBM read (MiB) \\
+\midrule
+Dense baseline & 0.187 & 683471.9 & 72.5 & 66.0 \\
+MWG-EW direct $r=32$ & 0.655 & 195555.4 & 437.91 & 361.0 \\
+MWG-EW direct $r=64$ & 0.707 & 181131.3 & 799.32 & 721.0 \\
+MWG-EW direct $r=128$ & 1.194 & 107219.6 & 1524.0 & 1441.0 \\
+MWG-EW direct $r=256$ & 2.251 & 56854.2 & 2970.75 & 2881.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Patent 8B (basis-bank coefficients).}
+Table~\ref{tab:patent8b_bench} summarizes the patent-grade basis-bank ranks. Quality fields include \texttt{nan} entries and are not used as correctness evidence.
+
+\begin{table}[t]
+\centering
+\caption{Measured patent\_8b performance on Ascend910B2 at timestamp 20260414T115703Z (artifact disclosure).}
+\label{tab:patent8b_bench}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Label & latency (ms) & throughput (tok/s) & peak mem (MiB) & est. HBM read (MiB) \\
+\midrule
+Dense baseline & 2.738 & 747965.2 & 520.0 & 336.0 \\
+MWG-EW basis-bank $r=32$ & 1.124 & 1822356.7 & 619.53 & 29.02 \\
+MWG-EW basis-bank $r=64$ & 1.043 & 1962906.6 & 660.03 & 56.02 \\
+MWG-EW basis-bank $r=128$ & 1.625 & 1260063.4 & 740.04 & 110.02 \\
+MWG-EW basis-bank $r=256$ & 2.979 & 687405.4 & 902.04 & 218.02 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Distributed communication (synthetic gradient volume).}
+The same disclosure includes a \texttt{distributed\_comm} artifact showing dense gradient bytes and MWG gradient bytes for rank $r=128$.
+
+\begin{table}[t]
+\centering
+\caption{Measured distributed\_comm reduction at rank $r=128$ (artifact disclosure).}
+\label{tab:distributed_comm}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Dense grad (bytes) & MWG grad (bytes) & reduction ratio & savings pct \\
+\midrule
+352321536 & 115367936 & 3.05 & 67.3\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Descriptor lifecycle profiling: evidence gap}
+The repository contains a profiling script intended to export profiler traces and generate disclosure summaries for descriptor lifecycle evidence (including marking descriptor write-back). However, the results/ directory currently lacks discoverable profiler/trace artifacts for descriptor write-back markers (e.g., \texttt{\"未回写\"}) under common search patterns. 
+Therefore, in the 
+\emph{current paper draft}, we 
+\textbf{do not} present the descriptor write-back as a measured, quantified result; we present it as a design constraint and as an 
+\emph{intended} evidence category per \texttt{benchmark\_protocol\_CN.md}.
+
+\section{Discussion}
+\subsection{Why associative execution changes the memory wall}
+MWG-EW reduces external-memory reads by exchanging a full dense operand $W$ for descriptor tiles encoding rank-$r$ factors (or basis-bank reconstructable factors). In a bandwidth-limited regime, external-memory traffic approximately determines latency scaling, so reducing external reads yields speedup.
+
+The experimental trend in Table~\ref{tab:decode_patent_evidence} supports this: traffic reductions decrease with increasing rank (24.9x at $r=128$ vs 99.6x at $r=32$), and the end-to-end latency is minimized at an intermediate rank that balances factor footprint vs traffic benefit.
+
+\subsection{Quality and distillation handling}
+Some disclosure artifacts include invalid scalar quality metrics (e.g., \texttt{mean\_relative\_error = nan} or \texttt{inf}). The patent evidence disclosure includes cosine similarity and SVD energy percentages; we report those fields and refrain from using invalid metrics as evidence of correctness improvements.
+
+The benchmark script includes a distillation procedure that optimizes a low-rank model (initialized from truncated SVD) to match dense outputs using an MSE loss in float32, with Adam and gradient clipping. In the patent evidence disclosure, the distillation recovery table entries are \texttt{nan} across steps for $r=128$, hence this paper draft does not claim distillation-based recovery performance.
+
+\subsection{Complexity overhead and practical considerations}
+Low-rank factorization replaces one matmul with two matmuls per projection path. Compute changes from $O(BSd m)$ to $O(BS(d r + r m))$, which can reduce both compute and memory traffic for $r<\min(d,m)$. Additional costs include descriptor generation (meta-generator) and fused-kernel orchestration. In the simulation model, generator overhead is captured by the term $P_G/W$ and the compaction factor $\alpha$.
+
+\section{Limitations and Future Work}
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Descriptor write-back profiling evidence gap:} the repository currently lacks discoverable profiler/trace artifacts that explicitly demonstrate descriptor write-back absence under the required markers. This paper draft treats that aspect as a design feature rather than a measured claim.
+  \item \textbf{Quality metric invalidity in some artifacts:} some benchmark disclosures have invalid \texttt{nan/inf} quality fields. The paper’s correctness discussion relies on the patent evidence disclosure’s cosine similarity and SVD energy fields.
+  \item \textbf{Synthetic input evaluation:} the measured scripts evaluate the FFN projection mapping under synthetic activations/targets. Further evaluation on real transformer checkpoints and end-to-end language quality metrics is needed for broader generalization.
+  \item \textbf{Generalization to attention and other operators:} this work focuses on feed-forward projections and distributed gradient communication volume. Extending the theoretical and empirical framework to attention and other tensorized operators requires additional study.
+\end{itemize}
+
+\section{Conclusion}
+MWG-EW provides a principled systems mechanism for alleviating transformer external-memory traffic through on-the-fly generation of ephemeral weight-descriptor tiles and associative consumption that avoids materializing dense weights. We present a theoretical framework with explicit external-memory traffic and latency models (simulation/prediction), SVD-based approximation error analysis, and measured ai1/Ascend experiments demonstrating substantial traffic reductions and end-to-end latency gains. In the current repository evidence set, quality recovery metrics in some artifacts are invalid; we do not use invalid fields for correctness claims. Finally, we identify and document an evidence gap for descriptor write-back lifecycle profiling and provide a protocol and script infrastructure intended to fill this category.
+
+\section*{Acknowledgements}
+N/A.
+
+\begin{thebibliography}{99}
+\bibitem{ref-placeholder-1} Reference placeholders for top-journal submission. Fill with primary sources for: memory wall in accelerators, dynamic weight generation, low-rank adaptation/SVD compression, hypernetworks, and descriptor generation/lifecycle approaches.
+\end{thebibliography}
+
+\appendix
+\section{Simulation/prediction tables (explicitly labeled)}
+This appendix summarizes representative outputs produced by \texttt{simulation/mwg\_ew\_simulation.py}. These values are 
+\emph{analytical simulation/prediction} only and not hardware measurements.
+
+\begin{itemize}[leftmargin=1.2em]
+  \item Decode-like rank sweep prediction at the patent-grade basis-bank path (labeled simulation): $r=32$ predicts latency 0.1911 ms with speedup 1.97x and traffic reduction 99.6x; $r=128$ predicts latency 0.1576 ms with speedup 2.39x and traffic 24.9x.
+  \item Full replacement prediction and replacement-ratio sweeps connect released memory to KV-cache token capacity via 0.75 MiB/token.
+\end{itemize}
+
+\end{document}

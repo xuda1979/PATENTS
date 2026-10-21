@@ -1,0 +1,16 @@
+{
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "texts": "gsm8k_test.txt"
+    },
+    {
+      "name": "mbpp_test",
+      "texts": "mbpp_test.txt"
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "texts": "alpaca_cleaned_train_tail.txt"
+    }
+  ]
+}

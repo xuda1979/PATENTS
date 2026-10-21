@@ -1,0 +1,134 @@
+2026-04-02T06:52:41.824Z [DEBUG] [init] configureGlobalMTLS starting
+2026-04-02T06:52:41.842Z [DEBUG] [init] configureGlobalMTLS complete
+2026-04-02T06:52:41.843Z [DEBUG] [init] configureGlobalAgents starting
+2026-04-02T06:52:41.845Z [DEBUG] [init] configureGlobalAgents complete
+2026-04-02T08:56:15.508Z [DEBUG] [init] configureGlobalMTLS starting
+2026-04-02T08:56:15.515Z [DEBUG] [init] configureGlobalMTLS complete
+2026-04-02T08:56:15.516Z [DEBUG] [init] configureGlobalAgents starting
+2026-04-02T08:56:15.517Z [DEBUG] [init] configureGlobalAgents complete
+2026-04-02T08:56:15.538Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2026-04-02T08:56:15.559Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-04-02T08:56:15.621Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-04-02T08:56:15.622Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-04-02T08:56:15.623Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-04-02T08:56:15.624Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-04-02T08:56:15.627Z [DEBUG] [ToolSearch:optimistic] mode=tst-auto, ENABLE_TOOL_SEARCH=undefined, result=true
+2026-04-02T08:56:15.629Z [DEBUG] [STARTUP] Running setup()...
+2026-04-02T08:56:15.656Z [DEBUG] Loading skills from: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\Lenovo\.claude\skills, project=[]
+2026-04-02T08:56:15.657Z [DEBUG] Error log sink initialized
+2026-04-02T08:56:15.668Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2026-04-02T08:56:15.669Z [DEBUG] Total plugin skills loaded: 0
+2026-04-02T08:56:15.669Z [DEBUG] Total plugin commands loaded: 0
+2026-04-02T08:56:15.724Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-04-02T08:56:15.730Z [DEBUG] Loaded 0 unique skills (0 unconditional, 0 conditional, managed: 0, user: 0, project: 0, additional: 0, legacy commands: 0)
+2026-04-02T08:56:15.732Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills, 2 bundled skills
+2026-04-02T08:56:15.768Z [DEBUG] [STARTUP] setup() completed in 138ms
+2026-04-02T08:56:15.769Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-04-02T08:56:15.771Z [DEBUG] Total plugin agents loaded: 0
+2026-04-02T08:56:15.787Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.29932.1775120175787
+2026-04-02T08:56:15.788Z [DEBUG] Preserving file permissions: 100666
+2026-04-02T08:56:15.789Z [DEBUG] Temp file written successfully, size: 2423 bytes
+2026-04-02T08:56:15.789Z [DEBUG] Applied original permissions to temp file
+2026-04-02T08:56:15.790Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.29932.1775120175787 to C:\Users\Lenovo\.claude.json
+2026-04-02T08:56:15.791Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-02T08:56:15.792Z [DEBUG] [STARTUP] Commands and agents loaded in 22ms
+2026-04-02T08:56:15.793Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-04-02T08:56:15.793Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-04-02T08:56:15.794Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-04-02T08:56:15.805Z [DEBUG] Total LSP servers loaded: 0
+2026-04-02T08:56:15.806Z [DEBUG] [STARTUP] MCP configs loaded in 247ms
+2026-04-02T08:56:15.806Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-04-02T08:56:15.807Z [DEBUG] LSP manager initialized with 0 servers
+2026-04-02T08:56:15.807Z [DEBUG] LSP server manager initialized successfully
+2026-04-02T08:56:15.807Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-04-02T08:56:15.903Z [DEBUG] installed_plugins.json doesn't exist, returning empty V2 object
+2026-04-02T08:56:15.903Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2026-04-02T08:56:16.485Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-04-02T08:56:16.531Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-04-02T08:56:16.532Z [DEBUG] Found 0 hook matchers in settings
+2026-04-02T08:56:16.533Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-04-02T08:56:16.540Z [DEBUG] installPluginsForHeadless: starting
+2026-04-02T08:56:16.541Z [DEBUG] Found 0 installed plugins (V2 format)
+2026-04-02T08:56:16.542Z [DEBUG] installPluginsForHeadless: no missing plugins or marketplaces configured
+2026-04-02T08:56:16.626Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.29932.1775120176626
+2026-04-02T08:56:16.627Z [DEBUG] Preserving file permissions: 100666
+2026-04-02T08:56:16.628Z [DEBUG] Temp file written successfully, size: 2423 bytes
+2026-04-02T08:56:16.629Z [DEBUG] Applied original permissions to temp file
+2026-04-02T08:56:16.629Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.29932.1775120176626 to C:\Users\Lenovo\.claude.json
+2026-04-02T08:56:16.631Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-02T08:56:16.633Z [DEBUG] Total plugin output styles loaded: 0
+2026-04-02T08:56:16.699Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\Lenovo\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2026-04-02T08:56:16.711Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.29932.1775120176711
+2026-04-02T08:56:16.712Z [DEBUG] Preserving file permissions: 100666
+2026-04-02T08:56:16.714Z [DEBUG] Temp file written successfully, size: 2423 bytes
+2026-04-02T08:56:16.715Z [DEBUG] Applied original permissions to temp file
+2026-04-02T08:56:16.716Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.29932.1775120176711 to C:\Users\Lenovo\.claude.json
+2026-04-02T08:56:16.716Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-02T08:56:16.721Z [DEBUG] Stats cache is up to date
+2026-04-02T08:56:16.728Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-04-02T08:56:16.729Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-04-02T08:56:16.730Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-04-02T08:56:16.731Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-04-02T08:56:16.736Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-04-02T08:56:16.737Z [DEBUG] Found 0 hook matchers in settings
+2026-04-02T08:56:16.737Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-04-02T08:56:16.742Z [DEBUG] autocompact: tokens=7 threshold=167000 effectiveWindow=180000
+2026-04-02T08:56:16.825Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-04-02T08:56:16.826Z [DEBUG] [API:auth] OAuth token check starting
+2026-04-02T08:56:16.827Z [DEBUG] [API:auth] OAuth token check complete
+2026-04-02T08:56:17.119Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-04-02T08:56:17.125Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.29932.1775120177125
+2026-04-02T08:56:17.125Z [DEBUG] Preserving file permissions: 100666
+2026-04-02T08:56:17.126Z [DEBUG] Temp file written successfully, size: 2423 bytes
+2026-04-02T08:56:17.128Z [DEBUG] Applied original permissions to temp file
+2026-04-02T08:56:17.128Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.29932.1775120177125 to C:\Users\Lenovo\.claude.json
+2026-04-02T08:56:17.131Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-02T08:56:17.137Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.42.834; cc_entrypoint=sdk-cli; cch=00000;
+2026-04-02T08:56:17.139Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-04-02T08:56:17.139Z [DEBUG] [API:auth] OAuth token check starting
+2026-04-02T08:56:17.141Z [DEBUG] [API:auth] OAuth token check complete
+2026-04-02T08:56:17.340Z [DEBUG] Failed to fetch org fast mode status, defaulting to disabled
+2026-04-02T08:56:18.786Z [ERROR] Error: Error: 404 {"error":{"message":"Invalid URL (POST /v1/messages/count_tokens)","type":"invalid_request_error","param":"","code":""}}
+    at Z4.generate (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:362:8893)
+    at ZS.makeStatusError (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:401:2195)
+    at ZS.makeRequest (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:401:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:964:3741
+    at async file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:964:2624
+    at async Oz9 (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:963:2787)
+    at async LR7 (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:964:2557)
+    at async yp1 (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3386:10195)
+    at async kc (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3386:10891)
+2026-04-02T08:56:18.787Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (18 tools)
+2026-04-02T08:56:18.788Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-04-02T08:56:18.788Z [DEBUG] [API:auth] OAuth token check starting
+2026-04-02T08:56:18.788Z [DEBUG] [API:auth] OAuth token check complete
+2026-04-02T08:56:19.973Z [DEBUG] Stream started - received first chunk
+2026-04-02T08:56:20.589Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-04-02T08:56:20.589Z [DEBUG] Found 0 hook matchers in settings
+2026-04-02T08:56:20.589Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-04-02T08:56:20.591Z [DEBUG] Getting matching hook commands for SessionEnd with query: other
+2026-04-02T08:56:20.592Z [DEBUG] Found 0 hook matchers in settings
+2026-04-02T08:56:20.592Z [DEBUG] Matched 0 unique hooks for query "other" (0 before deduplication)
+2026-04-02T08:56:20.602Z [DEBUG] LSP server manager shut down successfully
+2026-04-02T08:56:20.603Z [DEBUG] BigQuery metrics exporter flush complete
+2026-04-02T08:56:20.604Z [DEBUG] BigQuery metrics exporter flush complete
+2026-04-02T08:56:20.604Z [DEBUG] BigQuery metrics exporter shutdown complete
+2026-04-02T08:56:21.000Z [ERROR] Error: Error: 1P event logging: 22 events failed to export (status=403, code=ERR_BAD_REQUEST, Request failed with status code 403)
+    at KVA.queueFailedEvents (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2185:2315)
+    at async KVA.doExport (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2185:1197)
+2026-04-02T08:56:21.001Z [ERROR] Error: Error: {"stack":"Error: Failed to export 22 events (status=403, code=ERR_BAD_REQUEST, Request failed with status code 403)\n    at KVA.doExport (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2185:1372)","message":"Failed to export 22 events (status=403, code=ERR_BAD_REQUEST, Request failed with status code 403)","name":"Error"}
+    at UEA.error (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2228:34863)
+    at xWA.error (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:7388)
+    at file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2180:28569
+    at kr9 (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2180:29115)
+    at file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2181:20245
+2026-04-02T08:56:21.205Z [ERROR] Error: Error: 1P event logging: 1 events failed to export (status=403, code=ERR_BAD_REQUEST, Request failed with status code 403)
+    at KVA.queueFailedEvents (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2185:2315)
+    at async KVA.doExport (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2185:1197)
+2026-04-02T08:56:21.206Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events (status=403, code=ERR_BAD_REQUEST, Request failed with status code 403)\n    at KVA.doExport (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2185:1372)","message":"Failed to export 1 events (status=403, code=ERR_BAD_REQUEST, Request failed with status code 403)","name":"Error"}
+    at UEA.error (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2228:34863)
+    at xWA.error (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:7388)
+    at file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2180:28569
+    at kr9 (file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2180:29115)
+    at file:///C:/Users/Lenovo/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2181:20245

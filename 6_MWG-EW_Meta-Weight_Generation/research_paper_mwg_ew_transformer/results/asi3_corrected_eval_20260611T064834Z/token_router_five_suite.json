@@ -1,0 +1,387 @@
+{
+  "dense": {
+    "loss": 2.042110214661717,
+    "ppl": 7.7068551703830215,
+    "tokens": 74456
+  },
+  "patched": {
+    "loss": 1.9751391582334286,
+    "ppl": 7.207622584061866,
+    "tokens": 74456,
+    "ppl_ratio": 0.9352222696178752
+  },
+  "router": {
+    "mean": [
+      0.2811590347445922,
+      0.5679340006913302,
+      0.004159726293470057,
+      0.5519687682953471,
+      0.5521270267797956,
+      0.3712994454936038,
+      7.304486451025393,
+      0.9184661081767991,
+      0.5521269909050972
+    ],
+    "std": [
+      0.24035835767622044,
+      0.3040345583758076,
+      0.012543911166242884,
+      0.0362579332846213,
+      0.036256834604293894,
+      0.047089224210931445,
+      2.2854045849058444,
+      0.12802739142640437,
+      0.036256832291520956
+    ],
+    "coef": [
+      -0.05982250092084899,
+      0.09601928784344047,
+      -0.012000663167245433,
+      -0.047719560192993275,
+      1.2658486600995866,
+      -0.6152928392390437,
+      0.18918135506232486,
+      0.01086247879235827,
+      -0.2000949594335538,
+      -0.6156555352617237
+    ],
+    "train_mse": 1.145842421286712,
+    "train_weighted_mse": 1.3066185528415253,
+    "train_corr": 0.05647197365760803,
+    "suite_balanced_ridge": true,
+    "suite_weight_summary": {
+      "gsm8k_test": {
+        "examples": 130,
+        "tokens": 22693,
+        "dense_loss": 1.2255023372486922,
+        "patched_loss": 0.956612816221711,
+        "patched_ppl_ratio": 0.7642276820739089,
+        "positive_delta_fraction": 0.5979376900365752
+      },
+      "mbpp_test": {
+        "examples": 97,
+        "tokens": 4816,
+        "dense_loss": 1.3891856575329042,
+        "patched_loss": 1.2119421863872744,
+        "patched_ppl_ratio": 0.8375758341480937,
+        "positive_delta_fraction": 0.49210963455149503
+      },
+      "alpaca_cleaned_train_tail": {
+        "examples": 130,
+        "tokens": 17059,
+        "dense_loss": 1.3620741039320623,
+        "patched_loss": 1.3422697213059593,
+        "patched_ppl_ratio": 0.980390435952566,
+        "positive_delta_fraction": 0.5562459698692772
+      },
+      "wikitext103_validation_extra": {
+        "examples": 130,
+        "tokens": 18328,
+        "dense_loss": 2.7428667284109247,
+        "patched_loss": 2.8684543029338916,
+        "patched_ppl_ratio": 1.1338144578731546,
+        "positive_delta_fraction": 0.5933544303797469
+      },
+      "hellaswag_validation_extra": {
+        "examples": 130,
+        "tokens": 10120,
+        "dense_loss": 3.6454060339644965,
+        "patched_loss": 3.6866433637415468,
+        "patched_ppl_ratio": 1.0420993974171098,
+        "positive_delta_fraction": 0.5122529644268775
+      }
+    }
+  },
+  "mixed_frontier": [
+    {
+      "tokens": 75073.0,
+      "loss": 2.01078340654097,
+      "ppl": 7.469166449759831,
+      "actual_patch_token_fraction": 0.03585899513776337,
+      "target_patch_fraction": 0.05,
+      "train_score_threshold": -0.21418362855911255,
+      "threshold_policy": "suite_local",
+      "threshold_details": {
+        "threshold": -0.21418362855911255,
+        "policy": "joint_suite_local",
+        "global_threshold": -0.21418362855911255,
+        "suite_thresholds": {
+          "alpaca_cleaned_train_tail": -0.20611190795898438,
+          "gsm8k_test": -0.20584750175476074,
+          "hellaswag_validation_extra": -0.23239213228225708,
+          "mbpp_test": -0.2595594525337219,
+          "wikitext103_validation_extra": -0.19376659393310547
+        },
+        "max_predicted_delta": 0.0,
+        "target_patch_fraction": 0.05
+      },
+      "delta_loss": -0.03132680812074673,
+      "ppl_ratio": 0.9691587923519551
+    },
+    {
+      "tokens": 75073.0,
+      "loss": 1.996234423086245,
+      "ppl": 7.361284360993625,
+      "actual_patch_token_fraction": 0.06687474675850891,
+      "target_patch_fraction": 0.1,
+      "train_score_threshold": -0.1826152801513672,
+      "threshold_policy": "suite_local",
+      "threshold_details": {
+        "threshold": -0.1826152801513672,
+        "policy": "joint_suite_local",
+        "global_threshold": -0.1826152801513672,
+        "suite_thresholds": {
+          "alpaca_cleaned_train_tail": -0.17513346672058105,
+          "gsm8k_test": -0.1723143458366394,
+          "hellaswag_validation_extra": -0.2039167881011963,
+          "mbpp_test": -0.23155774176120758,
+          "wikitext103_validation_extra": -0.16174907982349396
+        },
+        "max_predicted_delta": 0.0,
+        "target_patch_fraction": 0.1
+      },
+      "delta_loss": -0.04587579157547195,
+      "ppl_ratio": 0.9551605938155676
+    },
+    {
+      "tokens": 75073.0,
+      "loss": 1.9805346247393167,
+      "ppl": 7.246616169999355,
+      "actual_patch_token_fraction": 0.1471016511345219,
+      "target_patch_fraction": 0.25,
+      "train_score_threshold": -0.12726962566375732,
+      "threshold_policy": "suite_local",
+      "threshold_details": {
+        "threshold": -0.12726962566375732,
+        "policy": "joint_suite_local",
+        "global_threshold": -0.12726962566375732,
+        "suite_thresholds": {
+          "alpaca_cleaned_train_tail": -0.12049269676208496,
+          "gsm8k_test": -0.11412615329027176,
+          "hellaswag_validation_extra": -0.15839344263076782,
+          "mbpp_test": -0.1782582402229309,
+          "wikitext103_validation_extra": -0.1060955673456192
+        },
+        "max_predicted_delta": 0.0,
+        "target_patch_fraction": 0.25
+      },
+      "delta_loss": -0.0615755899224002,
+      "ppl_ratio": 0.9402818672196752
+    }
+  ],
+  "feature_names": [
+    "position",
+    "fill_ratio",
+    "hidden_mean",
+    "hidden_std",
+    "hidden_rms",
+    "hidden_abs_mean",
+    "hidden_abs_max",
+    "hidden_abs_q95",
+    "hidden_l2"
+  ],
+  "train_summary": {
+    "split": "train",
+    "examples": 617,
+    "tokens": 73016,
+    "dense_loss": 1.984483336075329,
+    "patched_loss": 1.9218358810282072,
+    "patched_ppl_ratio": 0.9392745518283547,
+    "positive_delta_fraction": 0.5681905335816807,
+    "suite_metrics": {
+      "gsm8k_test": {
+        "examples": 130,
+        "tokens": 22693,
+        "dense_loss": 1.2255023372486922,
+        "patched_loss": 0.956612816221711,
+        "patched_ppl_ratio": 0.7642276820739089,
+        "positive_delta_fraction": 0.5979376900365752
+      },
+      "mbpp_test": {
+        "examples": 97,
+        "tokens": 4816,
+        "dense_loss": 1.3891856575329042,
+        "patched_loss": 1.2119421863872744,
+        "patched_ppl_ratio": 0.8375758341480937,
+        "positive_delta_fraction": 0.49210963455149503
+      },
+      "alpaca_cleaned_train_tail": {
+        "examples": 130,
+        "tokens": 17059,
+        "dense_loss": 1.3620741039320623,
+        "patched_loss": 1.3422697213059593,
+        "patched_ppl_ratio": 0.980390435952566,
+        "positive_delta_fraction": 0.5562459698692772
+      },
+      "wikitext103_validation_extra": {
+        "examples": 130,
+        "tokens": 18328,
+        "dense_loss": 2.7428667284109247,
+        "patched_loss": 2.8684543029338916,
+        "patched_ppl_ratio": 1.1338144578731546,
+        "positive_delta_fraction": 0.5933544303797469
+      },
+      "hellaswag_validation_extra": {
+        "examples": 130,
+        "tokens": 10120,
+        "dense_loss": 3.6454060339644965,
+        "patched_loss": 3.6866433637415468,
+        "patched_ppl_ratio": 1.0420993974171098,
+        "positive_delta_fraction": 0.5122529644268775
+      }
+    }
+  },
+  "eval_summary": {
+    "split": "eval",
+    "examples": 617,
+    "tokens": 74456,
+    "dense_loss": 2.042110214661717,
+    "patched_loss": 1.9751391582334286,
+    "patched_ppl_ratio": 0.9352222696178752,
+    "positive_delta_fraction": 0.5581954442892446,
+    "suite_metrics": {
+      "gsm8k_test": {
+        "examples": 130,
+        "tokens": 22551,
+        "dense_loss": 1.273678502054956,
+        "patched_loss": 0.9988593696559391,
+        "patched_ppl_ratio": 0.7597095176373942,
+        "positive_delta_fraction": 0.5785552747106558
+      },
+      "mbpp_test": {
+        "examples": 97,
+        "tokens": 4772,
+        "dense_loss": 1.451784905324138,
+        "patched_loss": 1.1697077923028887,
+        "patched_ppl_ratio": 0.7542155224529814,
+        "positive_delta_fraction": 0.4323134953897737
+      },
+      "alpaca_cleaned_train_tail": {
+        "examples": 130,
+        "tokens": 16583,
+        "dense_loss": 1.3480522787442277,
+        "patched_loss": 1.3363384914967533,
+        "patched_ppl_ratio": 0.9883545520607235,
+        "positive_delta_fraction": 0.5578001567870711
+      },
+      "wikitext103_validation_extra": {
+        "examples": 130,
+        "tokens": 19386,
+        "dense_loss": 2.758699519634493,
+        "patched_loss": 2.8794783853247328,
+        "patched_ppl_ratio": 1.1283753622694308,
+        "positive_delta_fraction": 0.5952233570617972
+      },
+      "hellaswag_validation_extra": {
+        "examples": 130,
+        "tokens": 11164,
+        "dense_loss": 3.633269155209144,
+        "patched_loss": 3.6699900352070727,
+        "patched_ppl_ratio": 1.037403420378552,
+        "positive_delta_fraction": 0.5071658903618774
+      }
+    }
+  },
+  "suite_sources": {
+    "train": [
+      {
+        "suite": "gsm8k_test",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/gsm8k_test/router_train.txt",
+        "count": 130
+      },
+      {
+        "suite": "mbpp_test",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/mbpp_test/router_train.txt",
+        "count": 97
+      },
+      {
+        "suite": "alpaca_cleaned_train_tail",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/alpaca_cleaned_train_tail/router_train.txt",
+        "count": 130
+      },
+      {
+        "suite": "wikitext103_validation_extra",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/wikitext103_validation_extra/router_train.txt",
+        "count": 130
+      },
+      {
+        "suite": "hellaswag_validation_extra",
+        "key": "train_texts",
+        "path": "data/heldout/combined_extra_splits/hellaswag_validation_extra/router_train.txt",
+        "count": 130
+      }
+    ],
+    "eval": [
+      {
+        "suite": "gsm8k_test",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/gsm8k_test/router_eval.txt",
+        "count": 130
+      },
+      {
+        "suite": "mbpp_test",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/mbpp_test/router_eval.txt",
+        "count": 97
+      },
+      {
+        "suite": "alpaca_cleaned_train_tail",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/alpaca_cleaned_train_tail/router_eval.txt",
+        "count": 130
+      },
+      {
+        "suite": "wikitext103_validation_extra",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/wikitext103_validation_extra/router_eval.txt",
+        "count": 130
+      },
+      {
+        "suite": "hellaswag_validation_extra",
+        "key": "eval_texts",
+        "path": "data/heldout/combined_extra_splits/hellaswag_validation_extra/router_eval.txt",
+        "count": 130
+      }
+    ]
+  },
+  "checkpoint": "results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+  "checkpoint_student": "mwg_expert_residual_r384",
+  "config": {
+    "model_dir": "/root/work/filestorage/Qwen2.5-1.5B-Instruct",
+    "layer": 16,
+    "checkpoint": "results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+    "train_texts": [],
+    "eval_texts": [],
+    "suite_split_manifest": "data/heldout/combined_extra_splits/manifest.json",
+    "suite_train_key": "train_texts",
+    "suite_eval_key": "eval_texts",
+    "suite_balanced_sampling": true,
+    "suite_balanced_ridge": true,
+    "fail_on_suite_overlap": true,
+    "require_texts": true,
+    "seq": 256,
+    "train_examples": 0,
+    "eval_examples": 0,
+    "fractions": [
+      0.1,
+      0.25,
+      0.5
+    ],
+    "risk_budgets": [],
+    "joint_budgets": [
+      0.05,
+      0.1,
+      0.25
+    ],
+    "risk_max_predicted_delta": 0.0,
+    "threshold_policy": "suite_local",
+    "seed": 0,
+    "ridge_l2": 1.0,
+    "dtype": "fp32",
+    "out_json": "results/asi3_corrected_eval_20260611T064834Z/token_router_five_suite.json"
+  }
+}

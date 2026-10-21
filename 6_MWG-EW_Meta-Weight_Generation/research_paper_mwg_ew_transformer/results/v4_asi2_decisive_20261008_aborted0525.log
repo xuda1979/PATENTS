@@ -1,0 +1,25 @@
+[2026-10-08T05:22:58Z] device-gate: no trainer/tenant processes detected
+[2026-10-08T05:22:58Z] fixed v4 source verified: 701e9be098b51b13ac89409384735e2d
+[2026-10-08T05:22:58Z] v1 baseline verified (source 59cf1751d920f5f90851b117f7483d6c, /root/work/mwg_torch_ext/build/libcustom_ops.so)
+[2026-10-08T05:22:58Z] staged /root/work/mwg_v4_torch_ext from fixed sources
+[2026-10-08T05:22:58Z] cmake configure
+[2026-10-08T05:23:00Z] cmake rc=0
+[2026-10-08T05:24:53Z] make rc=0
+[2026-10-08T05:24:53Z] V4_SO=/root/work/mwg_v4_torch_ext/build/libcustom_ops_v4.so
+[2026-10-08T05:24:53Z] warmup-fix string count in v4 .so: 1
+[2026-10-08T05:24:53Z] running test_v4_multicore.py
+preflight: device healthy (baseline matmul finite & deterministic)
+
+=== probe_T128: T=128, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.001953
+  v1 median = 0.1281 ± 0.0016 ms
+  v4 max_err = 0.001953
+  v4 median = 0.1182 ± 0.0027 ms
+  v1-vs-v4 max_err = 0.000000
+  speedup = 1.083x
+
+=== large_T512: T=512, H=128, R=128, amp=0.05 ===
+  v1 max_err = nan
+  ABORT: shipped v1 returned NaN; device wedged, v4 results would be uninterpretable
+[2026-10-08T05:25:08Z] test rc=3
+[2026-10-08T05:25:08Z] === v4 ASI2 decisive worker done ===

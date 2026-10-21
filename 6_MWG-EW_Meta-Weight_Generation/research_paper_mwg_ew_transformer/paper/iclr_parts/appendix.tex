@@ -1,0 +1,108 @@
+\appendix
+\section{Historical Audit Provenance}
+\label{app:audit-provenance}
+
+The following details explain why the old systems, quality, and routing
+artifacts cannot support the target claim.
+\begin{itemize}
+  \item \textbf{Implementation mismatch.}  The systems prototype used durable
+  low-rank factors plus a paired-scale head.  The quality prototype additionally
+  used four persistent rank-32 residual experts over a rank-384 base and pooled
+  the complete sequence and batch.  Neither is the causal $3r$ diagonal-core
+  operator or a fused no-store implementation.
+  \item \textbf{Timing scope.}  Archived Ascend 910B2 launchers used one process
+  per visible device.  The timer includes gradient zeroing, forward, a synthetic
+  scalar loss, and backward, but excludes optimizer execution and integrated
+  DDP synchronization.  A separate all-reduce proxy cannot be added to it and
+  called end-to-end training time.
+  \item \textbf{Workloads.}  The main systems geometry is
+  $(d,m)=(4096,14336)$ with $(B,S)=(1,128)$ for a forward/prefill shape and
+  $(2,512)$ for training.  The former is not cached autoregressive decode;
+  cached $S=1$ decode and continuous batching require separate measurements.
+  \item \textbf{Selection and data.}  The artifacts do not establish a common
+  four-layer selection sweep.  Reconstruction and calibration are support-set
+  fits, router launches requested zero split examples, and some downstream task
+  examples overlap fitting sources.  Layer choice and all splits must therefore
+  be predeclared and verified by content hashes and near-duplicate checks.
+  \item \textbf{Routing.}  Historical labels compare whole teacher-forced
+  dense and patched passes; padding masks were not propagated, cached positions
+  reset, and \texttt{torch.where} selected only after both branches ran.  The
+  path establishes neither causal marginal risk nor branch-skipping savings.
+  \item \textbf{Artifacts.}  Aggregate summaries and selected logs survive,
+  but the eight-process dense per-launch JSON and some checkpoint-replication raw JSON
+  do not.  New runs must retain fresh per-launch JSON, exact environment and
+  content hashes, and a fresh-run marker.
+\end{itemize}
+
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Publication-critical audit findings and implemented corrections.}
+\label{tab:ablationladder}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}}
+\toprule
+Issue & Consequence & Correction / status \\
+\midrule
+Full-sequence and batch pooling & Earlier logits depend on future tokens and other examples & Token-local controller implemented; causal rerun measured (equal-rank parity at r384 and r401, Tab.~\ref{tab:causalquality-app}) \\
+Rank-384 plus four rank-32 experts & Static rank-384 SVD is not parameter matched; effective rank can reach 512 & Report 64.325~MiB total and add rank/parameter-matched controls \\
+Zero requested split sizes & Nominal router seeds do not resample data & Require positive split sizes and content-hash/Jaccard evidence \\
+Eager mixed forward & Both dense and patched branches execute & Withdraw traffic savings; implement branch-skipping dispatch \\
+Token fraction used as call fraction & Routed-traffic equation applied at the wrong granularity & Use $p_{\mathrm{call}}$ and $p_{\mathrm{call}}(1-\rho_{\mathrm{desc,call}})$ \\
+Task overlap and unpaired tests & GSM8K fit/evaluation overlap; ``neutral'' is not equivalence & Disjoint tasks and paired bootstrap/McNemar with a predeclared margin \\
+Missing raw artifacts & Some headline launch/cell claims cannot be independently reconstructed & Preserve fresh per-launch JSON and environment/content hashes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Evidence map for the main claims. This table separates what is
+directly measured, what is analytically estimated from measured geometry, and
+what remains an implementation target.}
+\label{tab:evidencemap}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}}
+\toprule
+Claim & Evidence in this paper & Status \\
+\midrule
+A low-rank FFN reduces state and forward--backward time in this microbenchmark &
+Three-repeat eight-accelerator sweep, ranks 32--512; synchronized-DDP and optimizer-inclusive reruns on four processes (Tables~\ref{tab:ddptrain},~\ref{tab:ddptrainopt}) &
+Measured, including synchronized and optimizer-inclusive steps \\
+\emph{Ephemerality} carries no device penalty at L2-resident cores, and the core does not escape &
+Fused four-arm probe: equivalence at fp16 floor, parity at $T{=}128$, $1.93\times$ at $T{=}4096$ (single-core epilogue); measured v4 multi-core rewrite bit-identical to v1 and up to $3.03\times$ faster (Sec.~\ref{sec:systems}); core DRAM traffic output-only &
+\textbf{Measured} (mechanism; v4 resolves the beyond-L2 kernel deficit); net benefit open \\
+Analytic payload and reuse break-even accounting &
+Eqs.~\eqref{eq:core-payload}--\eqref{eq:full-factor-call}, Proposition~\ref{prop:breakeven}, Figure~\ref{fig:regimemap} &
+Analytic; measured at two geometries \\
+Causal FFN reconstruction is preserved by diagonal cores &
+Prior quality/routing interpretation withdrawn by integrity audit; causal \texttt{token\_diag\_core} implements and unit-tests the boundary; trained multi-seed FFN reconstruction measured on disjoint hash-bound splits from one coherent run family (Table~\ref{tab:causalquality-app}); shuffled-context control bounds context benefit (Table~\ref{tab:shuffled}); full-model causal perplexity and generation quality remain unvalidated &
+Measured (same-rank FFN-layer reconstruction parity at r384/r401/r512; context-conditioning adds ${\sim}0.05\%$ of MSE at r384/r401, not detectable at r512; $+1.95\%$ equal-budget penalty for the generated arm) \\
+Routed weight-traffic savings at deployment granularity &
+\texttt{torch.where} prototype evaluates both branches; whole-call router specified (Sec.~\ref{sec:eligibility}) &
+Not demonstrated \\
+Strict no-store \emph{training} semantics &
+save-core vs.\ rematerialize-core specified &
+Recompute-in-backward measured at FFN level ($24.5\times$--$71.8\times$ saved-footprint reduction, exact gradients, Table~\ref{tab:lifecycle}; depth-independent up to $N{=}16$, Table~\ref{tab:lifecycle-depth}); kernel training path scoped \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Eligibility and Benefit Routing}
+\label{sec:eligibility}
+
+The systems advantage is realized only on complete calls that can safely use
+the new path. A deployable router $g_{\routebudget}$ (Eq.~\ref{eq:router},
+Appendix~\ref{app:routing}) freezes a risk threshold on a held-out
+calibration set, certifies the dispatch rate against a budget $\routebudget$
+on a disjoint set, and gates on an upper-confidence estimate of causal excess
+loss computed only from pre-intervention features. The mixed FFN is
+$Y_{\mathrm{mix}}=(1-g_{\routebudget})Y_{\mathrm{dense}}+g_{\routebudget}\widetilde{Y}_{\mathrm{mwg}}$.
+Quality preservation requires a predeclared mean non-inferiority margin
+$\delta_{\rm NI}$ and a tail-risk limit
+$\Pr[\Delta(x)>\epsilon\mid g_{\routebudget}=1]\le\alpha$
+(Proposition~\ref{prop:budget}); mean safety alone cannot exclude severe tail
+failures, so high quantiles and worst-domain results must accompany the
+aggregate. The historical implementation satisfies none of these
+requirements---its labels are whole-sequence surrogates, its deployment path
+hard-codes an all-ones mask, and its mixed forward evaluates both branches
+before selecting outputs---so its router tables are diagnostic only.

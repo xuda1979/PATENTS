@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1300" viewBox="0 0 1000 1300">
+  <rect x="0" y="0" width="1000" height="1300" fill="#ffffff"/>
+  <defs>
+    <style>
+      .box { fill:none; stroke:#000; stroke-width:3; }
+      .txt { font-family:Microsoft YaHei, SimHei, sans-serif; text-anchor:middle; }
+    </style>
+  </defs>
+
+  <rect class="box" x="320" y="40" width="360" height="90" rx="20"/>
+  <text class="txt" x="500" y="95" font-size="30">开始</text>
+
+  <rect class="box" x="220" y="180" width="560" height="110"/>
+  <text class="txt" x="500" y="235" font-size="28">接收握手请求</text>
+  <text class="txt" x="500" y="270" font-size="20">SID、终端能力、算法集合、业务等级</text>
+
+  <rect class="box" x="220" y="340" width="560" height="110"/>
+  <text class="txt" x="500" y="395" font-size="28">读取切片握手画像</text>
+  <text class="txt" x="500" y="430" font-size="20">时延预算、安全等级、阈值、时限、早期业务范围</text>
+
+  <rect class="box" x="220" y="500" width="560" height="110"/>
+  <text class="txt" x="500" y="555" font-size="28">结合链路状态与终端能力</text>
+  <text class="txt" x="500" y="590" font-size="20">选择目标握手计划</text>
+
+  <rect class="box" x="220" y="660" width="560" height="110"/>
+  <text class="txt" x="500" y="715" font-size="28">执行基础后量子密钥协商</text>
+  <text class="txt" x="500" y="750" font-size="20">得到基础份额与基础会话密钥</text>
+
+  <polygon class="box" points="500,820 710,900 500,980 290,900"/>
+  <text class="txt" x="500" y="892" font-size="26">是否允许</text>
+  <text class="txt" x="500" y="926" font-size="26">早期业务</text>
+
+  <rect class="box" x="70" y="1020" width="340" height="120"/>
+  <text class="txt" x="240" y="1070" font-size="26">导出早期业务密钥</text>
+  <text class="txt" x="240" y="1105" font-size="20">仅放行白名单业务</text>
+
+  <rect class="box" x="470" y="1020" width="430" height="120"/>
+  <text class="txt" x="685" y="1070" font-size="26">生成增强密钥材料</text>
+  <text class="txt" x="685" y="1105" font-size="20">形成满足阈值恢复条件的增强片段</text>
+
+  <rect class="box" x="470" y="1180" width="430" height="90"/>
+  <text class="txt" x="685" y="1236" font-size="24">增强阶段内达到阈值则恢复并导出最终会话密钥</text>
+
+  <line x1="500" y1="130" x2="500" y2="180" stroke="#000" stroke-width="3"/>
+  <polygon points="500,180 492,164 508,164" fill="#000"/>
+  <line x1="500" y1="290" x2="500" y2="340" stroke="#000" stroke-width="3"/>
+  <polygon points="500,340 492,324 508,324" fill="#000"/>
+  <line x1="500" y1="450" x2="500" y2="500" stroke="#000" stroke-width="3"/>
+  <polygon points="500,500 492,484 508,484" fill="#000"/>
+  <line x1="500" y1="610" x2="500" y2="660" stroke="#000" stroke-width="3"/>
+  <polygon points="500,660 492,644 508,644" fill="#000"/>
+  <line x1="500" y1="770" x2="500" y2="820" stroke="#000" stroke-width="3"/>
+  <polygon points="500,820 492,804 508,804" fill="#000"/>
+
+  <line x1="395" y1="940" x2="300" y2="1020" stroke="#000" stroke-width="3"/>
+  <polygon points="300,1020 307,1003 317,1015" fill="#000"/>
+  <text x="330" y="960" font-size="22" font-family="Microsoft YaHei, SimHei, sans-serif">是</text>
+
+  <line x1="605" y1="940" x2="680" y2="1020" stroke="#000" stroke-width="3"/>
+  <polygon points="680,1020 663,1012 675,1001" fill="#000"/>
+  <text x="650" y="960" font-size="22" font-family="Microsoft YaHei, SimHei, sans-serif">否或并行</text>
+
+  <line x1="410" y1="1080" x2="470" y2="1080" stroke="#000" stroke-width="2" stroke-dasharray="10,8"/>
+  <polygon points="470,1080 454,1072 454,1088" fill="#000"/>
+  <text x="440" y="1060" font-size="18" text-anchor="middle" font-family="Microsoft YaHei, SimHei, sans-serif">并行进入增强阶段</text>
+</svg>

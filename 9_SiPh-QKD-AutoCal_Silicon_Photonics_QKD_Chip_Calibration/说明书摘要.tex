@@ -1,0 +1,42 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{hyperref,fancyhdr,setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利说明书摘要}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 说明书摘要} \\[0.8em]
+\end{center}
+
+\noindent\textbf{发明名称：}基于硅基光电集成的微型化 QKD 芯片封装与校准技术
+
+\vspace{0.8em}
+
+\noindent\textbf{摘要：}
+本发明公开了一种基于硅基光电集成的微型化 QKD 芯片封装结构、校准控制方法、微型化模组及终端设备。该封装结构在硅光子芯片上设置承载量子业务的主光路、与主光路共模布置的参考波导、温度与应力传感单元以及加热器、相位调节器或可调衰减器等执行单元，并配合低热膨胀基座、应力释放结构及近距共封装控制电路形成短反馈闭环。校准时，将量子业务组织为含有量子业务时隙和静默校准时隙的帧结构，在静默校准时隙中以低占空比、低功率向参考波导与选定主光路段注入校准信号，采集参考波导和温度、应力传感结果，估计温度漂移与应力漂移并生成补偿控制量，以在后续业务时隙中维持量子态制备或检测稳定性。采用本发明能够降低参考信号对量子业务的污染，减小手机、手表等终端发热、振动和装配应力对 QKD 芯片的影响，提高芯片级量子加密模组的稳定性和工程可用性。
+
+\vspace{0.6em}
+
+\noindent\textbf{摘要附图说明：}摘要附图为主光路、参考波导、片上传感单元与控制电路协同构成的微型化 QKD 芯片封装及校准闭环结构示意图。
+
+\vspace{0.6em}
+
+\noindent\textbf{关键词：}硅光子；量子密钥分发；芯片封装；静默时隙校准；温应力补偿；终端模组
+
+\end{document}

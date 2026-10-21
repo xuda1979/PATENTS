@@ -1,0 +1,102 @@
+{
+  "implementation": "tprest/falcon.py (pure Python, MIT)",
+  "implementation_url": "https://github.com/tprest/falcon.py",
+  "python_version": "3.13.6 (tags/v3.13.6:4e66535, Aug  6 2025, 14:27:33) [MSC v.1944 32 bit (Intel)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "timestamp_utc": "2026-03-09T12:19:56Z",
+  "parameters": {
+    "falcon-256": {
+      "sizes": {
+        "sk_bytes": 1792,
+        "vk_bytes": 448,
+        "sig_bytes": 356
+      },
+      "keygen": {
+        "iterations": 3,
+        "mean_ms": 1204.912,
+        "median_ms": 1066.033,
+        "stdev_ms": 692.726,
+        "min_ms": 592.147,
+        "max_ms": 1956.557
+      },
+      "sign": {
+        "iterations": 10,
+        "mean_ms": 16.803,
+        "median_ms": 17.074,
+        "stdev_ms": 0.888,
+        "min_ms": 15.586,
+        "max_ms": 18.608
+      },
+      "verify": {
+        "iterations": 10,
+        "mean_ms": 3.754,
+        "median_ms": 3.685,
+        "stdev_ms": 0.379,
+        "min_ms": 3.297,
+        "max_ms": 4.354
+      }
+    },
+    "falcon-512": {
+      "sizes": {
+        "sk_bytes": 3584,
+        "vk_bytes": 896,
+        "sig_bytes": 666
+      },
+      "keygen": {
+        "iterations": 3,
+        "mean_ms": 5749.285,
+        "median_ms": 5410.497,
+        "stdev_ms": 1869.084,
+        "min_ms": 4072.768,
+        "max_ms": 7764.592
+      },
+      "sign": {
+        "iterations": 10,
+        "mean_ms": 41.627,
+        "median_ms": 40.229,
+        "stdev_ms": 5.224,
+        "min_ms": 36.607,
+        "max_ms": 53.96
+      },
+      "verify": {
+        "iterations": 10,
+        "mean_ms": 9.685,
+        "median_ms": 9.556,
+        "stdev_ms": 0.925,
+        "min_ms": 8.428,
+        "max_ms": 11.247
+      }
+    },
+    "falcon-1024": {
+      "sizes": {
+        "sk_bytes": 7168,
+        "vk_bytes": 1792,
+        "sig_bytes": 1280
+      },
+      "keygen": {
+        "iterations": 3,
+        "mean_ms": 21201.581,
+        "median_ms": 20722.864,
+        "stdev_ms": 1362.739,
+        "min_ms": 20142.794,
+        "max_ms": 22739.084
+      },
+      "sign": {
+        "iterations": 10,
+        "mean_ms": 91.736,
+        "median_ms": 85.75,
+        "stdev_ms": 18.4,
+        "min_ms": 73.971,
+        "max_ms": 119.118
+      },
+      "verify": {
+        "iterations": 10,
+        "mean_ms": 20.778,
+        "median_ms": 19.47,
+        "stdev_ms": 2.788,
+        "min_ms": 18.159,
+        "max_ms": 26.141
+      }
+    }
+  }
+}

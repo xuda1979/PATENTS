@@ -1,0 +1,237 @@
+{
+ "l2_materialized": {
+  "l2_read_KB": 0.0,
+  "l2_write_KB": 0.0,
+  "ops": 629
+ },
+ "l2_fused": {
+  "l2_read_KB": 0.0,
+  "l2_write_KB": 0.0,
+  "ops": 435
+ },
+ "pipes_materialized": {
+  "util_cols": [
+   "Task Duration(us)",
+   "aic_mac_ratio",
+   "aic_scalar_ratio",
+   "aic_mte1_ratio",
+   "aic_mte2_ratio",
+   "aic_fixpipe_ratio",
+   "aiv_vec_ratio",
+   "aiv_scalar_ratio"
+  ],
+  "top": {
+   "aclnnMatmul": {
+    "n": 190,
+    "Task Duration(us)": 9011.481999999998,
+    "aic_mac_ratio": 113.03799999999993,
+    "aic_scalar_ratio": 74.952,
+    "aic_mte1_ratio": 86.51199999999993,
+    "aic_mte2_ratio": 131.12499999999997,
+    "aic_fixpipe_ratio": 65.01100000000005,
+    "aiv_vec_ratio": 0.0,
+    "aiv_scalar_ratio": 0.0,
+    "aiv_mte2_ratio": 0.0,
+    "aiv_mte3_ratio": 0.0,
+    "cube_utilization(%)": 24675.140000000003
+   },
+   "aclnnCast": {
+    "n": 78,
+    "Task Duration(us)": 1298.4809999999998,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 3.6459999999999995,
+    "aiv_scalar_ratio": 25.451999999999988,
+    "aiv_mte2_ratio": 35.92199999999998,
+    "aiv_mte3_ratio": 22.514,
+    "cube_utilization(%)": 0.0
+   },
+   "aclnnAdd": {
+    "n": 76,
+    "Task Duration(us)": 531.6719999999999,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 7.809999999999998,
+    "aiv_scalar_ratio": 36.06900000000001,
+    "aiv_mte2_ratio": 31.316000000000013,
+    "aiv_mte3_ratio": 16.257000000000005,
+    "cube_utilization(%)": 0.0
+   },
+   "aclnnMul": {
+    "n": 76,
+    "Task Duration(us)": 6618.574000000001,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 2.876999999999999,
+    "aiv_scalar_ratio": 18.292,
+    "aiv_mte2_ratio": 40.02299999999999,
+    "aiv_mte3_ratio": 13.206000000000003,
+    "cube_utilization(%)": 0.0
+   },
+   "aclnnTanh": {
+    "n": 57,
+    "Task Duration(us)": 574.7289999999999,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 28.360000000000014,
+    "aiv_scalar_ratio": 7.946000000000001,
+    "aiv_mte2_ratio": 10.849000000000004,
+    "aiv_mte3_ratio": 8.382000000000003,
+    "cube_utilization(%)": 0.0
+   },
+   "aclnnMuls": {
+    "n": 57,
+    "Task Duration(us)": 422.647,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 1.2420000000000004,
+    "aiv_scalar_ratio": 19.228000000000005,
+    "aiv_mte2_ratio": 21.705000000000005,
+    "aiv_mte3_ratio": 5.190000000000001,
+    "cube_utilization(%)": 0.0
+   }
+  }
+ },
+ "pipes_fused": {
+  "util_cols": [
+   "Task Duration(us)",
+   "aic_mac_ratio",
+   "aic_scalar_ratio",
+   "aic_mte1_ratio",
+   "aic_mte2_ratio",
+   "aic_fixpipe_ratio",
+   "aiv_vec_ratio",
+   "aiv_scalar_ratio"
+  ],
+  "top": {
+   "aclnnMatmul": {
+    "n": 143,
+    "Task Duration(us)": 9173.318000000001,
+    "aic_mac_ratio": 94.57499999999995,
+    "aic_scalar_ratio": 52.92699999999999,
+    "aic_mte1_ratio": 78.574,
+    "aic_mte2_ratio": 115.46099999999997,
+    "aic_fixpipe_ratio": 58.768000000000065,
+    "aiv_vec_ratio": 0.0,
+    "aiv_scalar_ratio": 0.0,
+    "aiv_mte2_ratio": 0.0,
+    "aiv_mte3_ratio": 0.0,
+    "cube_utilization(%)": 22165.659
+   },
+   "aclnnCast": {
+    "n": 140,
+    "Task Duration(us)": 1507.1890000000005,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 5.481999999999997,
+    "aiv_scalar_ratio": 53.69400000000001,
+    "aiv_mte2_ratio": 59.958,
+    "aiv_mte3_ratio": 33.890000000000015,
+    "cube_utilization(%)": 0.0
+   },
+   "ephemeral": {
+    "n": 57,
+    "Task Duration(us)": 23821.617000000002,
+    "aic_mac_ratio": 2.7899999999999987,
+    "aic_scalar_ratio": 55.55299999999999,
+    "aic_mte1_ratio": 2.146,
+    "aic_mte2_ratio": 2.6590000000000003,
+    "aic_fixpipe_ratio": 19.03,
+    "aiv_vec_ratio": 13.439000000000004,
+    "aiv_scalar_ratio": 4.6640000000000015,
+    "aiv_mte2_ratio": 3.8160000000000003,
+    "aiv_mte3_ratio": 3.125000000000001,
+    "cube_utilization(%)": 237.2820000000002
+   },
+   "aclnnSilu": {
+    "n": 40,
+    "Task Duration(us)": 2747.4739999999997,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 21.99199999999999,
+    "aiv_scalar_ratio": 3.731,
+    "aiv_mte2_ratio": 16.613999999999997,
+    "aiv_mte3_ratio": 6.858999999999998,
+    "cube_utilization(%)": 0.0
+   },
+   "aclnnAdd": {
+    "n": 23,
+    "Task Duration(us)": 162.404,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 2.3060000000000005,
+    "aiv_scalar_ratio": 10.732000000000003,
+    "aiv_mte2_ratio": 9.299,
+    "aiv_mte3_ratio": 4.831000000000001,
+    "cube_utilization(%)": 0.0
+   },
+   "aclnnMul": {
+    "n": 23,
+    "Task Duration(us)": 6705.076999999998,
+    "aic_mac_ratio": 0.0,
+    "aic_scalar_ratio": 0.0,
+    "aic_mte1_ratio": 0.0,
+    "aic_mte2_ratio": 0.0,
+    "aic_fixpipe_ratio": 0.0,
+    "aiv_vec_ratio": 0.6740000000000004,
+    "aiv_scalar_ratio": 1.102,
+    "aiv_mte2_ratio": 20.869000000000003,
+    "aiv_mte3_ratio": 7.735999999999999,
+    "cube_utilization(%)": 0.0
+   }
+  }
+ },
+ "arith_materialized": {
+  "available_arith_cols": [
+   "aicore_time(us)"
+  ],
+  "selected": {
+   "aclnnMatmul": {
+    "n": 190,
+    "dur_us": 12089.32,
+    "aicore_time(us)": 26963.308000000005
+   }
+  }
+ },
+ "arith_fused": {
+  "available_arith_cols": [
+   "aicore_time(us)"
+  ],
+  "selected": {
+   "aclnnMatmul": {
+    "n": 143,
+    "dur_us": 9162.949000000002,
+    "aicore_time(us)": 17801.792000000012
+   },
+   "ephemeral": {
+    "n": 57,
+    "dur_us": 23875.517,
+    "aicore_time(us)": 23853.511999999995
+   }
+  }
+ }
+}

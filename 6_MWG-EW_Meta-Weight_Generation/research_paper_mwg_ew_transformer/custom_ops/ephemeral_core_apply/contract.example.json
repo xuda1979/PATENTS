@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "op_qualified_name": "mwg::ephemeral_core_apply",
+  "implementation": "ascendc",
+  "core_residency": "ub_local_tensor",
+  "global_core_output": false,
+  "workspace_bytes": 0,
+  "outputs": [
+    "scaled_rank_activation"
+  ],
+  "audited_source_path": "REPLACE_WITH_AUDITED_SOURCE.cpp",
+  "audited_source_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "binary_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "source_audit": {
+    "no_global_core_tensor": true,
+    "no_core_datacopy_to_global": true
+  }
+}

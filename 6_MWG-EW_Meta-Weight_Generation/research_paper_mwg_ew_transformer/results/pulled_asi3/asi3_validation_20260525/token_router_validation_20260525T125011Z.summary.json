@@ -1,0 +1,136 @@
+{
+  "run_id": "asi3_token_router_validation_20260525T125011Z",
+  "dense": {
+    "loss": 1.303969681795912,
+    "ppl": 3.6838915571722075,
+    "tokens": 35118
+  },
+  "patched": {
+    "loss": 2.027428459134024,
+    "ppl": 7.594531578285908,
+    "tokens": 35118,
+    "ppl_ratio": 2.061551340592541
+  },
+  "mixed_frontier": [
+    {
+      "tokens": 35374.0,
+      "loss": 1.3170862938409853,
+      "ppl": 3.732530022147732,
+      "actual_patch_token_fraction": 0.003753662109375,
+      "target_patch_fraction": 0.01,
+      "train_score_threshold": -1.6045132875442505,
+      "delta_loss": 0.013116612045073195,
+      "ppl_ratio": 1.0132030121464433
+    },
+    {
+      "tokens": 35374.0,
+      "loss": 1.3285501225514849,
+      "ppl": 3.775565310259306,
+      "actual_patch_token_fraction": 0.012359619140625,
+      "target_patch_fraction": 0.03,
+      "train_score_threshold": -1.4636427164077759,
+      "delta_loss": 0.024580440755572752,
+      "ppl_ratio": 1.024885030317632
+    },
+    {
+      "tokens": 35374.0,
+      "loss": 1.3393495077648623,
+      "ppl": 3.816560055040589,
+      "actual_patch_token_fraction": 0.0193023681640625,
+      "target_patch_fraction": 0.05,
+      "train_score_threshold": -1.3943685293197632,
+      "delta_loss": 0.035379825968950174,
+      "ppl_ratio": 1.0360131387717122
+    },
+    {
+      "tokens": 35374.0,
+      "loss": 1.3534907945666876,
+      "ppl": 3.870914540764771,
+      "actual_patch_token_fraction": 0.03631591796875,
+      "target_patch_fraction": 0.1,
+      "train_score_threshold": -1.2963101863861084,
+      "delta_loss": 0.04952111277077553,
+      "ppl_ratio": 1.0507677765998422
+    },
+    {
+      "tokens": 35374.0,
+      "loss": 1.4579535340931886,
+      "ppl": 4.297156539554816,
+      "actual_patch_token_fraction": 0.09466552734375,
+      "target_patch_fraction": 0.25,
+      "train_score_threshold": -1.1419081687927246,
+      "delta_loss": 0.1539838522972765,
+      "ppl_ratio": 1.1664720507824495
+    },
+    {
+      "tokens": 35374.0,
+      "loss": 1.774779092002132,
+      "ppl": 5.8989778609836065,
+      "actual_patch_token_fraction": 0.24847412109375,
+      "target_patch_fraction": 0.5,
+      "train_score_threshold": -0.9009975790977478,
+      "delta_loss": 0.4708094102062199,
+      "ppl_ratio": 1.6012897691026828
+    }
+  ],
+  "train_summary": {
+    "split": "train",
+    "examples": 256,
+    "tokens": 30053,
+    "dense_loss": 1.2898757089708734,
+    "patched_loss": 0.4611187641517027,
+    "patched_ppl_ratio": 0.4365916566742944,
+    "positive_delta_fraction": 0.12042059029048681
+  },
+  "eval_summary": {
+    "split": "eval",
+    "examples": 256,
+    "tokens": 35118,
+    "dense_loss": 1.303969681795912,
+    "patched_loss": 2.027428459134024,
+    "patched_ppl_ratio": 2.061551340592541,
+    "positive_delta_fraction": 0.4120678854148869
+  },
+  "feature_names": [
+    "position",
+    "fill_ratio",
+    "hidden_mean",
+    "hidden_std",
+    "hidden_rms",
+    "hidden_abs_mean",
+    "hidden_abs_max",
+    "hidden_abs_q95",
+    "hidden_l2"
+  ],
+  "checkpoint": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260525T102958Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+  "config": {
+    "model_dir": "/root/work/filestorage/Qwen2.5-1.5B-Instruct",
+    "layer": 16,
+    "checkpoint": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260525T102958Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+    "seq": 256,
+    "train_examples": 256,
+    "eval_examples": 256,
+    "fractions": [
+      0.01,
+      0.03,
+      0.05,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "seed": 0,
+    "ridge_l2": 1.0,
+    "dtype": "fp32",
+    "out_json": "results/asi3_token_router_validation_20260525T125011Z/token_router_validation.json"
+  },
+  "status": {
+    "run_id": "asi3_token_router_validation_20260525T125011Z",
+    "state": "done",
+    "updated_at": "2026-05-25T12:52:48Z",
+    "train_texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_train.txt",
+    "eval_texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_eval.txt",
+    "patch": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260525T102958Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+    "out_json": "results/asi3_token_router_validation_20260525T125011Z/token_router_validation.json",
+    "result_json": "results/asi3_token_router_validation_20260525T125011Z/token_router_validation.json"
+  }
+}

@@ -1,0 +1,145 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{现有技术检索报告}
+\fancyfoot[C]{\thepage}
+\title{\textbf{现有技术检索报告}\\[0.5em]\Large 基于消费级终端深度传感器阵列复用的近场自由空间量子密钥注入方法、装置及支付系统}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{检索参数 / Search Parameters}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+检索日期 & 2026年3月31日 \\
+\hline
+数据库 & Google Patents、USPTO、WIPO、EPO、IACR ePrint、公开论文数据库 \\
+\hline
+关键词 & free-space QKD、LiDAR SPAD array、mobile secure element、near-field key provisioning \\
+\hline
+\end{tabular}
+
+\subsection{使用的关键词 / Keywords Used}
+\begin{itemize}
+\item 英文关键词：free-space QKD，handheld QKD，LiDAR SPAD array，mobile secure element key injection，near-field quantum key provisioning。
+\item 中文关键词：自由空间量子密钥分发，手持量子密钥分发，LiDAR SPAD 阵列，移动终端安全元件注入，近场量子密钥补给。
+\end{itemize}
+
+\section{A类：基础性现有技术 / Category A: Foundational Prior Art}
+\subsection{A1. SPAD/ToF 深度传感器基础}
+Apple 的 SPAD 检测器与 ToF 相关专利公开了门控敏感度和深度感知所需的接收端基础，但未公开将消费级深度传感器切换为量子密钥接收端，也未涉及支付场景。
+
+\subsection{A2. 移动/短距自由空间 QKD}
+手持自由空间 QKD 与低成本短距 QKD 论文证明了短距、低成本量子密钥链路的可行性，但依赖独立量子收发体系，未公开复用手机深度传感器和安全元件注入。
+
+\subsection{A3. 安全元件与离线令牌管理}
+移动设备安全元件和离线交易令牌管理已经成熟，但这些方案中的密钥来源仍为经典注入或经典协议协商，未涉及近场量子链路补钥。
+
+\section{B类：相关应用现有技术 / Category B: Related Application Prior Art}
+\subsection{B1. LiDAR 系统级实现}
+WO2018057081A1 等 LiDAR 系统专利表明脉冲控制与 SPAD 阵列探测的硬件基础已知，但目标是深度成像，不涉及量子密钥生成与注入。
+
+\subsection{B2. 移动终端安全元件}
+US20130024383A1 等移动终端 SE 专利公开了高安全应用框架，但未公开量子链路补钥，也未公开近场自由空间密钥注入流程。
+
+\subsection{B3. 线下支付安全流程}
+支付终端与 SE 的离线令牌管理、远程支付交易处理已有产业基础，但未见将量子生成的密钥池直接嵌入支付流程。
+
+\section{C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}
+\subsection{C1. 自由空间背景噪声控制}
+自由空间 QKD 文献普遍要求滤光、门控和误码控制。该类技术可作为本申请的实现基础，但不足以得到“深度传感器复用 + 近场补钥”的系统方案。
+
+\subsection{C2. 最后一段量子接入}
+近期“最后一段”自由空间 QKD 研究说明量子接入与现网系统融合具有现实需求，但该方向侧重网络级接入，不涉及 C 端终端的硬件复用和支付闭环。
+
+\section{D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}
+\subsection{D1. 近场支付与安全元件交易}
+现有支付系统强调安全元件、离线交易和风控，但并未把量子密钥池注入视作商户侧补钥能力。
+
+\subsection{D2. 安全元件初始化与写入}
+终端安全元件初始化和密钥写入已知，但注入对象为经典密钥或证书，不涉及量子链路和支付贴靠场景的耦合。
+
+\section{E类：专利检索结果 / Category E: Patent Search Results}
+\subsection{USPTO 检索结果}
+代表性结果包括 US20180209846A1（SPAD Detector Having Modulated Sensitivity）、US20130024383A1（Mobile Device With Secure Element）和若干支付 SE 管理方案。其相似度主要落在器件层或 SE 管理层，未覆盖本申请的系统闭环。
+
+\subsection{EPO 检索结果}
+代表性结果包括短距低成本 QKD 装置方向和 LiDAR 脉冲控制方向。该类方案可用于论证接近技术，但不足以直接推导出本申请的支付补钥方案。
+
+\subsection{CNIPA 检索结果}
+国内公开可检出 SPAD 传感器、支付安全元件及量子通信方向的分散技术，但未见将四类要素统一成近场量子补钥支付系统的单一公开。
+
+\section{新颖性分析 / Novelty Analysis}
+\subsection{创新点 A：消费级深度传感器复用}
+现有公开说明 LiDAR 或 ToF 的 SPAD 阵列与门控采样能力已知，但未见其被授权切换为量子密钥接收端并用于密钥注入。
+
+\subsection{创新点 B：厘米级近场发射基座}
+短距和手持 QKD 已有公开，但未见针对支付基座与终端贴靠场景形成专门结构。
+
+\subsection{创新点 C：双信道协同后处理}
+经典链路协商和量子链路生成各自已知，但未见与 SE 密钥注入形成统一流程。
+
+\subsection{创新点 D：SE 或 TEE 密钥池管理}
+安全元件的经典令牌和密钥对象管理成熟，但量子生成密钥池及其策略管理未见直接公开。
+
+\subsection{创新点 E：近场稳健性与回退}
+链路滤光、门控和回退在不同领域分别存在，但未与近场量子支付补钥耦合。
+
+\subsection{创新点 F：可取证落地接口}
+现有 QKD 文献较少关注侵权取证接口，本申请将设备日志、波形与交易行为统一纳入证据链。
+
+\section{可专利性评估 / Patentability Assessment}
+\begin{itemize}
+\item 新颖性：较强。未检出将深度传感器量子接收复用、近场发射基座和 SE 密钥池管理组合公开的单一文献。
+\item 创造性：中上。相邻技术较多，正式申请时需强调系统接口、时序控制与支付闭环。
+\item 实用性：明确。终端侧无需加专用量子硬件，商户侧基座可分步部署。
+\item 公开充分：可补强。建议在正式申请中补充接收模式切换、同步流程与 SE 写入状态机。
+\end{itemize}
+
+\section{权利要求差异化矩阵 / Claim Differentiation Matrix}
+\begin{tabular}{|p{2.8cm}|p{3.8cm}|p{3.8cm}|p{2.8cm}|}
+\hline
+特征 & 本申请 & 相邻技术 & 差异 \\
+\hline
+终端硬件 & 复用 ToF/LiDAR 接收阵列 & 专用 QKD 接收机 & 终端不新增量子接收硬件 \\
+\hline
+工作距离 & 厘米级贴靠近场 & 分米级或米级自由空间 & 更适合支付柜台 \\
+\hline
+后处理输出 & SE/TEE 密钥池 & 普通会话密钥 & 形成可离线消耗的安全资源 \\
+\hline
+业务闭环 & 与支付流程耦合 & 独立量子链路实验 & 直接面向交易应用 \\
+\hline
+\end{tabular}
+
+\section{关键区别特征 / Key Distinguishing Features}
+\begin{enumerate}
+\item 以消费级深度传感器接收阵列作为弱光量子接收端。
+\item 在厘米级贴靠场景中通过发射基座完成量子密钥补给。
+\item 通过经典近场链路承担公开讨论并把结果写入 SE/TEE。
+\item 形成面向支付与认证的密钥池，而非单次会话密钥。
+\item 给出可落到日志、波形和交易行为的取证路径。
+\end{enumerate}
+
+\section{建议申请策略 / Recommended Filing Strategy}
+\begin{enumerate}
+\item 主权利要求聚焦“传感器复用 + 近场基座 + SE 密钥池写入”的系统组合。
+\item 从属权利要求覆盖对准结构、背景光抑制、诱骗态比例与回退机制。
+\item 另行布局面向门禁、政企终端和 ATM 的场景分案。
+\item 避免声称绝对首创，而强调未检出完全相同公开。
+\end{enumerate}
+
+\section{结论 / Conclusion}
+综合公开检索结果，可以确认短距自由空间 QKD、SPAD/ToF 深度模组和安全元件管理均属成熟邻近技术；但尚未发现将三者通过近场贴靠基座和密钥池注入流程统一耦合到支付系统中的单一公开方案。因此，本申请具有较清晰的布局空间，但正式申请时应重点巩固“硬件切换时序、近场对准结构、SE 写入流程和业务闭环”四项区别特征。
+\end{document}

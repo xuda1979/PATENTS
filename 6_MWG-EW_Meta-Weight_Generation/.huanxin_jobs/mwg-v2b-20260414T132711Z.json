@@ -1,0 +1,12 @@
+{
+  "job_id": "mwg-v2b-20260414T132711Z",
+  "name": "mwg-v2b",
+  "pid": 9769,
+  "log_path": "/tmp/mwg-v2b.log",
+  "remote_root": "/root/work/mwg-ew-patent",
+  "command": "cd /root/work/mwg-ew-patent && PYTHONUNBUFFERED=1 python3 experiments/run_real_benchmark.py --suite all --ranks 32,64,128,256 --output-dir results 2>&1",
+  "created_at": "2026-04-14T13:27:14.922438+00:00",
+  "transport": "daemon",
+  "duration_ms": 2644,
+  "meta_file": "/Users/daxu/PATENTS/6_MWG-EW_Meta-Weight_Generation/.huanxin_jobs/mwg-v2b-20260414T132711Z.json"
+}

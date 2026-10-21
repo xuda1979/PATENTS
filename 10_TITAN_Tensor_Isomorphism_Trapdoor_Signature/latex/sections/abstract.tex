@@ -1,0 +1,73 @@
+% ============================================
+% ABSTRACT / 摘要
+% ============================================
+\newpage
+\section{摘要}
+
+\subsection{中文摘要}
+
+\textbf{【技术领域】}本发明涉及量子计算技术领域，特别涉及面向量子计算网络节点互联场景的分布式认证技术。
+
+\textbf{【技术问题】}现有量子计算网络节点采用的传统密码认证方案易受量子计算攻击威胁，而基于格密码的分布式实现面临离散高斯采样难题和高通信复杂度。
+
+\textbf{【技术方案】}本发明提供一种面向量子计算网络的抗量子攻击节点协同认证系统，包含多项核心创新：
+\begin{enumerate}[label=(\arabic*), leftmargin=2em]
+    \item 算术共享 NTT 协议，利用数论变换线性性质实现零通信分布式多项式运算；
+    \item 基于 Rényi 散度分析的分布式高斯采样，确保聚合分布的统计安全性；
+    \item 基于同态加密预处理的协同纠偏采样，在线阶段仅需 6 轮恒定通信；
+    \item 基于 Smudging Lemma 的噪声洪泛技术，提供严格的统计零知识性证明；
+    \item 针对量子计算网络场景优化的验证机制，大幅降低通信开销。
+\end{enumerate}
+系统支持动态节点管理和主动式密钥分片刷新。
+
+\textbf{【技术效果】}与现有 Dilithium 分布式方案相比，签名长度缩小 3.6 倍（666 字节 vs 2420 字节），通信开销节省约 72\%。基于 NTRU 格问题的安全性可抵抗量子计算攻击，适用于量子计算网络基础设施的节点认证需求。
+
+\vspace{1cm}
+
+\subsection{English Abstract}
+
+\textbf{[Technical Field]} This invention relates to quantum computing technology, specifically distributed authentication technology for quantum computing network node interconnection scenarios.
+
+\textbf{[Technical Problem]} Traditional cryptographic authentication schemes used by existing quantum computing network nodes are vulnerable to quantum computing attacks, while distributed implementation of lattice-based cryptography faces challenges in discrete Gaussian sampling and high communication complexity.
+
+\textbf{[Technical Solution]} This invention provides an anti-quantum attack node collaborative authentication system for quantum computing networks with multiple core innovations: (1) Arithmetic-shared NTT protocol enabling zero-communication distributed polynomial operations using NTT linearity; (2) Distributed Gaussian sampling based on Rényi divergence analysis ensuring statistical security; (3) Collaborative rejection sampling with homomorphic encryption preprocessing requiring only 6 constant rounds online; (4) Noise flooding based on Smudging Lemma providing rigorous statistical zero-knowledge proofs; (5) Verification mechanism optimized for quantum computing network scenarios significantly reducing communication overhead.
+
+\textbf{[Technical Effects]} Compared to existing Dilithium distributed schemes, signature size reduced by 3.6x (666 bytes vs 2420 bytes), communication overhead reduced by approximately 72\%. Security based on NTRU lattice problems resists quantum computing attacks, suitable for node authentication requirements of quantum computing network infrastructure.
+
+\vspace{1cm}
+
+\subsection{关键词}
+
+\textbf{中文关键词:} 量子计算网络；后量子密码学；Falcon签名；节点认证；多方安全计算；NTRU格；Beaver三元组；数论变换
+
+\textbf{English Keywords:} Quantum computing network; Post-quantum cryptography; Falcon signature; Node authentication; Multi-party computation; NTRU lattice; Beaver triple; Number Theoretic Transform
+
+\vspace{1cm}
+
+\subsection{技术效果摘要}
+
+\begin{table}[H]
+\centering
+\caption{技术指标对比}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{技术指标} & \textbf{本发明} & \textbf{现有技术(Dilithium)} & \textbf{改进幅度} \\
+\hline
+签名长度 & $\sim$666 字节 & $\sim$2420 字节 & 缩小 3.6 倍 \\
+\hline
+在线通信轮数 & 6 轮（恒定） & $O(n)$ 轮 & 显著降低 \\
+\hline
+通信开销 & $\sim$50,000 & $\sim$180,000 & 节省 72\% \\
+\hline
+量子安全 & $\checkmark$ & $\checkmark$ & 同等 \\
+\hline
+动态节点 & $\checkmark$ & 受限 & 优化 \\
+\hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+
+\textbf{字数统计：}摘要正文字数约 280 字（符合 CNIPA 300 字以内要求）
+
+\newpage

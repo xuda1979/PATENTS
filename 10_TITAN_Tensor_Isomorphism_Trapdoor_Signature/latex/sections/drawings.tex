@@ -1,0 +1,154 @@
+% ============================================
+% 说明书附图
+% Patent Drawings
+% ============================================
+
+\newpage
+\section{说明书附图}
+
+\subsection{附图说明}
+
+本发明提供以下附图：
+
+\begin{itemize}
+    \item \textbf{图1}：系统整体架构示意图
+    \item \textbf{图2}：分布式密钥生成流程图
+    \item \textbf{图3}：门限签名流程图
+    \item \textbf{图4}：签名验证流程图
+\end{itemize}
+
+附图中的主要符号说明：
+\begin{itemize}
+    \item $P_i$：第 $i$ 个量子计算节点
+    \item $[f]_i$：节点 $i$ 持有的私钥份额
+    \item $pk$：系统公钥
+    \item $\sigma$：聚合签名
+    \item $t$：门限值
+    \item $n$：总节点数
+\end{itemize}
+
+% 图1：系统架构图
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.85, every node/.style={transform shape}]
+    % Title
+    \node[font=\large\bfseries] at (0, 8) {量子计算网络节点协同认证系统架构};
+    
+    % Application Layer
+    \draw[thick, fill=blue!10] (-7, 6) rectangle (7, 7);
+    \node at (0, 6.5) {量子计算任务调度层};
+    
+    % Authentication Layer
+    \draw[thick, fill=green!10] (-7, 4) rectangle (7, 5.5);
+    \node[font=\bfseries] at (0, 5.2) {节点协同认证层};
+    \node at (-4.5, 4.6) {门限签名模块};
+    \node at (0, 4.6) {密钥管理模块};
+    \node at (4.5, 4.6) {身份验证模块};
+    
+    % Node Layer
+    \draw[thick, fill=yellow!10] (-7, 1.5) rectangle (7, 3.5);
+    \node[font=\bfseries] at (0, 3.2) {量子计算节点层};
+    
+    % Nodes
+    \foreach \i/\x in {1/-5, 2/-2.5, 3/0, n/4.5} {
+        \draw[thick] (\x-0.8, 1.8) rectangle (\x+0.8, 2.8);
+        \node at (\x, 2.3) {节点 $P_{\i}$};
+    }
+    \node at (2.25, 2.3) {$\cdots$};
+    
+    % Crypto Layer
+    \draw[thick, fill=red!10] (-7, 0) rectangle (7, 1);
+    \node at (0, 0.5) {后量子密码学基础层 (Falcon/NTRU)};
+    
+    % Arrows
+    \draw[->, thick] (0, 6) -- (0, 5.5);
+    \draw[->, thick] (0, 4) -- (0, 3.5);
+    \draw[->, thick] (0, 1.5) -- (0, 1);
+\end{tikzpicture}
+\caption{图1：系统整体架构示意图}
+\end{figure}
+
+% 图2：密钥生成流程
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.5cm]
+    \node[startstop] (start) {开始密钥生成};
+    \node[process, below of=start] (gen) {各节点生成本地随机份额};
+    \node[process, below of=gen] (vss) {执行 VSS 秘密共享};
+    \node[process, below of=vss] (verify) {节点间份额验证};
+    \node[decision, below of=verify, yshift=-0.5cm] (check) {验证通过?};
+    \node[process, below of=check, yshift=-0.5cm] (compute) {计算公钥 $pk$};
+    \node[startstop, below of=compute] (end) {密钥生成完成};
+    
+    % Right path
+    \node[process, right of=check, xshift=3cm] (abort) {中止并报告};
+    
+    % Arrows
+    \draw[arrow] (start) -- (gen);
+    \draw[arrow] (gen) -- (vss);
+    \draw[arrow] (vss) -- (verify);
+    \draw[arrow] (verify) -- (check);
+    \draw[arrow] (check) -- node[right] {是} (compute);
+    \draw[arrow] (check) -- node[above] {否} (abort);
+    \draw[arrow] (compute) -- (end);
+    \draw[arrow] (abort) |- (gen);
+\end{tikzpicture}
+\caption{图2：分布式密钥生成流程图}
+\end{figure}
+
+% 图3：门限签名流程
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.5cm]
+    \node[startstop] (start) {接收签名请求};
+    \node[process, below of=start] (hash) {计算消息哈希 $c = H(r, m)$};
+    \node[process, below of=hash] (sample) {协同纠偏采样};
+    \node[process, below of=sample] (partial) {生成部分签名};
+    \node[decision, below of=partial, yshift=-0.5cm] (enough) {收集 $\geq t$ 份?};
+    \node[process, below of=enough, yshift=-0.5cm] (aggregate) {聚合签名 $\sigma$};
+    \node[process, below of=aggregate] (verify) {验证签名};
+    \node[startstop, below of=verify] (end) {输出有效签名};
+    
+    % Wait node
+    \node[process, right of=enough, xshift=3cm] (wait) {等待更多份额};
+    
+    % Arrows
+    \draw[arrow] (start) -- (hash);
+    \draw[arrow] (hash) -- (sample);
+    \draw[arrow] (sample) -- (partial);
+    \draw[arrow] (partial) -- (enough);
+    \draw[arrow] (enough) -- node[right] {是} (aggregate);
+    \draw[arrow] (enough) -- node[above] {否} (wait);
+    \draw[arrow] (wait) |- (partial);
+    \draw[arrow] (aggregate) -- (verify);
+    \draw[arrow] (verify) -- (end);
+\end{tikzpicture}
+\caption{图3：门限签名流程图}
+\end{figure}
+
+% 图4：签名验证流程
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.5cm]
+    \node[startstop] (start) {接收签名 $(r, s, m)$};
+    \node[process, below of=start] (hash) {计算 $c = H(r, m) \mod q$};
+    \node[process, below of=hash] (compute) {计算 $w = s \cdot h + c \cdot pk$};
+    \node[decision, below of=compute, yshift=-0.5cm] (check1) {$\|[s, w]\| < \beta$?};
+    \node[decision, below of=check1, yshift=-0.5cm] (check2) {$w \equiv r \pmod{2}$?};
+    \node[startstop, below of=check2, yshift=-0.5cm] (accept) {签名有效};
+    
+    % Reject nodes
+    \node[startstop, right of=check1, xshift=3cm] (reject1) {签名无效};
+    \node[startstop, right of=check2, xshift=3cm] (reject2) {签名无效};
+    
+    % Arrows
+    \draw[arrow] (start) -- (hash);
+    \draw[arrow] (hash) -- (compute);
+    \draw[arrow] (compute) -- (check1);
+    \draw[arrow] (check1) -- node[right] {是} (check2);
+    \draw[arrow] (check1) -- node[above] {否} (reject1);
+    \draw[arrow] (check2) -- node[right] {是} (accept);
+    \draw[arrow] (check2) -- node[above] {否} (reject2);
+\end{tikzpicture}
+\caption{图4：签名验证流程图}
+\end{figure}

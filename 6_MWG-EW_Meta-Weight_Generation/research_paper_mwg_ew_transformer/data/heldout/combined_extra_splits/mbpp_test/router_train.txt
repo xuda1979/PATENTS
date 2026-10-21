@@ -1,0 +1,97 @@
+from operator import itemgetter def index_minimum(test_list): res = min(test_list, key = itemgetter(1))[0] return (res)
+def lps(str): n = len(str) L = [[0 for x in range(n)] for x in range(n)] for i in range(n): L[i][i] = 1 for cl in range(2, n+1): for i in range(n-cl+1): j = i+cl-1 if str[i] == str[j] and cl == 2: L[i][j] = 2 elif str[i] == str[j]: L[i][j] = L[i+1][j-1] + 2 else: L[i][j] = max(L[i][j-1], L[i+1][j]); return L[0][n-1]
+def insert_element(list,element): list = [v for elt in list for v in (element, elt)] return list
+def snake_to_camel(word): import re return ''.join(x.capitalize() or '_' for x in word.split('_'))
+def get_Char(strr): summ = 0 for i in range(len(strr)): summ += (ord(strr[i]) - ord('a') + 1) if (summ % 26 == 0): return ord('z') else: summ = summ % 26 return chr(ord('a') + summ - 1)
+def combinations_list(list1): if len(list1) == 0: return [[]] result = [] for el in combinations_list(list1[1:]): result += [el, el+[list1[0]]] return result
+def remove_Occ(s,ch): for i in range(len(s)): if (s[i] == ch): s = s[0 : i] + s[i + 1:] break for i in range(len(s) - 1,-1,-1): if (s[i] == ch): s = s[0 : i] + s[i + 1:] break return s
+def max_sum_increasing_subseq(a, n, index, k): dp = [[0 for i in range(n)] for i in range(n)] for i in range(n): if a[i] > a[0]: dp[0][i] = a[i] + a[0] else: dp[0][i] = a[i] for i in range(1, n): for j in range(n): if a[j] > a[i] and j > i: if dp[i - 1][i] + a[j] > dp[i - 1][j]: dp[i][j] = dp[i - 1][i] + a[j] else: dp[i][j] = dp[i - 1][j] else: dp[i][j] = dp[i - 1][j] return dp[index][k]
+def all_unique(test_list): if len(test_list) > len(set(test_list)): return False return True
+def is_majority(arr, n, x): i = binary_search(arr, 0, n-1, x) if i == -1: return False if ((i + n//2) <= (n -1)) and arr[i + n//2] == x: return True else: return False def binary_search(arr, low, high, x): if high >= low: mid = (low + high)//2 if (mid == 0 or x > arr[mid-1]) and (arr[mid] == x): return mid elif x > arr[mid]: return binary_search(arr, (mid + 1), high, x) else: return binary_search(arr, low, (mid -1), x) return -1
+def check_type(test_tuple): res = True for ele in test_tuple: if not isinstance(ele, type(test_tuple[0])): res = False break return (res)
+def filter_oddnumbers(nums): odd_nums = list(filter(lambda x: x%2 != 0, nums)) return odd_nums
+def multiply_num(numbers): total = 1 for x in numbers: total *= x return total/len(numbers)
+def sum(a,b): sum = 0 for i in range (1,min(a,b)): if (a % i == 0 and b % i == 0): sum += i return sum
+def dog_age(h_age): if h_age < 0: exit() elif h_age <= 2: d_age = h_age * 10.5 else: d_age = 21 + (h_age - 2)*4 return d_age
+def dict_depth(d): if isinstance(d, dict): return 1 + (max(map(dict_depth, d.values())) if d else 0) return 0
+def add_pairwise(test_tup): res = tuple(i + j for i, j in zip(test_tup, test_tup[1:])) return (res)
+def sum_range_list(list1, m, n): sum_range = 0 for i in range(m, n+1, 1): sum_range += list1[i] return sum_range
+def substract_elements(test_tup1, test_tup2): res = tuple(map(lambda i, j: i - j, test_tup1, test_tup2)) return (res)
+def common_in_nested_lists(nestedlist): result = list(set.intersection(*map(set, nestedlist))) return result
+import re def text_match_wordz(text): patterns = '\w*z.\w*' if re.search(patterns, text): return True else: return False
+from math import tan, pi def area_polygon(s, l): area = s * (l ** 2) / (4 * tan(pi / s)) return area
+def max_val(listval): max_val = max(i for i in listval if isinstance(i, int)) return(max_val)
+def bitwise_xor(test_tup1, test_tup2): res = tuple(ele1 ^ ele2 for ele1, ele2 in zip(test_tup1, test_tup2)) return (res)
+def count_integer(list1): ctr = 0 for i in list1: if isinstance(i, int): ctr = ctr + 1 return ctr
+def cube_nums(nums): cube_nums = list(map(lambda x: x ** 3, nums)) return cube_nums
+import re def text_match_one(text): patterns = 'ab+?' if re.search(patterns, text): return True else: return False
+def find_tuples(test_list, K): res = [sub for sub in test_list if all(ele % K == 0 for ele in sub)] return res
+def find_Element(arr,ranges,rotations,index) : for i in range(rotations - 1,-1,-1 ) : left = ranges[i][0] right = ranges[i][1] if (left <= index and right >= index) : if (index == left) : index = right else : index = index - 1 return arr[index]
+def first_non_repeating_character(str1): char_order = [] ctr = {} for c in str1: if c in ctr: ctr[c] += 1 else: ctr[c] = 1 char_order.append(c) for c in char_order: if ctr[c] == 1: return c return None
+def sum_div(number): divisors = [1] for i in range(2, number): if (number % i)==0: divisors.append(i) return sum(divisors)
+def long_words(n, str): word_len = [] txt = str.split(" ") for x in txt: if len(x) > n: word_len.append(x) return word_len
+def group_tuples(Input): out = {} for elem in Input: try: out[elem[0]].extend(elem[1:]) except KeyError: out[elem[0]] = list(elem) return [tuple(values) for values in out.values()]
+def max_difference(test_list): temp = [abs(b - a) for a, b in test_list] res = max(temp) return (res)
+def intersection_array(array_nums1,array_nums2): result = list(filter(lambda x: x in array_nums1, array_nums2)) return result
+def find_lucas(n): if (n == 0): return 2 if (n == 1): return 1 return find_lucas(n - 1) + find_lucas(n - 2)
+import re def text_match_two_three(text): patterns = 'ab{2,3}' if re.search(patterns, text): return True else: return False
+from collections import Counter def sort_counter(dict1): x = Counter(dict1) sort_counter=x.most_common() return sort_counter
+def shell_sort(my_list): gap = len(my_list) // 2 while gap > 0: for i in range(gap, len(my_list)): current_item = my_list[i] j = i while j >= gap and my_list[j - gap] > current_item: my_list[j] = my_list[j - gap] j -= gap my_list[j] = current_item gap //= 2 return my_list
+def find_even_pair(A): count = 0 for i in range(0, len(A)): for j in range(i+1, len(A)): if ((A[i] ^ A[j]) % 2 == 0): count += 1 return count
+def max_subarray_product(arr): n = len(arr) max_ending_here = 1 min_ending_here = 1 max_so_far = 0 flag = 0 for i in range(0, n): if arr[i] > 0: max_ending_here = max_ending_here * arr[i] min_ending_here = min (min_ending_here * arr[i], 1) flag = 1 elif arr[i] == 0: max_ending_here = 1 min_ending_here = 1 else: temp = max_ending_here max_ending_here = max (min_ending_here * arr[i], 1) min_ending_here = temp * arr[i] if (max_so_far < max_ending_here): max_so_far = max_ending_here if flag == 0 and max_so_far == 0: return 0 return max_so_far
+def sum_negativenum(nums): sum_negativenum = list(filter(lambda nums:nums<0,nums)) return sum(sum_negativenum)
+def add_nested_tuples(test_tup1, test_tup2): res = tuple(tuple(a + b for a, b in zip(tup1, tup2)) for tup1, tup2 in zip(test_tup1, test_tup2)) return (res)
+def cube_Sum(n): sum = 0 for i in range(1,n + 1): sum += (2*i)*(2*i)*(2*i) return sum
+def search(arr): n = len(arr) XOR = 0 for i in range(n) : XOR = XOR ^ arr[i] return (XOR)
+import re def start_withp(words): for w in words: m = re.match("(P\w+)\W(P\w+)", w) if m: return m.groups()
+def odd_Equivalent(s,n): count=0 for i in range(0,n): if (s[i] == '1'): count = count + 1 return count
+def divisor(n): for i in range(n): x = len([i for i in range(1,n+1) if not n % i]) return x
+def count_no_of_ways(n, k): dp = [0] * (n + 1) total = k mod = 1000000007 dp[1] = k dp[2] = k * k for i in range(3,n+1): dp[i] = ((k - 1) * (dp[i - 1] + dp[i - 2])) % mod return dp[n]
+def is_Monotonic(A): return (all(A[i] <= A[i + 1] for i in range(len(A) - 1)) or all(A[i] >= A[i + 1] for i in range(len(A) - 1)))
+def max_length_list(input_list): max_length = max(len(x) for x in input_list ) max_list = max(input_list, key = lambda i: len(i)) return(max_length, max_list)
+def set_left_most_unset_bit(n): if not (n & (n + 1)): return n pos, temp, count = 0, n, 0 while temp: if not (temp & 1): pos = count count += 1; temp>>=1 return (n | (1 << (pos)))
+def add_string(list_, string): add_string=[string.format(i) for i in list_] return add_string
+def and_tuples(test_tup1, test_tup2): res = tuple(ele1 & ele2 for ele1, ele2 in zip(test_tup1, test_tup2)) return (res)
+def check_element(list,element): check_element=all(v== element for v in list) return check_element
+import math def sumofFactors(n) : if (n % 2 != 0) : return 0 res = 1 for i in range(2, (int)(math.sqrt(n)) + 1) : count = 0 curr_sum = 1 curr_term = 1 while (n % i == 0) : count= count + 1 n = n // i if (i == 2 and count == 1) : curr_sum = 0 curr_term = curr_term * i curr_sum = curr_sum + curr_term res = res * curr_sum if (n >= 2) : res = res * (1 + n) return res
+def get_Inv_Count(arr): inv_count = 0 for i in range(len(arr)): for j in range(i + 1, len(arr)): if (arr[i] > arr[j]): inv_count += 1 return inv_count
+def even_Power_Sum(n): sum = 0; for i in range(1,n+1): j = 2*i; sum = sum + (j*j*j*j*j); return sum;
+def min_val(listval): min_val = min(i for i in listval if isinstance(i, int)) return min_val
+def sort_sublists(input_list): result = [sorted(x, key = lambda x:x[0]) for x in input_list] return result
+def check_tuplex(tuplex,tuple1): if tuple1 in tuplex: return True else: return False
+def harmonic_sum(n): if n < 2: return 1 else: return 1 / n + (harmonic_sum(n - 1))
+def amicable_numbers_sum(limit): if not isinstance(limit, int): return "Input is not an integer!" if limit < 1: return "Input must be bigger than 0!" amicables = set() for num in range(2, limit+1): if num in amicables: continue sum_fact = sum([fact for fact in range(1, num) if num % fact == 0]) sum_fact2 = sum([fact for fact in range(1, sum_fact) if sum_fact % fact == 0]) if num == sum_fact2 and num != sum_fact: amicables.add(num) amicables.add(sum_fact2) return sum(amicables)
+def find_length(string): n = len(string) current_sum = 0 max_sum = 0 for i in range(n): current_sum += (1 if string[i] == '0' else -1) if current_sum < 0: current_sum = 0 max_sum = max(current_sum, max_sum) return max_sum if max_sum else 0
+def remove_odd(str1): str2 = '' for i in range(1, len(str1) + 1): if(i % 2 == 0): str2 = str2 + str1[i - 1] return str2
+def count_X(tup, x): count = 0 for ele in tup: if (ele == x): count = count + 1 return count
+def subject_marks(subjectmarks): #subject_marks = [('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)]) subjectmarks.sort(key = lambda x: x[1]) return subjectmarks
+from collections import defaultdict def max_occurrences(nums): dict = defaultdict(int) for i in nums: dict[i] += 1 result = max(dict.items(), key=lambda x: x[1]) return result[0]
+def round_and_sum(list1): lenght=len(list1) round_and_sum=sum(list(map(round,list1))* lenght) return round_and_sum
+def cal_sum(n): a = 3 b = 0 c = 2 if (n == 0): return 3 if (n == 1): return 3 if (n == 2): return 5 sum = 5 while (n > 2): d = a + b sum = sum + d a = b b = c c = d n = n-1 return sum
+def multiply_int(x, y): if y < 0: return -multiply_int(x, -y) elif y == 0: return 0 elif y == 1: return x else: return x + multiply_int(x, y - 1)
+NO_OF_CHARS = 256 def str_to_list(string): temp = [] for x in string: temp.append(x) return temp def lst_to_string(List): return ''.join(List) def get_char_count_array(string): count = [0] * NO_OF_CHARS for i in string: count[ord(i)] += 1 return count def remove_dirty_chars(string, second_string): count = get_char_count_array(second_string) ip_ind = 0 res_ind = 0 temp = '' str_list = str_to_list(string) while ip_ind != len(str_list): temp = str_list[ip_ind] if count[ord(temp)] == 0: str_list[res_ind] = str_list[ip_ind] res_ind += 1 ip_ind+=1 return lst_to_string(str_list[0:res_ind])
+import re def find_adverb_position(text): for m in re.finditer(r"\w+ly", text): return (m.start(), m.end(), m.group(0))
+def min_product_tuple(list1): result_min = min([abs(x * y) for x, y in list1] ) return result_min
+def all_Bits_Set_In_The_Given_Range(n,l,r): num = (((1 << r) - 1) ^ ((1 << (l - 1)) - 1)) new_num = n & num if (new_num == 0): return True return False
+def min_of_three(a,b,c): if (a <= b) and (a <= c): smallest = a elif (b <= a) and (b <= c): smallest = b else: smallest = c return smallest
+def maximize_elements(test_tup1, test_tup2): res = tuple(tuple(max(a, b) for a, b in zip(tup1, tup2)) for tup1, tup2 in zip(test_tup1, test_tup2)) return (res)
+def odd_values_string(str): result = "" for i in range(len(str)): if i % 2 == 0: result = result + str[i] return result
+def re_arrange_array(arr, n): j=0 for i in range(0, n): if (arr[i] < 0): temp = arr[i] arr[i] = arr[j] arr[j] = temp j = j + 1 return arr
+def find_Max_Num(arr) : n = len(arr) arr.sort(reverse = True) num = arr[0] for i in range(1,n) : num = num * 10 + arr[i] return num
+def loss_amount(actual_cost,sale_amount): if(sale_amount > actual_cost): amount = sale_amount - actual_cost return amount else: return 0
+def is_undulating(n): n = str(n) if (len(n) <= 2): return False for i in range(2, len(n)): if (n[i - 2] != n[i]): return False return True
+def median_numbers(a,b,c): if a > b: if a < c: median = a elif b > c: median = b else: median = c else: if a > c: median = a elif b < c: median = b else: median = c return median
+import math def next_Perfect_Square(N): nextN = math.floor(math.sqrt(N)) + 1 return nextN * nextN
+import sys def next_smallest_palindrome(num): numstr = str(num) for i in range(num+1,sys.maxsize): if str(i) == str(i)[::-1]: return i
+def replace_list(list1,list2): list1[-1:] = list2 replace_list=list1 return replace_list
+def find_Parity(x): y = x ^ (x >> 1); y = y ^ (y >> 2); y = y ^ (y >> 4); y = y ^ (y >> 8); y = y ^ (y >> 16); if (y & 1): return True return False
+def large_product(nums1, nums2, N): result = sorted([x*y for x in nums1 for y in nums2], reverse=True)[:N] return result
+from array import array def positive_count(nums): n = len(nums) n1 = 0 for x in nums: if x > 0: n1 += 1 else: None return round(n1/n,2)
+def babylonian_squareroot(number): if(number == 0): return 0; g = number/2.0; g2 = g + 1; while(g != g2): n = number/ g; g2 = g; g = (g + n)/2; return g;
+def highest_Power_of_2(n): res = 0 for i in range(n, 0, -1): if ((i & (i - 1)) == 0): res = i break return res
+def find_lists(Input): if isinstance(Input, list): return 1 else: return len(Input)
+def sequential_search(dlist, item): pos = 0 found = False while pos < len(dlist) and not found: if dlist[pos] == item: found = True else: pos = pos + 1 return found, pos
+from collections import Counter def check_occurences(test_list): res = dict(Counter(tuple(ele) for ele in map(sorted, test_list))) return (res)
+def remove_elements(list1, list2): result = [x for x in list1 if x not in list2] return result
+def comb_sort(nums): shrink_fact = 1.3 gaps = len(nums) swapped = True i = 0 while gaps > 1 or swapped: gaps = int(float(gaps) / shrink_fact) swapped = False i = 0 while gaps + i < len(nums): if nums[i] > nums[i+gaps]: nums[i], nums[i+gaps] = nums[i+gaps], nums[i] swapped = True i += 1 return nums
+def division_elements(test_tup1, test_tup2): res = tuple(ele1 // ele2 for ele1, ele2 in zip(test_tup1, test_tup2)) return (res)

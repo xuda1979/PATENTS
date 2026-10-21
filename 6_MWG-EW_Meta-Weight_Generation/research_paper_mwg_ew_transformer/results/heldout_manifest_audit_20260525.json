@@ -1,0 +1,121 @@
+{
+  "manifest": "data/heldout/manifest.json",
+  "provenance": "data/heldout/provenance.json",
+  "heldout_dir": "data/heldout",
+  "sources": [
+    {
+      "label": "main",
+      "manifest": "data/heldout/manifest.json",
+      "provenance": "data/heldout/provenance.json",
+      "heldout_dir": "data/heldout",
+      "suite_count": 3,
+      "failure_count": 1
+    }
+  ],
+  "suite_count": 3,
+  "families_present": [
+    "code_generation",
+    "instruction_following",
+    "math_reasoning"
+  ],
+  "families_missing_recommended": [
+    "general_language_modeling",
+    "commonsense_reasoning",
+    "multi_turn_dialogue",
+    "long_context"
+  ],
+  "suites": [
+    {
+      "source": "main",
+      "name": "gsm8k_test",
+      "family": "math_reasoning",
+      "path": "data/heldout/gsm8k_test.txt",
+      "exists": true,
+      "line_count": 260,
+      "characters": 139393,
+      "dataset": "openai/gsm8k",
+      "config": "main",
+      "split": "test",
+      "source_type": null,
+      "source_path": null
+    },
+    {
+      "source": "main",
+      "name": "mbpp_test",
+      "family": "code_generation",
+      "path": "data/heldout/mbpp_test.txt",
+      "exists": true,
+      "line_count": 194,
+      "characters": 29746,
+      "dataset": "google-research-datasets/mbpp",
+      "config": "sanitized",
+      "split": "test",
+      "source_type": null,
+      "source_path": null
+    },
+    {
+      "source": "main",
+      "name": "alpaca_cleaned_train_tail",
+      "family": "instruction_following",
+      "path": "data/heldout/alpaca_cleaned_train_tail.txt",
+      "exists": true,
+      "line_count": 260,
+      "characters": 185863,
+      "dataset": "yahma/alpaca-cleaned",
+      "config": null,
+      "split": "train",
+      "source_type": null,
+      "source_path": null
+    }
+  ],
+  "families": {
+    "math_reasoning": {
+      "suite_count": 1,
+      "line_count": 260,
+      "characters": 139393,
+      "suites": [
+        "main:gsm8k_test"
+      ]
+    },
+    "code_generation": {
+      "suite_count": 1,
+      "line_count": 194,
+      "characters": 29746,
+      "suites": [
+        "main:mbpp_test"
+      ]
+    },
+    "instruction_following": {
+      "suite_count": 1,
+      "line_count": 260,
+      "characters": 185863,
+      "suites": [
+        "main:alpaca_cleaned_train_tail"
+      ]
+    }
+  },
+  "failures": [
+    {
+      "source": "main",
+      "name": "wikitext103_validation",
+      "dataset": "Salesforce/wikitext",
+      "split": "validation",
+      "error": "ConnectionError(\"Couldn't reach 'Salesforce/wikitext' on the Hub (LocalEntryNotFoundError)\")"
+    }
+  ],
+  "router": {
+    "main": {
+      "train_texts": "data/heldout/router_train.txt",
+      "eval_texts": "data/heldout/router_eval.txt",
+      "train_count": 256,
+      "eval_count": 256,
+      "train_characters": 118630,
+      "eval_characters": 141268
+    }
+  },
+  "eval_overlap_pairs": [],
+  "claim_boundary": {
+    "ready_for_broad_family_claim": false,
+    "reason": "Current manifest is useful for broad stress testing, but top-journal broad-family claims need the missing recommended families and resolved dataset failures."
+  }
+}

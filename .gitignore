@@ -1,0 +1,108 @@
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+
+# ===== AI tool local state =====
+.claude/
+.future/
+
+# ===== Dependencies / vendored toolchains / virtual envs =====
+node_modules/
+.venv*/
+venv/
+.miktex-local/
+
+# ===== Browser profiles & caches (contain cookies / login data) =====
+**/browser-automation/profile/
+**/profile/Default/
+.edge-headless*/
+
+# ===== Python bytecode =====
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# ===== Binary documents =====
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+
+# ===== Images =====
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.ico
+*.tif
+*.tiff
+*.webp
+*.heic
+
+# ===== Binary fonts =====
+*.ttf
+*.otf
+*.woff
+*.woff2
+*.eot
+*.pfb
+
+# ===== Media =====
+*.mp3
+*.mp4
+*.mov
+*.avi
+*.wav
+
+# ===== Archives / compressed =====
+*.zip
+*.tar
+*.tgz
+*.gz
+*.7z
+*.rar
+
+# ===== Binaries / build outputs =====
+*.exe
+*.dll
+*.dylib
+*.so
+*.a
+*.o
+*.bin
+*.node
+*.dvi
+*.xdv
+
+# ===== LaTeX build artifacts =====
+*.aux
+*.bbl
+*.blg
+*.toc
+*.lof
+*.lot
+*.out
+*.fls
+*.fdb_latexmk
+*.bcf
+*.run.xml
+*.synctex.gz
+latex/*.log
+**/latex/*.log
+**/latex/**/*.log
+
+# ===== Databases =====
+*.db
+*.sqlite
+*.sqlite3
+*-journal
+
+# ===== Misc junk =====
+/output/latest

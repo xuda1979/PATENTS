@@ -1,0 +1,416 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,heading=true]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+
+\ctexset{
+  section = {
+    name = {,、},
+    number = \chinese{section},
+    format = {\Large\bfseries\raggedright}
+  }
+}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\raggedbottom
+\setlength{\emergencystretch}{3em}
+\hfuzz=100pt
+\hbadness=10000
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+
+\newcommand{\Kearly}{K_{\mathrm{early}}}
+\newcommand{\Kfinal}{K_{\mathrm{final}}}
+\newcommand{\Kbase}{K_{\mathrm{base}}}
+\newcommand{\Krein}{K_{\mathrm{reinforce}}}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[1em]
+    {\Huge\heiti 技术交底书} \\[1em]
+\end{center}
+
+\noindent
+\begin{tabular}{|p{3cm}|p{12cm}|}
+\hline
+公司编号 &  \\ \hline
+发明名称 & 一种面向6G网络切片的超低时延抗量子自适应握手方法、系统、设备及存储介质 \\ \hline
+申请单位 & 研究院（暂定） \\ \hline
+申报类型 & 发明 \\ \hline
+发明人 & 待补充 \\ \hline
+技术联系人 & 待补充 \\ \hline
+注意事项 & 1．本稿按本目录第4个专利的 LaTeX 交底书模板结构组织。\\
+& 2．涉及发明人、部门编号、项目编号等信息，提交前请人工补齐。 \\ \hline
+\end{tabular}
+
+\vspace{1cm}
+
+\section{发明名称}
+
+一种面向6G网络切片的超低时延抗量子自适应握手方法、系统、设备及存储介质。
+
+\section{技术领域}
+
+本发明涉及移动通信安全、后量子密码学、网络切片安全编排以及低时延连接建立技术领域，尤其涉及一种用于 6G 或后 6G 网络切片场景中的\textbf{切片感知、能力感知、时延预算感知}的抗量子握手协议、系统与设备。该方案既可部署于终端与边缘安全锚点之间，也可部署于终端与核心网服务入口、切片安全网关、接入边缘计算节点或安全代理之间。
+
+\textbf{与量子计算的关联说明：}
+
+随着量子计算能力提升，传统 RSA、ECC 等公钥体制面临被 Shor 算法有效攻击的风险。6G 场景中，自动驾驶、工业控制、XR、车路协同、智能传感等业务既要求抗量子安全，又要求极低接入时延和高可靠性。现有后量子密钥封装机制（KEM）虽然能提供量子韧性，但其公钥、密文和计算开销通常显著大于传统方案，从而使连接建立时延、空口占用和终端算力负担增大。本发明正是面向这种“\textbf{必须抗量子，但不能牺牲超低时延}”的矛盾而提出。
+
+\textbf{关联项目：}\underline{\hspace{8cm}}（待补充）
+
+\section{现有技术的技术方案}
+
+\subsection{后量子握手与切片安全的公开技术现状}
+
+现有公开技术大体可以分为四类。
+
+第一类是\textbf{将 PQC 原语直接并入现有 TLS/DTLS/IPsec 握手}的方案。这类方案的重点是把 ML-KEM 或其他 KEM 作为新的密钥协商机制接入既有协议栈，优点是兼容现有基础设施，缺点是通常仍采用“单次协商、整包发送、整阶段等待”的思路。也就是说，一旦所选后量子算法的报文或计算开销较大，所有业务切片都要承担同样的时延代价。
+
+第二类是\textbf{多 KEM 或混合 KEM 组合}方案。这类方案通过两个或多个 KEM 共同派生会话密钥，以获得更高的长期安全性或跨困难问题的鲁棒性。但现有公开方案多数是静态配置或在握手开始前就确定完整组合，并未根据网络切片的时延预算、业务等级、终端能力和链路状态动态决定“先用哪一部分、后补哪一部分”。
+
+第三类是\textbf{密码敏捷或动态算法选择}方案。这类方案关注根据设备资源、数据敏感度或上下文变化在不同算法之间切换，强调策略驱动和资源约束，但其关注点大多在数据加密阶段或会话内算法切换，而非 6G 接入建链阶段的低时延抗量子握手。
+
+第四类是\textbf{网络切片安全与切片特定认证}方案。这类方案强调切片选择、切片信任模型、切片级安全隔离和网络功能的可信部署，但通常不涉及具体的后量子握手状态机，也未把“切片 SLA/时延预算”与“PQC 握手开销控制”统一纳入一个协议设计框架。
+
+\subsection{现有技术的公开资料检索与分析}
+
+截至 \textbf{2026 年 3 月 26 日}，围绕“PQC 握手、TLS 中 ML-KEM、双 KEM/多 KEM、安全会话恢复、5G/6G 网络切片安全、切片特定认证、低时延连接建立”等主题进行检索，可获得如下具有代表性的公开技术脉络：
+
+\begin{enumerate}[leftmargin=2em]
+    \item 存在将后量子算法集成到 TLS 的公开专利与 IETF 草案，例如在握手中引入 PQC 公钥、密文或新的命名群组；
+    \item 存在使用两个或多个 PQC KEM 共同建立安全会话、提升前向安全性或实现类型多样性的专利方案；
+    \item 存在根据资源约束或策略条件切换加密技术的密码敏捷公开方案；
+    \item 存在关于 5G/6G 网络切片安全、切片信任与切片特定认证的标准化和专利公开；
+    \item 存在关于 PQ-TLS 性能影响、KEMTLS、后量子证书链以及 PQC 在隧道/IPsec 中落地的论文与工程实现。
+\end{enumerate}
+
+但是，申请人经比对认为：尚未发现公开文献同时给出以下组合技术特征：
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{以网络切片画像为中心}的握手画像选择机制，即握手参数不由单纯客户端算法列表决定，而由切片类型、业务等级、时延预算、终端能力、链路质量共同决定；
+    \item \textbf{主密钥份额 + 增强密钥份额}的分阶段后量子握手，即先用最低可接受的抗量子份额快速建链，再在限定窗口内注入增强份额形成最终密钥；
+    \item \textbf{增强份额的阈值分片传送与恢复}，即将增强份额转化为可按切片需求动态配置的 $(t,n)$ 片段，任意达到阈值的分片即可恢复，不必等待全部到齐；
+    \item \textbf{将切片标识、计划标识、片段调度计划与最终 transcript 绑定}的抗降级与抗跨切片重放机制；
+    \item \textbf{允许受限业务在早期密钥上先行通行，而高敏业务必须等待最终密钥}的业务分级承载机制。
+\end{itemize}
+
+\section{现有技术的缺点及本申请提案要解决的技术问题}
+
+现有技术至少存在如下不足。
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{缺乏切片差异化建链机制。} 现有 PQC 握手大多将同一套算法或同一类消息流程施加于所有业务，而 6G 场景中，自动驾驶、工业控制、视频流和大规模传感对时延、带宽、可靠性和长期安全性的要求明显不同。
+    \item \textbf{后量子握手普遍采用“大消息一次性交换”。} 这会导致空口占用高、重传代价大、终端算力峰值高，特别不利于车载单元、工业终端和低功耗传感器。
+    \item \textbf{现有多 KEM 或混合 KEM 方案偏静态。} 即使采用多个后量子份额，通常也需要在连接建立前一次性完成全部 KEM 交换，无法在保证最低安全底线的前提下按业务时限逐步增强。
+    \item \textbf{现有密码敏捷方案未解决“握手阶段”的极低时延问题。} 其更多关注会话内切换、数据加密策略或资源感知选择，而不是 6G 接入建链的首个毫秒级时窗。
+    \item \textbf{现有切片安全方案与具体 PQC 握手实现脱节。} 切片选择、切片信任、NSSAI 或 SLA 约束通常停留在网络编排与认证架构层面，未与实际密钥交换状态机形成统一闭环。
+    \item \textbf{缺乏可证明的抗降级绑定点。} 如果切片类型、时延等级、增强片段阈值等参数未被绑定进握手 transcript，则攻击者可能通过篡改协商路径迫使双方退回到较弱但更快的方案。
+\end{enumerate}
+
+因此，本申请要解决的核心技术问题是：
+
+\begin{quote}
+在 6G 网络切片场景下，如何在\textbf{不放弃抗量子安全底线}的前提下，根据切片的时延预算、业务等级、终端能力和链路状态，动态拆分、调度和协商 PQC 密钥材料，使连接建立足够快、足够稳、且具备抗降级与跨切片隔离能力。
+\end{quote}
+
+\section{本申请提案的技术方案的详细阐述}
+
+\subsection{核心设计思想}
+
+本申请提出一种\textbf{切片感知分阶段抗量子握手协议}，可简称为 \textbf{SASPH}（Slice-Adaptive Staged Post-Quantum Handshake）。该协议并不要求在握手首阶段一次性交换全部高开销后量子材料，而是将会话主密钥的形成拆分为两层：
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{基础份额层}：用于尽快获得最小可接受的抗量子安全能力，形成基础会话密钥 $\Kbase$；
+    \item \textbf{增强份额层}：在切片允许的时间窗口内继续输送额外的后量子份额，达到阈值后恢复增强材料 $\Krein$，最终导出最终会话密钥 $\Kfinal$。
+\end{itemize}
+
+在此基础上，本申请把“选择哪种后量子算法组合、是否需要增强份额、增强份额需要拆成几片、阈值是多少、哪些业务可先用基础密钥放行”统一交由\textbf{切片握手画像}驱动。
+
+\subsection{术语与对象定义}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{切片标识}：记为 $SID$，用于标识所访问的 6G 网络切片或切片实例。
+    \item \textbf{切片握手画像}：记为 $\Pi(SID)$，包含该切片对应的时延上限、最小安全等级、可用算法集合、是否允许早期业务、增强片段阈值、失效时间窗等参数。
+    \item \textbf{终端能力向量}：记为 $Cap_{UE}$，至少包括 CPU 档位、内存档位、硬件加速能力、最大可接受握手字节数、可支持的 KEM/签名算法集合。
+    \item \textbf{链路态向量}：记为 $Net$，至少包括预测 RTT、丢包率、重排序概率、当前接入负荷。
+    \item \textbf{基础份额}：记为 $z_0$，由首阶段 PQC 协商导出。
+    \item \textbf{增强份额集合}：记为 $\{z_1,\dots,z_m\}$，由附加 KEM、额外认证材料或补强片段导出。
+    \item \textbf{基础会话密钥}：记为 $\Kbase=\mathrm{HKDF}(z_0, H(\mathrm{transcript}), SID, \Pi)$。
+    \item \textbf{最终会话密钥}：记为 $\Kfinal=\mathrm{HKDF}(z_0 \,\|\, \Krein \,\|\, H(\mathrm{transcript}), SID, \Pi)$。
+\end{itemize}
+
+\subsection{总体系统架构}
+
+本申请方案至少包括如下功能实体。
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|p{3cm}|p{11cm}|}
+\hline
+功能实体 & 功能说明 \\ \hline
+切片策略控制器 & 存储每个切片的安全底线、时延预算、可用算法集合、允许的业务等级和重协商策略。 \\ \hline
+握手画像决策引擎 & 根据 $SID$、$Cap_{UE}$、$Net$ 与策略约束，从候选算法包中选出最优握手计划。 \\ \hline
+基础份额协商模块 & 负责首阶段最小后量子安全份额的交换和基础密钥导出。 \\ \hline
+增强份额编码模块 & 负责将增强密钥材料执行阈值分片或“全有或全无变换 + 纠删编码”，生成 $(t,n)$ 片段。 \\ \hline
+增强份额调度模块 & 按握手计划把增强片段映射到后续控制报文、首批业务报文或多路径子流。 \\ \hline
+转录绑定与反降级模块 & 将切片标识、计划标识、算法包摘要、阈值参数、片段调度计划绑定到 transcript。 \\ \hline
+恢复与降级模块 & 在增强片段未按时达到阈值时执行安全降级、限流、重协商或会话撤销。 \\ \hline
+切片恢复票据管理模块 & 为同切片后续快速重连生成绑定到切片画像的恢复票据。 \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{握手计划选择模型}
+
+对于给定切片 $SID$，握手画像决策引擎在候选算法包集合 $\mathcal{B}(SID,Cap_{UE})$ 中选择最优计划 $b^\star$。一个候选计划至少包括：
+
+\begin{itemize}[leftmargin=2em]
+    \item 基础 KEM 类型；
+    \item 是否需要第二类或第三类增强份额；
+    \item 增强份额的 $(t,n)$ 分片参数；
+    \item 是否允许早期业务先行；
+    \item 片段传输窗口与重发策略。
+\end{itemize}
+
+选择目标可形式化为：
+\[
+b^\star
+=
+\arg\min_{b \in \mathcal{B}(SID,Cap_{UE})}
+\left(
+\alpha_{SID}\hat{T}(b)
+\;+\;
+\beta_{SID}\hat{C}(b)
+\;+\;
+\gamma_{SID}\hat{B}(b)
+\;+\;
+\delta_{SID}\hat{P}_{\mathrm{loss}}(b)
+\right)
+\]
+
+其中：
+
+\begin{itemize}[leftmargin=2em]
+    \item $\hat{T}(b)$ 表示预测握手完成时间；
+    \item $\hat{C}(b)$ 表示终端与网络侧计算成本；
+    \item $\hat{B}(b)$ 表示额外握手字节开销；
+    \item $\hat{P}_{\mathrm{loss}}(b)$ 表示在当前链路条件下因片段丢失导致超时的风险。
+\end{itemize}
+
+同时满足如下约束：
+\[
+Q(b)\ge Q_{\min}(SID), \qquad
+\hat{T}(b)\le L_{\max}(SID), \qquad
+\hat{E}(b)\le E_{\max}(Cap_{UE})
+\]
+
+其中 $Q(b)$ 为该计划可达到的抗量子安全等级，$L_{\max}(SID)$ 为切片时延上限，$\hat{E}(b)$ 为终端能耗估计。
+
+\subsection{协议消息与状态机}
+
+本申请的协议消息至少包括如下字段。
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|p{3.2cm}|p{10.8cm}|}
+\hline
+消息字段 & 含义 \\ \hline
+\texttt{sid} & 切片标识或切片实例标识。 \\ \hline
+\texttt{qprofile\_id} & 切片握手画像编号。 \\ \hline
+\texttt{plan\_id} & 本次握手选择出的握手计划编号。 \\ \hline
+\texttt{cap\_class} & 终端能力等级。 \\ \hline
+\texttt{bundle\_digest} & 所选算法包和参数集合的摘要。 \\ \hline
+\texttt{frag\_total} & 增强份额总分片数 $n$。 \\ \hline
+\texttt{recover\_threshold} & 恢复阈值 $t$。 \\ \hline
+\texttt{stage\_deadline} & 增强片段到达截止窗口。 \\ \hline
+\texttt{early\_scope} & 允许在 $\Kbase$ 上承载的业务范围。 \\ \hline
+\texttt{anti\_downgrade\_tag} & 覆盖切片、计划、算法包和阈值参数的完整性绑定值。 \\ \hline
+\end{tabular}
+\end{center}
+
+协议流程可按如下步骤进行。
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{握手请求阶段：} 终端向边缘安全锚点或服务端发送携带 $SID$、$Cap_{UE}$、支持算法集合、期望业务等级和可选恢复票据的首条握手请求。
+    \item \textbf{画像匹配阶段：} 服务端或切片策略控制器根据 $SID$ 读取切片握手画像 $\Pi(SID)$，结合链路状态 $Net$ 与终端能力，确定最优握手计划 $b^\star$，并返回 \texttt{plan\_id}、\texttt{bundle\_digest}、$(t,n)$、\texttt{stage\_deadline} 等参数。
+    \item \textbf{基础份额建立阶段：} 双方按计划执行基础 KEM，得到基础份额 $z_0$，并派生基础密钥 $\Kbase$。若该切片允许早期业务，则可进一步导出
+    \[
+    \Kearly = \mathrm{HKDF}(z_0, H(\mathrm{transcript}), SID, \texttt{plan\_id}, \texttt{early\_scope})
+    \]
+    用于承载白名单业务。
+    \item \textbf{增强份额生成阶段：} 若该切片要求额外安全裕度，则生成一项或多项增强份额 $\{z_1,\dots,z_m\}$，并计算增强材料
+    \[
+    \Krein = H(z_1 \,\|\, z_2 \,\|\, \cdots \,\|\, z_m).
+    \]
+    \item \textbf{阈值分片阶段：} 对 $\Krein$ 执行阈值分片，得到 $n$ 个增强片段 $r_1,\dots,r_n$，任意达到阈值 $t$ 即可恢复。为防止少量分片泄露信息，可先对 $\Krein$ 执行全有或全无变换，再执行纠删编码或秘密共享。
+    \item \textbf{片段调度阶段：} 片段按握手计划映射到后续握手报文、首批应用报文、独立控制消息或多路径子流。URLLC 切片可采用少分片、短窗口；eMBB 切片可采用更多增强片段；大规模传感切片可采用较宽窗口与聚合发送。
+    \item \textbf{最终确认阶段：} 接收端在截止窗口内收到至少 $t$ 个有效片段后恢复 $\Krein$，导出
+    \[
+    \Kfinal=\mathrm{HKDF}(z_0 \,\|\, \Krein \,\|\, H(\mathrm{transcript}), SID, \texttt{plan\_id})
+    \]
+    并将业务从 $\Kearly$ 或 $\Kbase$ 迁移至 $\Kfinal$。
+    \item \textbf{异常处理阶段：} 若在 \texttt{stage\_deadline} 内未达到阈值，则根据切片策略触发以下至少一种处理：限制业务集、降低会话权限、发起补强重协商、请求重发、撤销会话。
+\end{enumerate}
+
+\subsection{早期业务承载机制}
+
+本申请并不主张让所有业务在未完成增强前全部放行，而是引入\textbf{业务分级承载}机制：
+
+\begin{itemize}[leftmargin=2em]
+    \item 对 URLLC 或自动驾驶场景，可允许仅承载低字节量、强时效但受控的“启动类控制消息”；
+    \item 对 eMBB 或高清视频场景，可选择不使用早期业务，等待 $\Kfinal$ 后再开始大流量传输；
+    \item 对工业传感或 mMTC 场景，可允许少量注册类消息先行，正式控制命令必须等待最终密钥。
+\end{itemize}
+
+早期业务范围由 \texttt{early\_scope} 明确限定，且该字段被纳入 \texttt{anti\_downgrade\_tag} 和 transcript，避免攻击者通过篡改协商结果扩大早期业务范围。
+
+\subsection{抗降级、抗重放与跨切片隔离}
+
+为避免攻击者诱导双方退回到较弱但更快的方案，本申请要求将以下信息纳入完整性绑定：
+
+\begin{itemize}[leftmargin=2em]
+    \item 切片标识 $SID$；
+    \item 握手画像编号 \texttt{qprofile\_id}；
+    \item 握手计划编号 \texttt{plan\_id}；
+    \item 算法包摘要 \texttt{bundle\_digest}；
+    \item 阈值参数 \texttt{recover\_threshold} 与 \texttt{frag\_total}；
+    \item 早期业务范围 \texttt{early\_scope}；
+    \item 增强阶段截止窗口 \texttt{stage\_deadline}。
+\end{itemize}
+
+由此实现三层安全效果：
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{抗降级：} 攻击者无法删改阈值参数、算法包或业务范围而不被发现；
+    \item \textbf{抗跨切片重放：} 某一切片中的恢复票据、增强片段和 transcript 不能直接迁移到另一切片复用；
+    \item \textbf{抗路径篡改：} 若多路径承载片段，则路径标识或片段顺序摘要也可被绑定入 transcript。
+\end{enumerate}
+
+\subsection{切片绑定的恢复票据}
+
+对于同一终端反复进入同一切片的场景，本申请可选生成切片绑定恢复票据：
+\[
+Ticket = \mathrm{AEAD}_{K_S}(SID, \texttt{qprofile\_id}, \texttt{plan\_id}, Cap_{UE}, Expiry, PolicyHash).
+\]
+
+当终端再次进入同一切片时，可以直接沿用此前验证过的画像与策略哈希，仅更新必要的基础份额和少量增强片段，以进一步降低重连时延。该票据与切片标识及策略哈希绑定，不能跨切片复用。
+
+\subsection{具体实施例}
+
+\subsubsection*{实施例1：自动驾驶 URLLC 切片}
+
+自动驾驶终端进入面向车路协同的极低时延切片，切片画像要求在极短时间内建立可用安全通道。协议为其选择：
+
+\begin{itemize}[leftmargin=2em]
+    \item 一种基础 KEM 作为首阶段最小抗量子份额；
+    \item 一组较短窗口的增强片段；
+    \item 只允许极少量启动控制消息在 $\Kearly$ 上承载；
+    \item 一旦达到阈值即切换到 $\Kfinal$。
+\end{itemize}
+
+该实施方式使得建链首阶段不必等待全部高开销份额完成，从而降低首包时延。
+
+\subsubsection*{实施例2：高清视频 eMBB 切片}
+
+高清视频流对首包时延敏感度低于自动驾驶，但对长会话安全性和吞吐更敏感。协议可选择更多增强份额或更高安全级别的算法包，并允许在更宽时间窗口内发送增强片段。由于该切片带宽相对充裕，因此可以采用更大的分片数 $n$ 来提升鲁棒性。
+
+\subsubsection*{实施例3：工业传感 mMTC 切片}
+
+对于海量低功耗传感器，终端算力和电量受限。协议可依据能力等级选择更低计算负担的基础份额，并把增强份额拆为较少的片段，在边缘安全锚点完成部分恢复或验证协调。正式控制命令只有在最终密钥建立后才允许下发。
+
+\subsubsection*{实施例4：边缘安全网关部署}
+
+本发明可以部署为切片边缘安全网关软件模块、DPU/SmartNIC 加速模块、终端协议库或核心网安全函数插件。其保护对象既包括方法流程，也包括承载该流程的系统、设备和存储介质。
+
+\section{本申请提案的关键点和欲保护点}
+
+本申请建议重点保护如下技术点：
+
+\begin{enumerate}[leftmargin=2em]
+    \item 基于网络切片画像、终端能力和链路状态联合选择后量子握手计划的机制；
+    \item 将会话密钥形成拆分为基础份额与增强份额两层、并允许在基础份额完成后先形成早期密钥的机制；
+    \item 对增强份额执行 $(t,n)$ 阈值分片或等价恢复编码、以任意达到阈值的片段恢复增强材料的机制；
+    \item 将切片标识、握手计划、阈值参数、早期业务范围和调度窗口绑定进 transcript 的机制；
+    \item 基于切片策略对早期业务进行细粒度门控，并在增强完成后迁移到最终密钥的机制；
+    \item 与同切片恢复票据绑定的快速重连机制；
+    \item 上述方法对应的系统、终端设备、边缘网关设备、服务器设备和存储介质。
+\end{enumerate}
+
+\section{与第三条中最接近的现有技术相比，本申请提案有何技术优点}
+
+与现有的“静态 PQC 握手”或“静态双 KEM/混合 KEM”方案相比，本申请至少具有如下优点：
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{显著降低连接建立等待时间。} 通过把高开销增强份额从首阶段关键路径中剥离，首个可用安全通道可更快建立。
+    \item \textbf{更适合 6G 多样化切片。} 不同切片可以依据各自 SLA 采用不同的握手计划，而非所有场景使用同一套后量子开销。
+    \item \textbf{提升弱终端可用性。} 终端无需在最初时刻完成全部高开销计算，降低峰值 CPU 与内存压力。
+    \item \textbf{提高丢包和重排序环境下的成功率。} 增强份额采用阈值分片后，不必等待全部片段到齐即可恢复，能缓解无线链路波动对握手时延的影响。
+    \item \textbf{增强抗降级能力。} 切片、计划和片段参数被纳入 transcript 绑定，使得攻击者难以诱导协商到不满足切片安全要求的低配模式。
+    \item \textbf{具备较好的工程落地性。} 该方案既可用于端到端协议，也可用于边缘安全锚点、切片网关或接入代理，适合产品化与标准化推进。
+\end{enumerate}
+
+\section{其他有助于理解本申请提案的技术资料}
+
+\subsection{术语与缩写}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{3cm}|p{11cm}|}
+\hline
+缩写 & 含义 \\ \hline
+PQC & 后量子密码学 \\ \hline
+KEM & 密钥封装机制 \\ \hline
+ML-KEM & NIST 标准化格基 KEM \\ \hline
+URLLC & 超可靠低时延通信 \\ \hline
+eMBB & 增强移动宽带 \\ \hline
+mMTC & 大规模机器类通信 \\ \hline
+SLA & 服务级别协议 \\ \hline
+Transcript & 握手转录文本或握手上下文摘要 \\ \hline
+$(t,n)$ & 总分片数为 $n$、恢复阈值为 $t$ 的分片参数 \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{建议附图}
+
+为后续撰写正式说明书和附图，建议至少绘制以下图示：
+
+\begin{enumerate}[leftmargin=2em]
+    \item 图1：切片感知分阶段抗量子握手系统架构图；
+    \item 图2：握手画像选择与计划生成流程图；
+    \item 图3：基础份额、增强份额、早期密钥与最终密钥的时序图；
+    \item 图4：增强份额的阈值分片与恢复示意图；
+    \item 图5：自动驾驶、视频流、传感器三类切片的参数差异示意图。
+\end{enumerate}
+
+\subsection{权利要求撰写建议}
+
+建议独立权利要求围绕“\textbf{切片感知 + 分阶段密钥形成 + 阈值分片恢复 + transcript 绑定}”四点展开，不要只写成“根据业务选择不同算法”的泛化表述，否则容易被密码敏捷或普通多算法协商文献覆盖。
+
+\section{本申请提案的侵权证据可获得性}
+
+本方案具有较好的可检测性和取证可获得性，体现在：
+
+\begin{enumerate}[leftmargin=2em]
+    \item 握手消息中存在可识别的切片画像编号、计划编号、阈值参数和片段序号字段；
+    \item 终端、边缘安全锚点和服务器侧的日志中会留下计划选择、增强片段接收和最终切换时刻记录；
+    \item 若协议实现为 SDK、网关固件或 DPU 加速模块，可通过二进制接口、配置项或管理面接口识别其是否支持上述关键字段和状态机；
+    \item 若产品公开宣称支持“切片感知后量子低时延握手”或“分阶段 PQC 会话建立”，可进一步结合抓包和设备管理界面进行佐证；
+    \item 早期业务白名单和最终密钥切换点通常会在控制面或策略面留下可审计记录，可作为辅助证据。
+\end{enumerate}
+
+\end{document}

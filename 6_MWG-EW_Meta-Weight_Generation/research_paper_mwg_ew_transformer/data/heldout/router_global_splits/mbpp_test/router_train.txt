@@ -1,0 +1,97 @@
+def sequence(n): if n == 1 or n == 2: return 1 else: return sequence(sequence(n-1)) + sequence(n-sequence(n-1))
+def extract_string(str, l): result = [e for e in str if len(e) == l] return result
+def tuple_intersection(test_list1, test_list2): res = set([tuple(sorted(ele)) for ele in test_list1]) & set([tuple(sorted(ele)) for ele in test_list2]) return (res)
+def is_samepatterns(colors, patterns): if len(colors) != len(patterns): return False sdict = {} pset = set() sset = set() for i in range(len(patterns)): pset.add(patterns[i]) sset.add(colors[i]) if patterns[i] not in sdict.keys(): sdict[patterns[i]] = [] keys = sdict[patterns[i]] keys.append(colors[i]) sdict[patterns[i]] = keys if len(pset) != len(sset): return False for values in sdict.values(): for i in range(len(values) - 1): if values[i] != values[i+1]: return False return True
+NO_OF_CHARS = 256 def str_to_list(string): temp = [] for x in string: temp.append(x) return temp def lst_to_string(List): return ''.join(List) def get_char_count_array(string): count = [0] * NO_OF_CHARS for i in string: count[ord(i)] += 1 return count def remove_dirty_chars(string, second_string): count = get_char_count_array(second_string) ip_ind = 0 res_ind = 0 temp = '' str_list = str_to_list(string) while ip_ind != len(str_list): temp = str_list[ip_ind] if count[ord(temp)] == 0: str_list[res_ind] = str_list[ip_ind] res_ind += 1 ip_ind+=1 return lst_to_string(str_list[0:res_ind])
+from collections import defaultdict def count_Substrings(s): n = len(s) count,sum = 0,0 mp = defaultdict(lambda : 0) mp[0] += 1 for i in range(n): sum += ord(s[i]) - ord('0') count += mp[sum - (i + 1)] mp[sum - (i + 1)] += 1 return count
+def rearrange_bigger(n): nums = list(str(n)) for i in range(len(nums)-2,-1,-1): if nums[i] < nums[i+1]: z = nums[i:] y = min(filter(lambda x: x > z[0], z)) z.remove(y) z.sort() nums[i:] = [y] + z return int("".join(nums)) return False
+def extract_rear(test_tuple): res = list(sub[len(sub) - 1] for sub in test_tuple) return (res)
+def count_integer(list1): ctr = 0 for i in list1: if isinstance(i, int): ctr = ctr + 1 return ctr
+from collections import defaultdict def max_occurrences(nums): dict = defaultdict(int) for i in nums: dict[i] += 1 result = max(dict.items(), key=lambda x: x[1]) return result[0]
+import re regex = r'^[a-z]$|^([a-z]).*\1$' def check_char(string): if(re.search(regex, string)): return "Valid" else: return "Invalid"
+def dict_depth(d): if isinstance(d, dict): return 1 + (max(map(dict_depth, d.values())) if d else 0) return 0
+def add_lists(test_list, test_tup): res = tuple(list(test_tup) + test_list) return (res)
+def get_max_sum (n): res = list() res.append(0) res.append(1) i = 2 while i<n + 1: res.append(max(i, (res[int(i / 2)] + res[int(i / 3)] + res[int(i / 4)] + res[int(i / 5)]))) i = i + 1 return res[n]
+import heapq def merge_sorted_list(num1,num2,num3): num1=sorted(num1) num2=sorted(num2) num3=sorted(num3) result = heapq.merge(num1,num2,num3) return list(result)
+def reverse_vowels(str1): vowels = "" for char in str1: if char in "aeiouAEIOU": vowels += char result_string = "" for char in str1: if char in "aeiouAEIOU": result_string += vowels[-1] vowels = vowels[:-1] else: result_string += char return result_string
+def insert_element(list,element): list = [v for elt in list for v in (element, elt)] return list
+import re def start_withp(words): for w in words: m = re.match("(P\w+)\W(P\w+)", w) if m: return m.groups()
+def max_Product(arr): arr_len = len(arr) if (arr_len < 2): return ("No pairs exists") x = arr[0]; y = arr[1] for i in range(0,arr_len): for j in range(i + 1,arr_len): if (arr[i] * arr[j] > x * y): x = arr[i]; y = arr[j] return x,y
+def cube_nums(nums): cube_nums = list(map(lambda x: x ** 3, nums)) return cube_nums
+def count_X(tup, x): count = 0 for ele in tup: if (ele == x): count = count + 1 return count
+def extract_singly(test_list): res = [] temp = set() for inner in test_list: for ele in inner: if not ele in temp: temp.add(ele) res.append(ele) return (res)
+from collections import Counter def sort_counter(dict1): x = Counter(dict1) sort_counter=x.most_common() return sort_counter
+def sum(a,b): sum = 0 for i in range (1,min(a,b)): if (a % i == 0 and b % i == 0): sum += i return sum
+def even_Power_Sum(n): sum = 0; for i in range(1,n+1): j = 2*i; sum = sum + (j*j*j*j*j); return sum;
+import sys def next_smallest_palindrome(num): numstr = str(num) for i in range(num+1,sys.maxsize): if str(i) == str(i)[::-1]: return i
+def check_integer(text): text = text.strip() if len(text) < 1: return None else: if all(text[i] in "0123456789" for i in range(len(text))): return True elif (text[0] in "+-") and \ all(text[i] in "0123456789" for i in range(1,len(text))): return True else: return False
+def max_sum(arr): MSIBS = arr[:] for i in range(len(arr)): for j in range(0, i): if arr[i] > arr[j] and MSIBS[i] < MSIBS[j] + arr[i]: MSIBS[i] = MSIBS[j] + arr[i] MSDBS = arr[:] for i in range(1, len(arr) + 1): for j in range(1, i): if arr[-i] > arr[-j] and MSDBS[-i] < MSDBS[-j] + arr[-i]: MSDBS[-i] = MSDBS[-j] + arr[-i] max_sum = float("-Inf") for i, j, k in zip(MSIBS, MSDBS, arr): max_sum = max(max_sum, i + j - k) return max_sum
+def remove_Occ(s,ch): for i in range(len(s)): if (s[i] == ch): s = s[0 : i] + s[i + 1:] break for i in range(len(s) - 1,-1,-1): if (s[i] == ch): s = s[0 : i] + s[i + 1:] break return s
+def check_element(list,element): check_element=all(v== element for v in list) return check_element
+def cal_sum(n): a = 3 b = 0 c = 2 if (n == 0): return 3 if (n == 1): return 3 if (n == 2): return 5 sum = 5 while (n > 2): d = a + b sum = sum + d a = b b = c c = d n = n-1 return sum
+def max_val(listval): max_val = max(i for i in listval if isinstance(i, int)) return(max_val)
+def highest_Power_of_2(n): res = 0 for i in range(n, 0, -1): if ((i & (i - 1)) == 0): res = i break return res
+def multiply_num(numbers): total = 1 for x in numbers: total *= x return total/len(numbers)
+import heapq def k_smallest_pairs(nums1, nums2, k): queue = [] def push(i, j): if i < len(nums1) and j < len(nums2): heapq.heappush(queue, [nums1[i] + nums2[j], i, j]) push(0, 0) pairs = [] while queue and len(pairs) < k: _, i, j = heapq.heappop(queue) pairs.append([nums1[i], nums2[j]]) push(i, j + 1) if j == 0: push(i + 1, 0) return pairs
+def rev(num): rev_num = 0 while (num > 0): rev_num = (rev_num * 10 + num % 10) num = num // 10 return rev_num def check(n): return (2 * rev(n) == n + 1)
+import math def volume_cone(r,h): volume = (1.0/3) * math.pi * r * r * h return volume
+def count_occurance(s): count = 0 for i in range(len(s) - 2): if (s[i] == 's' and s[i+1] == 't' and s[i+2] == 'd'): count = count + 1 return count
+def pancake_sort(nums): arr_len = len(nums) while arr_len > 1: mi = nums.index(max(nums[0:arr_len])) nums = nums[mi::-1] + nums[mi+1:len(nums)] nums = nums[arr_len-1::-1] + nums[arr_len:len(nums)] arr_len -= 1 return nums
+from collections import Counter def check_occurences(test_list): res = dict(Counter(tuple(ele) for ele in map(sorted, test_list))) return (res)
+def round_and_sum(list1): lenght=len(list1) round_and_sum=sum(list(map(round,list1))* lenght) return round_and_sum
+def string_to_tuple(str1): result = tuple(x for x in str1 if not x.isspace()) return result
+def intersection_array(array_nums1,array_nums2): result = list(filter(lambda x: x in array_nums1, array_nums2)) return result
+def and_tuples(test_tup1, test_tup2): res = tuple(ele1 & ele2 for ele1, ele2 in zip(test_tup1, test_tup2)) return (res)
+def find_Parity(x): y = x ^ (x >> 1); y = y ^ (y >> 2); y = y ^ (y >> 4); y = y ^ (y >> 8); y = y ^ (y >> 16); if (y & 1): return True return False
+def check_distinct(test_tup): res = True temp = set() for ele in test_tup: if ele in temp: res = False break temp.add(ele) return res
+import cmath def angle_complex(a,b): cn=complex(a,b) angle=cmath.phase(a+b) return angle
+def add_string(list_, string): add_string=[string.format(i) for i in list_] return add_string
+def harmonic_sum(n): if n < 2: return 1 else: return 1 / n + (harmonic_sum(n - 1))
+def max_sum_increasing_subseq(a, n, index, k): dp = [[0 for i in range(n)] for i in range(n)] for i in range(n): if a[i] > a[0]: dp[0][i] = a[i] + a[0] else: dp[0][i] = a[i] for i in range(1, n): for j in range(n): if a[j] > a[i] and j > i: if dp[i - 1][i] + a[j] > dp[i - 1][j]: dp[i][j] = dp[i - 1][i] + a[j] else: dp[i][j] = dp[i - 1][j] else: dp[i][j] = dp[i - 1][j] return dp[index][k]
+def replace_list(list1,list2): list1[-1:] = list2 replace_list=list1 return replace_list
+def multiply_int(x, y): if y < 0: return -multiply_int(x, -y) elif y == 0: return 0 elif y == 1: return x else: return x + multiply_int(x, y - 1)
+def drop_empty(dict1): dict1 = {key:value for (key, value) in dict1.items() if value is not None} return dict1
+import re def snake_to_camel(word): return ''.join(x.capitalize() or '_' for x in word.split('_'))
+def flatten_list(list1): result_list = [] if not list1: return result_list stack = [list(list1)] while stack: c_num = stack.pop() next = c_num.pop() if c_num: stack.append(c_num) if isinstance(next, list): if next: stack.append(list(next)) else: result_list.append(next) result_list.reverse() return result_list
+def overlapping(list1,list2): for i in range(len(list1)): for j in range(len(list2)): if(list1[i]==list2[j]): return True return False
+def all_Bits_Set_In_The_Given_Range(n,l,r): num = (((1 << r) - 1) ^ ((1 << (l - 1)) - 1)) new_num = n & num if (new_num == 0): return True return False
+from collections import defaultdict def max_aggregate(stdata): temp = defaultdict(int) for name, marks in stdata: temp[name] += marks return max(temp.items(), key=lambda x: x[1])
+def newman_prime(n): if n == 0 or n == 1: return 1 return 2 * newman_prime(n - 1) + newman_prime(n - 2)
+import heapq def larg_nnum(list1,n): largest=heapq.nlargest(n,list1) return largest
+def is_Monotonic(A): return (all(A[i] <= A[i + 1] for i in range(len(A) - 1)) or all(A[i] >= A[i + 1] for i in range(len(A) - 1)))
+def sum_negativenum(nums): sum_negativenum = list(filter(lambda nums:nums<0,nums)) return sum(sum_negativenum)
+def large_product(nums1, nums2, N): result = sorted([x*y for x in nums1 for y in nums2], reverse=True)[:N] return result
+def count_Primes_nums(n): ctr = 0 for num in range(n): if num <= 1: continue for i in range(2,num): if (num % i) == 0: break else: ctr += 1 return ctr
+def max_length_list(input_list): max_length = max(len(x) for x in input_list ) max_list = max(input_list, key = lambda i: len(i)) return(max_length, max_list)
+import math def next_Perfect_Square(N): nextN = math.floor(math.sqrt(N)) + 1 return nextN * nextN
+def index_multiplication(test_tup1, test_tup2): res = tuple(tuple(a * b for a, b in zip(tup1, tup2)) for tup1, tup2 in zip(test_tup1, test_tup2)) return (res)
+def kth_element(arr, k): n = len(arr) for i in range(n): for j in range(0, n-i-1): if arr[j] > arr[j+1]: arr[j], arr[j+1] == arr[j+1], arr[j] return arr[k-1]
+import math def div_sum(n): total = 1 i = 2 while i * i <= n: if (n % i == 0): total = (total + i + math.floor(n / i)) i += 1 return total def are_equivalent(num1, num2): return div_sum(num1) == div_sum(num2);
+def division_elements(test_tup1, test_tup2): res = tuple(ele1 // ele2 for ele1, ele2 in zip(test_tup1, test_tup2)) return (res)
+def extract_freq(test_list): res = len(list(set(tuple(sorted(sub)) for sub in test_list))) return (res)
+def find_remainder(arr, n): mul = 1 for i in range(len(arr)): mul = (mul * (arr[i] % n)) % n return mul % n
+def count_binary_seq(n): nCr = 1 res = 1 for r in range(1, n + 1): nCr = (nCr * (n + 1 - r)) / r res += nCr * nCr return res
+def sum_even_and_even_index(arr): i = 0 sum = 0 for i in range(0, len(arr),2): if (arr[i] % 2 == 0) : sum += arr[i] return sum
+def min_of_three(a,b,c): if (a <= b) and (a <= c): smallest = a elif (b <= a) and (b <= c): smallest = b else: smallest = c return smallest
+def bitwise_xor(test_tup1, test_tup2): res = tuple(ele1 ^ ele2 for ele1, ele2 in zip(test_tup1, test_tup2)) return (res)
+def long_words(n, str): word_len = [] txt = str.split(" ") for x in txt: if len(x) > n: word_len.append(x) return word_len
+def snake_to_camel(word): import re return ''.join(x.capitalize() or '_' for x in word.split('_'))
+def min_val(listval): min_val = min(i for i in listval if isinstance(i, int)) return min_val
+def number_of_substrings(str): str_len = len(str); return int(str_len * (str_len + 1) / 2);
+import math def sumofFactors(n) : if (n % 2 != 0) : return 0 res = 1 for i in range(2, (int)(math.sqrt(n)) + 1) : count = 0 curr_sum = 1 curr_term = 1 while (n % i == 0) : count= count + 1 n = n // i if (i == 2 and count == 1) : curr_sum = 0 curr_term = curr_term * i curr_sum = curr_sum + curr_term res = res * curr_sum if (n >= 2) : res = res * (1 + n) return res
+def max_difference(test_list): temp = [abs(b - a) for a, b in test_list] res = max(temp) return (res)
+def count_bidirectional(test_list): res = 0 for idx in range(0, len(test_list)): for iidx in range(idx + 1, len(test_list)): if test_list[iidx][0] == test_list[idx][1] and test_list[idx][1] == test_list[iidx][0]: res += 1 return res
+def count_no_of_ways(n, k): dp = [0] * (n + 1) total = k mod = 1000000007 dp[1] = k dp[2] = k * k for i in range(3,n+1): dp[i] = ((k - 1) * (dp[i - 1] + dp[i - 2])) % mod return dp[n]
+def sort_sublists(input_list): result = [sorted(x, key = lambda x:x[0]) for x in input_list] return result
+import re def change_date_format(dt): return re.sub(r'(\d{4})-(\d{1,2})-(\d{1,2})', '\\3-\\2-\\1', dt)
+def count_samepair(list1,list2,list3): result = sum(m == n == o for m, n, o in zip(list1,list2,list3)) return result
+import re def text_match_one(text): patterns = 'ab+?' if re.search(patterns, text): return True else: return False
+def is_majority(arr, n, x): i = binary_search(arr, 0, n-1, x) if i == -1: return False if ((i + n//2) <= (n -1)) and arr[i + n//2] == x: return True else: return False def binary_search(arr, low, high, x): if high >= low: mid = (low + high)//2 if (mid == 0 or x > arr[mid-1]) and (arr[mid] == x): return mid elif x > arr[mid]: return binary_search(arr, (mid + 1), high, x) else: return binary_search(arr, low, (mid -1), x) return -1
+def find_tuples(test_list, K): res = [sub for sub in test_list if all(ele % K == 0 for ele in sub)] return res
+import re def text_match_wordz(text): patterns = '\w*z.\w*' if re.search(patterns, text): return True else: return False
+def re_arrange_array(arr, n): j=0 for i in range(0, n): if (arr[i] < 0): temp = arr[i] arr[i] = arr[j] arr[j] = temp j = j + 1 return arr
+def max_sub_array_sum_repeated(a, n, k): max_so_far = -2147483648 max_ending_here = 0 for i in range(n*k): max_ending_here = max_ending_here + a[i%n] if (max_so_far < max_ending_here): max_so_far = max_ending_here if (max_ending_here < 0): max_ending_here = 0 return max_so_far
+def eulerian_num(n, m): if (m >= n or n == 0): return 0 if (m == 0): return 1 return ((n - m) * eulerian_num(n - 1, m - 1) +(m + 1) * eulerian_num(n - 1, m))
+def is_sublist(l, s): sub_set = False if s == []: sub_set = True elif s == l: sub_set = True elif len(s) > len(l): sub_set = False else: for i in range(len(l)): if l[i] == s[0]: n = 1 while (n < len(s)) and (l[i+n] == s[n]): n += 1 if n == len(s): sub_set = True return sub_set
+def sequential_search(dlist, item): pos = 0 found = False while pos < len(dlist) and not found: if dlist[pos] == item: found = True else: pos = pos + 1 return found, pos
+def odd_values_string(str): result = "" for i in range(len(str)): if i % 2 == 0: result = result + str[i] return result

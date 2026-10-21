@@ -1,0 +1,391 @@
+{
+  "ok": true,
+  "submit": true,
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": null,
+  "taskName": "asi3-pys3-0611a",
+  "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+  "resourceGroup": "huanxin-all-resource",
+  "resourceGroupType": "公共资源组",
+  "priority": "中",
+  "resourceConfig": {
+    "instanceCount": 1,
+    "acceleratorCardsPerInstance": 1,
+    "cpuPerInstance": 4,
+    "memoryPerInstance": 16
+  },
+  "usedProfile": {
+    "profileDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "isolated": false,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": false,
+    "baseProfileLocked": false
+  },
+  "launchSpec": {
+    "remote_root": "/vllm-workspace/mwg-ew-transformer-research",
+    "execution_command": "set -euo pipefail\nexport AWS_ACCESS_KEY_ID='[REDACTED]'\nexport AWS_SECRET_ACCESS_KEY='[REDACTED]'\npython3 - <<'PYREMOTE'\nimport datetime, hashlib, hmac, json, os, urllib.parse, urllib.request\nservice='s3'; region='us-east-1'; endpoint='https://iner.aihuanxin.cn'; bucket='jtdlp-21b4208dde424e96b159362ef49c9c96'\nkey='mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts/asi3-pys3-canary-0611.json'\nbody=json.dumps({'event':'pys3_canary','ok':True,'time':datetime.datetime.utcnow().isoformat()+'Z'}).encode()\nak=os.environ['AWS_ACCESS_KEY_ID']; sk=os.environ['AWS_SECRET_ACCESS_KEY']\nnow=datetime.datetime.utcnow(); amz=now.strftime('%Y%m%dT%H%M%SZ'); datestamp=now.strftime('%Y%m%d')\ncanonical_uri='/' + bucket + '/' + '/'.join(urllib.parse.quote(p, safe='') for p in key.split('/'))\npayload_hash=hashlib.sha256(body).hexdigest()\nheaders={'host':'iner.aihuanxin.cn','x-amz-content-sha256':payload_hash,'x-amz-date':amz}\ncanonical_headers=''.join(f'{k}:{headers[k]}\\n' for k in sorted(headers))\nsigned_headers=';'.join(sorted(headers))\ncanonical_request='PUT\\n'+canonical_uri+'\\n'+'\\n'+canonical_headers+'\\n'+signed_headers+'\\n'+payload_hash\nscope=f'{datestamp}/{region}/{service}/aws4_request'\nstring_to_sign='AWS4-HMAC-SHA256\\n'+amz+'\\n'+scope+'\\n'+hashlib.sha256(canonical_request.encode()).hexdigest()\ndef sign(k,m): return hmac.new(k, m.encode(), hashlib.sha256).digest()\nsigning=sign(sign(sign(sign(('AWS4'+sk).encode(),datestamp),region),service),'aws4_request')\nsig=hmac.new(signing,string_to_sign.encode(),hashlib.sha256).hexdigest()\nheaders['Authorization']=f'AWS4-HMAC-SHA256 Credential={ak}/{scope}, SignedHeaders={signed_headers}, Signature={sig}'\nreq=urllib.request.Request(endpoint+canonical_uri, data=body, headers=headers, method='PUT')\nwith urllib.request.urlopen(req, timeout=30) as r:\n    print('__PYS3_PUT_STATUS__', r.status)\nPYREMOTE\n",
+    "executionCommand": "set -euo pipefail\nexport AWS_ACCESS_KEY_ID='[REDACTED]'\nexport AWS_SECRET_ACCESS_KEY='[REDACTED]'\npython3 - <<'PYREMOTE'\nimport datetime, hashlib, hmac, json, os, urllib.parse, urllib.request\nservice='s3'; region='us-east-1'; endpoint='https://iner.aihuanxin.cn'; bucket='jtdlp-21b4208dde424e96b159362ef49c9c96'\nkey='mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts/asi3-pys3-canary-0611.json'\nbody=json.dumps({'event':'pys3_canary','ok':True,'time':datetime.datetime.utcnow().isoformat()+'Z'}).encode()\nak=os.environ['AWS_ACCESS_KEY_ID']; sk=os.environ['AWS_SECRET_ACCESS_KEY']\nnow=datetime.datetime.utcnow(); amz=now.strftime('%Y%m%dT%H%M%SZ'); datestamp=now.strftime('%Y%m%d')\ncanonical_uri='/' + bucket + '/' + '/'.join(urllib.parse.quote(p, safe='') for p in key.split('/'))\npayload_hash=hashlib.sha256(body).hexdigest()\nheaders={'host':'iner.aihuanxin.cn','x-amz-content-sha256':payload_hash,'x-amz-date':amz}\ncanonical_headers=''.join(f'{k}:{headers[k]}\\n' for k in sorted(headers))\nsigned_headers=';'.join(sorted(headers))\ncanonical_request='PUT\\n'+canonical_uri+'\\n'+'\\n'+canonical_headers+'\\n'+signed_headers+'\\n'+payload_hash\nscope=f'{datestamp}/{region}/{service}/aws4_request'\nstring_to_sign='AWS4-HMAC-SHA256\\n'+amz+'\\n'+scope+'\\n'+hashlib.sha256(canonical_request.encode()).hexdigest()\ndef sign(k,m): return hmac.new(k, m.encode(), hashlib.sha256).digest()\nsigning=sign(sign(sign(sign(('AWS4'+sk).encode(),datestamp),region),service),'aws4_request')\nsig=hmac.new(signing,string_to_sign.encode(),hashlib.sha256).hexdigest()\nheaders['Authorization']=f'AWS4-HMAC-SHA256 Credential={ak}/{scope}, SignedHeaders={signed_headers}, Signature={sig}'\nreq=urllib.request.Request(endpoint+canonical_uri, data=body, headers=headers, method='PUT')\nwith urllib.request.urlopen(req, timeout=30) as r:\n    print('__PYS3_PUT_STATUS__', r.status)\nPYREMOTE\n",
+    "remote_command": "set -euo pipefail\nexport AWS_ACCESS_KEY_ID='[REDACTED]'\nexport AWS_SECRET_ACCESS_KEY='[REDACTED]'\npython3 - <<'PYREMOTE'\nimport datetime, hashlib, hmac, json, os, urllib.parse, urllib.request\nservice='s3'; region='us-east-1'; endpoint='https://iner.aihuanxin.cn'; bucket='jtdlp-21b4208dde424e96b159362ef49c9c96'\nkey='mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts/asi3-pys3-canary-0611.json'\nbody=json.dumps({'event':'pys3_canary','ok':True,'time':datetime.datetime.utcnow().isoformat()+'Z'}).encode()\nak=os.environ['AWS_ACCESS_KEY_ID']; sk=os.environ['AWS_SECRET_ACCESS_KEY']\nnow=datetime.datetime.utcnow(); amz=now.strftime('%Y%m%dT%H%M%SZ'); datestamp=now.strftime('%Y%m%d')\ncanonical_uri='/' + bucket + '/' + '/'.join(urllib.parse.quote(p, safe='') for p in key.split('/'))\npayload_hash=hashlib.sha256(body).hexdigest()\nheaders={'host':'iner.aihuanxin.cn','x-amz-content-sha256':payload_hash,'x-amz-date':amz}\ncanonical_headers=''.join(f'{k}:{headers[k]}\\n' for k in sorted(headers))\nsigned_headers=';'.join(sorted(headers))\ncanonical_request='PUT\\n'+canonical_uri+'\\n'+'\\n'+canonical_headers+'\\n'+signed_headers+'\\n'+payload_hash\nscope=f'{datestamp}/{region}/{service}/aws4_request'\nstring_to_sign='AWS4-HMAC-SHA256\\n'+amz+'\\n'+scope+'\\n'+hashlib.sha256(canonical_request.encode()).hexdigest()\ndef sign(k,m): return hmac.new(k, m.encode(), hashlib.sha256).digest()\nsigning=sign(sign(sign(sign(('AWS4'+sk).encode(),datestamp),region),service),'aws4_request')\nsig=hmac.new(signing,string_to_sign.encode(),hashlib.sha256).hexdigest()\nheaders['Authorization']=f'AWS4-HMAC-SHA256 Credential={ak}/{scope}, SignedHeaders={signed_headers}, Signature={sig}'\nreq=urllib.request.Request(endpoint+canonical_uri, data=body, headers=headers, method='PUT')\nwith urllib.request.urlopen(req, timeout=30) as r:\n    print('__PYS3_PUT_STATUS__', r.status)\nPYREMOTE\n",
+    "output_dir": "",
+    "log_path": "",
+    "job_name": "asi3-pys3-0611a"
+  },
+  "executionCommand": "set -euo pipefail\nexport AWS_ACCESS_KEY_ID='[REDACTED]'\nexport AWS_SECRET_ACCESS_KEY='[REDACTED]'\npython3 - <<'PYREMOTE'\nimport datetime, hashlib, hmac, json, os, urllib.parse, urllib.request\nservice='s3'; region='us-east-1'; endpoint='https://iner.aihuanxin.cn'; bucket='jtdlp-21b4208dde424e96b159362ef49c9c96'\nkey='mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts/asi3-pys3-canary-0611.json'\nbody=json.dumps({'event':'pys3_canary','ok':True,'time':datetime.datetime.utcnow().isoformat()+'Z'}).encode()\nak=os.environ['AWS_ACCESS_KEY_ID']; sk=os.environ['AWS_SECRET_ACCESS_KEY']\nnow=datetime.datetime.utcnow(); amz=now.strftime('%Y%m%dT%H%M%SZ'); datestamp=now.strftime('%Y%m%d')\ncanonical_uri='/' + bucket + '/' + '/'.join(urllib.parse.quote(p, safe='') for p in key.split('/'))\npayload_hash=hashlib.sha256(body).hexdigest()\nheaders={'host':'iner.aihuanxin.cn','x-amz-content-sha256':payload_hash,'x-amz-date':amz}\ncanonical_headers=''.join(f'{k}:{headers[k]}\\n' for k in sorted(headers))\nsigned_headers=';'.join(sorted(headers))\ncanonical_request='PUT\\n'+canonical_uri+'\\n'+'\\n'+canonical_headers+'\\n'+signed_headers+'\\n'+payload_hash\nscope=f'{datestamp}/{region}/{service}/aws4_request'\nstring_to_sign='AWS4-HMAC-SHA256\\n'+amz+'\\n'+scope+'\\n'+hashlib.sha256(canonical_request.encode()).hexdigest()\ndef sign(k,m): return hmac.new(k, m.encode(), hashlib.sha256).digest()\nsigning=sign(sign(sign(sign(('AWS4'+sk).encode(),datestamp),region),service),'aws4_request')\nsig=hmac.new(signing,string_to_sign.encode(),hashlib.sha256).hexdigest()\nheaders['Authorization']=f'AWS4-HMAC-SHA256 Credential={ak}/{scope}, SignedHeaders={signed_headers}, Signature={sig}'\nreq=urllib.request.Request(endpoint+canonical_uri, data=body, headers=headers, method='PUT')\nwith urllib.request.urlopen(req, timeout=30) as r:\n    print('__PYS3_PUT_STATUS__', r.status)\nPYREMOTE\n",
+  "networkEvents": [
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/portal/messagecenter/web/getMailList",
+      "status": 200,
+      "requestPreview": "{\"pageNum\":\"1\",\"pageSize\":\"0\",\"readStatus\":\"0\"}",
+      "responsePreview": "{\"state\":\"OK\",\"requestId\":null,\"body\":{\"pageNum\":1,\"pageSize\":0,\"list\":[{\"mailId\":71446,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 12:40:40\"},{\"mailId\":71443,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 11:04:37\"},{\"mailId\":71378,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】API订购申请审批完成通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-04 16:20:56\"},{\"mailId\":57566,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】资产公开申请审批通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-05-14 15:31:51\"},{\"mailId\":46887,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-28 09:11:12\"},{\"mailId\":45699,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-21 11:32:25\"},{\"mailId\":45441,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】新建项目申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-20 09:07:33\"}],\"total\":7,\"unreadCount\":7},\"errorCode\":null,\"errorMessage\":null,\"errorParams\":null}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/image/v1/preset_image/preset_image_list",
+      "status": 200,
+      "requestPreview": "{\"scene\":[1,2],\"page\":1,\"pageSize\":9999999}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"data\":[{\"id\":376,\"poolId\":6,\"createBy\":\"ma_wenjie\",\"imageType\":0,\"imageName\":\"tyzjx\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"1.0.RC3\"},\"pyVersion\":\"python3.11.12\",\"scene\":2,\"architecture\":0,\"chipType\":1,\"ideType\":[\"Jupyter\",\"VSCode\"],\"size\":13012181820,\"tags\":[\"222\"],\"startCommand\":\"axiba\",\"createTime\":\"2026-03-31 18:27:17\",\"updateTime\":\"2026-03-31 18:27:17\",\"shelveTime\":\"2026-04-01 16:47:35\",\"description\":\"镜像描述\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/test@sha256:9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"imageId\":\"9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"workingDir\":\"test\",\"imagePresetExtension\":{\"id\":241,\"presetId\":376,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-03-31T10:27:17.000+00:00\",\"updateTime\":\"2026-03-31T10:27:17.000+00:00\"},\"status\":0},{\"id\":378,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.1.RC1\"},\"pyVersion\":\"python3.11.10\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":16473590943,\"tags\":[\"preset-20250929-070525-125\"],\"startCommand\":\"tail -f /dev/null\",\"createTime\":\"2026-04-02 09:42:53\",\"updateTime\":\"2026-04-02 09:42:53\",\"shelveTime\":\"2026-06-05 16:58:23\",\"description\":\"MindIE 升级到2.1.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/syyatb070525125@sha256:385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"imageId\":\"385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":243,\"presetId\":378,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T01:42:53.000+00:00\",\"updateTime\":\"2026-04-02T01:42:53.000+00:00\"},\"status\":0},{\"id\":380,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.2.RC1\"},\"pyVersion\":\"Python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":19184749211,\"tags\":[\"preset-20251205-063413-055\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json} -n ${model_name} -w ${world_size}\",\"createTime\":\"2026-04-02 14:44:21\",\"updateTime\":\"2026-04-02 14:44:21\",\"shelveTime\":\"2026-04-02 14:44:26\",\"description\":\"MindIE 升级到2.2.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署、健康检查、自动扩缩容\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/mindie063413055@sha256:af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"imageId\":\"af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":245,\"presetId\":380,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T06:44:21.000+00:00\",\"updateTime\":\"2026-04-02T06:44:21.000+00:00\"},\"status\":0},{\"id\":383,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.0.T3.1\"},\"pyVersion\":\"python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":15021921800,\"tags\":[\"preset-20251205-030713-726\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json}\",\"createTime\":\"2026-04-03 11:23:04\",\"updateTime\":\"2026-04-03 11:23:04\",\"shelveTime\":\"2026-04-03 11:23:09\",\"description\":\"大模型推理预置镜像，支持DeepSeek、Qwen部署，支持DeepSeek自动扩缩容，扩容命令参考/workspace/deepseek/README.md\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/preset030713726@sha256:6e0f"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/dataset/v1/external/query/noShare/versionIds",
+      "status": 200,
+      "requestPreview": "{\"page\":0,\"pageSize\":0,\"isEnabled\":1,\"modelName\":\"0\"}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"page\":null,\"pageSize\":null,\"total\":0,\"list\":null},\"traceId\":\"be3286e9-da5a-481d-9847-afe3de0461d2\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/dataset/v1/external/preset/query",
+      "status": 200,
+      "requestPreview": "{\"page\":0,\"pageSize\":0,\"isEnabled\":1}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"page\":0,\"pageSize\":0,\"total\":0,\"list\":[]},\"traceId\":\"58b247f6-e4a5-452a-adac-dd8ce2394b11\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/dataset/v1/external/query/share/versionIds",
+      "status": 200,
+      "requestPreview": "{\"page\":0,\"pageSize\":0,\"isEnabled\":1,\"modelName\":\"0\"}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"page\":null,\"pageSize\":null,\"total\":0,\"list\":null},\"traceId\":\"628397c6-e8d1-4d5f-a93e-a22c788fc18d\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/image/v1/preset_image/preset_image_list",
+      "status": 200,
+      "requestPreview": "{\"scene\":[1,2],\"page\":1,\"pageSize\":9999999}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"data\":[{\"id\":376,\"poolId\":6,\"createBy\":\"ma_wenjie\",\"imageType\":0,\"imageName\":\"tyzjx\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"1.0.RC3\"},\"pyVersion\":\"python3.11.12\",\"scene\":2,\"architecture\":0,\"chipType\":1,\"ideType\":[\"Jupyter\",\"VSCode\"],\"size\":13012181820,\"tags\":[\"222\"],\"startCommand\":\"axiba\",\"createTime\":\"2026-03-31 18:27:17\",\"updateTime\":\"2026-03-31 18:27:17\",\"shelveTime\":\"2026-04-01 16:47:35\",\"description\":\"镜像描述\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/test@sha256:9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"imageId\":\"9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"workingDir\":\"test\",\"imagePresetExtension\":{\"id\":241,\"presetId\":376,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-03-31T10:27:17.000+00:00\",\"updateTime\":\"2026-03-31T10:27:17.000+00:00\"},\"status\":0},{\"id\":378,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.1.RC1\"},\"pyVersion\":\"python3.11.10\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":16473590943,\"tags\":[\"preset-20250929-070525-125\"],\"startCommand\":\"tail -f /dev/null\",\"createTime\":\"2026-04-02 09:42:53\",\"updateTime\":\"2026-04-02 09:42:53\",\"shelveTime\":\"2026-06-05 16:58:23\",\"description\":\"MindIE 升级到2.1.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/syyatb070525125@sha256:385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"imageId\":\"385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":243,\"presetId\":378,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T01:42:53.000+00:00\",\"updateTime\":\"2026-04-02T01:42:53.000+00:00\"},\"status\":0},{\"id\":380,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.2.RC1\"},\"pyVersion\":\"Python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":19184749211,\"tags\":[\"preset-20251205-063413-055\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json} -n ${model_name} -w ${world_size}\",\"createTime\":\"2026-04-02 14:44:21\",\"updateTime\":\"2026-04-02 14:44:21\",\"shelveTime\":\"2026-04-02 14:44:26\",\"description\":\"MindIE 升级到2.2.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署、健康检查、自动扩缩容\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/mindie063413055@sha256:af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"imageId\":\"af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":245,\"presetId\":380,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T06:44:21.000+00:00\",\"updateTime\":\"2026-04-02T06:44:21.000+00:00\"},\"status\":0},{\"id\":383,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.0.T3.1\"},\"pyVersion\":\"python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":15021921800,\"tags\":[\"preset-20251205-030713-726\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json}\",\"createTime\":\"2026-04-03 11:23:04\",\"updateTime\":\"2026-04-03 11:23:04\",\"shelveTime\":\"2026-04-03 11:23:09\",\"description\":\"大模型推理预置镜像，支持DeepSeek、Qwen部署，支持DeepSeek自动扩缩容，扩容命令参考/workspace/deepseek/README.md\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/preset030713726@sha256:6e0f"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/task/v1/create",
+      "status": 200,
+      "requestPreview": "{\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"resGroupType\":\"public\",\"name\":\"asi3-pys3-0611a\",\"count\":1,\"imageType\":\"preset\",\"imageVersion\":\"\",\"imageId\":395,\"imageName\":\"qwen3.5-27B-35B-122B-397B-031626-zx\",\"codeContents\":[\"c2V0JTIwLWV1byUyMHBpcGVmYWls\",\"[REDACTED_BASE64_COMMAND]\",\"[REDACTED_BASE64_COMMAND]\",\"cHl0aG9uMyUyMC0lMjAlM0MlM0MnUFlSRU1PVEUn\",\"aW1wb3J0JTIwZGF0ZXRpbWUlMkMlMjBoYXNobGliJTJDJTIwaG1hYyUyQyUyMGpzb24lMkMlMjBvcyUyQyUyMHVybGxpYi5wYXJzZSUyQyUyMHVybGxpYi5yZXF1ZXN0\",\"c2VydmljZSUzRCdzMyclM0IlMjByZWdpb24lM0QndXMtZWFzdC0xJyUzQiUyMGVuZHBvaW50JTNEJ2h0dHBzJTNBJTJGJTJGaW5lci5haWh1YW54aW4uY24nJTNCJTIwYnVja2V0JTNEJ2p0ZGxwLTIxYjQyMDhkZGU0MjRlOTZiMTU5MzYyZWY0OWM5Yzk2Jw==\",\"a2V5JTNEJ213Zy1ldy1wYXRlbnQlMkZyZXNlYXJjaF9wYXBlcl9td2dfZXdfdHJhbnNmb3JtZXIlMkZyZXN1bHRzJTJGYXNpM190b2tlbl9yb3V0ZXJfZ2xvYmFsX3Rhc2tfYXJ0aWZhY3RzJTJGYXNpMy1weXMzLWNhbmFyeS0wNjExLmpzb24n\",\"Ym9keSUzRGpzb24uZHVtcHMoJTdCJ2V2ZW50JyUzQSdweXMzX2NhbmFyeSclMkMnb2snJTNBVHJ1ZSUyQyd0aW1lJyUzQWRhdGV0aW1lLmRhdGV0aW1lLnV0Y25vdygpLmlzb2Zvcm1hdCgpJTJCJ1onJTdEKS5lbmNvZGUoKQ==\",\"[REDACTED_BASE64_COMMAND]\",\"bm93JTNEZGF0ZXRpbWUuZGF0ZXRpbWUudXRjbm93KCklM0IlMjBhbXolM0Rub3cuc3RyZnRpbWUoJyUyNVklMjVtJTI1ZFQlMjVIJTI1TSUyNVNaJyklM0IlMjBkYXRlc3RhbXAlM0Rub3cuc3RyZnRpbWUoJyUyNVklMjVtJTI1ZCcp\",\"Y2Fub25pY2FsX3VyaSUzRCclMkYnJTIwJTJCJTIwYnVja2V0JTIwJTJCJTIwJyUyRiclMjAlMkIlMjAnJTJGJy5qb2luKHVybGxpYi5wYXJzZS5xdW90ZShwJTJDJTIwc2FmZSUzRCcnKSUyMGZvciUyMHAlMjBpbiUyMGtleS5zcGxpdCgnJTJGJykp\",\"cGF5bG9hZF9oYXNoJTNEaGFzaGxpYi5zaGEyNTYoYm9keSkuaGV4ZGlnZXN0KCk=\",\"aGVhZGVycyUzRCU3Qidob3N0JyUzQSdpbmVyLmFpaHVhbnhpbi5jbiclMkMneC1hbXotY29udGVudC1zaGEyNTYnJTNBcGF5bG9hZF9oYXNoJTJDJ3gtYW16LWRhdGUnJTNBYW16JTdE\",\"Y2Fub25pY2FsX2hlYWRlcnMlM0QnJy5qb2luKGYnJTdCayU3RCUzQSU3QmhlYWRlcnMlNUJrJTVEJTdEJTVDbiclMjBmb3IlMjBrJTIwaW4lMjBzb3J0ZWQoaGVhZGVycykp\",\"c2lnbmVkX2hlYWRlcnMlM0QnJTNCJy5qb2luKHNvcnR",
+      "responsePreview": "{\"code\":0,\"data\":\"任务发起成功\",\"msg\":\"OK\",\"traceId\":\"ee274f80-b560-4969-8a71-10038e5b5bc3\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/task/v1/list",
+      "status": 200,
+      "requestPreview": "{\"pageNum\":1,\"pageSize\":10,\"projectId\":[\"21b4208dde424e96b159362ef49c9c96\"],\"status\":[],\"resGroupId\":[],\"order\":null,\"currentUser\":1}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"total\":297,\"list\":[{\"id\":\"dt-9666b23dd3bd4db8a67dcf82ccb09f9d\",\"name\":\"asi3-pys3-0611a\",\"userName\":\"xuda2025\",\"status\":1,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":4,\"gpu\":1,\"mem\":16,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 14:10:11\",\"useTime\":\"--\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-a6b4d53840144e3eaf37528aa26bafce\",\"name\":\"asi3-extra5-1n-0611a\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":4,\"gpu\":1,\"mem\":16,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 14:06:40\",\"startTime\":\"2026-06-11 14:06:54\",\"endTime\":\"2026-06-11 14:06:54\",\"useTime\":\"00:00:00\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-ebb08ab145864876955d22f614cfed85\",\"name\":\"as1-isq-fs4rb-135312\",\"userName\":\"xuda2025\",\"status\":3,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":20,\"gpu\":4,\"mem\":240,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 13:54:09\",\"startTime\":\"2026-06-11 13:54:21\",\"useTime\":\"00:16:01\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-027444dd545b459c832d7942ecb688a9\",\"name\":\"asi3-extra5-2n-0611b\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":40,\"gpu\":2,\"mem\":480,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 13:53:42\",\"startTime\":\"2026-06-11 13:53:56\",\"endTime\":\"2026-06-11 13:53:56\",\"useTime\":\"00:00:00\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-b2852f989b184a6aaec8d0bf6168e577\",\"name\":\"asi3-2min-0611a\",\"userName\":\"xuda2025\",\"status\":0,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":8,\"gpu\":2,\"mem\":32,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 13:50:44\",\"startTime\":\"2026-06-11 13:50:52\",\"endTime\":\"2026-06-11 13:51:01\",\"useTime\":\"00:00:09\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-8fb45165bcea40c0b339cddbe1e20767\",\"name\":\"asi3-mincan-0611a\",\"userName\":\"xuda2025\",\"status\":0,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":4,\"gpu\":1,\"mem\":16,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 13:47:38\",\"startTime\":\"2026-06-11 13:47:47\",\"endTime\":\"2026-06-11 13:47:56\",\"useTime\":\"00:00:09\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-97329cb435bf4adfa5e230b4b90de07a\",\"name\":\"asi3-canary3-0611\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":40,\"gpu\":2,\"mem\":480,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 13:43:30\",\"startTime\":\"2026-06-11 13:43:39\",\"endTime\":\"2026-06-11 13:43:39\",\"useTime\":\"00:00:00\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-c19fdfc3d92647f9bc40ad09bb519454\",\"name\":\"as1-isq-fs5-133804\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"count\":1,\"resourceInfo\":{\"cpu\":20,\"gpu\":5,\"mem\":240,\"gpuType\":\"昇腾910B\"},\"submitTime\":\"2026-06-11 13:39:12\",\"startTime\":\"2026-06-11 13:39:22\",\"endTime\":\"2026-06-11 13:39:31\",\"useTime\":\"00:00:09\",\"projectName\":\"移动研究院未来院\",\"projectId\":\"21b4208dde424e96b159362ef49c9c96\",\"resGroupType\":\"public\",\"resGroupIsBind\":true,\"priority\":\"med\"},{\"id\":\"dt-130f745d038c4d62a3a9d6f71983f0e5\",\"name\":\"asi3-extra5ui-0611\",\"userName\":\"xuda2025\",\"status\":6,\"resGroupId\":154,\"resGroupName\":"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/resource/v1/user/list-all-resource-group",
+      "status": 200,
+      "requestPreview": "{}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":[{\"id\":154,\"groupName\":\"huanxin-all-resource\",\"attribute\":null,\"status\":null,\"clusterId\":null},{\"id\":152,\"groupName\":\"测试资源组\",\"attribute\":null,\"status\":null,\"clusterId\":null},{\"id\":159,\"groupName\":\"研究院未来院专属资源组\",\"attribute\":null,\"status\":null,\"clusterId\":null}],\"traceId\":\"66802455-f5a3-4f49-8e6f-765ed188648f\"}"
+    }
+  ],
+  "submitResult": {
+    "submitted": true,
+    "blockedReason": null,
+    "clickAttempted": true,
+    "drawerOpenAfterClick": false,
+    "postClickNetworkEvents": [
+      {
+        "method": "POST",
+        "url": "https://aihuanxin.cn/kunlun/web/task/v1/create",
+        "status": 200,
+        "requestPreview": "{\"resGroupId\":154,\"resGroupName\":\"huanxin-all-resource\",\"resGroupType\":\"public\",\"name\":\"asi3-pys3-0611a\",\"count\":1,\"imageType\":\"preset\",\"imageVersion\":\"\",\"imageId\":395,\"imageName\":\"qwen3.5-27B-35B-122B-397B-031626-zx\",\"codeContents\":[\"c2V0JTIwLWV1byUyMHBpcGVmYWls\",\"[REDACTED_BASE64_COMMAND]\",\"[REDACTED_BASE64_COMMAND]\",\"cHl0aG9uMyUyMC0lMjAlM0MlM0MnUFlSRU1PVEUn\",\"aW1wb3J0JTIwZGF0ZXRpbWUlMkMlMjBoYXNobGliJTJDJTIwaG1hYyUyQyUyMGpzb24lMkMlMjBvcyUyQyUyMHVybGxpYi5wYXJzZSUyQyUyMHVybGxpYi5yZXF1ZXN0\",\"c2VydmljZSUzRCdzMyclM0IlMjByZWdpb24lM0QndXMtZWFzdC0xJyUzQiUyMGVuZHBvaW50JTNEJ2h0dHBzJTNBJTJGJTJGaW5lci5haWh1YW54aW4uY24nJTNCJTIwYnVja2V0JTNEJ2p0ZGxwLTIxYjQyMDhkZGU0MjRlOTZiMTU5MzYyZWY0OWM5Yzk2Jw==\",\"a2V5JTNEJ213Zy1ldy1wYXRlbnQlMkZyZXNlYXJjaF9wYXBlcl9td2dfZXdfdHJhbnNmb3JtZXIlMkZyZXN1bHRzJTJGYXNpM190b2tlbl9yb3V0ZXJfZ2xvYmFsX3Rhc2tfYXJ0aWZhY3RzJTJGYXNpMy1weXMzLWNhbmFyeS0wNjExLmpzb24n\",\"Ym9keSUzRGpzb24uZHVtcHMoJTdCJ2V2ZW50JyUzQSdweXMzX2NhbmFyeSclMkMnb2snJTNBVHJ1ZSUyQyd0aW1lJyUzQWRhdGV0aW1lLmRhdGV0aW1lLnV0Y25vdygpLmlzb2Zvcm1hdCgpJTJCJ1onJTdEKS5lbmNvZGUoKQ==\",\"[REDACTED_BASE64_COMMAND]\",\"bm93JTNEZGF0ZXRpbWUuZGF0ZXRpbWUudXRjbm93KCklM0IlMjBhbXolM0Rub3cuc3RyZnRpbWUoJyUyNVklMjVtJTI1ZFQlMjVIJTI1TSUyNVNaJyklM0IlMjBkYXRlc3RhbXAlM0Rub3cuc3RyZnRpbWUoJyUyNVklMjVtJTI1ZCcp\",\"Y2Fub25pY2FsX3VyaSUzRCclMkYnJTIwJTJCJTIwYnVja2V0JTIwJTJCJTIwJyUyRiclMjAlMkIlMjAnJTJGJy5qb2luKHVybGxpYi5wYXJzZS5xdW90ZShwJTJDJTIwc2FmZSUzRCcnKSUyMGZvciUyMHAlMjBpbiUyMGtleS5zcGxpdCgnJTJGJykp\",\"cGF5bG9hZF9oYXNoJTNEaGFzaGxpYi5zaGEyNTYoYm9keSkuaGV4ZGlnZXN0KCk=\",\"aGVhZGVycyUzRCU3Qidob3N0JyUzQSdpbmVyLmFpaHVhbnhpbi5jbiclMkMneC1hbXotY29udGVudC1zaGEyNTYnJTNBcGF5bG9hZF9oYXNoJTJDJ3gtYW16LWRhdGUnJTNBYW16JTdE\",\"Y2Fub25pY2FsX2hlYWRlcnMlM0QnJy5qb2luKGYnJTdCayU3RCUzQSU3QmhlYWRlcnMlNUJrJTVEJTdEJTVDbiclMjBmb3IlMjBrJTIwaW4lMjBzb3J0ZWQoaGVhZGVycykp\",\"c2lnbmVkX2hlYWRlcnMlM0QnJTNCJy5qb2luKHNvcnR",
+        "responsePreview": "{\"code\":0,\"data\":\"任务发起成功\",\"msg\":\"OK\",\"traceId\":\"ee274f80-b560-4969-8a71-10038e5b5bc3\"}"
+      }
+    ],
+    "visibleMessages": [],
+    "resourceState": {
+      "alertText": "当前项目空间加速卡剩余/总量为：1 / 50卡",
+      "quotaRemaining": 1,
+      "quotaTotal": 50,
+      "instanceCount": 1,
+      "acceleratorCardsPerInstance": 1,
+      "cpuPerInstance": 4,
+      "memoryPerInstance": 16,
+      "requestedAcceleratorCards": 1
+    },
+    "createPayloadOverride": {
+      "source": "/tmp/asi3-pys3-canary.XXXXXX.sh",
+      "lines": 27,
+      "encodedBytes": 3088,
+      "resourceConfig": {
+        "instanceCount": 1,
+        "acceleratorCardsPerInstance": 1,
+        "cpuPerInstance": 4,
+        "memoryPerInstance": 16
+      }
+    },
+    "preSubmitDiagnostics": {
+      "activeElement": {
+        "tagName": "BODY",
+        "id": "",
+        "className": "",
+        "text": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被"
+      },
+      "drawerCount": 2,
+      "drawers": [
+        {
+          "className": "ant-drawer-content-wrapper",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 1200,
+            "height": 1000
+          },
+          "textPreview": "提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail export AWS_ACCESS_KEY_ID='[REDACTED]' export AWS_SECRET_ACCESS_KEY='[REDACTED]' "
+        },
+        {
+          "className": "ant-drawer-content train-create-drawer",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 1200,
+            "height": 1000
+          },
+          "textPreview": "提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail export AWS_ACCESS_KEY_ID='[REDACTED]' export AWS_SECRET_ACCESS_KEY='[REDACTED]' "
+        }
+      ],
+      "buttons": [
+        {
+          "text": "",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "ant-drawer-close",
+          "rect": {
+            "x": 1542,
+            "y": 19,
+            "width": 22,
+            "height": 18
+          }
+        },
+        {
+          "text": "开 关",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "ant-switch css-3nz3m5",
+          "rect": {
+            "x": 571,
+            "y": -1001,
+            "width": 45,
+            "height": 22
+          }
+        },
+        {
+          "text": "查看详情",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-link",
+          "rect": {
+            "x": 841,
+            "y": -553,
+            "width": 74,
+            "height": 16
+          }
+        },
+        {
+          "text": "刷新",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-link",
+          "rect": {
+            "x": 1465,
+            "y": 331,
+            "width": 60,
+            "height": 32
+          }
+        },
+        {
+          "text": "选择",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-sm ant-btn-background-ghost show-drawer-button",
+          "rect": {
+            "x": 571,
+            "y": 592,
+            "width": 80,
+            "height": 32
+          }
+        },
+        {
+          "text": "取 消",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-default",
+          "rect": {
+            "x": 1442,
+            "y": 944,
+            "width": 64,
+            "height": 32
+          }
+        },
+        {
+          "text": "确 定",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-primary kl-create-btn",
+          "rect": {
+            "x": 1514,
+            "y": 944,
+            "width": 62,
+            "height": 32
+          }
+        }
+      ],
+      "errors": [
+        "所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回",
+        "30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格",
+        "请选择一个适用于训练场景的镜像。",
+        "训练任务占用资源为实例数乘以单实例资源配置，训练任务占用资源不得超出项目空间配额，当前项目空间加速卡剩余/总量为：1 / 50卡 刷新",
+        "请输入[1-10000]之间的正整数",
+        "请输入[1-undefined]之间的正整数",
+        "请输入[1-NaN]之间的正整数",
+        "请输入[1-NaN]之间的正整数"
+      ]
+    },
+    "postSubmitDiagnostics": {
+      "activeElement": {
+        "tagName": "BODY",
+        "id": "",
+        "className": "",
+        "text": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被"
+      },
+      "drawerCount": 0,
+      "drawers": [],
+      "buttons": [],
+      "errors": [
+        "所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回"
+      ]
+    },
+    "taskList": {
+      "opened": true,
+      "taskNameVisible": true,
+      "summary": {
+        "title": "焕新社区",
+        "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=7fff17ae-ac30-4b1a-a0dd-6ec8ffc96f87&session_state=b3c2d704-0bc5-4e5d-8805-4efd762c10e1&code=001200e8-af8f-4737-b758-995dc3ffc5ca.b3c2d704-0bc5-4e5d-8805-4efd762c10e1.55d54dd3-6a72-4b47-b302-151bd26477bc",
+        "bodyPreview": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回 Jupyter VSCode Shell终端 可视化 保存镜像 任务列表 提交任务 训练任务列表 仅我创建 训练任务名称 所属资源组 创建人 任务状态 优先级 实例数 单实例资源配置 最近提交时间 服务时长 asi3-pys3-0611a 公共huanxin-all-resource xuda2025 启动中 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:10:11 -- asi3-extra5-1n-0611a 公共huanxin-all-resource xuda2025 失败 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:06:40 00:00:00 as1-isq-fs4rb-135312 公共huanxin-all-resource xuda2025 运行中 中 1 4加速卡 20核CPU 240GB内存 2026-06-11 13:54:09 00:16:04 asi3-extra5-2n-0611b 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:53:42 00:00:00 asi3-2min-0611a 公共huanxin-all-resource xuda2025 成功 中 1 2加速卡 8核CPU 32GB内存 2026-06-11 13:50:44 00:00:09 asi3-mincan-0611a 公共huanxin-all-resource xuda2025 成功 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 13:47:38 00:00:09 asi3-canary3-0611 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:43:30 00:00:00 as1-isq-fs5-133804 公共huanxin-all-resource xuda2025 失败 中 1 5加速卡 20核CPU 240GB内存 2026-06-11 13:39:12 00:00:09 asi3-extra5ui-0611 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:31:46 00:00:00 as1-up-c00u-131229 公共huanxin-all-resource xuda2025 成功 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 13:13:26 00:00:05 共 297 条 每页显示 10 条 1 2 3 4 5 ••• 30 跳至页",
+        "headings": [
+          "训练任务列表"
+        ],
+        "buttons": [
+          {
+            "text": "",
+            "disabled": false,
+            "className": "ant-alert-close-icon"
+          },
+          {
+            "text": "可视化",
+            "disabled": false,
+            "className": "css-3nz3m5 ant-btn ant-btn-default"
+          },
+          {
+            "text": "保存镜像",
+            "disabled": false,
+            "className": "css-3nz3m5 ant-btn ant-btn-default"
+          },
+          {
+            "text": "任务列表",
+            "disabled": false,
+            "className": "css-3nz3m5 ant-btn ant-btn-default"
+          },
+          {
+            "text": "提交任务",
+            "disabled": false,
+            "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-background-ghost"
+          },
+          {
+            "text": "",
+            "disabled": false,
+            "className": "ant-drawer-close"
+          },
+          {
+            "text": "",
+            "disabled": false,
+            "className": "css-3nz3m5 ant-btn ant-btn-default icon-reload-button ant-btn-icon-only"
+          },
+          {
+            "text": "",
+            "disabled": true,
+            "className": "ant-pagination-item-link"
+          },
+          {
+            "text": "",
+            "disabled": false,
+            "className": "ant-pagination-item-link"
+          }
+        ]
+      }
+    }
+  },
+  "title": "焕新社区",
+  "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=7fff17ae-ac30-4b1a-a0dd-6ec8ffc96f87&session_state=b3c2d704-0bc5-4e5d-8805-4efd762c10e1&code=001200e8-af8f-4737-b758-995dc3ffc5ca.b3c2d704-0bc5-4e5d-8805-4efd762c10e1.55d54dd3-6a72-4b47-b302-151bd26477bc",
+  "bodyPreview": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回 Jupyter VSCode Shell终端 可视化 保存镜像 任务列表 提交任务 训练任务列表 仅我创建 训练任务名称 所属资源组 创建人 任务状态 优先级 实例数 单实例资源配置 最近提交时间 服务时长 asi3-pys3-0611a 公共huanxin-all-resource xuda2025 启动中 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:10:11 -- asi3-extra5-1n-0611a 公共huanxin-all-resource xuda2025 失败 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 14:06:40 00:00:00 as1-isq-fs4rb-135312 公共huanxin-all-resource xuda2025 运行中 中 1 4加速卡 20核CPU 240GB内存 2026-06-11 13:54:09 00:16:04 asi3-extra5-2n-0611b 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:53:42 00:00:00 asi3-2min-0611a 公共huanxin-all-resource xuda2025 成功 中 1 2加速卡 8核CPU 32GB内存 2026-06-11 13:50:44 00:00:09 asi3-mincan-0611a 公共huanxin-all-resource xuda2025 成功 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 13:47:38 00:00:09 asi3-canary3-0611 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:43:30 00:00:00 as1-isq-fs5-133804 公共huanxin-all-resource xuda2025 失败 中 1 5加速卡 20核CPU 240GB内存 2026-06-11 13:39:12 00:00:09 asi3-extra5ui-0611 公共huanxin-all-resource xuda2025 失败 中 1 2加速卡 40核CPU 480GB内存 2026-06-11 13:31:46 00:00:00 as1-up-c00u-131229 公共huanxin-all-resource xuda2025 成功 中 1 1加速卡 4核CPU 16GB内存 2026-06-11 13:13:26 00:00:05 共 297 条 每页显示 10 条 1 2 3 4 5 ••• 30 跳至页",
+  "headings": [
+    "训练任务列表"
+  ],
+  "buttons": [
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-alert-close-icon"
+    },
+    {
+      "text": "可视化",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "保存镜像",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "任务列表",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "提交任务",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-background-ghost"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-drawer-close"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default icon-reload-button ant-btn-icon-only"
+    },
+    {
+      "text": "",
+      "disabled": true,
+      "className": "ant-pagination-item-link"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-pagination-item-link"
+    }
+  ],
+  "timestamp": "2026-06-11T06:10:25.366Z"
+}

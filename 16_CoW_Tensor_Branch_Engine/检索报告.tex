@@ -1,0 +1,113 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\noindent
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{一种面向多路径推理的张量状态写时复制管理系统、芯片及方法} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.04.02} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明面向树状推理、多候选搜索和验证回溯类模型推理场景，其核心不在于增加乘加阵列数量，而在于把多分支状态管理从软件运行时下沉到芯片内存微架构。现有公开资料主要覆盖软件分页 KV 管理、链式思维多路径搜索和投机推理验证树，但尚未公开以写时复制张量状态页表、专用分支状态控制器和分支生命周期指令集为核心的一体化硬件实现。
+}}
+
+\vspace{1em}
+
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 多路径推理, 树搜索推理, 分支状态管理
+(2) KV Cache, 写时复制, 张量页表
+(3) 大模型推理显存管理, 分支剪枝, 分支合流
+(4) AI 芯片内存控制器, 专用指令, 运行时协同
+
+\textbf{外文检索关键词：}
+(1) multi-path inference, tree search inference, branch state management
+(2) KV cache, copy-on-write, tensor page table
+(3) large language model serving, branch pruning, branch merge
+(4) AI accelerator memory controller, branch ISA, runtime co-design
+
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{Efficient Memory Management for Large Language Model Serving with PagedAttention} \newline SOSP 2023 \newline Kwon, W., et al. \\
+\hline
+2 & A (基础技术) & \textbf{Tree of Thoughts: Deliberate Problem Solving with Large Language Models} \newline arXiv 2023 \newline Yao, S., et al. \\
+\hline
+3 & Y (相关技术) & \textbf{Self-Consistency Improves Chain of Thought Reasoning in Language Models} \newline ICLR 2023 \newline Wang, X., et al. \\
+\hline
+4 & Y (相关技术) & \textbf{SpecInfer: Accelerating Generative Large Language Model Serving with Speculative Inference and Token Tree Verification} \newline arXiv 2023 \newline Miao, X., et al. \\
+\hline
+\end{longtable}
+
+\section*{三、分析评述}
+
+\textbf{1. 与文献1（PagedAttention） 的对比分析：}
+文献1解决的是软件侧 KV Cache 分页和块映射问题，其核心在于提高大模型服务时的内存利用率，但并未将分支生命周期、共享页写入检测和回收逻辑下沉到芯片微架构。本文方案进一步将“共享前缀、差异尾部”的状态管理语义固化为硬件页表、共享计数器和专用指令。
+
+\textbf{2. 与文献2（Tree of Thoughts） 的对比分析：}
+文献2揭示了多路径推理在算法层面的价值，但其默认底层硬件能够透明支撑分支扩张和回收，并未给出针对分支状态复制的专用存储架构。本文方案解决的是该算法落地时的底层显存墙问题。
+
+\textbf{3. 与文献3（Self-Consistency） 的对比分析：}
+文献3通过并行采样多条推理链提升准确率，但现有实现仍主要依赖软件运行时维护多个上下文副本。本文方案把多候选链之间的前缀复用固化为写时复制张量页机制，从而在硬件层为自一致性类推理提供更低成本支撑。
+
+\textbf{4. 与文献4（SpecInfer） 的对比分析：}
+文献4涉及树形令牌验证和推理树结构，但重点仍在软件推理框架、验证策略和服务调度。其并未公开面向张量状态的硬件原生分支控制器、分支指令集和显存单周期回收机制，因此无法覆盖本申请的核心保护点。
+
+\section*{四、检索结论}
+
+经检索，现有公开资料已经分别覆盖软件分页 KV 管理、树搜索推理、自一致性采样和推理树验证等基础思想，但未发现与本申请全部技术特征相同的现有技术。尤其未发现将“分支状态控制器 + 张量页写时复制 + 分支生命周期专用指令 + 硬件原生回收”组合为统一芯片方案的公开文献。因此，本申请具备较强的新颖性基础，创造性重点可集中论证其把软件树搜索状态管理降维固化为芯片内存微架构这一点。
+
+\end{document}

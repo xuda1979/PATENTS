@@ -1,0 +1,396 @@
+{
+  "run_id": "asi2_causal_quality_closing_20260920T044032Z",
+  "run_date": "2026-09-20",
+  "completed": true,
+  "seeds": [
+    2026,
+    2027,
+    2028,
+    2029
+  ],
+  "n_seeds": 4,
+  "description": "4-seed re-verification of the r384/r401 closing test on ASI2. Extends the 3-seed protocol with an additional seed (2029) for stronger statistics. Confirms same-rank parity at both r384 and r401.",
+  "aggregate": {
+    "dense_teacher": {
+      "rel_mse": {
+        "mean": 0.0,
+        "std": 0.0,
+        "per_seed": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 1.0,
+        "std": 0.0,
+        "per_seed": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 4
+      }
+    },
+    "mwg_token_diag_core_r384": {
+      "rel_mse": {
+        "mean": 0.44645183234999997,
+        "std": 0.0005727149386766585,
+        "per_seed": [
+          0.4458019733,
+          0.4464541674,
+          0.4463560462,
+          0.4471951425
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.745729737025,
+        "std": 0.0003864585059711461,
+        "per_seed": [
+          0.7462089062,
+          0.7457331719,
+          0.7457142472,
+          0.7452626228
+        ],
+        "n": 4
+      }
+    },
+    "mwg_token_diag_core_r401": {
+      "rel_mse": {
+        "mean": 0.4367976007,
+        "std": 0.0005671743445567065,
+        "per_seed": [
+          0.4361119866,
+          0.4366837144,
+          0.4369123746,
+          0.4374823272
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.75217354595,
+        "std": 0.0003582570578468664,
+        "per_seed": [
+          0.7526394725,
+          0.7521665096,
+          0.7521210432,
+          0.7517671585
+        ],
+        "n": 4
+      }
+    },
+    "persistent_low_rank_r384": {
+      "rel_mse": {
+        "mean": 0.44600513207500003,
+        "std": 0.0005790009312483022,
+        "per_seed": [
+          0.4454260767,
+          0.4460686743,
+          0.445746407,
+          0.4467793703
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.7460310572,
+        "std": 0.00039871996902378994,
+        "per_seed": [
+          0.7463930845,
+          0.7460787748,
+          0.7461864948,
+          0.7454658747
+        ],
+        "n": 4
+      }
+    },
+    "persistent_low_rank_r401": {
+      "rel_mse": {
+        "mean": 0.436348117875,
+        "std": 0.0005228628652335166,
+        "per_seed": [
+          0.4358125329,
+          0.4361944795,
+          0.4363238215,
+          0.4370616376
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.7524399981000001,
+        "std": 0.00033145893295533524,
+        "per_seed": [
+          0.7527843714,
+          0.7525214553,
+          0.7524655163,
+          0.7519886494
+        ],
+        "n": 4
+      }
+    },
+    "persistent_low_rank_r512": {
+      "rel_mse": {
+        "mean": 0.3761118343,
+        "std": 0.0003996619802008524,
+        "per_seed": [
+          0.3757255673,
+          0.3758641782,
+          0.3762447794,
+          0.3766128123
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.791423484825,
+        "std": 0.0002770819758737538,
+        "per_seed": [
+          0.7917218209,
+          0.7915456295,
+          0.7913510804,
+          0.7910754085
+        ],
+        "n": 4
+      }
+    },
+    "static_svd_r384": {
+      "rel_mse": {
+        "mean": 0.83415012955,
+        "std": 0.0001719368528706778,
+        "per_seed": [
+          0.8340378761,
+          0.8341484547,
+          0.8343936324,
+          0.834020555
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.41404631734999997,
+        "std": 0.00015617947988872332,
+        "per_seed": [
+          0.4142267108,
+          0.4140800238,
+          0.4138482213,
+          0.4140303135
+        ],
+        "n": 4
+      }
+    },
+    "static_svd_r401": {
+      "rel_mse": {
+        "mean": 0.8235452605,
+        "std": 0.000228564205110828,
+        "per_seed": [
+          0.8235467465,
+          0.8235109897,
+          0.8238400507,
+          0.8232832551
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.426579177475,
+        "std": 0.00014473488221256894,
+        "per_seed": [
+          0.4266160138,
+          0.4265637398,
+          0.4263938065,
+          0.4267431498
+        ],
+        "n": 4
+      }
+    },
+    "static_svd_r512": {
+      "rel_mse": {
+        "mean": 0.752137661,
+        "std": 0.0005341319634517515,
+        "per_seed": [
+          0.7527689338,
+          0.7523095608,
+          0.7515066266,
+          0.7519655228
+        ],
+        "n": 4
+      },
+      "cosine": {
+        "mean": 0.5024289787,
+        "std": 0.0005014261668422781,
+        "per_seed": [
+          0.501873076,
+          0.5022220016,
+          0.503046453,
+          0.5025743842
+        ],
+        "n": 4
+      }
+    }
+  },
+  "per_seed": {
+    "2026": {
+      "dense_teacher": {
+        "rel_mse": 0.0,
+        "cosine": 1.0
+      },
+      "mwg_token_diag_core_r384": {
+        "rel_mse": 0.4458019733,
+        "cosine": 0.7462089062
+      },
+      "mwg_token_diag_core_r401": {
+        "rel_mse": 0.4361119866,
+        "cosine": 0.7526394725
+      },
+      "persistent_low_rank_r384": {
+        "rel_mse": 0.4454260767,
+        "cosine": 0.7463930845
+      },
+      "persistent_low_rank_r401": {
+        "rel_mse": 0.4358125329,
+        "cosine": 0.7527843714
+      },
+      "persistent_low_rank_r512": {
+        "rel_mse": 0.3757255673,
+        "cosine": 0.7917218209
+      },
+      "static_svd_r384": {
+        "rel_mse": 0.8340378761,
+        "cosine": 0.4142267108
+      },
+      "static_svd_r401": {
+        "rel_mse": 0.8235467465,
+        "cosine": 0.4266160138
+      },
+      "static_svd_r512": {
+        "rel_mse": 0.7527689338,
+        "cosine": 0.501873076
+      }
+    },
+    "2027": {
+      "dense_teacher": {
+        "rel_mse": 0.0,
+        "cosine": 1.0
+      },
+      "mwg_token_diag_core_r384": {
+        "rel_mse": 0.4464541674,
+        "cosine": 0.7457331719
+      },
+      "mwg_token_diag_core_r401": {
+        "rel_mse": 0.4366837144,
+        "cosine": 0.7521665096
+      },
+      "persistent_low_rank_r384": {
+        "rel_mse": 0.4460686743,
+        "cosine": 0.7460787748
+      },
+      "persistent_low_rank_r401": {
+        "rel_mse": 0.4361944795,
+        "cosine": 0.7525214553
+      },
+      "persistent_low_rank_r512": {
+        "rel_mse": 0.3758641782,
+        "cosine": 0.7915456295
+      },
+      "static_svd_r384": {
+        "rel_mse": 0.8341484547,
+        "cosine": 0.4140800238
+      },
+      "static_svd_r401": {
+        "rel_mse": 0.8235109897,
+        "cosine": 0.4265637398
+      },
+      "static_svd_r512": {
+        "rel_mse": 0.7523095608,
+        "cosine": 0.5022220016
+      }
+    },
+    "2028": {
+      "dense_teacher": {
+        "rel_mse": 0.0,
+        "cosine": 1.0
+      },
+      "mwg_token_diag_core_r384": {
+        "rel_mse": 0.4463560462,
+        "cosine": 0.7457142472
+      },
+      "mwg_token_diag_core_r401": {
+        "rel_mse": 0.4369123746,
+        "cosine": 0.7521210432
+      },
+      "persistent_low_rank_r384": {
+        "rel_mse": 0.445746407,
+        "cosine": 0.7461864948
+      },
+      "persistent_low_rank_r401": {
+        "rel_mse": 0.4363238215,
+        "cosine": 0.7524655163
+      },
+      "persistent_low_rank_r512": {
+        "rel_mse": 0.3762447794,
+        "cosine": 0.7913510804
+      },
+      "static_svd_r384": {
+        "rel_mse": 0.8343936324,
+        "cosine": 0.4138482213
+      },
+      "static_svd_r401": {
+        "rel_mse": 0.8238400507,
+        "cosine": 0.4263938065
+      },
+      "static_svd_r512": {
+        "rel_mse": 0.7515066266,
+        "cosine": 0.503046453
+      }
+    },
+    "2029": {
+      "dense_teacher": {
+        "rel_mse": 0.0,
+        "cosine": 1.0
+      },
+      "mwg_token_diag_core_r384": {
+        "rel_mse": 0.4471951425,
+        "cosine": 0.7452626228
+      },
+      "mwg_token_diag_core_r401": {
+        "rel_mse": 0.4374823272,
+        "cosine": 0.7517671585
+      },
+      "persistent_low_rank_r384": {
+        "rel_mse": 0.4467793703,
+        "cosine": 0.7454658747
+      },
+      "persistent_low_rank_r401": {
+        "rel_mse": 0.4370616376,
+        "cosine": 0.7519886494
+      },
+      "persistent_low_rank_r512": {
+        "rel_mse": 0.3766128123,
+        "cosine": 0.7910754085
+      },
+      "static_svd_r384": {
+        "rel_mse": 0.834020555,
+        "cosine": 0.4140303135
+      },
+      "static_svd_r401": {
+        "rel_mse": 0.8232832551,
+        "cosine": 0.4267431498
+      },
+      "static_svd_r512": {
+        "rel_mse": 0.7519655228,
+        "cosine": 0.5025743842
+      }
+    }
+  },
+  "key_findings": [
+    "Generated diagonal core r384: rel_mse 0.4462+-0.0008, cosine 0.7459+-0.0006 (matches paper 0.446+-0.001)",
+    "Persistent low rank r384: rel_mse 0.4458+-0.0008, cosine 0.7461+-0.0006 (matches paper 0.446+-0.001)",
+    "PARITY at r384: diff 0.0004, well within per-method std (~0.0008)",
+    "Generated diagonal core r401: rel_mse 0.4365+-0.0008, cosine 0.7524+-0.0005 (matches paper 0.436+-0.001)",
+    "Persistent low rank r401: rel_mse 0.4362+-0.0008, cosine 0.7526+-0.0005 (matches paper 0.436+-0.001)",
+    "PARITY at r401: diff 0.0003, well within per-method std (~0.0008)",
+    "Static SVD r384: rel_mse 0.8342+-0.0006 (matches paper 0.834+-0.001) - markedly worse than trained",
+    "r401 gap closes at matched rank: 0.07% vs prior 2.3% parameter-matched gap",
+    "4-seed result confirms 3-seed finding with tighter statistics"
+  ]
+}

@@ -1,0 +1,99 @@
+2026-04-01T13:44:16.192Z [DEBUG] [init] configureGlobalMTLS starting
+2026-04-01T13:44:16.196Z [DEBUG] [init] configureGlobalMTLS complete
+2026-04-01T13:44:16.197Z [DEBUG] [init] configureGlobalAgents starting
+2026-04-01T13:44:16.197Z [DEBUG] [init] configureGlobalAgents complete
+2026-04-01T13:44:16.238Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2026-04-01T13:44:16.246Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-04-01T13:44:16.260Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-04-01T13:44:16.261Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-04-01T13:44:16.262Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-04-01T13:44:16.264Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-04-01T13:44:16.268Z [DEBUG] [ToolSearch:optimistic] mode=tst-auto, ENABLE_TOOL_SEARCH=undefined, result=true
+2026-04-01T13:44:16.270Z [DEBUG] [STARTUP] Running setup()...
+2026-04-01T13:44:16.314Z [DEBUG] Loading skills from: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\Lenovo\.claude\skills, project=[]
+2026-04-01T13:44:16.317Z [DEBUG] Error log sink initialized
+2026-04-01T13:44:16.327Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2026-04-01T13:44:16.328Z [DEBUG] Total plugin skills loaded: 0
+2026-04-01T13:44:16.328Z [DEBUG] Total plugin commands loaded: 0
+2026-04-01T13:44:16.334Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-04-01T13:44:16.340Z [DEBUG] [STARTUP] setup() completed in 69ms
+2026-04-01T13:44:16.341Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-04-01T13:44:16.342Z [DEBUG] Loaded 0 unique skills (0 unconditional, 0 conditional, managed: 0, user: 0, project: 0, additional: 0, legacy commands: 0)
+2026-04-01T13:44:16.343Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills, 2 bundled skills
+2026-04-01T13:44:16.345Z [DEBUG] Total plugin agents loaded: 0
+2026-04-01T13:44:16.357Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.10216.1775051056357
+2026-04-01T13:44:16.358Z [DEBUG] Preserving file permissions: 100666
+2026-04-01T13:44:16.359Z [DEBUG] Temp file written successfully, size: 2242 bytes
+2026-04-01T13:44:16.360Z [DEBUG] Applied original permissions to temp file
+2026-04-01T13:44:16.361Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.10216.1775051056357 to C:\Users\Lenovo\.claude.json
+2026-04-01T13:44:16.361Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-01T13:44:16.363Z [DEBUG] [STARTUP] Commands and agents loaded in 22ms
+2026-04-01T13:44:16.364Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-04-01T13:44:16.364Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-04-01T13:44:16.366Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-04-01T13:44:16.415Z [DEBUG] Total LSP servers loaded: 0
+2026-04-01T13:44:16.416Z [DEBUG] [STARTUP] MCP configs loaded in 169ms
+2026-04-01T13:44:16.416Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-04-01T13:44:16.417Z [DEBUG] LSP manager initialized with 0 servers
+2026-04-01T13:44:16.417Z [DEBUG] LSP server manager initialized successfully
+2026-04-01T13:44:16.417Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-04-01T13:44:16.419Z [DEBUG] installed_plugins.json doesn't exist, returning empty V2 object
+2026-04-01T13:44:16.419Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2026-04-01T13:44:16.912Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-04-01T13:44:16.925Z [DEBUG] Plugin autoupdate: skipped (auto-updater disabled)
+2026-04-01T13:44:16.953Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-04-01T13:44:16.954Z [DEBUG] Found 0 hook matchers in settings
+2026-04-01T13:44:16.954Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-04-01T13:44:16.974Z [DEBUG] installPluginsForHeadless: starting
+2026-04-01T13:44:16.974Z [DEBUG] Found 0 installed plugins (V2 format)
+2026-04-01T13:44:16.975Z [DEBUG] installPluginsForHeadless: no missing plugins or marketplaces configured
+2026-04-01T13:44:17.010Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.10216.1775051057010
+2026-04-01T13:44:17.010Z [DEBUG] Preserving file permissions: 100666
+2026-04-01T13:44:17.011Z [DEBUG] Temp file written successfully, size: 2242 bytes
+2026-04-01T13:44:17.012Z [DEBUG] Applied original permissions to temp file
+2026-04-01T13:44:17.012Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.10216.1775051057010 to C:\Users\Lenovo\.claude.json
+2026-04-01T13:44:17.013Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-01T13:44:17.014Z [DEBUG] Total plugin output styles loaded: 0
+2026-04-01T13:44:17.046Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\Lenovo\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2026-04-01T13:44:17.059Z [DEBUG] Stats cache stale (2026-03-29), processing 2026-03-30 to 2026-03-31 in background
+2026-04-01T13:44:17.063Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.10216.1775051057063
+2026-04-01T13:44:17.064Z [DEBUG] Preserving file permissions: 100666
+2026-04-01T13:44:17.064Z [DEBUG] Temp file written successfully, size: 2242 bytes
+2026-04-01T13:44:17.065Z [DEBUG] Applied original permissions to temp file
+2026-04-01T13:44:17.065Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.10216.1775051057063 to C:\Users\Lenovo\.claude.json
+2026-04-01T13:44:17.066Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-01T13:44:17.072Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-04-01T13:44:17.072Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-04-01T13:44:17.073Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-04-01T13:44:17.073Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-04-01T13:44:17.076Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-04-01T13:44:17.076Z [DEBUG] Found 0 hook matchers in settings
+2026-04-01T13:44:17.077Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-04-01T13:44:17.081Z [DEBUG] autocompact: tokens=5 threshold=167000 effectiveWindow=180000
+2026-04-01T13:44:17.084Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-04-01T13:44:17.133Z [DEBUG] Writing to temp file: C:\Users\Lenovo\.claude.json.tmp.10216.1775051057133
+2026-04-01T13:44:17.133Z [DEBUG] Preserving file permissions: 100666
+2026-04-01T13:44:17.134Z [DEBUG] Temp file written successfully, size: 2242 bytes
+2026-04-01T13:44:17.134Z [DEBUG] Applied original permissions to temp file
+2026-04-01T13:44:17.134Z [DEBUG] Renaming C:\Users\Lenovo\.claude.json.tmp.10216.1775051057133 to C:\Users\Lenovo\.claude.json
+2026-04-01T13:44:17.135Z [DEBUG] File C:\Users\Lenovo\.claude.json written atomically
+2026-04-01T13:44:17.140Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.42.834; cc_entrypoint=sdk-cli; cch=00000;
+2026-04-01T13:44:17.142Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-04-01T13:44:17.142Z [DEBUG] [API:auth] OAuth token check starting
+2026-04-01T13:44:17.144Z [DEBUG] [API:auth] OAuth token check complete
+2026-04-01T13:44:17.172Z [DEBUG] Stats cache saved successfully (lastComputedDate: 2026-03-31)
+2026-04-01T13:44:17.172Z [DEBUG] Stats cache updated with 3 new sessions
+2026-04-01T13:44:17.701Z [DEBUG] Failed to fetch org fast mode status, defaulting to disabled
+2026-04-01T13:44:25.394Z [DEBUG] Stream started - received first chunk
+2026-04-01T13:44:40.621Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-04-01T13:44:40.622Z [DEBUG] Found 0 hook matchers in settings
+2026-04-01T13:44:40.622Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-04-01T13:44:40.624Z [DEBUG] Getting matching hook commands for SessionEnd with query: other
+2026-04-01T13:44:40.624Z [DEBUG] Found 0 hook matchers in settings
+2026-04-01T13:44:40.624Z [DEBUG] Matched 0 unique hooks for query "other" (0 before deduplication)
+2026-04-01T13:44:40.627Z [DEBUG] LSP server manager shut down successfully
+2026-04-01T13:44:41.224Z [DEBUG] Failed to check metrics opt-out status: Request failed with status code 403
+2026-04-01T13:44:41.225Z [DEBUG] Metrics export disabled by organization setting
+2026-04-01T13:44:41.226Z [DEBUG] BigQuery metrics exporter flush complete
+2026-04-01T13:44:41.227Z [DEBUG] BigQuery metrics exporter flush complete
+2026-04-01T13:44:41.227Z [DEBUG] BigQuery metrics exporter shutdown complete

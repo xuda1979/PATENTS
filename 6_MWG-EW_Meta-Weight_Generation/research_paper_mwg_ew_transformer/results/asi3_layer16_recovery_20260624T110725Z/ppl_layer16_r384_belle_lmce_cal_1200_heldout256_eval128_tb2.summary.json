@@ -1,0 +1,15 @@
+{
+  "_note": "Headline metrics extracted from ASI3 NAS artifact (full JSON incl. KL trajectory preserved at /root/work/filestorage/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260624T110725Z/). Terminal transport could not pull the full ~10KB file locally.",
+  "run_id": "asi3_layer16_recovery_20260624T110725Z",
+  "model_dir": "/root/work/filestorage/Qwen2.5-1.5B-Instruct",
+  "layer": 16,
+  "rank": 384,
+  "student": "expert_residual",
+  "lmce_texts": "data/heldout/router_eval.txt",
+  "lmce_steps": 1200,
+  "dense": {"ppl": 3.6854},
+  "patched": {"ppl": 1.4899, "tokens": 35374},
+  "ppl_ratio": 0.4043,
+  "delta_loss": -0.9057,
+  "checkpoint": "results/asi3_layer16_recovery_20260624T110725Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt"
+}

@@ -1,0 +1,294 @@
+[
+  {
+    "suite": "pilot_1b",
+    "config": {
+      "d": 2048,
+      "m": 5632,
+      "batch_size": 1,
+      "seq_len": 128,
+      "dtype": "fp16",
+      "ranks": [
+        32,
+        64,
+        128,
+        256
+      ]
+    },
+    "env": {
+      "torch_version": "2.6.0+cpu",
+      "device_backend": "npu",
+      "npu_available": true,
+      "npu_name": "Ascend910B2",
+      "npu_count": 8,
+      "npu_memory_gib": 60.96,
+      "torch_npu_version": "2.6.0"
+    },
+    "benchmarks": [
+      {
+        "label": "dense_baseline",
+        "batch_size": 1,
+        "seq_len": 128,
+        "latency_ms": 0.187,
+        "throughput_tokens_per_s": 683471.9,
+        "peak_memory_mib": 72.5,
+        "model_params_m": 34.6
+      },
+      {
+        "label": "mwg_ew_direct_r32",
+        "batch_size": 1,
+        "seq_len": 128,
+        "latency_ms": 0.655,
+        "throughput_tokens_per_s": 195555.4,
+        "peak_memory_mib": 437.91,
+        "model_params_m": 189.27
+      },
+      {
+        "label": "mwg_ew_direct_r64",
+        "batch_size": 1,
+        "seq_len": 128,
+        "latency_ms": 0.707,
+        "throughput_tokens_per_s": 181131.3,
+        "peak_memory_mib": 799.32,
+        "model_params_m": 378.01
+      },
+      {
+        "label": "mwg_ew_direct_r128",
+        "batch_size": 1,
+        "seq_len": 128,
+        "latency_ms": 1.194,
+        "throughput_tokens_per_s": 107219.6,
+        "peak_memory_mib": 1524.0,
+        "model_params_m": 755.5
+      },
+      {
+        "label": "mwg_ew_direct_r256",
+        "batch_size": 1,
+        "seq_len": 128,
+        "latency_ms": 2.251,
+        "throughput_tokens_per_s": 56854.2,
+        "peak_memory_mib": 2970.75,
+        "model_params_m": 1510.47
+      }
+    ],
+    "quality": [
+      {
+        "max_abs_error": 1.101562,
+        "mean_relative_error": Infinity,
+        "cosine_similarity": 0.000245,
+        "label": "mwg_ew_direct_r32"
+      },
+      {
+        "max_abs_error": 2.664062,
+        "mean_relative_error": Infinity,
+        "cosine_similarity": 0.000222,
+        "label": "mwg_ew_direct_r64"
+      },
+      {
+        "max_abs_error": 10.0,
+        "mean_relative_error": Infinity,
+        "cosine_similarity": -0.001069,
+        "label": "mwg_ew_direct_r128"
+      },
+      {
+        "max_abs_error": 21.390625,
+        "mean_relative_error": Infinity,
+        "cosine_similarity": -0.000495,
+        "label": "mwg_ew_direct_r256"
+      }
+    ],
+    "hbm": [
+      {
+        "label": "dense_baseline",
+        "total_param_bytes": 69206016,
+        "total_param_mib": 66.0,
+        "estimated_hbm_read_per_forward_mib": 66.0
+      },
+      {
+        "label": "mwg_ew_direct_r32",
+        "total_param_bytes": 378535936,
+        "total_param_mib": 361.0,
+        "estimated_hbm_read_per_forward_mib": 361.0
+      },
+      {
+        "label": "mwg_ew_direct_r64",
+        "total_param_bytes": 756023296,
+        "total_param_mib": 721.0,
+        "estimated_hbm_read_per_forward_mib": 721.0
+      },
+      {
+        "label": "mwg_ew_direct_r128",
+        "total_param_bytes": 1510998016,
+        "total_param_mib": 1441.0,
+        "estimated_hbm_read_per_forward_mib": 1441.0
+      },
+      {
+        "label": "mwg_ew_direct_r256",
+        "total_param_bytes": 3020947456,
+        "total_param_mib": 2881.0,
+        "estimated_hbm_read_per_forward_mib": 2881.0
+      }
+    ]
+  },
+  {
+    "suite": "patent_8b",
+    "config": {
+      "d": 4096,
+      "m": 14336,
+      "batch_size": 4,
+      "seq_len": 512,
+      "dtype": "fp16",
+      "ranks": [
+        32,
+        64,
+        128,
+        256
+      ]
+    },
+    "env": {
+      "torch_version": "2.6.0+cpu",
+      "device_backend": "npu",
+      "npu_available": true,
+      "npu_name": "Ascend910B2",
+      "npu_count": 8,
+      "npu_memory_gib": 60.96,
+      "torch_npu_version": "2.6.0"
+    },
+    "benchmarks": [
+      {
+        "label": "dense_baseline",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 2.738,
+        "throughput_tokens_per_s": 747965.2,
+        "peak_memory_mib": 520.0,
+        "model_params_m": 176.16
+      },
+      {
+        "label": "mwg_ew_basis_bank_r32",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 1.124,
+        "throughput_tokens_per_s": 1822356.7,
+        "peak_memory_mib": 619.53,
+        "model_params_m": 15.22
+      },
+      {
+        "label": "mwg_ew_basis_bank_r64",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 1.043,
+        "throughput_tokens_per_s": 1962906.6,
+        "peak_memory_mib": 660.03,
+        "model_params_m": 29.37
+      },
+      {
+        "label": "mwg_ew_basis_bank_r128",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 1.625,
+        "throughput_tokens_per_s": 1260063.4,
+        "peak_memory_mib": 740.04,
+        "model_params_m": 57.68
+      },
+      {
+        "label": "mwg_ew_basis_bank_r256",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 2.979,
+        "throughput_tokens_per_s": 687405.4,
+        "peak_memory_mib": 902.04,
+        "model_params_m": 114.31
+      }
+    ],
+    "quality": [
+      {
+        "max_abs_error": 0.557617,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r32"
+      },
+      {
+        "max_abs_error": 0.557617,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r64"
+      },
+      {
+        "max_abs_error": 0.557617,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r128"
+      },
+      {
+        "max_abs_error": 0.557617,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r256"
+      }
+    ],
+    "hbm": [
+      {
+        "label": "dense_baseline",
+        "total_param_bytes": 352321536,
+        "total_param_mib": 336.0,
+        "estimated_hbm_read_per_forward_mib": 336.0
+      },
+      {
+        "label": "mwg_ew_basis_bank_r32",
+        "total_param_bytes": 30433280,
+        "total_param_mib": 29.02,
+        "estimated_hbm_read_per_forward_mib": 29.02
+      },
+      {
+        "label": "mwg_ew_basis_bank_r64",
+        "total_param_bytes": 58744832,
+        "total_param_mib": 56.02,
+        "estimated_hbm_read_per_forward_mib": 56.02
+      },
+      {
+        "label": "mwg_ew_basis_bank_r128",
+        "total_param_bytes": 115367936,
+        "total_param_mib": 110.02,
+        "estimated_hbm_read_per_forward_mib": 110.02
+      },
+      {
+        "label": "mwg_ew_basis_bank_r256",
+        "total_param_bytes": 228614144,
+        "total_param_mib": 218.02,
+        "estimated_hbm_read_per_forward_mib": 218.02
+      }
+    ]
+  },
+  {
+    "suite": "distributed_comm",
+    "config": {
+      "d": 4096,
+      "m": 14336,
+      "rank": 128,
+      "batch_size": 4,
+      "seq_len": 512,
+      "dtype": "fp16"
+    },
+    "env": {
+      "torch_version": "2.6.0+cpu",
+      "device_backend": "npu",
+      "npu_available": true,
+      "npu_name": "Ascend910B2",
+      "npu_count": 8,
+      "npu_memory_gib": 60.96,
+      "torch_npu_version": "2.6.0"
+    },
+    "benchmarks": [
+      {
+        "dense_grad_bytes": 352321536,
+        "dense_grad_mib": 336.0,
+        "mwg_ew_grad_bytes": 115367936,
+        "mwg_ew_grad_mib": 110.02,
+        "reduction_ratio": 3.05,
+        "savings_pct": 67.3
+      }
+    ],
+    "quality": [],
+    "hbm": []
+  }
+]

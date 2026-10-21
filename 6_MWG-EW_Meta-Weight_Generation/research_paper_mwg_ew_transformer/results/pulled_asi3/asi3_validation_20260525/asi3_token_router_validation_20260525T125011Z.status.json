@@ -1,0 +1,10 @@
+{
+  "run_id": "asi3_token_router_validation_20260525T125011Z",
+  "state": "done",
+  "updated_at": "2026-05-25T12:52:48Z",
+  "train_texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_train.txt",
+  "eval_texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_eval.txt",
+  "patch": "/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260525T102958Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt",
+  "out_json": "results/asi3_token_router_validation_20260525T125011Z/token_router_validation.json",
+  "result_json": "results/asi3_token_router_validation_20260525T125011Z/token_router_validation.json"
+}

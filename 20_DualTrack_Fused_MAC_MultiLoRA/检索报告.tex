@@ -1,0 +1,126 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{一种支持端侧多智能体并发的基座权重与多路LoRA低秩适配权重单周期融合乘加阵列及方法} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.04.02} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明面向端侧设备（手机/PC/车载等）多智能体并发推理的工程痛点。端侧常采用“共享基座大模型 + 多路LoRA/Adapter个性化配置”的策略以节省存储与部署成本，但现有通用算力硬件通常需要在软件侧执行LoRA融合、上下文切换与参数搬运，导致额外算力消耗、内存带宽竞争以及明显的延迟抖动。为此，本发明提出双轨数据流与单周期融合乘加微架构，将LoRA融合与上下文切换控制下沉至芯片微架构与指令级接口，实现近似零开销的LoRA切换与并发执行。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 一、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) LoRA 低秩适配, 参数高效微调, 适配器
+(2) 多智能体 并发推理, 端侧推理, 上下文切换
+(3) 融合乘加, Fused MAC, 张量核心, 矩阵乘加阵列
+(4) 双轨数据流, 旁路计算, 片上SRAM, 权重预取
+(5) 权重合并, 运行时融合, 多LoRA组合
+
+\textbf{外文检索关键词：}
+(1) LoRA, low-rank adaptation, PEFT, adapter
+(2) multi-agent inference, on-device inference, context switching
+(3) fused multiply-accumulate, fused GEMM, tensor core, MMA
+(4) dual-track dataflow, bypass path, on-chip SRAM, weight prefetch
+(5) multi-LoRA composition, runtime weight fusion
+
+% 二、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{LoRA: Low-Rank Adaptation of Large Language Models} \newline arXiv, Hu, E.J. 等, 2021 \\
+\hline
+2 & A (基础技术) & \textbf{Parameter-Efficient Transfer Learning for NLP}（Adapter/PEFT综述类） \newline 相关论文/公开材料（综述性质）, 2019-2022 \\
+\hline
+3 & Y (相关技术) & \textbf{Tensor Core / WMMA / fused MMA programming model} \newline GPU/NPU公开白皮书与编程指南（公开资料）, 2017-2024 \\
+\hline
+4 & Y (相关技术) & \textbf{On-chip SRAM assisted accelerator architectures for DNN inference} \newline 相关公开论文/专利（片上存储与数据流优化方向）, 2016-2024 \\
+\hline
+5 & Y (相关技术) & \textbf{Techniques for runtime weight fusion / multi-model context switching} \newline 相关公开专利/论文（运行时权重融合与快速切换方向）, 2018-2024 \\
+\hline
+\end{longtable}
+
+% 三、分析评述
+\section*{三、分析评述}
+
+\textbf{1. 与文献1（LoRA/低秩适配）的对比分析：}
+文献1提出了在不更新基座权重的情况下，通过低秩矩阵构造 $\Delta W=BA$ 来实现参数高效微调的算法方法，重点在于训练/微调与推理时的数学形式，并未涉及端侧多智能体并发场景下的硬件微架构支持与上下文切换机制。本发明将LoRA推理路径固化为硬件旁路轨，并在融合点实现单周期与主轨部分和的原生融合，从系统层面降低运行时融合与切换开销。
+
+\textbf{2. 与文献2（Adapter/PEFT综述类）的对比分析：}
+综述类材料通常覆盖多种参数高效微调方法（Adapter、Prefix-Tuning、LoRA等）及其组合方式，但主要停留在软件框架与算法层的组织与复用。本发明的关键在于将“多路适配权重的组合/切换”转化为硬件映射表、上下文寄存器与片上SRAM索引问题，并提供常数周期切换与融合数据通路，区别于仅在软件中实现的组合策略。
+
+\textbf{3. 与文献3（张量核心/融合MMA编程模型）的对比分析：}
+文献3类公开资料描述了融合MMA、张量核心等通用矩阵乘加执行模型，主要针对单一路径的GEMM或卷积等算子优化。其并未明确提出在同一累加路径中引入“基座主轨 + LoRA旁路轨”的双轨数据流，也未提出面向多智能体并发的LoRA上下文快速切换控制机制。本发明在保持主轨吞吐的同时，为LoRA路径提供专用旁路与融合点，且通过 `SET\_LORA\_CTX` 等原语实现常数时间切换。
+
+\textbf{4. 与文献4/5（片上SRAM数据流与运行时切换相关方向）的对比分析：}
+相关工作通常涉及片上SRAM缓存、权重预取、或多模型切换的通用机制，但往往未与LoRA低秩结构紧耦合，也未在微架构层提供“单周期融合”的强约束。本发明利用LoRA低秩结构的可预测访问模式，将其驻留于片上SRAM并与主轨共享输入广播，同时通过融合点避免额外写回与二次加法，从而在端侧功耗与实时性约束下获得更稳定的性能收益。
+
+% 四、检索结论
+\section*{四、检索结论}
+
+经检索与分析，未发现与本申请方案全部技术特征完全相同的现有技术。本申请提出的“双轨数据流 + 单周期融合乘加 + 常数周期LoRA上下文切换映射表”的组合，能够面向端侧多智能体并发推理显著降低融合与切换的软硬件开销，具备较强的新颖性与创造性。
+
+\end{document}

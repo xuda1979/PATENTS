@@ -1,0 +1,284 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\raggedbottom
+\setlength{\emergencystretch}{3em}
+\hfuzz=100pt
+\hbadness=10000
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & 一种面向6G网络切片的超低时延抗量子自适应握手方法、系统、设备及存储介质 \\
+        \hline
+        \textbf{申报单位} & 研究院（暂定） \\
+        \hline
+        \textbf{检索人} & 待补充（本稿为 AI 辅助形成的检索底稿，提交前建议人工复核） \\
+        \hline
+        \textbf{审核人} & 待补充 \\
+        \hline
+        \textbf{检索日期} & 2026.03.26 \\
+        \hline
+        \textbf{关联项目} & 6G 安全与抗量子密码方向预研（暂定） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本申请直接针对量子计算对传统公钥密码的威胁，关注 6G 网络切片中的超低时延抗量子连接建立问题。现有公开资料已经表明，PQC 原语和 PQ-TLS 会带来额外的计算与报文开销；同时，3GPP 和 NIST 均在推进面向通信系统的 PQC 迁移与标准化。因而，本申请的检索重点落在“\textbf{PQC 握手、TLS/混合密钥协商、会话恢复、网络切片安全、时延优化、切片特定认证}”这些交叉主题上。
+}}
+
+\vspace{1em}
+
+\section*{一、发明名称}
+
+一种面向6G网络切片的超低时延抗量子自适应握手方法、系统、设备及存储介质。
+
+\section*{二、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+
+\begin{enumerate}[leftmargin=2em]
+    \item 6G，网络切片，切片感知，切片安全，切片特定认证，NSSAAF；
+    \item 后量子密码，抗量子，PQC，KEM，ML-KEM，混合密钥协商；
+    \item 自适应握手，低时延握手，分阶段握手，快速重连，会话恢复；
+    \item 密钥分片，阈值分片，纠删编码，增强份额，抗降级，转录绑定；
+    \item 自动驾驶，URLLC，eMBB，mMTC，时延预算，能力感知。
+\end{enumerate}
+
+\textbf{外文检索关键词：}
+
+\begin{enumerate}[leftmargin=2em]
+    \item 6G, network slicing, slice-aware, slice security, slice-specific authentication;
+    \item post-quantum cryptography, PQC, KEM, ML-KEM, hybrid key agreement;
+    \item adaptive handshake, low-latency handshake, staged handshake, session resumption;
+    \item key fragmentation, threshold split, erasure coding, reinforcement secret, anti-downgrade;
+    \item URLLC, autonomous driving, eMBB, mMTC, latency budget, capability-aware.
+\end{enumerate}
+
+\textbf{检索范围与策略：}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{专利数据库：} Google Patents、USPTO 公布文献、WIPO/PCT 文献；
+    \item \textbf{标准与官方文档：} NIST、IETF Datatracker、3GPP Portal；
+    \item \textbf{学术文献：} IACR ePrint、NDSS、公开可访问的期刊/会议页面；
+    \item \textbf{检索时段：} 主要覆盖 2020--2026 年公开资料，并适当回溯早期 TLS 与切片安全背景文献；
+    \item \textbf{字段重点：} 标题、摘要、权利要求、标准摘要、论文摘要；
+    \item \textbf{判断原则：} 本报告对专利和标准优先依据权利要求、摘要、标准简介作判断；对个别论文根据其公开摘要作覆盖分析。
+\end{itemize}
+
+\vspace{0.5em}
+\noindent\textbf{检索命中量与筛选统计（约数）：}
+
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{3.2cm}|p{3.2cm}|p{4cm}|}
+\hline
+\textbf{数据源} & \textbf{初检命中量} & \textbf{保留文献量} & \textbf{备注} \\
+\hline
+Google Patents / USPTO / WIPO & 约 120 条 & 5 条 & 重点筛选 PQC 握手、多 KEM、会话恢复、切片安全 \\
+\hline
+IETF / NIST / 3GPP 官方文档 & 约 30 条 & 6 条 & 重点筛选 ML-KEM、混合 TLS、PQC 迁移、切片安全相关文档 \\
+\hline
+IACR / NDSS / 公开论文页面 & 约 60 条 & 4 条 & 重点筛选 PQ-TLS 性能、KEMTLS、切片中的 PQC 隧道 \\
+\hline
+\end{tabular}
+\normalsize
+
+\section*{三、相关专利文献}
+
+\noindent 综合中文与英文检索式，并对专利、标准与论文进行交叉比对后，筛选出与本申请最相关的公开资料如下。
+
+\textbf{相关度等级定义：}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Y$\bigstar$：} 最接近的单篇现有技术，覆盖本申请核心思路的一部分；
+    \item \textbf{Y：} 具有明确启发关系，但未给出本申请的关键组合特征；
+    \item \textbf{A：} 背景或旁证文献，用于说明技术趋势、已知问题或相邻方案。
+\end{itemize}
+
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{1.2cm}|p{1.6cm}|p{11cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息与分析} \\
+\hline
+P1 & Y$\bigstar$ & \textbf{US20220006835A1 / US11374975B2: TLS integration of post quantum cryptographic algorithms}。公开日分别为 2022-01-06、2022-06-28。权利要求与说明书明确记载：在 TLS 中引入 PQC 模式，请求消息可携带 PQC 公钥，且存在“\textit{second client hello message}”“\textit{second server hello message}”以及“\textit{PQC encrypted client key share}”“\textit{PQC encrypted server key share}”等机制。该文献说明了\textbf{将 PQC 嵌入握手流程}的总体路径，但算法选择仍围绕单次握手展开，未公开切片画像驱动的握手计划、增强份额的阈值分片恢复、切片绑定 transcript 或基础密钥/最终密钥两层承载机制。 \\
+\hline
+P2 & Y & \textbf{US12088706B2 / US20240097891A1: Device securing communications using two post-quantum cryptography key encapsulation mechanisms}。公开日分别为 2024-03-21、2024-09-10。摘要与权利要求说明设备和网络可支持两个不同 PQC KEM，并通过 HKDF 结合多个共享秘密。该文献对\textbf{双 KEM、类型多样性与共享秘密组合}提供了明确启发，但其流程仍是静态双 KEM 安全会话建立，未公开按切片时延预算动态决定“先建立基础份额、后补增强份额”的状态机，也未公开 $(t,n)$ 阈值分片恢复。 \\
+\hline
+P3 & Y & \textbf{US20230058198A1: Dynamic cryptographic algorithm selection}。公开日 2023-02-23。说明书中明确记载：若新技术被标记为量子安全，则在资源允许时优先使用；否则可选择多个密码技术；并可基于资源约束、通信数据量、时间区间等条件切换技术。该文献对\textbf{资源约束驱动的密码敏捷}有启发，但它不是一个面向 6G 切片接入建链的 PQC 握手协议，未公开切片级 SLA、阈值分片增强、业务分级早期放行或切片绑定抗降级机制。 \\
+\hline
+P4 & A & \textbf{US20220407890A1: Security for 5G network slicing}。公开日 2022-12-22。其摘要指出，5G 切片可依据客户策略建立可信模型并满足约定属性；说明书还讨论了标准化切片类型、SLA、NSSAI 及切片选择。该文献说明了\textbf{切片安全和切片属性约束}是既有研究方向，但其重点在可信切片和切片属性保证，并未公开后量子握手协议本身。 \\
+\hline
+P5 & A & \textbf{US12192184B2 / US20230308424A1: Secure session resumption using post-quantum cryptography}。公开日分别为 2023-09-28、2025-01-07。该文献聚焦于\textbf{PQC 会话恢复/恢复连接}，能降低后续连接的时延，但并未给出首次建链时的切片感知自适应握手，更未公开增强份额阈值分片及业务分级承载。 \\
+\hline
+\end{longtable}
+\endgroup
+
+\textbf{标准与非专利文献：}
+
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{1.2cm}|p{1.6cm}|p{11cm}|}
+\hline
+\textbf{编号} & \textbf{相关度} & \textbf{文献信息与分析} \\
+\hline
+R1 & A & \textbf{NIST FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism Standard}，发布日期 2024-08-13。该标准给出 ML-KEM-512、768、1024 三个参数集，说明 ML-KEM 是可用于在公开信道上建立共享密钥的 KEM。该文献是本申请所涉 PQC 握手的底层原语依据，但不涉及切片感知或握手状态机设计。 \\
+\hline
+R2 & A & \textbf{IETF draft-ietf-tls-mlkem-07: ML-KEM Post-Quantum Key Agreement for TLS 1.3}，发布时间 2026-02-12。摘要说明把 ML-KEM-512、768、1024 注册为 TLS 1.3 的 \texttt{NamedGroup}。这表明\textbf{单纯把 ML-KEM 接入 TLS}已进入标准化流程，但其仍是固定组协商，并非切片画像驱动的多阶段方案。 \\
+\hline
+R3 & A & \textbf{IETF draft-ietf-tls-ecdhe-mlkem-04: Post-quantum hybrid ECDHE-MLKEM Key Agreement for TLSv1.3}，发布时间 2026-02-08。摘要定义 X25519MLKEM768、SecP256r1MLKEM768 和 SecP384r1MLKEM1024 三种混合命名群组，说明混合握手是当前标准化主流方向。但该文献仍采用\textbf{固定命名群组一次性协商}，未公开按切片时延预算动态拆分和调度增强份额。 \\
+\hline
+R4 & A & \textbf{NIST IR 8547 (Initial Public Draft): Transition to Post-Quantum Cryptography Standards}，发布日期 2024-11-12。该报告描述 NIST 向 PQC 迁移的总体路径，并强调现有量子脆弱标准需迁移到量子韧性标准。这一文献支持本申请的技术背景和紧迫性，但不涉及本申请的具体握手机制。 \\
+\hline
+R5 & A & \textbf{3GPP TR 33.703: Study on transitioning to Post Quantum Cryptography (PQC) in 3GPP}。3GPP Portal 显示该规范号于 2025-06-20 创建，属于 Rel-20，状态为草案；其相关工作项 FS\_CryptoPQC 在 2026-03-05 的 3GPP Portal 记录中显示进度已从 50\% 更新为 70\%。该文献说明\textbf{3GPP 正在正式研究通信系统向 PQC 迁移}，但并未给出本申请的切片感知低时延握手。 \\
+\hline
+R6 & A & \textbf{3GPP TS 33.501: Security architecture and procedures for 5G System}。3GPP Portal 显示该规范已处于 Under Change Control 状态，并已有 Rel-20 版本记录。该文献说明 5G/6G 安全架构与接入认证已有成熟框架，但尚未公开本申请这种面向切片时延预算的 PQC 分阶段握手机制。 \\
+\hline
+R7 & A & \textbf{3GPP TS 33.326: Security Assurance Specification for the Network Slice-Specific Authentication and Authorization Function (NSSAAF)}。3GPP Portal 表明 33.326 面向 NSSAAF 网络产品类。该文献说明\textbf{切片特定认证/授权功能}已经成为标准对象，但其重点在安全保证规范，并非低时延抗量子握手流程。 \\
+\hline
+S1 & A & \textbf{Post-Quantum Authentication in TLS 1.3: A Performance Study}（NDSS 2020 / IACR ePrint 2020）。摘要指出：研究评估了 PQ 签名给 TLS 1.3 连接建立和会话吞吐带来的影响，并指出至少两种 PQ 签名算法可用于时间敏感应用，同时组合不同签名算法的证书链可降低握手时间。该文献说明\textbf{PQC 对握手时延的影响是真实且可优化的}，但并未公开切片感知、分阶段增强和阈值分片机制。 \\
+\hline
+S2 & A & \textbf{Post-quantum TLS without handshake signatures}（CCS 2020 / IACR ePrint 2020/534）。摘要指出 KEMTLS 以 KEM 代替服务器握手签名，可把带宽需求降到后量子 TLS 1.3 的一半以下，并将服务器 CPU 周期降低接近 90\%。该文献证明\textbf{通过重构握手角色可以获得显著性能收益}，但其没有利用切片画像、阈值分片和增强阶段。 \\
+\hline
+S3 & A & \textbf{The impact of data-heavy, post-quantum TLS 1.3 on the Time-To-Last-Byte of real-world connections}（2024 年公开论文与 NIST 相关展示材料）。该文献指出 PQ-TLS 的数据量增大对真实连接性能有显著影响，说明握手字节量和链路条件必须被共同考虑。其提供了本申请“按切片预算自适应控制握手负担”的问题依据，但未给出本申请方案。 \\
+\hline
+S4 & A & \textbf{QRoNS: Quantum Resilience over IPsec Tunnels for Network Slicing}（Electronics 2025）。摘要说明作者在网络切片和虚拟化场景下实现了 PQC-IPsec，使用 ML-KEM 与 ML-DSA，在 DPU 上达到接近线速。该文献表明\textbf{PQC 与网络切片结合具有现实工程价值}，但它关注的是隧道层高吞吐落地，而非切片感知的自适应握手计划。 \\
+\hline
+\end{longtable}
+\endgroup
+
+\section*{四、分析评述}
+
+\subsection*{（一）本申请方案的必要技术特征拆分（用于对照）}
+
+为便于与现有技术比对，将本申请核心特征拆分为以下六项：
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{F1 切片感知握手画像协商：} 由切片标识、业务等级、时延预算、终端能力和链路状态共同决定握手计划；
+    \item \textbf{F2 分阶段后量子建链：} 先形成基础份额和早期密钥，再在限定窗口内补齐增强份额形成最终密钥；
+    \item \textbf{F3 增强份额阈值分片恢复：} 将增强密钥材料拆分为 $(t,n)$ 片段，任意达到阈值即可恢复；
+    \item \textbf{F4 握手计划的联合优化：} 以时延、计算、字节量和丢包风险为目标函数进行选择；
+    \item \textbf{F5 transcript 绑定的抗降级/抗跨切片重放：} 将切片、计划、阈值和早期业务范围绑定入握手转录；
+    \item \textbf{F6 切片绑定恢复票据与业务分级承载：} 恢复票据不得跨切片复用，并允许白名单业务先行。
+\end{itemize}
+
+\subsection*{（二）与主要现有技术方案的对比分析}
+
+现有最相关公开技术分别从不同方向接近本申请：
+
+\begin{itemize}[leftmargin=2em]
+    \item P1 解决的是“如何把 PQC 插入 TLS 握手”；
+    \item P2 解决的是“如何把两个 PQC KEM 组合进同一安全会话”；
+    \item P3 解决的是“如何基于资源或条件做密码敏捷选择”；
+    \item P4 解决的是“如何把切片做成可信安全对象”；
+    \item P5 解决的是“如何用 PQC 会话恢复降低后续连接开销”。
+\end{itemize}
+
+而本申请并非以上任一方向的简单重述，而是将它们之间原本分散的要素以新的方式耦合起来：\textbf{不是静态双 KEM，也不是通用密码敏捷，更不是单纯切片安全，而是把“切片 SLA 驱动的握手计划选择”与“分阶段后量子密钥形成”及“阈值分片恢复”结合起来}。
+
+\subsection*{（三）与主要专利文献的逐特征（F1--F6）覆盖对比}
+
+\begingroup
+\setstretch{1.0}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{1.7cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}|}
+\hline
+\textbf{技术特征} & \shortstack{\textbf{P1}\\\textbf{TLS 集成}\\\textbf{PQC}} & \shortstack{\textbf{P2}\\\textbf{双 KEM}} & \shortstack{\textbf{P3}\\\textbf{动态算法选择}} & \shortstack{\textbf{P4}\\\textbf{切片安全}} & \shortstack{\textbf{P5}\\\textbf{PQC 会话恢复}} & \shortstack{\textbf{本申请}\\\textbf{方案}} \\
+\hline
+F1 切片感知握手画像协商 & 未覆盖 & 未覆盖 & 部分：资源/条件驱动，但非切片画像 & 部分：涉及切片与 SLA，但非握手画像 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F2 分阶段后量子建链 & 部分：存在二次 Hello，但无早期/最终双层密钥承载 & 部分：多 KEM 组合，但非分阶段业务门控 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F3 增强份额阈值分片恢复 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F4 面向时延预算的联合优化 & 未覆盖 & 未覆盖 & 部分：考虑资源约束，但未形成握手优化目标函数 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F5 transcript 绑定的抗降级/跨切片重放 & 部分：TLS/PQC 消息绑定 & 部分：消息哈希与 KDF 绑定 & 未覆盖 & 未覆盖 & 未覆盖 & \textbf{完全覆盖} \\
+\hline
+F6 切片绑定恢复票据与业务分级承载 & 未覆盖 & 未覆盖 & 未覆盖 & 未覆盖 & 部分：有会话恢复，但非切片绑定 & \textbf{完全覆盖} \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection*{（四）与标准和论文的对比分析}
+
+从标准和论文角度看，R2、R3 表明 ML-KEM 和混合 ECDHE-MLKEM 已进入 TLS 标准化主线，但这些文献的设计中心是\textbf{命名群组与兼容性}，不是“切片预算驱动的握手负担管理”。S1、S2、S3 则说明 PQC 握手性能确实受到签名体积、密钥体积和真实网络条件影响，这些结论强化了本申请所针对的问题是真实且紧迫的。S4 进一步说明 PQC 与网络切片/IPsec 的结合已有工程价值，但其关注重点是\textbf{高吞吐量隧道层落地}，而非接入建链首阶段的超低时延自适应握手。
+
+\subsection*{（五）创造性干扰因素分析}
+
+从创造性角度看，需要重点防范审查员基于“P1 + P3 + P4”或“P2 + P3 + P4”的组合式评价，即：
+
+\begin{itemize}[leftmargin=2em]
+    \item 由 P1 或 P2 提供 PQC 握手或多 KEM 组合；
+    \item 由 P3 提供资源感知或策略驱动选择；
+    \item 由 P4 或 R7 提供切片安全或切片特定认证背景。
+\end{itemize}
+
+但上述组合仍然不能自然推出本申请至少两个关键落点：
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{增强份额的阈值分片恢复。} 这不是普通的多 KEM 或普通的会话恢复，而是把增强材料显式拆成可按时窗和丢包环境恢复的片段，并与握手计划绑定。
+    \item \textbf{基础密钥/最终密钥的双层业务门控。} 现有文献没有公开“白名单业务先在基础密钥上承载，高敏业务必须等待最终密钥”的切片化承载规则。
+\end{enumerate}
+
+因此，本申请在“问题定义、状态机设计、参数绑定点和业务承载语义”四个层面均有实质差异。
+
+\section*{五、检索结论}
+
+基于截至 \textbf{2026 年 3 月 26 日} 的公开资料检索与比对，可得出如下结论：
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{未发现 X 级文献。} 即未发现单篇公开文献同时公开本申请的 F1--F6 全部关键组合特征。
+    \item \textbf{最接近的单篇现有技术为 P1（US20220006835A1 / US11374975B2）。} 其公开了将 PQC 集成到 TLS 握手的二次 Hello 机制，但未公开切片感知握手画像、增强份额阈值分片、基础/最终双层密钥承载和切片绑定 transcript。
+    \item \textbf{P2、P3、P4、P5 分别提供局部启发。} 这些文献分别涉及双 KEM、安全会话中的动态算法选择、切片安全信任模型和 PQC 会话恢复，但它们之间并不存在对本申请关键组合特征的直接公开。
+    \item \textbf{标准与论文侧重于原语标准化、兼容性和性能测量。} R1--R7、S1--S4 共同证明了该问题的重要性，但并未替代本申请的协议级方案。
+\end{enumerate}
+
+综上，在本次检索范围内，本申请相对于现有公开技术具有较明确的新颖性基础；从创造性角度看，建议后续权利要求特别突出以下三点，以进一步拉开与组合现有技术的距离：
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{切片画像驱动的分阶段握手计划选择；}
+    \item \textbf{增强份额的 $(t,n)$ 阈值分片与恢复；}
+    \item \textbf{基础密钥/最终密钥双层业务承载及 transcript 绑定抗降级。}
+\end{itemize}
+
+若后续需要继续增强检索证据，建议围绕“6G 切片特定认证 + PQC 低时延建链 + 阈值分片恢复 + 早期业务门控”这一更窄组合继续做补充检索，以支持权利要求布局。
+
+\end{document}

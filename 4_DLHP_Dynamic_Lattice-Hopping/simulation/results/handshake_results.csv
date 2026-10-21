@@ -1,0 +1,5 @@
+network_profile,handshake_mean_ms,handshake_p95_ms,handshake_ci95_low_ms,handshake_ci95_high_ms,sync_overhead_mean_ms
+LAN,13.984,15.637,13.884,14.083,2.018
+WAN-50ms,167.643,175.401,167.141,168.145,8.008
+WAN-100ms,324.803,340.526,323.854,325.752,15.023
+WAN-200ms,640.653,672.57,638.715,642.591,28.114

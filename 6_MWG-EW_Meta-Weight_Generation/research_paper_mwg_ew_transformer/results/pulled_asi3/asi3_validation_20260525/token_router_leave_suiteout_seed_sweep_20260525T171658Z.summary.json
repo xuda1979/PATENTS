@@ -1,0 +1,1137 @@
+{
+  "seed_count": 3,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "seed_summaries": [
+    {
+      "seed": 0,
+      "run_count": 3,
+      "split_manifest": {
+        "protocol": "leave_suite_out_broad_auxiliary_router",
+        "train_sources": [
+          "data/heldout/router_train.txt",
+          "data/heldout/router_eval.txt"
+        ],
+        "heldout_dir": "data/heldout",
+        "manifest": "data/heldout/manifest.json",
+        "unique_base_train_source_count": 512,
+        "seed": 0,
+        "train_fraction": 0.75,
+        "max_train_count": 0,
+        "suites": [
+          {
+            "name": "gsm8k_test",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/splits/gsm8k_test/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/splits/gsm8k_test/router_eval.txt",
+            "source_eval_texts": "data/heldout/gsm8k_test.txt",
+            "auxiliary_suite_names": [
+              "mbpp_test",
+              "alpaca_cleaned_train_tail"
+            ],
+            "train_count": 340,
+            "candidate_train_count": 454,
+            "eval_count": 260,
+            "overlap_removed": 196
+          },
+          {
+            "name": "mbpp_test",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/splits/mbpp_test/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/splits/mbpp_test/router_eval.txt",
+            "source_eval_texts": "data/heldout/mbpp_test.txt",
+            "auxiliary_suite_names": [
+              "gsm8k_test",
+              "alpaca_cleaned_train_tail"
+            ],
+            "train_count": 390,
+            "candidate_train_count": 520,
+            "eval_count": 194,
+            "overlap_removed": 136
+          },
+          {
+            "name": "alpaca_cleaned_train_tail",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/splits/alpaca_cleaned_train_tail/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/splits/alpaca_cleaned_train_tail/router_eval.txt",
+            "source_eval_texts": "data/heldout/alpaca_cleaned_train_tail.txt",
+            "auxiliary_suite_names": [
+              "gsm8k_test",
+              "mbpp_test"
+            ],
+            "train_count": 340,
+            "candidate_train_count": 454,
+            "eval_count": 260,
+            "overlap_removed": 180
+          }
+        ]
+      },
+      "runs": [
+        {
+          "suite": "alpaca_cleaned_train_tail",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/alpaca_cleaned_train_tail/token_router_validation.json",
+          "overlap_removed": 180,
+          "dense": {
+            "loss": 1.3551623886033106,
+            "ppl": 3.8773905495482697,
+            "tokens": 33642
+          },
+          "patched": {
+            "loss": 1.4594823914015806,
+            "ppl": 4.303731303392834,
+            "tokens": 33642,
+            "ppl_ratio": 1.1099555869847144
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 340,
+            "tokens": 39505,
+            "dense_loss": 1.284145097692712,
+            "patched_loss": 1.513641591754658,
+            "patched_ppl_ratio": 1.2579664568630937,
+            "positive_delta_fraction": 0.28128085052525
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 260,
+            "tokens": 33642,
+            "dense_loss": 1.3551623886033106,
+            "patched_loss": 1.4594823914015806,
+            "patched_ppl_ratio": 1.1099555869847144,
+            "positive_delta_fraction": 0.3703109208727186
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.007061298076923077,
+              "loss": 1.3556901153987309,
+              "ppl_ratio": 1.0005278660677037,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.0251953125,
+              "loss": 1.3531097238601524,
+              "ppl_ratio": 0.9979494405323943,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.043870192307692304,
+              "loss": 1.3508894587433744,
+              "ppl_ratio": 0.99573618611626,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.08786057692307692,
+              "loss": 1.3467369970626715,
+              "ppl_ratio": 0.991610002597756,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.20591947115384615,
+              "loss": 1.3431162284307512,
+              "ppl_ratio": 0.9880261043538201,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.3727764423076923,
+              "loss": 1.3571758771743876,
+              "ppl_ratio": 1.0020155170003677,
+              "tokens": 33902.0
+            }
+          ]
+        },
+        {
+          "suite": "gsm8k_test",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/gsm8k_test/token_router_validation.json",
+          "overlap_removed": 196,
+          "dense": {
+            "loss": 1.2495148182969207,
+            "ppl": 3.488649917670586,
+            "tokens": 45244
+          },
+          "patched": {
+            "loss": 1.5300352301956772,
+            "ppl": 4.6183395244389,
+            "tokens": 45244,
+            "ppl_ratio": 1.3238185640371223
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 340,
+            "tokens": 31530,
+            "dense_loss": 1.3926395934081024,
+            "patched_loss": 1.5159552827094647,
+            "patched_ppl_ratio": 1.131241485418011,
+            "positive_delta_fraction": 0.3486837932128132
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 260,
+            "tokens": 45244,
+            "dense_loss": 1.2495148182969207,
+            "patched_loss": 1.5300352301956772,
+            "patched_ppl_ratio": 1.3238185640371223,
+            "positive_delta_fraction": 0.2923481566616568
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.0016977163461538462,
+              "loss": 1.2493358708200282,
+              "ppl_ratio": 0.9998210685332523,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.006039663461538462,
+              "loss": 1.249499715559457,
+              "ppl_ratio": 0.9999848973765819,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.010621995192307693,
+              "loss": 1.2500030687262216,
+              "ppl_ratio": 1.000488369642943,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.024293870192307693,
+              "loss": 1.2500977038160888,
+              "ppl_ratio": 1.0005830554299435,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.08795072115384615,
+              "loss": 1.274689034960965,
+              "ppl_ratio": 1.0254937630651226,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.23671875,
+              "loss": 1.3661633137182585,
+              "ppl_ratio": 1.1237243660014529,
+              "tokens": 45504.0
+            }
+          ]
+        },
+        {
+          "suite": "mbpp_test",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed0/mbpp_test/token_router_validation.json",
+          "overlap_removed": 136,
+          "dense": {
+            "loss": 1.4203416452738062,
+            "ppl": 4.138534109369908,
+            "tokens": 9588
+          },
+          "patched": {
+            "loss": 1.5274490331877357,
+            "ppl": 4.606411019959,
+            "tokens": 9588,
+            "ppl_ratio": 1.1130537765847548
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 390,
+            "tokens": 60050,
+            "dense_loss": 1.2975612548269102,
+            "patched_loss": 1.5124539487323196,
+            "patched_ppl_ratio": 1.2397288593660671,
+            "positive_delta_fraction": 0.3277768526228143
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 194,
+            "tokens": 9588,
+            "dense_loss": 1.4203416452738062,
+            "patched_loss": 1.5274490331877357,
+            "patched_ppl_ratio": 1.1130537765847548,
+            "positive_delta_fraction": 0.24478514810179391
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.003946520618556701,
+              "loss": 1.4250994869546885,
+              "ppl_ratio": 1.0047691781815735,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.005013692010309279,
+              "loss": 1.4113085109369565,
+              "ppl_ratio": 0.9910075418511596,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.006443298969072165,
+              "loss": 1.4000921948260507,
+              "ppl_ratio": 0.9799541928029629,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.012665109536082474,
+              "loss": 1.3735709153229998,
+              "ppl_ratio": 0.9543061663325535,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.0682788337628866,
+              "loss": 1.34841494051695,
+              "ppl_ratio": 0.9305991017990238,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.28549855025773196,
+              "loss": 1.3048389488429386,
+              "ppl_ratio": 0.8909181699345854,
+              "tokens": 9782.0
+            }
+          ]
+        }
+      ],
+      "aggregate_frontier": [
+        {
+          "target_patch_fraction": 0.01,
+          "token_weighted_actual_patch_fraction": 0.0039831577870335965,
+          "token_weighted_ppl_ratio": 1.0006313309177757,
+          "mean_suite_ppl_ratio": 1.0017060375941764,
+          "min_suite_ppl_ratio": 0.9998210685332523,
+          "max_suite_ppl_ratio": 1.0047691781815735,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.03,
+          "token_weighted_actual_patch_fraction": 0.013208551215115166,
+          "token_weighted_ppl_ratio": 0.9982228798349263,
+          "mean_suite_ppl_ratio": 0.9963139599200453,
+          "min_suite_ppl_ratio": 0.9910075418511596,
+          "max_suite_ppl_ratio": 0.9999848973765819,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.05,
+          "token_weighted_actual_patch_fraction": 0.022801933885294185,
+          "token_weighted_ppl_ratio": 0.9964104176806868,
+          "mean_suite_ppl_ratio": 0.9920595828540554,
+          "min_suite_ppl_ratio": 0.9799541928029629,
+          "max_suite_ppl_ratio": 1.000488369642943,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.1,
+          "token_weighted_actual_patch_fraction": 0.0471813209126663,
+          "token_weighted_ppl_ratio": 0.9919971976452261,
+          "mean_suite_ppl_ratio": 0.9821664081200843,
+          "min_suite_ppl_ratio": 0.9543061663325535,
+          "max_suite_ppl_ratio": 1.0005830554299435,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.25,
+          "token_weighted_actual_patch_fraction": 0.1306352320750646,
+          "token_weighted_ppl_ratio": 1.0003762604683915,
+          "mean_suite_ppl_ratio": 0.9813729897393221,
+          "min_suite_ppl_ratio": 0.9305991017990238,
+          "max_suite_ppl_ratio": 1.0254937630651226,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.5,
+          "token_weighted_actual_patch_fraction": 0.2937868745317366,
+          "token_weighted_ppl_ratio": 1.048763279698716,
+          "mean_suite_ppl_ratio": 1.0055526843121354,
+          "min_suite_ppl_ratio": 0.8909181699345854,
+          "max_suite_ppl_ratio": 1.1237243660014529,
+          "tokens": 89188.0,
+          "suite_count": 3
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "run_count": 3,
+      "split_manifest": {
+        "protocol": "leave_suite_out_broad_auxiliary_router",
+        "train_sources": [
+          "data/heldout/router_train.txt",
+          "data/heldout/router_eval.txt"
+        ],
+        "heldout_dir": "data/heldout",
+        "manifest": "data/heldout/manifest.json",
+        "unique_base_train_source_count": 512,
+        "seed": 1,
+        "train_fraction": 0.75,
+        "max_train_count": 0,
+        "suites": [
+          {
+            "name": "gsm8k_test",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/splits/gsm8k_test/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/splits/gsm8k_test/router_eval.txt",
+            "source_eval_texts": "data/heldout/gsm8k_test.txt",
+            "auxiliary_suite_names": [
+              "mbpp_test",
+              "alpaca_cleaned_train_tail"
+            ],
+            "train_count": 340,
+            "candidate_train_count": 454,
+            "eval_count": 260,
+            "overlap_removed": 196
+          },
+          {
+            "name": "mbpp_test",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/splits/mbpp_test/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/splits/mbpp_test/router_eval.txt",
+            "source_eval_texts": "data/heldout/mbpp_test.txt",
+            "auxiliary_suite_names": [
+              "gsm8k_test",
+              "alpaca_cleaned_train_tail"
+            ],
+            "train_count": 390,
+            "candidate_train_count": 520,
+            "eval_count": 194,
+            "overlap_removed": 136
+          },
+          {
+            "name": "alpaca_cleaned_train_tail",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/splits/alpaca_cleaned_train_tail/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/splits/alpaca_cleaned_train_tail/router_eval.txt",
+            "source_eval_texts": "data/heldout/alpaca_cleaned_train_tail.txt",
+            "auxiliary_suite_names": [
+              "gsm8k_test",
+              "mbpp_test"
+            ],
+            "train_count": 340,
+            "candidate_train_count": 454,
+            "eval_count": 260,
+            "overlap_removed": 180
+          }
+        ]
+      },
+      "runs": [
+        {
+          "suite": "alpaca_cleaned_train_tail",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/alpaca_cleaned_train_tail/token_router_validation.json",
+          "overlap_removed": 180,
+          "dense": {
+            "loss": 1.3551623886033106,
+            "ppl": 3.8773905495482697,
+            "tokens": 33642
+          },
+          "patched": {
+            "loss": 1.4594823914015806,
+            "ppl": 4.303731303392834,
+            "tokens": 33642,
+            "ppl_ratio": 1.1099555869847144
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 340,
+            "tokens": 41599,
+            "dense_loss": 1.2734768651374793,
+            "patched_loss": 1.5882330678822303,
+            "patched_ppl_ratio": 1.3699252862168179,
+            "positive_delta_fraction": 0.29161758696122503
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 260,
+            "tokens": 33642,
+            "dense_loss": 1.3551623886033106,
+            "patched_loss": 1.4594823914015806,
+            "patched_ppl_ratio": 1.1099555869847144,
+            "positive_delta_fraction": 0.3703109208727186
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.00830829326923077,
+              "loss": 1.3561756588735312,
+              "ppl_ratio": 1.001013783801975,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.032827524038461536,
+              "loss": 1.3547681493415544,
+              "ppl_ratio": 0.99960583844033,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.05145733173076923,
+              "loss": 1.3537261007398387,
+              "ppl_ratio": 0.9985647431042934,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.09166165865384615,
+              "loss": 1.3513093328614494,
+              "ppl_ratio": 0.9961543577528211,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.19661959134615384,
+              "loss": 1.347982976716828,
+              "ppl_ratio": 0.9928462985256952,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.3589092548076923,
+              "loss": 1.3565629833349822,
+              "ppl_ratio": 1.0014015760225494,
+              "tokens": 33902.0
+            }
+          ]
+        },
+        {
+          "suite": "gsm8k_test",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/gsm8k_test/token_router_validation.json",
+          "overlap_removed": 196,
+          "dense": {
+            "loss": 1.2495148182969207,
+            "ppl": 3.488649917670586,
+            "tokens": 45244
+          },
+          "patched": {
+            "loss": 1.5300352301956772,
+            "ppl": 4.6183395244389,
+            "tokens": 45244,
+            "ppl_ratio": 1.3238185640371223
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 340,
+            "tokens": 31315,
+            "dense_loss": 1.3795048239359398,
+            "patched_loss": 1.4826369199274296,
+            "patched_ppl_ratio": 1.1086378460194009,
+            "positive_delta_fraction": 0.3402842088456012
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 260,
+            "tokens": 45244,
+            "dense_loss": 1.2495148182969207,
+            "patched_loss": 1.5300352301956772,
+            "patched_ppl_ratio": 1.3238185640371223,
+            "positive_delta_fraction": 0.2923481566616568
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.0003155048076923077,
+              "loss": 1.2494809298714527,
+              "ppl_ratio": 0.9999661121487381,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.0009314903846153847,
+              "loss": 1.2495202547392472,
+              "ppl_ratio": 1.000005436457104,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.001622596153846154,
+              "loss": 1.2491382258694026,
+              "ppl_ratio": 0.9996234784745094,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.004477163461538461,
+              "loss": 1.248392469396372,
+              "ppl_ratio": 0.9988782806974137,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.018704927884615384,
+              "loss": 1.247895562799933,
+              "ppl_ratio": 0.9983820547898695,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.07384314903846154,
+              "loss": 1.2656554739317123,
+              "ppl_ratio": 1.0162716196833905,
+              "tokens": 45504.0
+            }
+          ]
+        },
+        {
+          "suite": "mbpp_test",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed1/mbpp_test/token_router_validation.json",
+          "overlap_removed": 136,
+          "dense": {
+            "loss": 1.4203416452738062,
+            "ppl": 4.138534109369908,
+            "tokens": 9588
+          },
+          "patched": {
+            "loss": 1.5274490331877357,
+            "ppl": 4.606411019959,
+            "tokens": 9588,
+            "ppl_ratio": 1.1130537765847548
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 390,
+            "tokens": 59604,
+            "dense_loss": 1.2907048210618672,
+            "patched_loss": 1.458320691142076,
+            "patched_ppl_ratio": 1.182482296565847,
+            "positive_delta_fraction": 0.31328434333266225
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 194,
+            "tokens": 9588,
+            "dense_loss": 1.4203416452738062,
+            "patched_loss": 1.5274490331877357,
+            "patched_ppl_ratio": 1.1130537765847548,
+            "positive_delta_fraction": 0.24478514810179391
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.015987435567010308,
+              "loss": 1.4253291756347313,
+              "ppl_ratio": 1.0049999887941354,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.0899645618556701,
+              "loss": 1.4253252281218407,
+              "ppl_ratio": 1.004996021551555,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.17145215850515463,
+              "loss": 1.4235122768553798,
+              "ppl_ratio": 1.0031756633504432,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.33944104381443296,
+              "loss": 1.3868193724932443,
+              "ppl_ratio": 0.9670333724694387,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.6373832152061856,
+              "loss": 1.3514276846277522,
+              "ppl_ratio": 0.9334069863574771,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.8673485824742269,
+              "loss": 1.4094749396501984,
+              "ppl_ratio": 0.9891921237353432,
+              "tokens": 9782.0
+            }
+          ]
+        }
+      ],
+      "aggregate_frontier": [
+        {
+          "target_patch_fraction": 0.01,
+          "token_weighted_actual_patch_fraction": 0.005072583575135524,
+          "token_weighted_ppl_ratio": 1.0009153158495343,
+          "mean_suite_ppl_ratio": 1.0019932949149497,
+          "min_suite_ppl_ratio": 0.9999661121487381,
+          "max_suite_ppl_ratio": 1.0049999887941354,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.03,
+          "token_weighted_actual_patch_fraction": 0.022820767395676848,
+          "token_weighted_ppl_ratio": 1.0003995874587712,
+          "mean_suite_ppl_ratio": 1.0015357654829964,
+          "min_suite_ppl_ratio": 0.99960583844033,
+          "max_suite_ppl_ratio": 1.004996021551555,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.05,
+          "token_weighted_actual_patch_fraction": 0.03919233630329839,
+          "token_weighted_ppl_ratio": 0.9996097279806914,
+          "mean_suite_ppl_ratio": 1.0004546283097486,
+          "min_suite_ppl_ratio": 0.9985647431042934,
+          "max_suite_ppl_ratio": 1.0031756633504432,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.1,
+          "token_weighted_actual_patch_fraction": 0.07435590761570303,
+          "token_weighted_ppl_ratio": 0.9943023796862104,
+          "mean_suite_ppl_ratio": 0.9873553369732244,
+          "min_suite_ppl_ratio": 0.9670333724694387,
+          "max_suite_ppl_ratio": 0.9988782806974137,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.25,
+          "token_weighted_actual_patch_fraction": 0.15418922988995998,
+          "token_weighted_ppl_ratio": 0.9889479763637836,
+          "mean_suite_ppl_ratio": 0.9748784465576806,
+          "min_suite_ppl_ratio": 0.9334069863574771,
+          "max_suite_ppl_ratio": 0.9983820547898695,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.5,
+          "token_weighted_actual_patch_fraction": 0.269232453290795,
+          "token_weighted_ppl_ratio": 1.007604329375782,
+          "mean_suite_ppl_ratio": 1.0022884398137608,
+          "min_suite_ppl_ratio": 0.9891921237353432,
+          "max_suite_ppl_ratio": 1.0162716196833905,
+          "tokens": 89188.0,
+          "suite_count": 3
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "run_count": 3,
+      "split_manifest": {
+        "protocol": "leave_suite_out_broad_auxiliary_router",
+        "train_sources": [
+          "data/heldout/router_train.txt",
+          "data/heldout/router_eval.txt"
+        ],
+        "heldout_dir": "data/heldout",
+        "manifest": "data/heldout/manifest.json",
+        "unique_base_train_source_count": 512,
+        "seed": 2,
+        "train_fraction": 0.75,
+        "max_train_count": 0,
+        "suites": [
+          {
+            "name": "gsm8k_test",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/splits/gsm8k_test/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/splits/gsm8k_test/router_eval.txt",
+            "source_eval_texts": "data/heldout/gsm8k_test.txt",
+            "auxiliary_suite_names": [
+              "mbpp_test",
+              "alpaca_cleaned_train_tail"
+            ],
+            "train_count": 340,
+            "candidate_train_count": 454,
+            "eval_count": 260,
+            "overlap_removed": 196
+          },
+          {
+            "name": "mbpp_test",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/splits/mbpp_test/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/splits/mbpp_test/router_eval.txt",
+            "source_eval_texts": "data/heldout/mbpp_test.txt",
+            "auxiliary_suite_names": [
+              "gsm8k_test",
+              "alpaca_cleaned_train_tail"
+            ],
+            "train_count": 390,
+            "candidate_train_count": 520,
+            "eval_count": 194,
+            "overlap_removed": 136
+          },
+          {
+            "name": "alpaca_cleaned_train_tail",
+            "train_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/splits/alpaca_cleaned_train_tail/router_train.txt",
+            "eval_texts": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/splits/alpaca_cleaned_train_tail/router_eval.txt",
+            "source_eval_texts": "data/heldout/alpaca_cleaned_train_tail.txt",
+            "auxiliary_suite_names": [
+              "gsm8k_test",
+              "mbpp_test"
+            ],
+            "train_count": 340,
+            "candidate_train_count": 454,
+            "eval_count": 260,
+            "overlap_removed": 180
+          }
+        ]
+      },
+      "runs": [
+        {
+          "suite": "alpaca_cleaned_train_tail",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/alpaca_cleaned_train_tail/token_router_validation.json",
+          "overlap_removed": 180,
+          "dense": {
+            "loss": 1.3551623886033106,
+            "ppl": 3.8773905495482697,
+            "tokens": 33642
+          },
+          "patched": {
+            "loss": 1.4594823914015806,
+            "ppl": 4.303731303392834,
+            "tokens": 33642,
+            "ppl_ratio": 1.1099555869847144
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 340,
+            "tokens": 40790,
+            "dense_loss": 1.270702706589714,
+            "patched_loss": 1.5386639900142056,
+            "patched_ppl_ratio": 1.3072965249905004,
+            "positive_delta_fraction": 0.2845550379995097
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 260,
+            "tokens": 33642,
+            "dense_loss": 1.3551623886033106,
+            "patched_loss": 1.4594823914015806,
+            "patched_ppl_ratio": 1.1099555869847144,
+            "positive_delta_fraction": 0.3703109208727186
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.007361778846153846,
+              "loss": 1.35510279178535,
+              "ppl_ratio": 0.9999404049578944,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.029717548076923075,
+              "loss": 1.352098901383216,
+              "ppl_ratio": 0.9969412004687659,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.049954927884615384,
+              "loss": 1.3500025699159177,
+              "ppl_ratio": 0.994853470310952,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.09612379807692308,
+              "loss": 1.345359318871272,
+              "ppl_ratio": 0.9902448237273076,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.21488882211538463,
+              "loss": 1.3438110153920586,
+              "ppl_ratio": 0.9887128105381836,
+              "tokens": 33902.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.37091346153846155,
+              "loss": 1.3601092223864124,
+              "ppl_ratio": 1.004959089566114,
+              "tokens": 33902.0
+            }
+          ]
+        },
+        {
+          "suite": "gsm8k_test",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/gsm8k_test/token_router_validation.json",
+          "overlap_removed": 196,
+          "dense": {
+            "loss": 1.2495148182969207,
+            "ppl": 3.488649917670586,
+            "tokens": 45244
+          },
+          "patched": {
+            "loss": 1.5300352301956772,
+            "ppl": 4.6183395244389,
+            "tokens": 45244,
+            "ppl_ratio": 1.3238185640371223
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 340,
+            "tokens": 32420,
+            "dense_loss": 1.3760557859492553,
+            "patched_loss": 1.4303287544712324,
+            "patched_ppl_ratio": 1.0557727555535144,
+            "positive_delta_fraction": 0.3293645897594078
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 260,
+            "tokens": 45244,
+            "dense_loss": 1.2495148182969207,
+            "patched_loss": 1.5300352301956772,
+            "patched_ppl_ratio": 1.3238185640371223,
+            "positive_delta_fraction": 0.2923481566616568
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.0012169471153846154,
+              "loss": 1.2493298784836226,
+              "ppl_ratio": 0.999815077287015,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.003635817307692308,
+              "loss": 1.248698960666174,
+              "ppl_ratio": 0.9991844750905995,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.006460336538461538,
+              "loss": 1.2494046136084551,
+              "ppl_ratio": 0.999889801383848,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.01571514423076923,
+              "loss": 1.2487829281973395,
+              "ppl_ratio": 0.9992683776666487,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.05264423076923077,
+              "loss": 1.2602353716994807,
+              "ppl_ratio": 1.0107782244394188,
+              "tokens": 45504.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.15827824519230768,
+              "loss": 1.315185361812952,
+              "ppl_ratio": 1.0678748409148136,
+              "tokens": 45504.0
+            }
+          ]
+        },
+        {
+          "suite": "mbpp_test",
+          "path": "results/asi3_token_router_leave_suiteout_seed_sweep_20260525T171658Z/seed2/mbpp_test/token_router_validation.json",
+          "overlap_removed": 136,
+          "dense": {
+            "loss": 1.4203416452738062,
+            "ppl": 4.138534109369908,
+            "tokens": 9588
+          },
+          "patched": {
+            "loss": 1.5274490331877357,
+            "ppl": 4.606411019959,
+            "tokens": 9588,
+            "ppl_ratio": 1.1130537765847548
+          },
+          "train_summary": {
+            "split": "train",
+            "examples": 390,
+            "tokens": 58920,
+            "dense_loss": 1.2907813916462096,
+            "patched_loss": 1.5076543658278827,
+            "patched_ppl_ratio": 1.24218630238408,
+            "positive_delta_fraction": 0.32062118126272915
+          },
+          "eval_summary": {
+            "split": "eval",
+            "examples": 194,
+            "tokens": 9588,
+            "dense_loss": 1.4203416452738062,
+            "patched_loss": 1.5274490331877357,
+            "patched_ppl_ratio": 1.1130537765847548,
+            "positive_delta_fraction": 0.24478514810179391
+          },
+          "mixed_frontier": [
+            {
+              "target_patch_fraction": 0.01,
+              "actual_patch_token_fraction": 0.00390625,
+              "loss": 1.425329192622847,
+              "ppl_ratio": 1.0050000058671917,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.03,
+              "actual_patch_token_fraction": 0.004892880154639175,
+              "loss": 1.4164477439714926,
+              "ppl_ratio": 0.9961136701007424,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.05,
+              "actual_patch_token_fraction": 0.008235341494845361,
+              "loss": 1.4058545742559423,
+              "ppl_ratio": 0.9856173616792677,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.1,
+              "actual_patch_token_fraction": 0.03084729381443299,
+              "loss": 1.3793127968544805,
+              "ppl_ratio": 0.9598014407939732,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.25,
+              "actual_patch_token_fraction": 0.18822487113402062,
+              "loss": 1.351444108492025,
+              "ppl_ratio": 0.9334223166330232,
+              "tokens": 9782.0
+            },
+            {
+              "target_patch_fraction": 0.5,
+              "actual_patch_token_fraction": 0.5196520618556701,
+              "loss": 1.330273588305479,
+              "ppl_ratio": 0.9138689880020018,
+              "tokens": 9782.0
+            }
+          ]
+        }
+      ],
+      "aggregate_frontier": [
+        {
+          "target_patch_fraction": 0.01,
+          "token_weighted_actual_patch_fraction": 0.0038476692546168677,
+          "token_weighted_ppl_ratio": 1.00043010811762,
+          "mean_suite_ppl_ratio": 1.0015851627040337,
+          "min_suite_ppl_ratio": 0.999815077287015,
+          "max_suite_ppl_ratio": 1.0050000058671917,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.03,
+          "token_weighted_actual_patch_fraction": 0.01368783580017219,
+          "token_weighted_ppl_ratio": 0.9979941963168598,
+          "mean_suite_ppl_ratio": 0.997413115220036,
+          "min_suite_ppl_ratio": 0.9961136701007424,
+          "max_suite_ppl_ratio": 0.9991844750905995,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.05,
+          "token_weighted_actual_patch_fraction": 0.023188110838823182,
+          "token_weighted_ppl_ratio": 0.9964000075194411,
+          "mean_suite_ppl_ratio": 0.9934535444580225,
+          "min_suite_ppl_ratio": 0.9856173616792677,
+          "max_suite_ppl_ratio": 0.999889801383848,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.1,
+          "token_weighted_actual_patch_fraction": 0.047939623644139936,
+          "token_weighted_ppl_ratio": 0.9914371522093527,
+          "mean_suite_ppl_ratio": 0.9831048807293099,
+          "min_suite_ppl_ratio": 0.9598014407939732,
+          "max_suite_ppl_ratio": 0.9992683776666487,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.25,
+          "token_weighted_actual_patch_fraction": 0.12918665755159703,
+          "token_weighted_ppl_ratio": 0.9936186683742957,
+          "mean_suite_ppl_ratio": 0.9776377838702085,
+          "min_suite_ppl_ratio": 0.9334223166330232,
+          "max_suite_ppl_ratio": 1.0107782244394188,
+          "tokens": 89188.0,
+          "suite_count": 3
+        },
+        {
+          "target_patch_fraction": 0.5,
+          "token_weighted_actual_patch_fraction": 0.2787397173541268,
+          "token_weighted_ppl_ratio": 1.0258352702225833,
+          "mean_suite_ppl_ratio": 0.9955676394943098,
+          "min_suite_ppl_ratio": 0.9138689880020018,
+          "max_suite_ppl_ratio": 1.0678748409148136,
+          "tokens": 89188.0,
+          "suite_count": 3
+        }
+      ]
+    }
+  ],
+  "aggregate_frontier": [
+    {
+      "target_patch_fraction": 0.01,
+      "mean_actual_patch_token_fraction": 0.004301136872261996,
+      "mean_token_weighted_ppl_ratio": 1.0006589182949768,
+      "min_token_weighted_ppl_ratio": 1.00043010811762,
+      "max_token_weighted_ppl_ratio": 1.0009153158495343,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.03,
+      "mean_actual_patch_token_fraction": 0.016572384803654732,
+      "mean_token_weighted_ppl_ratio": 0.9988722212035192,
+      "min_token_weighted_ppl_ratio": 0.9979941963168598,
+      "max_token_weighted_ppl_ratio": 1.0003995874587712,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.05,
+      "mean_actual_patch_token_fraction": 0.028394127009138587,
+      "mean_token_weighted_ppl_ratio": 0.9974733843936064,
+      "min_token_weighted_ppl_ratio": 0.9964000075194411,
+      "max_token_weighted_ppl_ratio": 0.9996097279806914,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.1,
+      "mean_actual_patch_token_fraction": 0.05649228405750309,
+      "mean_token_weighted_ppl_ratio": 0.9925789098469298,
+      "min_token_weighted_ppl_ratio": 0.9914371522093527,
+      "max_token_weighted_ppl_ratio": 0.9943023796862104,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.25,
+      "mean_actual_patch_token_fraction": 0.13800370650554053,
+      "mean_token_weighted_ppl_ratio": 0.9943143017354902,
+      "min_token_weighted_ppl_ratio": 0.9889479763637836,
+      "max_token_weighted_ppl_ratio": 1.0003762604683915,
+      "seed_count": 3
+    },
+    {
+      "target_patch_fraction": 0.5,
+      "mean_actual_patch_token_fraction": 0.28058634839221946,
+      "mean_token_weighted_ppl_ratio": 1.027400959765694,
+      "min_token_weighted_ppl_ratio": 1.007604329375782,
+      "max_token_weighted_ppl_ratio": 1.048763279698716,
+      "seed_count": 3
+    }
+  ]
+}

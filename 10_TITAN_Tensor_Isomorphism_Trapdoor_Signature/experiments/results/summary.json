@@ -1,0 +1,299 @@
+{
+  "timestamp_utc": "2026-04-02T02:15:37Z",
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:37:03) [MSC v.1929 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy_version": "2.1.3",
+  "sympy_version": "1.14.0",
+  "falcon_impl_dir": "C:\\Users\\Lenovo\\patents\\5_QTS-Falcon_Threshold_Signature\\real_benchmarks\\falcon_standard\\falcon_impl",
+  "security_note": "TITAN parameter points are engineering proof-of-concept points only; they are not claimed to be security-level matched to Falcon.",
+  "schemes": {
+    "titan-n8-r16": {
+      "family": "titan",
+      "param_n": 8,
+      "rounds": 16,
+      "sizes": {
+        "pk_bytes": 512,
+        "sk_bytes": 384,
+        "sig_bytes": 3104
+      },
+      "correctness": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_success_rate": 1.0,
+        "tampered_msg_reject_rate": 1.0,
+        "tampered_sig_reject_rate": 1.0
+      },
+      "keygen": {
+        "iterations": 5,
+        "mean_ms": 4.539,
+        "median_ms": 4.486,
+        "stdev_ms": 0.362,
+        "min_ms": 4.237,
+        "max_ms": 5.133,
+        "p95_ms": 5.133
+      },
+      "sign": {
+        "iterations": 50,
+        "mean_ms": 16.534,
+        "median_ms": 16.126,
+        "stdev_ms": 1.362,
+        "min_ms": 15.001,
+        "max_ms": 21.354,
+        "p95_ms": 19.422
+      },
+      "verify": {
+        "iterations": 50,
+        "mean_ms": 1.808,
+        "median_ms": 1.587,
+        "stdev_ms": 0.514,
+        "min_ms": 1.502,
+        "max_ms": 4.137,
+        "p95_ms": 2.674
+      },
+      "sign_throughput_sig_s": 60.481,
+      "verify_throughput_sig_s": 553.097
+    },
+    "titan-n8-r32": {
+      "family": "titan",
+      "param_n": 8,
+      "rounds": 32,
+      "sizes": {
+        "pk_bytes": 512,
+        "sk_bytes": 384,
+        "sig_bytes": 6176
+      },
+      "correctness": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_success_rate": 1.0,
+        "tampered_msg_reject_rate": 1.0,
+        "tampered_sig_reject_rate": 1.0
+      },
+      "keygen": {
+        "iterations": 5,
+        "mean_ms": 4.936,
+        "median_ms": 4.307,
+        "stdev_ms": 1.22,
+        "min_ms": 3.83,
+        "max_ms": 6.747,
+        "p95_ms": 6.747
+      },
+      "sign": {
+        "iterations": 50,
+        "mean_ms": 33.794,
+        "median_ms": 33.052,
+        "stdev_ms": 4.8,
+        "min_ms": 29.193,
+        "max_ms": 62.372,
+        "p95_ms": 38.747
+      },
+      "verify": {
+        "iterations": 50,
+        "mean_ms": 3.495,
+        "median_ms": 3.185,
+        "stdev_ms": 0.621,
+        "min_ms": 2.998,
+        "max_ms": 5.669,
+        "p95_ms": 4.82
+      },
+      "sign_throughput_sig_s": 29.591,
+      "verify_throughput_sig_s": 286.123
+    },
+    "titan-n10-r32": {
+      "family": "titan",
+      "param_n": 10,
+      "rounds": 32,
+      "sizes": {
+        "pk_bytes": 1000,
+        "sk_bytes": 600,
+        "sig_bytes": 9632
+      },
+      "correctness": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_success_rate": 1.0,
+        "tampered_msg_reject_rate": 1.0,
+        "tampered_sig_reject_rate": 1.0
+      },
+      "keygen": {
+        "iterations": 5,
+        "mean_ms": 6.525,
+        "median_ms": 6.445,
+        "stdev_ms": 0.251,
+        "min_ms": 6.312,
+        "max_ms": 6.957,
+        "p95_ms": 6.957
+      },
+      "sign": {
+        "iterations": 50,
+        "mean_ms": 43.297,
+        "median_ms": 41.013,
+        "stdev_ms": 8.557,
+        "min_ms": 36.776,
+        "max_ms": 84.809,
+        "p95_ms": 64.075
+      },
+      "verify": {
+        "iterations": 50,
+        "mean_ms": 4.136,
+        "median_ms": 3.911,
+        "stdev_ms": 0.668,
+        "min_ms": 3.436,
+        "max_ms": 6.622,
+        "p95_ms": 5.343
+      },
+      "sign_throughput_sig_s": 23.096,
+      "verify_throughput_sig_s": 241.779
+    },
+    "titan-n12-r32": {
+      "family": "titan",
+      "param_n": 12,
+      "rounds": 32,
+      "sizes": {
+        "pk_bytes": 1728,
+        "sk_bytes": 864,
+        "sig_bytes": 13856
+      },
+      "correctness": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_success_rate": 1.0,
+        "tampered_msg_reject_rate": 1.0,
+        "tampered_sig_reject_rate": 1.0
+      },
+      "keygen": {
+        "iterations": 5,
+        "mean_ms": 10.096,
+        "median_ms": 9.632,
+        "stdev_ms": 1.686,
+        "min_ms": 8.655,
+        "max_ms": 12.887,
+        "p95_ms": 12.887
+      },
+      "sign": {
+        "iterations": 50,
+        "mean_ms": 50.15,
+        "median_ms": 49.295,
+        "stdev_ms": 5.423,
+        "min_ms": 45.161,
+        "max_ms": 81.117,
+        "p95_ms": 54.427
+      },
+      "verify": {
+        "iterations": 50,
+        "mean_ms": 4.806,
+        "median_ms": 4.363,
+        "stdev_ms": 1.15,
+        "min_ms": 4.019,
+        "max_ms": 11.234,
+        "p95_ms": 6.271
+      },
+      "sign_throughput_sig_s": 19.94,
+      "verify_throughput_sig_s": 208.073
+    },
+    "falcon-512": {
+      "family": "falcon",
+      "param_n": 512,
+      "rounds": null,
+      "sizes": {
+        "pk_bytes": 896,
+        "sk_bytes": 3584,
+        "sig_bytes": 666
+      },
+      "correctness": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_success_rate": 1.0,
+        "tampered_msg_reject_rate": 1.0,
+        "tampered_sig_reject_rate": 1.0
+      },
+      "keygen": {
+        "iterations": 3,
+        "mean_ms": 2328.044,
+        "median_ms": 2404.462,
+        "stdev_ms": 135.516,
+        "min_ms": 2171.578,
+        "max_ms": 2408.094,
+        "p95_ms": 2408.094
+      },
+      "sign": {
+        "iterations": 50,
+        "mean_ms": 16.28,
+        "median_ms": 15.555,
+        "stdev_ms": 2.513,
+        "min_ms": 14.552,
+        "max_ms": 27.663,
+        "p95_ms": 19.517
+      },
+      "verify": {
+        "iterations": 50,
+        "mean_ms": 4.263,
+        "median_ms": 3.985,
+        "stdev_ms": 0.706,
+        "min_ms": 3.773,
+        "max_ms": 7.795,
+        "p95_ms": 5.08
+      },
+      "sign_throughput_sig_s": 61.425,
+      "verify_throughput_sig_s": 234.577
+    },
+    "falcon-1024": {
+      "family": "falcon",
+      "param_n": 1024,
+      "rounds": null,
+      "sizes": {
+        "pk_bytes": 1792,
+        "sk_bytes": 7168,
+        "sig_bytes": 1280
+      },
+      "correctness": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_success_rate": 1.0,
+        "tampered_msg_reject_rate": 1.0,
+        "tampered_sig_reject_rate": 1.0
+      },
+      "keygen": {
+        "iterations": 3,
+        "mean_ms": 11414.624,
+        "median_ms": 11638.177,
+        "stdev_ms": 876.242,
+        "min_ms": 10448.261,
+        "max_ms": 12157.434,
+        "p95_ms": 12157.434
+      },
+      "sign": {
+        "iterations": 50,
+        "mean_ms": 40.76,
+        "median_ms": 39.589,
+        "stdev_ms": 4.474,
+        "min_ms": 35.994,
+        "max_ms": 53.539,
+        "p95_ms": 50.609
+      },
+      "verify": {
+        "iterations": 50,
+        "mean_ms": 10.706,
+        "median_ms": 10.447,
+        "stdev_ms": 1.156,
+        "min_ms": 9.428,
+        "max_ms": 15.097,
+        "p95_ms": 13.4
+      },
+      "sign_throughput_sig_s": 24.534,
+      "verify_throughput_sig_s": 93.406
+    }
+  }
+}

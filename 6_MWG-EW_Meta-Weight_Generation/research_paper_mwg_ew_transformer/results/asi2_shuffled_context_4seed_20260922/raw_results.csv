@@ -1,0 +1,9 @@
+seed|method|relative_mse|cosine
+4seed_mean|persistent_low_rank_r384|0.4498|0.7423
+4seed_mean|mwg_token_diag_core_r384|0.4462|0.7450
+4seed_mean|mwg_shuffled_diag_core_r384|0.4491|0.7428
+4seed_mean|persistent_low_rank_r401|0.4405|0.7485
+4seed_mean|mwg_token_diag_core_r401|0.4365|0.7518
+4seed_mean|mwg_shuffled_diag_core_r401|0.4397|0.7490
+4seed_mean|static_svd_r384|0.8369|0.4107
+4seed_mean|static_svd_r401|0.8260|0.4236

@@ -1,0 +1,44 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,heading=true]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref,fancyhdr,setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利说明书摘要}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 说明书摘要} \\[0.8em]
+\end{center}
+
+\noindent\textbf{发明名称：}量子-经典异构光纤网络的动态波分复用与路由控制方法
+
+\vspace{0.8em}
+
+\noindent\textbf{摘要：}
+本发明公开了一种面向量子-经典异构光纤网络的动态波分复用与路由控制方法、系统及电子设备。该方法由量子控制器/编排器执行，在量子信号与经典波分复用业务信号共纤传输场景下，采集链路段级经典功率谱与波长占用、放大器状态及告警信息，并采集量子链路的量子误码率 QBER、计数率、暗计数率、探测器饱和度和密钥率；据此构建链路段-波长-时间窗三级噪声感知数据形成三维噪声张量，预测候选路径与候选量子波长在不同发射时间窗下的 QBER 与安全密钥率；在满足量子业务质量约束与现网扰动约束的条件下，对路由、量子波长、发射时间窗、探测门控参数与纠错配置进行联合优化，得到目标重配置方案；按先轻后重的分层执行策略优先调整发射时间窗、门控与纠错参数，必要时再执行量子波长迁移或路径迁移；并通过新旧配置重叠保护、配置快照与回滚机制降低重构失败导致的业务中断风险。采用本发明可在不新增暗光纤的前提下，提升量子业务在动态经典业务负荷下的稳定性与持续可服务性。
+
+\vspace{0.6em}
+
+\noindent\textbf{摘要附图说明：}摘要附图为量子控制器与 ROADM/OTN/QKD 设备协同的系统总体架构示意图。
+
+\vspace{0.6em}
+
+\noindent\textbf{关键词：}量子密钥分发；共纤传输；波分复用；噪声感知；联合优化；在线重构
+
+\end{document}
+

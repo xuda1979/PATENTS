@@ -1,0 +1,24 @@
+{
+  "suites": [
+    {
+      "name": "general_heldout",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/general_heldout.txt",
+      "eval_batches": 128
+    },
+    {
+      "name": "instruction_heldout",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/instruction_heldout.txt",
+      "eval_batches": 128
+    },
+    {
+      "name": "code_heldout",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/code_heldout.txt",
+      "eval_batches": 128
+    },
+    {
+      "name": "math_reasoning_heldout",
+      "texts": "/vllm-workspace/mwg-ew-transformer-research/data/heldout/math_reasoning_heldout.txt",
+      "eval_batches": 128
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "schema": "mwg-multi-layer-lifecycle-v1",
+  "device": "Ascend910B2",
+  "fp32_bytes_per_elem": 4,
+  "generated": "2026-09-13T15:27:40Z",
+  "configs": [
+    {
+      "d": 1536,
+      "m": 8960,
+      "N": 1,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 5373952,
+      "saved_activ_bytes_rec": 786432,
+      "saved_footprint_reduction_x": 6.83,
+      "peak_alloc_mat": 276830720,
+      "peak_alloc_rec": 607135744,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 1536,
+      "m": 8960,
+      "N": 4,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 21495808,
+      "saved_activ_bytes_rec": 3145728,
+      "saved_footprint_reduction_x": 6.83,
+      "peak_alloc_mat": 937439744,
+      "peak_alloc_rec": 2258658304,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 1536,
+      "m": 8960,
+      "N": 8,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 42991616,
+      "saved_activ_bytes_rec": 6291456,
+      "saved_footprint_reduction_x": 6.83,
+      "peak_alloc_mat": 1818251776,
+      "peak_alloc_rec": 4460688384,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 1536,
+      "m": 8960,
+      "N": 16,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 85983232,
+      "saved_activ_bytes_rec": 12582912,
+      "saved_footprint_reduction_x": 6.83,
+      "peak_alloc_mat": 3579875840,
+      "peak_alloc_rec": 8864748544,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 2048,
+      "m": 11008,
+      "N": 1,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 6684672,
+      "saved_activ_bytes_rec": 1048576,
+      "saved_footprint_reduction_x": 6.38,
+      "peak_alloc_mat": 452991488,
+      "peak_alloc_rec": 994060288,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 2048,
+      "m": 11008,
+      "N": 4,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 26738688,
+      "saved_activ_bytes_rec": 4194304,
+      "saved_footprint_reduction_x": 6.38,
+      "peak_alloc_mat": 1535128064,
+      "peak_alloc_rec": 3699401728,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 2048,
+      "m": 11008,
+      "N": 8,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 53477376,
+      "saved_activ_bytes_rec": 8388608,
+      "saved_footprint_reduction_x": 6.38,
+      "peak_alloc_mat": 2977976832,
+      "peak_alloc_rec": 7306523648,
+      "grad_maxdiff": 0.0
+    },
+    {
+      "d": 2048,
+      "m": 11008,
+      "N": 16,
+      "B": 2,
+      "S": 64,
+      "saved_activ_bytes_mat": 106954752,
+      "saved_activ_bytes_rec": 16777216,
+      "saved_footprint_reduction_x": 6.38,
+      "peak_alloc_mat": 5863674368,
+      "peak_alloc_rec": 14520767488,
+      "grad_maxdiff": 0.0
+    }
+  ]
+}

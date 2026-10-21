@@ -1,0 +1,48 @@
+\documentclass[12pt]{article}
+\usepackage[UTF8]{ctex}
+\usepackage[paperwidth=18cm,paperheight=12.5cm,margin=0.3cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\pagestyle{empty}
+\begin{document}
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={draw,thick,rounded corners=2pt,align=center,font=\small,inner sep=5pt},
+  lbl/.style={font=\footnotesize},
+  arr/.style={-{Stealth[length=2.5mm]},thick}]
+
+% top modules
+\node[box,minimum width=4.6cm,minimum height=1.4cm] (compiler) at (0.2,5.2)
+  {qLDPC 编译模块 [120]\\ \footnotesize Tanner 图 $\to$ 声子模式映射};
+\node[box,minimum width=4.6cm,minimum height=1.4cm] (control) at (6.4,5.2)
+  {多色状态依赖力\\控制模块 [130]};
+
+% ion chain
+\node[box,minimum width=11.6cm,minimum height=2.6cm] (chain) at (3.3,1.5) {};
+\node[lbl,anchor=north west] at (chain.north west) {离子链数据寄存器 [110]};
+\node[draw,circle,thick,fill=gray!25,minimum size=0.7cm,font=\tiny,align=center] (ro) at (-1.55,1.15) {读出};
+\foreach \i in {1,...,8} {
+  \node[draw,circle,thick,minimum size=0.62cm,font=\footnotesize] (ion\i) at (-0.6+1.08*\i,1.15) {\i};
+}
+\node[lbl] at (3.3,0.5) {共享读出离子 [150] \qquad 数据离子 $1\sim N$};
+
+% phonon modes
+\node[box,minimum width=11.6cm,minimum height=1.6cm] (modes) at (3.3,-1.8) {};
+\node[lbl,anchor=north west] at (modes.north west) {可寻址声子本征模集合 [140]};
+\foreach \j/\x in {1/-0.7,2/2.0,3/4.7,4/7.4} {
+  \node[draw,thick,minimum width=1.9cm,minimum height=0.55cm,font=\footnotesize] at (\x,-2.05) {模式 $m_{\j}$};
+}
+
+% decoder
+\node[box,minimum width=3.6cm,minimum height=1.2cm] (decoder) at (3.3,-4.6) {qLDPC 译码器 [160]};
+
+% arrows
+\draw[arr] (compiler) -- node[lbl,above]{脉冲表} (control);
+\draw[arr] (control.south) -- node[lbl,right]{状态依赖力} ($(chain.north)+(3.1,0)$);
+\draw[arr] ($(chain.south)+(-2.2,0)$) -- node[lbl,left]{奇偶写入} ($(modes.north)+(-2.2,0)$);
+\draw[arr] ($(modes.north)+(2.2,0)$) -- node[lbl,right]{边带逐模读取} ($(chain.south)+(2.2,0)$);
+\draw[arr] (chain.west) -- ++(-1.0,0) |- node[lbl,pos=0.25,left,align=center]{综合征\\比特} (decoder.west);
+\draw[arr] (decoder.east) -- ++(0.5,0) -- node[lbl,below,pos=0.0,anchor=north west]{} (10.3,-4.6) -- node[lbl,right,align=center]{Pauli frame\\更新} (10.3,5.2) -- (control.east);
+\end{tikzpicture}
+\end{center}
+\end{document}

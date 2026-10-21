@@ -1,0 +1,132 @@
+{
+  "ok": false,
+  "timestamp": "2026-06-09T03:35:18.721Z",
+  "requested": {
+    "taskId": "dt-d1d3fa8bd170415ebc104047770c2389",
+    "taskName": "asi3-2npu-router-ui-06090231",
+    "projectId": "21b4208dde424e96b159362ef49c9c96"
+  },
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": {
+    "ok": true,
+    "mode": "safari_sso_bridge",
+    "authUrl": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+    "bridgeAttempt": 1,
+    "maxBridgeAttempts": 2,
+    "safariCapture": {
+      "found": true,
+      "window": 1,
+      "tab": 5,
+      "visit_url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+      "final_url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+      "title": "焕新社区",
+      "callback_url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+      "auth_redirect_url": null,
+      "redirect_samples": [
+        {
+          "t": 7.6,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.65,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.7,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.75,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.8,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.85,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.9,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        },
+        {
+          "t": 7.95,
+          "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+          "title": "焕新社区"
+        }
+      ],
+      "redirect_samples_truncated": true,
+      "redirect_sample_count": 160
+    },
+    "finalUrl": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3",
+    "finalUrlState": "app_surface",
+    "trace": [
+      {
+        "label": "after_callback_attempt_1",
+        "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3&state=%5BREDACTED%5D&session_state=%5BREDACTED%5D&code=%5BREDACTED%5D",
+        "classified": "callback",
+        "timestamp": "2026-06-09T03:35:10.427Z"
+      },
+      {
+        "label": "after_retry_train_dev_attempt_1",
+        "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3",
+        "classified": "app_surface",
+        "timestamp": "2026-06-09T03:35:14.516Z"
+      }
+    ],
+    "bodyPreview": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回 Jupyter VSCode Shell终端 可视化 保存镜像 任务列表 提交任务",
+    "localStorageKeys": [
+      "JTKL_POOL_ID_KEY",
+      "JTKL_PROJECT_ID_KEY"
+    ],
+    "sessionStorageKeys": [
+      "RECORD_USER_VISIT"
+    ],
+    "cookieNames": [
+      "68b329_0",
+      "68b329_1",
+      "AUTH_SESSION_ID",
+      "AUTH_SESSION_ID_LEGACY",
+      "KEYCLOAK_IDENTITY",
+      "KEYCLOAK_IDENTITY_LEGACY",
+      "KEYCLOAK_REMEMBER_ME",
+      "KEYCLOAK_SESSION",
+      "KEYCLOAK_SESSION_LEGACY"
+    ]
+  },
+  "currentUrl": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3",
+  "currentUrlClass": "app_surface",
+  "usedProfile": {
+    "profileDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "isolated": false,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": false,
+    "baseProfileLocked": false
+  },
+  "task": null,
+  "taskStatusCode": null,
+  "taskStatusText": "",
+  "pods": null,
+  "listStatus": {
+    "ok": false,
+    "status": 403
+  },
+  "detailStatus": {
+    "ok": false,
+    "status": 403
+  },
+  "podStatus": {
+    "ok": false,
+    "status": 403
+  }
+}

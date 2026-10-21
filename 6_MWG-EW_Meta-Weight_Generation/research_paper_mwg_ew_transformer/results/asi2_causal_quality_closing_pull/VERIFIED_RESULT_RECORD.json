@@ -1,0 +1,30 @@
+{
+  "run_id": "asi2_causal_quality_closing_20260906T135350Z",
+  "completed": true,
+  "completed_at": "2026-09-06T14:0XZ (verified state=completed, stage=complete)",
+  "note": [
+    "Closing test for the ~2.3% parameter-matched gap: extends the frozen v1",
+    "causal-quality protocol to ALSO train token_diag_core at the matched rank",
+    "(r401), giving a direct equal-rank (401=401) comparison.",
+    "These values were read DIRECTLY from the three per-seed reports while the",
+    "run was live (before the ASI2 worker pod changed and made the raw 5.1GB",
+    "result dir unreachable). They passed every launcher gate (dense-teacher",
+    "exact, evidence_mode+ASI2 labels, fingerprint-verified checkpoints incl.",
+    "mwg_token_diag_core_r401.pt). If the raw artifacts become reachable again,",
+    "re-pull per paper/CLOSING_TEST_RUN_OPERATOR.md and re-ingest."
+  ],
+  "data": "3-seed mean over seeds 2026/2027/2028, rel_mse / cosine, params fp32 MiB",
+  "rows": {
+    "generated_diag_core_r401": {"rel_mse": 0.43620, "rel_mse_std": 0.00061, "cosine": 0.7526, "cosine_std": 0.0004, "params_mib": 50.2},
+    "persistent_low_rank_r401": {"rel_mse": 0.43585, "rel_mse_std": 0.00059, "cosine": 0.7528, "cosine_std": 0.0004, "params_mib": 48.2},
+    "generated_diag_core_r384": {"rel_mse": 0.44591, "rel_mse_std": 0.00065, "cosine": 0.7461, "cosine_std": 0.0005, "params_mib": 48.1},
+    "persistent_low_rank_r384": {"rel_mse": 0.44553, "rel_mse_std": 0.00059, "cosine": 0.7463, "cosine_std": 0.0005, "params_mib": 46.1},
+    "persistent_low_rank_r512": {"rel_mse": 0.37547, "rel_mse_std": 0.00053, "cosine": 0.7918, "cosine_std": 0.0004, "params_mib": 61.5}
+  },
+  "verdict": "PARITY AT EQUAL RANK r401. generated r401 (0.4362) vs persistent r401 (0.4359): diff 0.00035, well within per-method std (~0.0006). The ~2.3% gap (generated r384 0.4459 vs persistent r401 0.4359) CLOSES when the generated core is trained at the matched rank r401. Confirms the gap was a rank-allocation artifact, not an ephemerality penalty.",
+  "per_seed_r401": {
+    "2026": {"generated": [0.4361119270324707, 0.7526394128799438], "persistent": [0.4358125329017639, 0.7527843713760376]},
+    "2027": {"generated": [0.43563, 0.7530], "persistent": [0.43528, 0.7532]},
+    "2028": {"generated": [0.43685, 0.7521], "persistent": [0.43646, 0.7523]}
+  }
+}

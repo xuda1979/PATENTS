@@ -1,0 +1,175 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{setspace}
+\usetikzlibrary{positioning,arrows.meta}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+\title{\textbf{发明专利技术交底书}\\[0.5em]\Large 基于超低功耗可调谐超构表面后向散射的量子防伪射频识别系统及认证方法}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{发明名称}
+基于超低功耗可调谐超构表面后向散射的量子防伪射频识别系统及认证方法。
+
+\textbf{英文名称}: Quantum Anti-Counterfeit RFID System and Authentication Method Based on Ultra-Low-Power Tunable Metasurface Backscatter.
+
+\section{申请人信息}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+申请人名称 & 待补充 \\
+\hline
+申请人类型 & 企业或研究机构，待补充 \\
+\hline
+国籍或注册地 & 待补充 \\
+\hline
+通讯地址 & 待补充 \\
+\hline
+联系人及电话 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{发明人信息}
+\subsection{第一发明人}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+姓名 & 待补充 \\
+\hline
+工作单位 & 待补充 \\
+\hline
+联系电话 & 待补充 \\
+\hline
+电子邮箱 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{技术领域}
+本申请涉及防伪溯源、RFID/NFC、后向散射通信、超构表面材料、物理不可克隆函数和量子安全认证技术，尤其涉及利用可调谐超构表面和量子受限探测序列构建低功耗防伪标签。
+
+\section{背景技术}
+\subsection{现有技术的局限性}
+现有 RFID/NFC 防伪大多依赖静态 UID、密钥或普通挑战应答协议，面对有设备、有样品、有时间的对手时，克隆门槛持续下降。经典 PUF 或结构防伪虽然能提高复制难度，但仍面临高分辨扫描、模拟器转发和中间人重放等现实问题。
+
+\subsection{相关技术路线与工程瓶颈}
+被动标签功耗预算极低，难以承载复杂密码算法和高成本安全芯片。可调谐超构表面可在极低功耗下调制反射相位、幅度或偏振，为构建“材料级响应 + 协议级认证”提供硬件基础。另一方面，量子读出 PUF 已证明单光子或弱相干探测对无扰动窃听更敏感，但尚未与可调谐后向散射标签形成产业化架构。
+
+\subsection{审查中可能关注的现有技术边界}
+公开资料已经分别覆盖量子读出 PUF、经典 RFID 挑战应答、可调谐超构表面和量子防伪方向，但尚未发现将“可调谐超构表面标签、量子受限随机探测序列、诱骗态一致性检验和供应链后台追溯”统一为一套被动标签系统方案。
+
+\section{发明内容}
+\subsection{发明目的}
+本申请的目的在于，在不依赖高成本有源量子标签的前提下，通过超低功耗可调谐超构表面后向散射结构与量子受限读写流程，构建兼具低功耗、低成本、高取证性和高抗克隆性的量子防伪标签体系。
+
+\subsection{技术方案}
+\subsubsection{创新点 A：可调谐超构表面标签}
+标签以可调谐超构表面阵列作为后向散射调制核心，其反射的相位、幅度或偏振可在有限状态间切换，并通过能量采集或超低功耗驱动完成状态更新。
+
+\subsubsection{创新点 B：量子受限挑战序列}
+读写器发射平均光子数受限的弱相干脉冲或等效弱场序列，并随机切换编码基、时隙、频点或强度档位，使读出过程对窃听、转发和测量再制备攻击更敏感。
+
+\subsubsection{创新点 C：材料指纹与协议绑定}
+标签可以包含制造散差形成的结构指纹或预置秘密映射，读写器把挑战序列与这些材料级特征绑定，形成难以复制的动态挑战应答关系。
+
+\subsubsection{创新点 D：诱骗态与统计判决}
+系统在读写过程中插入诱骗态或强度扰动，并通过相干检测或统计检验分析误码、可见度、互相关和一致性指标，对中间人和模拟器攻击进行量化识别。
+
+\subsubsection{创新点 E：供应链场景落地接口}
+认证结果与资产 ID、批次、时间地点绑定，并可同步到供应链平台，支持现场快速验真和实验室深度复测两级流程。
+
+\subsubsection{创新点 F：可拆解、可测试的侵权证据}
+标签的可调谐超构表面层、驱动层、能量采集单元及读写器中的随机挑战、相干检测和统计判决模块共同形成易于取证的结构和行为证据。
+
+\section{附图说明}
+图1示出量子防伪射频识别系统总体架构。图2示出挑战、响应与统计判决流程。
+
+\section{具体实施方式}
+\subsection{系统架构}
+系统由读写器、可调谐超构表面标签和后台追溯平台组成。读写器负责弱场发射、随机挑战生成、相干检测和统计判决；标签负责状态响应和材料指纹承载；后台负责模板管理、批次绑定和审计追溯。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1cm]
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm] (a) {量子受限读写器};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, right=of a] (b) {可调谐超构表面标签};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, right=of b] (c) {统计判决模块};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, below=of b] (d) {供应链后台平台};
+\draw[->, thick] (a) -- (b);
+\draw[->, thick] (b) -- (c);
+\draw[->, thick] (c) -- (d);
+\draw[->, thick] (d) -| (b);
+\end{tikzpicture}
+\caption{图1 量子防伪射频识别系统总体架构}
+\end{figure}
+
+\subsection{实施步骤}
+\subsubsection{实施例 1：高端芯片托盘的光学 Q-RFID 验真}
+在柔性基底上制备可调谐超构表面阵列并保留工艺散差形成结构指纹。读写器发射近红外弱相干脉冲，随机切换相位基和强度档位；标签根据秘密映射切换表面状态并后向散射。读写器通过诱骗态统计和相关性分析判断是否为真品。
+
+\subsubsection{实施例 2：冷链疫苗物流复核}
+在仓储和出库环节，读写器以现场快速验真模式扫描标签；若出现统计扰动超阈，则转入实验室深度复测模式，提取更高分辨的响应数据。
+
+\subsubsection{实施例 3：军工部件全生命周期追溯}
+每次认证不仅给出真假判断，还把认证结果与批次号、位置和时间戳同步到后台，以支持后续流转追踪和争议处理。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm]
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm] (s1) {读写器发射量子受限随机挑战};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s1] (s2) {标签按结构指纹或秘密映射切换表面状态};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s2] (s3) {读写器执行相干或统计检测};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s3] (s4) {后台记录验真结果并形成追溯链};
+\draw[->, thick] (s1) -- (s2);
+\draw[->, thick] (s2) -- (s3);
+\draw[->, thick] (s3) -- (s4);
+\end{tikzpicture}
+\caption{图2 Q-RFID 挑战、响应与判决流程示意图}
+\end{figure}
+
+\section{技术效果}
+\subsection{安全效果}
+本申请通过量子受限挑战与统计扰动判定，提高对无扰动窃听、转发和模拟攻击的识别能力。即使标签本身不具备复杂安全芯片，也可借助材料级响应和协议级检测形成多重防克隆门槛。
+
+\subsection{产业化与经济可行性}
+该方案适合高价值芯片、军工部件、航空航天器件和冷链药品等高附加值场景。标签侧可低成本量产，读写器侧则可通过软件和检测模块升级形成差异化设备与服务。
+
+\subsection{可取证性与实施稳定性}
+结构取证可落到可调谐超构表面层、驱动层和能量采集层，行为取证可落到随机挑战、诱骗态统计和阈值判决日志。因此，相较于普通 RFID 标签，本申请更容易在侵权认定中建立“结构 + 行为”双重证据链。
+
+\section{权利要求书}
+\subsection{独立权利要求}
+\begin{itemize}
+\item 一种量子防伪射频识别认证方法，其特征在于，读写器向可调谐超构表面标签发射量子受限挑战序列，并依据标签后向散射响应执行统计判决。
+\item 所述挑战序列至少包含随机编码基、时隙、频点或强度档位中的一种。
+\item 一种量子防伪射频识别系统，包括量子受限读写器、可调谐超构表面标签和后台追溯平台。
+\item 标签包括可调谐超构表面阵列、能量采集单元以及秘密映射或结构指纹单元。
+\end{itemize}
+
+\subsection{从属权利要求}
+\begin{itemize}
+\item 读写过程中插入诱骗态或强度扰动以进行一致性检验。
+\item 读写器执行相干检测或统计相关检测中的至少一种。
+\item 可调谐超构表面采用液晶、MEMS、相变材料或其组合。
+\item 后台平台将认证结果与资产 ID、批次和时间地点绑定。
+\end{itemize}
+
+\section{说明书摘要}
+本申请公开了一种基于超低功耗可调谐超构表面后向散射的量子防伪射频识别系统及认证方法。读写器发射量子受限随机挑战序列，标签通过可调谐超构表面阵列及其结构指纹产生后向散射响应，读写器再通过诱骗态一致性检验和统计判决识别窃听、转发和克隆攻击。该方案有助于在不引入高成本有源量子标签的情况下，为高价值供应链提供低功耗、易取证、可产业化的防伪路径。
+\end{document}

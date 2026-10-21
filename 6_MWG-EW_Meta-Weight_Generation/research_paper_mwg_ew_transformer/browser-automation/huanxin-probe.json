@@ -1,0 +1,204 @@
+{
+  "ok": true,
+  "title": "焕新社区",
+  "url": "https://aihuanxin.cn/auth/realms/TechnicalMiddlePlatform/protocol/openid-connect/auth?client_id=kunlun-front&redirect_uri=https%3A%2F%2Faihuanxin.cn%2Fkunlun%2Fkl-web%3FpoolId%3D1%26projectId%3D3ed7854b946a47b1a49ad754baa76cd3%23%2Ftrain-dev&state=526183de-6671-46a9-82a1-aa1603bd9d10&response_mode=fragment&response_type=code&scope=openid&nonce=a7919d37-1c3b-4bc9-85df-9c34498712ac",
+  "state": "login_required",
+  "bodyPreview": "焕新社区 短信登录 密码登录 获取验证码 下次自动登录 我已阅读并同意焕新社区 《服务协议及隐私政策》 登录 取消登录 没有账号？ 立即注册 ©2025 焕新社区 版权所有京ICP备05002571号-27",
+  "attemptTrace": [
+    {
+      "attempt": 1,
+      "title": "焕新社区",
+      "url": "https://aihuanxin.cn/auth/realms/TechnicalMiddlePlatform/protocol/openid-connect/auth?client_id=kunlun-front&redirect_uri=https%3A%2F%2Faihuanxin.cn%2Fkunlun%2Fkl-web%3FpoolId%3D1%26projectId%3D3ed7854b946a47b1a49ad754baa76cd3%23%2Ftrain-dev&state=526183de-6671-46a9-82a1-aa1603bd9d10&response_mode=fragment&response_type=code&scope=openid&nonce=a7919d37-1c3b-4bc9-85df-9c34498712ac",
+      "state": "login_required",
+      "bodyPreview": "焕新社区 短信登录 密码登录 获取验证码 下次自动登录 我已阅读并同意焕新社区 《服务协议及隐私政策》 登录 取消登录 没有账号？ 立即注册 ©2025 焕新社区 版权所有京ICP备05002571号-27",
+      "hasLikelyRemoteSurface": true
+    }
+  ],
+  "links": [
+    {
+      "text": "短信登录",
+      "href": "#"
+    },
+    {
+      "text": "密码登录",
+      "href": "#"
+    },
+    {
+      "text": "《服务协议及隐私政策》",
+      "href": "https://aihuanxin.cn/portal/common-helpcenter#/document/40?unread-message=%2Fportal%2Fcommon-components%23%2F&platformCode=JTRGZNPTFWXY&error=login_required&state=b2457970-ab75-412b-8596-95caa4011dfc"
+    },
+    {
+      "text": "取消登录",
+      "href": ""
+    },
+    {
+      "text": "立即注册",
+      "href": "/auth/realms/TechnicalMiddlePlatform/login-actions/registration?client_id=kunlun-front&tab_id=0XNVFrqBCEU&redirect_uri=https%3A%2F%2Faihuanxin.cn%2Fkunlun%2Fkl-web%3FpoolId%3D1%26projectId%3D3ed7854b946a47b1a49ad754baa76cd3%23%2Ftrain-dev"
+    }
+  ],
+  "surfaceSummary": {
+    "interesting": [
+      {
+        "tag": "A",
+        "text": "短信登录",
+        "placeholder": "",
+        "role": "",
+        "className": "",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "A",
+        "text": "密码登录",
+        "placeholder": "",
+        "role": "",
+        "className": "",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "手机号",
+        "role": "",
+        "className": "input",
+        "id": "phoneNumber",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "图形验证码",
+        "role": "",
+        "className": "input ",
+        "id": "captchaCode",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "短信验证码",
+        "role": "",
+        "className": "input",
+        "id": "code",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "BUTTON",
+        "text": "获取验证码",
+        "placeholder": "",
+        "role": "",
+        "className": "ant-btn",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "",
+        "role": "",
+        "className": "ant-checkbox-input",
+        "id": "rememberMe",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "",
+        "role": "",
+        "className": "ant-checkbox-input",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "A",
+        "text": "《服务协议及隐私政策》",
+        "placeholder": "",
+        "role": "",
+        "className": "",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "",
+        "role": "",
+        "className": "",
+        "id": "id-hidden-input",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "",
+        "role": "",
+        "className": "",
+        "id": "loginType",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "A",
+        "text": "取消登录",
+        "placeholder": "",
+        "role": "",
+        "className": "",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "A",
+        "text": "立即注册",
+        "placeholder": "",
+        "role": "",
+        "className": "link-button",
+        "id": "",
+        "editable": "",
+        "testId": ""
+      }
+    ],
+    "likelyTerminalTargets": [],
+    "likelyEditorTargets": [
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "图形验证码",
+        "role": "",
+        "className": "input ",
+        "id": "captchaCode",
+        "editable": "",
+        "testId": ""
+      },
+      {
+        "tag": "INPUT",
+        "text": "",
+        "placeholder": "短信验证码",
+        "role": "",
+        "className": "input",
+        "id": "code",
+        "editable": "",
+        "testId": ""
+      }
+    ],
+    "hasLikelyRemoteSurface": true
+  },
+  "timestamp": "2026-07-01T09:24:00.756Z",
+  "usedPersistentProfile": true,
+  "profileInfo": {
+    "profileDir": "/Users/daxu/PATENTS/6_MWG-EW_Meta-Weight_Generation/browser-automation/profile",
+    "isolated": false,
+    "sourceDir": "/Users/daxu/PATENTS/6_MWG-EW_Meta-Weight_Generation/browser-automation/profile"
+  }
+}

@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+% pdfLaTeX defaults to UTF-8 in modern LaTeX; keep this file UTF-8 encoded.
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% Consistent formatting for identifiers/fields used in pseudocode.
+\newcommand{\id}[1]{\textsf{#1}}
+\newcommand{\field}[1]{\mathrm{#1}}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\date{\today}
+
+\begin{document}
+
+\begin{center}
+{\LARGE Algorithmic Specifications\\[0.2em]Dynamic Multi-Primitive Cryptographic Hopping Protocol (DMP-CHP)\par}
+\vspace{0.6em}
+{\large \today\par}
+\end{center}
+
+\section{Core Algorithms}
+
+\subsection{Stateless Schedule Derivation (Resilient Hopping)}
+
+To handle packet loss and out-of-order delivery (e.g., in UDP/QUIC streams), the hopping state depends on a monotonic sequence number rather than strictly the previous internal state.
+
+\begin{algorithm}
+\caption{Get\_Hop\_Parameters}
+\label{alg:get_hop}
+\begin{algorithmic}[1]
+\Require Master secret $K_{\field{session}}$, packet sequence number $\id{SeqID}$
+\Require Library size $N_{\field{algo}}$, mode $\id{Mode}$
+\Ensure Algorithm Index $idx$, Packet Key $k_{pkt}$
+
+\State $\id{Salt} \gets \id{Mode}.\field{salt}$
+\State $\id{Seed} \gets \text{HMAC}(K_{\field{session}}, \id{"HOP"} \parallel \id{SeqID} \parallel \id{Salt})$
+\Comment{Use the first 32 bits of Seed in network byte order for index derivation}
+\State $idx \gets \text{Trunc32}(\id{Seed}[0{:}4]\;\text{(network byte order)}) \bmod N_{\field{algo}}$
+\State $k_{pkt} \gets \text{HKDF}(\id{Seed}, \id{info}=\id{"KEYGEN"})$
+
+\Return $(idx, k_{pkt})$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Holographic Entropy Dispersion (Encryption)}
+
+\begin{algorithm}
+\caption{Holographic\_Encrypt}
+\label{alg:hed_enc}
+\begin{algorithmic}[1]
+\Require Session secret $K_{\field{session}}$
+\Require Plaintext payload $P$, threshold $k$, total shares $n$, base sequence $\id{BaseSeqID}$
+\Require Mode $\id{Mode}$, max orthogonality retries $R_{\max}$
+\Require Orthogonality library $\Lambda$ (array of algorithms), library size $N_{\field{algo}}$
+\Ensure Composite Ciphertext $C_{bundle}$
+
+\State $Shares \gets \text{Shamir\_Split}(P, k, n)$ \Comment{Generate $n$ shares}
+\State $C_{bundle} \gets []$
+
+\State $\id{prev\_class} \gets \bot$ \Comment{No previous hard-problem class for first share}
+
+\For{$i \gets 1$ \textbf{to} $n$}
+    \State $s_i \gets Shares[i]$
+    \State $\id{SeqID} \gets \id{BaseSeqID} + i$ \Comment{Transmitted / authenticated monotonic sequence identifier}
+    \State $\id{SelCtr} \gets \id{SeqID}$ \Comment{Selection counter used for enforcing orthogonality}
+    \State $(idx, key) \gets \text{Get\_Hop\_Parameters}(K_{\field{session}}, \id{SelCtr}, N_{\field{algo}}, \id{Mode})$
+    \State $Algo \gets \Lambda[idx]$ \Comment{Select algorithm for this share}
+    
+    \Comment{Ensure Orthogonality: retry until hard-problem class differs from previous}
+    \State $\id{retry} \gets 0$
+    \While{$Algo.\field{hard\_problem\_class} = \id{prev\_class}$}
+        \State $\id{SelCtr} \gets \id{SelCtr} + 1$ \Comment{Deterministic bump to escape same-class selection}
+        \State $(idx, key) \gets \text{Get\_Hop\_Parameters}(K_{\field{session}}, \id{SelCtr}, N_{\field{algo}}, \id{Mode})$
+        \State $Algo \gets \Lambda[idx]$
+        \State $\id{retry} \gets \id{retry} + 1$
+        \If{$\id{retry} > R_{\max}$}
+            \State \textbf{break} \Comment{Fallback after $R_{\max}$ attempts; orthogonality may be relaxed}
+        \EndIf
+    \EndWhile
+
+    \State $c_i \gets Algo.\field{Encrypt}(key, s_i, \text{AD}=\text{Header}(\id{SeqID}))$ \Comment{Use AEAD-style Encrypt(key, plaintext, AD) to bind SeqID}
+    \State $C_{bundle}.\field{append}(\{c_i, \text{Header}(\id{SeqID})\})$ \Comment{Header contains authenticated SeqID bound as AD}
+    \State $\id{prev\_class} \gets Algo.\field{hard\_problem\_class}$
+\EndFor
+
+\Return $C_{bundle}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Active Decoy Injection}
+
+\begin{algorithm}
+\caption{Generate\_Decoy}
+\label{alg:decoy}
+\begin{algorithmic}[1]
+\Require Legitimate traffic distribution $\mathcal{D}_{\field{traffic}}$, current schedule
+\Require Session secret $K_{\field{session}}$
+\Require Administrative/control key $K_{\field{admin}}$ (or a control key derivable from $K_{\field{session}}$)
+\Require Orthogonality library $\Lambda$ (array of algorithms), library size $N_{\field{algo}}$, mode $\id{Mode}$
+\Require Ghost sequence counter $\id{GhostSeqID}$ (monotonic counter stored in state; initialize to 0 if undefined)
+\Ensure Decoy Packet $P_{decoy}$
+
+\State $\id{TargetLen} \gets \text{Sample}(\mathcal{D}_{\field{traffic}}.\field{length})$
+\State $\id{TargetInterarrival} \gets \text{Sample}(\mathcal{D}_{\field{traffic}}.\field{timing})$
+\State $\id{Noise} \gets \text{TRNG}(\id{TargetLen})$
+
+\State $\id{GhostSeqID} \gets \id{GhostSeqID} + 1$ \Comment{Monotonic counter reserved for decoys (stateful)}
+\State $(idx, key) \gets \text{Get\_Hop\_Parameters}(K_{\field{session}}, \id{GhostSeqID}, N_{\field{algo}}, \id{Mode})$
+\State $Algo \gets \Lambda[idx]$
+
+\State $P_{decoy} \gets Algo.\field{Encrypt}(key, \id{Noise})$
+\State $P_{decoy}.\field{Header}.\field{Flag} \gets \text{Encrypted}(\id{"DECOY"}, K_{\field{admin}})$
+
+\Return $P_{decoy}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Neuro-Cognitive Adaptation}
+
+\begin{algorithm}
+\caption{Update\_Threat\_State}
+\label{alg:rl_update}
+\begin{algorithmic}[1]
+\Require Current State $State_t$, Network Metrics $M_t$, Global Model $\theta_{global}$
+\Ensure New Mode $Mode_{t+1}$
+
+\State $Features \gets \text{Extract\_Features}(M_t)$
+\State $\id{ThreatScore} \gets \text{NeuralNet}_{\theta_{global}}(Features)$
+\State $\id{LocalEntropy} \gets \text{Measure\_Jitter}()$
+
+\If{$\id{ThreatScore} > T_{\field{paranoid}}$}
+    \State $Mode_{t+1} \gets \text{"NANO\_HOPPING"}$
+    \State $\text{Inject\_Chaff}(Rate=HIGH)$
+\ElsIf{$\id{ThreatScore} > T_{\field{alert}}$}
+    \State $Mode_{t+1} \gets \text{"MICRO\_HOPPING"}$
+\Else
+    \State $Mode_{t+1} \gets \text{"MACRO\_HOPPING"}$
+\EndIf
+
+\State \text{Update\_Locally\_Learned\_Weights}() \Comment{Federated Learning Step}
+\Return $Mode_{t+1}$
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}

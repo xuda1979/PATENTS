@@ -1,0 +1,94 @@
+{
+  "ok": true,
+  "submit": true,
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": null,
+  "taskName": "asi3-router-0606a",
+  "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+  "resourceGroup": "huanxin-all-resource",
+  "resourceGroupType": "公共资源组",
+  "priority": "中",
+  "resourceConfig": {
+    "instanceCount": 1,
+    "acceleratorCardsPerInstance": 8,
+    "cpuPerInstance": 160,
+    "memoryPerInstance": 1920
+  },
+  "usedProfile": {
+    "profileDir": "/var/folders/py/d8v62mnd40vg77h4cls6n0t80000gn/T/huanxin-profile-auto-1780744918539-78706",
+    "isolated": true,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": true,
+    "baseProfileLocked": true
+  },
+  "launchSpec": {
+    "remote_root": "/vllm-workspace/mwg-ew-transformer-research",
+    "output_dir": "",
+    "log_path": "",
+    "job_name": "ASI3-token-router-global",
+    "remote_command": "set -euo pipefail && echo __ASI3_TOKEN_ROUTER_BOOT__ && date -u && umask 077 && cat > /tmp/iner-rclone.conf <<'__INER_RCLONE_CONF__'\n[iner-aihuanxin]\ntype = s3\nprovider = Other\naccess_key_id = [REDACTED]\nsecret_access_key = [REDACTED]\nendpoint = https://iner.aihuanxin.cn\nregion = us-east-1\nacl = private\nforce_path_style = true\n__INER_RCLONE_CONF__ && command -v rclone >/dev/null && mkdir -p /vllm-workspace/mwg-ew-transformer-research && rclone --config /tmp/iner-rclone.conf sync iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer /vllm-workspace/mwg-ew-transformer-research --s3-no-check-bucket --exclude '__pycache__/**' --exclude '.pytest_cache/**' --exclude '*.pyc' --exclude 'logs/**' --exclude 'results/**' --exclude '*.pt' --exclude '*.pth' --exclude '*.bin' --exclude '*.safetensors' --exclude '*.ckpt' --progress && chmod +x /vllm-workspace/mwg-ew-transformer-research/scripts/*.sh || true && cd /vllm-workspace/mwg-ew-transformer-research && mkdir -p logs results && python3 - <<'PYPROBE'\nimport torch\nimport torch_npu\nprint('torch', torch.__version__)\nprint('torch_npu', getattr(torch_npu, '__version__', 'unknown'))\nprint('npu_count', torch.npu.device_count())\nprint('npu_available', torch.npu.is_available())\nPYPROBE && export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 && export PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256 && export HCCL_CONNECT_TIMEOUT=1800 && export OMP_NUM_THREADS=1 && test -f /vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt && RUN_ID=asi3-token-router-global-task-$(date -u +%Y%m%dT%H%M%SZ) && echo run_id=$RUN_ID && PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt bash scripts/launch_asi3_token_router_global_suite_balanced_detached.sh 2>&1 | tee logs/${RUN_ID}.launch.log && sleep 5 && STATUS=$(ls -t logs/asi3_token_router_global_suite_balanced_*.status.json | head -n 1) && echo status=$STATUS && for i in $(seq 1 180); do state=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"state\",\"\"))' \"$STATUS\" 2>/dev/null || true); echo poll=$i state=$state; [ \"$state\" = done ] && break; [ \"$state\" = failed ] && break; sleep 20; done && cat \"$STATUS\" && OUTDIR=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"outdir\",\"\"))' \"$STATUS\") && RESULT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"result_json\",\"\"))' \"$STATUS\") && mkdir -p results/asi3_token_router_global_task_artifacts && cp -f \"$STATUS\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true && cp -f logs/${RUN_ID}.launch.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true && cp -f logs/asi3_token_router_global_suite_balanced_*.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true && cp -f \"$RESULT\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true && [ -n \"$OUTDIR\" ] && find \"$OUTDIR\" -maxdepth 2 -type f -name '*.json' -exec cp -f {} results/asi3_token_router_global_task_artifacts/ \\; 2>/dev/null || true && rclone --config /tmp/iner-rclone.conf copy results/asi3_token_router_global_task_artifacts iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts --s3-no-check-bucket --progress || true && echo __ASI3_TOKEN_ROUTER_DONE__",
+    "execution_command": "set -euo pipefail\necho __ASI3_TOKEN_ROUTER_BOOT__\ndate -u\numask 077\ncat > /tmp/iner-rclone.conf <<'__INER_RCLONE_CONF__'\n[iner-aihuanxin]\ntype = s3\nprovider = Other\naccess_key_id = [REDACTED]\nsecret_access_key = [REDACTED]\nendpoint = https://iner.aihuanxin.cn\nregion = us-east-1\nacl = private\nforce_path_style = true\n__INER_RCLONE_CONF__\ncommand -v rclone >/dev/null\nmkdir -p /vllm-workspace/mwg-ew-transformer-research\nrclone --config /tmp/iner-rclone.conf sync iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer /vllm-workspace/mwg-ew-transformer-research --s3-no-check-bucket --exclude '__pycache__/**' --exclude '.pytest_cache/**' --exclude '*.pyc' --exclude 'logs/**' --exclude 'results/**' --exclude '*.pt' --exclude '*.pth' --exclude '*.bin' --exclude '*.safetensors' --exclude '*.ckpt' --progress\nchmod +x /vllm-workspace/mwg-ew-transformer-research/scripts/*.sh || true\ncd /vllm-workspace/mwg-ew-transformer-research\nmkdir -p logs results\npython3 - <<'PYPROBE'\nimport torch\nimport torch_npu\nprint('torch', torch.__version__)\nprint('torch_npu', getattr(torch_npu, '__version__', 'unknown'))\nprint('npu_count', torch.npu.device_count())\nprint('npu_available', torch.npu.is_available())\nPYPROBE\nexport ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7\nexport PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256\nexport HCCL_CONNECT_TIMEOUT=1800\nexport OMP_NUM_THREADS=1\ntest -f /vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt\nRUN_ID=asi3-token-router-global-task-$(date -u +%Y%m%dT%H%M%SZ)\necho run_id=$RUN_ID\nPATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt bash scripts/launch_asi3_token_router_global_suite_balanced_detached.sh 2>&1 | tee logs/${RUN_ID}.launch.log\nsleep 5\nSTATUS=$(ls -t logs/asi3_token_router_global_suite_balanced_*.status.json | head -n 1)\necho status=$STATUS\nfor i in $(seq 1 180); do state=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"state\",\"\"))' \"$STATUS\" 2>/dev/null || true); echo poll=$i state=$state; [ \"$state\" = done ] && break; [ \"$state\" = failed ] && break; sleep 20; done\ncat \"$STATUS\"\nOUTDIR=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"outdir\",\"\"))' \"$STATUS\")\nRESULT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"result_json\",\"\"))' \"$STATUS\")\nmkdir -p results/asi3_token_router_global_task_artifacts\ncp -f \"$STATUS\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f logs/${RUN_ID}.launch.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f logs/asi3_token_router_global_suite_balanced_*.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f \"$RESULT\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\n[ -n \"$OUTDIR\" ] && find \"$OUTDIR\" -maxdepth 2 -type f -name '*.json' -exec cp -f {} results/asi3_token_router_global_task_artifacts/ \\; 2>/dev/null || true\nrclone --config /tmp/iner-rclone.conf copy results/asi3_token_router_global_task_artifacts iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts --s3-no-check-bucket --progress || true\necho __ASI3_TOKEN_ROUTER_DONE__",
+    "executionCommand": "set -euo pipefail\necho __ASI3_TOKEN_ROUTER_BOOT__\ndate -u\numask 077\ncat > /tmp/iner-rclone.conf <<'__INER_RCLONE_CONF__'\n[iner-aihuanxin]\ntype = s3\nprovider = Other\naccess_key_id = [REDACTED]\nsecret_access_key = [REDACTED]\nendpoint = https://iner.aihuanxin.cn\nregion = us-east-1\nacl = private\nforce_path_style = true\n__INER_RCLONE_CONF__\ncommand -v rclone >/dev/null\nmkdir -p /vllm-workspace/mwg-ew-transformer-research\nrclone --config /tmp/iner-rclone.conf sync iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer /vllm-workspace/mwg-ew-transformer-research --s3-no-check-bucket --exclude '__pycache__/**' --exclude '.pytest_cache/**' --exclude '*.pyc' --exclude 'logs/**' --exclude 'results/**' --exclude '*.pt' --exclude '*.pth' --exclude '*.bin' --exclude '*.safetensors' --exclude '*.ckpt' --progress\nchmod +x /vllm-workspace/mwg-ew-transformer-research/scripts/*.sh || true\ncd /vllm-workspace/mwg-ew-transformer-research\nmkdir -p logs results\npython3 - <<'PYPROBE'\nimport torch\nimport torch_npu\nprint('torch', torch.__version__)\nprint('torch_npu', getattr(torch_npu, '__version__', 'unknown'))\nprint('npu_count', torch.npu.device_count())\nprint('npu_available', torch.npu.is_available())\nPYPROBE\nexport ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7\nexport PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256\nexport HCCL_CONNECT_TIMEOUT=1800\nexport OMP_NUM_THREADS=1\ntest -f /vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt\nRUN_ID=asi3-token-router-global-task-$(date -u +%Y%m%dT%H%M%SZ)\necho run_id=$RUN_ID\nPATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt bash scripts/launch_asi3_token_router_global_suite_balanced_detached.sh 2>&1 | tee logs/${RUN_ID}.launch.log\nsleep 5\nSTATUS=$(ls -t logs/asi3_token_router_global_suite_balanced_*.status.json | head -n 1)\necho status=$STATUS\nfor i in $(seq 1 180); do state=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"state\",\"\"))' \"$STATUS\" 2>/dev/null || true); echo poll=$i state=$state; [ \"$state\" = done ] && break; [ \"$state\" = failed ] && break; sleep 20; done\ncat \"$STATUS\"\nOUTDIR=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"outdir\",\"\"))' \"$STATUS\")\nRESULT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"result_json\",\"\"))' \"$STATUS\")\nmkdir -p results/asi3_token_router_global_task_artifacts\ncp -f \"$STATUS\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f logs/${RUN_ID}.launch.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f logs/asi3_token_router_global_suite_balanced_*.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f \"$RESULT\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\n[ -n \"$OUTDIR\" ] && find \"$OUTDIR\" -maxdepth 2 -type f -name '*.json' -exec cp -f {} results/asi3_token_router_global_task_artifacts/ \\; 2>/dev/null || true\nrclone --config /tmp/iner-rclone.conf copy results/asi3_token_router_global_task_artifacts iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts --s3-no-check-bucket --progress || true\necho __ASI3_TOKEN_ROUTER_DONE__"
+  },
+  "executionCommand": "set -euo pipefail\necho __ASI3_TOKEN_ROUTER_BOOT__\ndate -u\numask 077\ncat > /tmp/iner-rclone.conf <<'__INER_RCLONE_CONF__'\n[iner-aihuanxin]\ntype = s3\nprovider = Other\naccess_key_id = [REDACTED]\nsecret_access_key = [REDACTED]\nendpoint = https://iner.aihuanxin.cn\nregion = us-east-1\nacl = private\nforce_path_style = true\n__INER_RCLONE_CONF__\ncommand -v rclone >/dev/null\nmkdir -p /vllm-workspace/mwg-ew-transformer-research\nrclone --config /tmp/iner-rclone.conf sync iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer /vllm-workspace/mwg-ew-transformer-research --s3-no-check-bucket --exclude '__pycache__/**' --exclude '.pytest_cache/**' --exclude '*.pyc' --exclude 'logs/**' --exclude 'results/**' --exclude '*.pt' --exclude '*.pth' --exclude '*.bin' --exclude '*.safetensors' --exclude '*.ckpt' --progress\nchmod +x /vllm-workspace/mwg-ew-transformer-research/scripts/*.sh || true\ncd /vllm-workspace/mwg-ew-transformer-research\nmkdir -p logs results\npython3 - <<'PYPROBE'\nimport torch\nimport torch_npu\nprint('torch', torch.__version__)\nprint('torch_npu', getattr(torch_npu, '__version__', 'unknown'))\nprint('npu_count', torch.npu.device_count())\nprint('npu_available', torch.npu.is_available())\nPYPROBE\nexport ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7\nexport PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256\nexport HCCL_CONNECT_TIMEOUT=1800\nexport OMP_NUM_THREADS=1\ntest -f /vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt\nRUN_ID=asi3-token-router-global-task-$(date -u +%Y%m%dT%H%M%SZ)\necho run_id=$RUN_ID\nPATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260605T085838Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt bash scripts/launch_asi3_token_router_global_suite_balanced_detached.sh 2>&1 | tee logs/${RUN_ID}.launch.log\nsleep 5\nSTATUS=$(ls -t logs/asi3_token_router_global_suite_balanced_*.status.json | head -n 1)\necho status=$STATUS\nfor i in $(seq 1 180); do state=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"state\",\"\"))' \"$STATUS\" 2>/dev/null || true); echo poll=$i state=$state; [ \"$state\" = done ] && break; [ \"$state\" = failed ] && break; sleep 20; done\ncat \"$STATUS\"\nOUTDIR=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"outdir\",\"\"))' \"$STATUS\")\nRESULT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get(\"result_json\",\"\"))' \"$STATUS\")\nmkdir -p results/asi3_token_router_global_task_artifacts\ncp -f \"$STATUS\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f logs/${RUN_ID}.launch.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f logs/asi3_token_router_global_suite_balanced_*.log results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\ncp -f \"$RESULT\" results/asi3_token_router_global_task_artifacts/ 2>/dev/null || true\n[ -n \"$OUTDIR\" ] && find \"$OUTDIR\" -maxdepth 2 -type f -name '*.json' -exec cp -f {} results/asi3_token_router_global_task_artifacts/ \\; 2>/dev/null || true\nrclone --config /tmp/iner-rclone.conf copy results/asi3_token_router_global_task_artifacts iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts --s3-no-check-bucket --progress || true\necho __ASI3_TOKEN_ROUTER_DONE__",
+  "networkEvents": [
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/portal/messagecenter/web/getMailList",
+      "status": 200,
+      "requestPreview": "{\"pageNum\":\"1\",\"pageSize\":\"0\",\"readStatus\":\"0\"}",
+      "responsePreview": "{\"state\":\"OK\",\"requestId\":null,\"body\":{\"pageNum\":1,\"pageSize\":0,\"list\":[{\"mailId\":71446,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 12:40:40\"},{\"mailId\":71443,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 11:04:37\"},{\"mailId\":71378,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】API订购申请审批完成通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-04 16:20:56\"},{\"mailId\":57566,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】资产公开申请审批通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-05-14 15:31:51\"},{\"mailId\":46887,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-28 09:11:12\"},{\"mailId\":45699,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-21 11:32:25\"},{\"mailId\":45441,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】新建项目申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-20 09:07:33\"}],\"total\":7,\"unreadCount\":7},\"errorCode\":null,\"errorMessage\":null,\"errorParams\":null}"
+    }
+  ],
+  "submitResult": {
+    "submitted": false,
+    "blockedReason": "direct_submit_failed",
+    "clickAttempted": false,
+    "drawerOpenAfterClick": false,
+    "postClickNetworkEvents": [],
+    "visibleMessages": [],
+    "resourceState": null,
+    "createPayloadOverride": {
+      "name": "asi3-router-0606a",
+      "lines": 52,
+      "encodedBytes": 5796,
+      "firstLine": "set -euo pipefail",
+      "imageId": 395,
+      "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+      "resourceInfo": {
+        "gpuType": "昇腾910B",
+        "gpu": 8,
+        "cpu": 160,
+        "mem": 1920
+      },
+      "priority": "med"
+    },
+    "directSubmitOnly": {
+      "attempted": true,
+      "payloadSummary": {
+        "name": "asi3-router-0606a",
+        "lines": 52,
+        "encodedBytes": 5796,
+        "firstLine": "set -euo pipefail",
+        "imageId": 395,
+        "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+        "resourceInfo": {
+          "gpuType": "昇腾910B",
+          "gpu": 8,
+          "cpu": 160,
+          "mem": 1920
+        },
+        "priority": "med"
+      },
+      "response": {
+        "ok": false,
+        "status": 403,
+        "text": "RBAC: access denied",
+        "json": null
+      }
+    },
+    "taskList": null
+  },
+  "timestamp": "2026-06-06T11:22:15.148Z"
+}

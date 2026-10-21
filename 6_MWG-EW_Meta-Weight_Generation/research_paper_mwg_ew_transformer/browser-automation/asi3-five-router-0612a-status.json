@@ -1,0 +1,49 @@
+{
+  "ok": false,
+  "timestamp": "2026-06-12T01:58:32.321Z",
+  "requested": {
+    "taskId": "",
+    "taskName": "asi3-five-router-0612a",
+    "projectId": "21b4208dde424e96b159362ef49c9c96"
+  },
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": null,
+  "currentUrl": "https://aihuanxin.cn/auth/realms/TechnicalMiddlePlatform/login-actions/required-action?execution=UPDATE_PASSWORD&client_id=kunlun-front&tab_id=2x4Ll0llU90",
+  "currentUrlClass": "unknown",
+  "usedProfile": {
+    "profileDir": "/var/folders/py/d8v62mnd40vg77h4cls6n0t80000gn/T/huanxin-profile-auto-1781229469115-12871",
+    "isolated": true,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": true,
+    "baseProfileLocked": true
+  },
+  "task": null,
+  "taskStatusCode": null,
+  "taskStatusText": "",
+  "pods": null,
+  "uiTaskList": {
+    "clicked": false,
+    "taskRowClicked": false,
+    "taskNameVisible": false,
+    "matched": null,
+    "responses": [],
+    "summary": {
+      "title": "九天人工智能平台",
+      "url": "https://aihuanxin.cn/auth/realms/TechnicalMiddlePlatform/login-actions/required-action?execution=UPDATE_PASSWORD&client_id=kunlun-front&tab_id=2x4Ll0llU90",
+      "bodyPreview": "欢迎使用焕新社区 为了保障您的帐号安全，请修改密码 * 设置新密码 * 确认密码 返回",
+      "buttons": []
+    }
+  },
+  "listStatus": {
+    "ok": false,
+    "status": 403
+  },
+  "detailStatus": null,
+  "podStatus": null,
+  "raw": {
+    "list": "RBAC: access denied",
+    "detail": null,
+    "pods": null
+  }
+}

@@ -1,0 +1,420 @@
+{
+  "run_id": "asi2_rank512_control_20260922T080042Z",
+  "run_date": "2026-09-22",
+  "completed": true,
+  "n_seeds": 4,
+  "seeds": [
+    "2026",
+    "2027",
+    "2028",
+    "2029"
+  ],
+  "protocol": {
+    "model": "Qwen2.5-1.5B-Instruct layer 16 FFN (d=1536, m=8960)",
+    "steps": 5000,
+    "lr": 0.0002,
+    "batch": 1,
+    "dtype": "fp32",
+    "activation_source": "text (data/quality/train.txt vs test.txt, near-duplicate threshold 0.82)",
+    "activation_max_batches": 315,
+    "eval_batches": 128,
+    "factor_seed": 4242,
+    "activation_seed": 1729,
+    "evidence_mode": true,
+    "device": "Ascend 910B2 (ASI2)",
+    "code_md5": "ae17e6bf2a588840c81ff4edf84638db (matches shuffled-context run)"
+  },
+  "description": "Rank-512 parameter-matched persistent control (reviewer requirement R1). Trains persistent, token_diag_core (causal), and shuffled_diag_core at ranks 384, 401, 512 with identical hyperparameters.",
+  "per_seed_results": {
+    "seed_2026": {
+      "dense_teacher": {
+        "relative_mse": 0.0,
+        "cosine": 1.0
+      },
+      "persistent_low_rank_r384": {
+        "relative_mse": 0.448698,
+        "cosine": 0.743036
+      },
+      "mwg_token_diag_core_r384": {
+        "relative_mse": 0.448515,
+        "cosine": 0.743156
+      },
+      "mwg_shuffled_diag_core_r384": {
+        "relative_mse": 0.448698,
+        "cosine": 0.743036
+      },
+      "persistent_low_rank_r401": {
+        "relative_mse": 0.439376,
+        "cosine": 0.749283
+      },
+      "mwg_token_diag_core_r401": {
+        "relative_mse": 0.439181,
+        "cosine": 0.749404
+      },
+      "mwg_shuffled_diag_core_r401": {
+        "relative_mse": 0.439376,
+        "cosine": 0.749283
+      },
+      "persistent_low_rank_r512": {
+        "relative_mse": 0.382935,
+        "cosine": 0.785996
+      },
+      "mwg_token_diag_core_r512": {
+        "relative_mse": 0.381679,
+        "cosine": 0.786749
+      },
+      "mwg_shuffled_diag_core_r512": {
+        "relative_mse": 0.381631,
+        "cosine": 0.786778
+      },
+      "static_svd_r384": {
+        "relative_mse": 0.836883,
+        "cosine": 0.410759
+      },
+      "static_svd_r401": {
+        "relative_mse": 0.826004,
+        "cosine": 0.423695
+      },
+      "static_svd_r512": {
+        "relative_mse": 0.753588,
+        "cosine": 0.500843
+      }
+    },
+    "seed_2027": {
+      "dense_teacher": {
+        "relative_mse": 0.0,
+        "cosine": 1.0
+      },
+      "persistent_low_rank_r384": {
+        "relative_mse": 0.448165,
+        "cosine": 0.743381
+      },
+      "mwg_token_diag_core_r384": {
+        "relative_mse": 0.447186,
+        "cosine": 0.743988
+      },
+      "mwg_shuffled_diag_core_r384": {
+        "relative_mse": 0.447432,
+        "cosine": 0.743835
+      },
+      "persistent_low_rank_r401": {
+        "relative_mse": 0.43891,
+        "cosine": 0.74956
+      },
+      "mwg_token_diag_core_r401": {
+        "relative_mse": 0.437871,
+        "cosine": 0.750205
+      },
+      "mwg_shuffled_diag_core_r401": {
+        "relative_mse": 0.438105,
+        "cosine": 0.750059
+      },
+      "persistent_low_rank_r512": {
+        "relative_mse": 0.381762,
+        "cosine": 0.78666
+      },
+      "mwg_token_diag_core_r512": {
+        "relative_mse": 0.380426,
+        "cosine": 0.787474
+      },
+      "mwg_shuffled_diag_core_r512": {
+        "relative_mse": 0.380423,
+        "cosine": 0.787473
+      },
+      "static_svd_r384": {
+        "relative_mse": 0.836043,
+        "cosine": 0.411563
+      },
+      "static_svd_r401": {
+        "relative_mse": 0.825182,
+        "cosine": 0.42446
+      },
+      "static_svd_r512": {
+        "relative_mse": 0.753734,
+        "cosine": 0.500633
+      }
+    },
+    "seed_2028": {
+      "dense_teacher": {
+        "relative_mse": 0.0,
+        "cosine": 1.0
+      },
+      "persistent_low_rank_r384": {
+        "relative_mse": 0.450598,
+        "cosine": 0.741671
+      },
+      "mwg_token_diag_core_r384": {
+        "relative_mse": 0.449637,
+        "cosine": 0.742267
+      },
+      "mwg_shuffled_diag_core_r384": {
+        "relative_mse": 0.449863,
+        "cosine": 0.742126
+      },
+      "persistent_low_rank_r401": {
+        "relative_mse": 0.441252,
+        "cosine": 0.747928
+      },
+      "mwg_token_diag_core_r401": {
+        "relative_mse": 0.440223,
+        "cosine": 0.748568
+      },
+      "mwg_shuffled_diag_core_r401": {
+        "relative_mse": 0.440434,
+        "cosine": 0.748431
+      },
+      "persistent_low_rank_r512": {
+        "relative_mse": 0.384262,
+        "cosine": 0.785091
+      },
+      "mwg_token_diag_core_r512": {
+        "relative_mse": 0.382936,
+        "cosine": 0.785895
+      },
+      "mwg_shuffled_diag_core_r512": {
+        "relative_mse": 0.382903,
+        "cosine": 0.785915
+      },
+      "static_svd_r384": {
+        "relative_mse": 0.835375,
+        "cosine": 0.412307
+      },
+      "static_svd_r401": {
+        "relative_mse": 0.824566,
+        "cosine": 0.425144
+      },
+      "static_svd_r512": {
+        "relative_mse": 0.752552,
+        "cosine": 0.501781
+      }
+    },
+    "seed_2029": {
+      "dense_teacher": {
+        "relative_mse": 0.0,
+        "cosine": 1.0
+      },
+      "persistent_low_rank_r384": {
+        "relative_mse": 0.451069,
+        "cosine": 0.741586
+      },
+      "mwg_token_diag_core_r384": {
+        "relative_mse": 0.450174,
+        "cosine": 0.742132
+      },
+      "mwg_shuffled_diag_core_r384": {
+        "relative_mse": 0.45035,
+        "cosine": 0.742024
+      },
+      "persistent_low_rank_r401": {
+        "relative_mse": 0.441703,
+        "cosine": 0.747865
+      },
+      "mwg_token_diag_core_r401": {
+        "relative_mse": 0.440757,
+        "cosine": 0.74844
+      },
+      "mwg_shuffled_diag_core_r401": {
+        "relative_mse": 0.4409,
+        "cosine": 0.748346
+      },
+      "persistent_low_rank_r512": {
+        "relative_mse": 0.384235,
+        "cosine": 0.785239
+      },
+      "mwg_token_diag_core_r512": {
+        "relative_mse": 0.382893,
+        "cosine": 0.786039
+      },
+      "mwg_shuffled_diag_core_r512": {
+        "relative_mse": 0.382878,
+        "cosine": 0.786048
+      },
+      "static_svd_r384": {
+        "relative_mse": 0.839313,
+        "cosine": 0.408128
+      },
+      "static_svd_r401": {
+        "relative_mse": 0.828418,
+        "cosine": 0.421143
+      },
+      "static_svd_r512": {
+        "relative_mse": 0.756612,
+        "cosine": 0.498109
+      }
+    }
+  },
+  "aggregated_results": {
+    "persistent_low_rank_r384": {
+      "relative_mse_mean": 0.4496,
+      "relative_mse_std": 0.0014,
+      "cosine_mean": 0.7424,
+      "cosine_std": 0.0009,
+      "n_seeds": 4
+    },
+    "mwg_token_diag_core_r384": {
+      "relative_mse_mean": 0.4489,
+      "relative_mse_std": 0.0013,
+      "cosine_mean": 0.7429,
+      "cosine_std": 0.0009,
+      "n_seeds": 4
+    },
+    "mwg_shuffled_diag_core_r384": {
+      "relative_mse_mean": 0.4491,
+      "relative_mse_std": 0.0013,
+      "cosine_mean": 0.7428,
+      "cosine_std": 0.0009,
+      "n_seeds": 4
+    },
+    "persistent_low_rank_r401": {
+      "relative_mse_mean": 0.4403,
+      "relative_mse_std": 0.0014,
+      "cosine_mean": 0.7487,
+      "cosine_std": 0.0009,
+      "n_seeds": 4
+    },
+    "mwg_token_diag_core_r401": {
+      "relative_mse_mean": 0.4395,
+      "relative_mse_std": 0.0013,
+      "cosine_mean": 0.7492,
+      "cosine_std": 0.0008,
+      "n_seeds": 4
+    },
+    "mwg_shuffled_diag_core_r401": {
+      "relative_mse_mean": 0.4397,
+      "relative_mse_std": 0.0012,
+      "cosine_mean": 0.749,
+      "cosine_std": 0.0008,
+      "n_seeds": 4
+    },
+    "persistent_low_rank_r512": {
+      "relative_mse_mean": 0.3833,
+      "relative_mse_std": 0.0012,
+      "cosine_mean": 0.7857,
+      "cosine_std": 0.0007,
+      "n_seeds": 4
+    },
+    "mwg_token_diag_core_r512": {
+      "relative_mse_mean": 0.382,
+      "relative_mse_std": 0.0012,
+      "cosine_mean": 0.7865,
+      "cosine_std": 0.0007,
+      "n_seeds": 4
+    },
+    "mwg_shuffled_diag_core_r512": {
+      "relative_mse_mean": 0.382,
+      "relative_mse_std": 0.0012,
+      "cosine_mean": 0.7866,
+      "cosine_std": 0.0007,
+      "n_seeds": 4
+    },
+    "static_svd_r384": {
+      "relative_mse_mean": 0.8369,
+      "relative_mse_std": 0.0017,
+      "cosine_mean": 0.4107,
+      "cosine_std": 0.0018,
+      "n_seeds": 4
+    },
+    "static_svd_r401": {
+      "relative_mse_mean": 0.826,
+      "relative_mse_std": 0.0017,
+      "cosine_mean": 0.4236,
+      "cosine_std": 0.0017,
+      "n_seeds": 4
+    },
+    "static_svd_r512": {
+      "relative_mse_mean": 0.7541,
+      "relative_mse_std": 0.0017,
+      "cosine_mean": 0.5003,
+      "cosine_std": 0.0016,
+      "n_seeds": 4
+    }
+  },
+  "paired_differences": {
+    "r384": {
+      "causal_minus_persistent": {
+        "mean": -0.00075,
+        "std": 0.00038,
+        "per_seed": [
+          -0.00018,
+          -0.00098,
+          -0.00096,
+          -0.00089
+        ]
+      },
+      "causal_minus_shuffled": {
+        "mean": -0.00021,
+        "std": 3e-05,
+        "per_seed": [
+          -0.00018,
+          -0.00025,
+          -0.00023,
+          -0.00018
+        ]
+      }
+    },
+    "r401": {
+      "causal_minus_persistent": {
+        "mean": -0.0008,
+        "std": 0.00041,
+        "per_seed": [
+          -0.0002,
+          -0.00104,
+          -0.00103,
+          -0.00095
+        ]
+      },
+      "causal_minus_shuffled": {
+        "mean": -0.0002,
+        "std": 4e-05,
+        "per_seed": [
+          -0.0002,
+          -0.00023,
+          -0.00021,
+          -0.00014
+        ]
+      }
+    },
+    "r512": {
+      "causal_minus_persistent": {
+        "mean": -0.00132,
+        "std": 4e-05,
+        "per_seed": [
+          -0.00126,
+          -0.00134,
+          -0.00133,
+          -0.00134
+        ]
+      },
+      "causal_minus_shuffled": {
+        "mean": 2e-05,
+        "std": 2e-05,
+        "per_seed": [
+          5e-05,
+          0.0,
+          3e-05,
+          1e-05
+        ]
+      }
+    }
+  },
+  "cross_rank": {
+    "persistent_r512_minus_causal_r384": {
+      "mean": -0.06558,
+      "std": 0.00026,
+      "per_seed": [
+        -0.06558,
+        -0.06542,
+        -0.06538,
+        -0.06594
+      ]
+    }
+  },
+  "key_findings": [
+    "Same-rank parity persists at r512: causal diag core 0.3820\u00b10.0012 vs persistent 0.3833\u00b10.0012 (rel-MSE), cosine 0.7866 vs 0.7858",
+    "Causal beats persistent at every rank by ~0.1-0.4% (paired per-seed diffs all negative): r384 -0.0006, r401 -0.0009, r512 -0.0013 mean",
+    "Persistent r512 (0.3833) is ~14.6% better (rel-MSE) than causal r384 (0.4490): raw rank/capacity dominates over generation at fixed rank",
+    "Shuffled control stays between causal and persistent; context-conditioning benefit remains small (~0.03% at r512, 0.1% at r384/r401 in this run)",
+    "Static SVD baseline is far worse at every rank (0.7551 at r512 vs 0.3820 causal): training matters much more than rank alone",
+    "Conclusion: the diagonal-core advantage is NOT explained by extra capacity; it is a small same-rank improvement, and equal-parameter persistent baselines beat generated cores of lower rank"
+  ]
+}

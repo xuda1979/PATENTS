@@ -1,0 +1,132 @@
+[
+  {
+    "suite": "patent_8b",
+    "config": {
+      "d": 4096,
+      "m": 14336,
+      "batch_size": 4,
+      "seq_len": 512,
+      "dtype": "fp16",
+      "ranks": [
+        32,
+        64,
+        128,
+        256
+      ]
+    },
+    "env": {
+      "torch_version": "2.6.0+cpu",
+      "device_backend": "npu",
+      "npu_available": true,
+      "npu_name": "Ascend910B2",
+      "npu_count": 8,
+      "npu_memory_gib": 60.96,
+      "torch_npu_version": "2.6.0"
+    },
+    "benchmarks": [
+      {
+        "label": "dense_baseline",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 2.756,
+        "throughput_tokens_per_s": 742978.7,
+        "peak_memory_mib": 520.0,
+        "model_params_m": 176.16
+      },
+      {
+        "label": "mwg_ew_basis_bank_r32",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 1.201,
+        "throughput_tokens_per_s": 1704679.8,
+        "peak_memory_mib": 621.03,
+        "model_params_m": 15.22
+      },
+      {
+        "label": "mwg_ew_basis_bank_r64",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 1.184,
+        "throughput_tokens_per_s": 1729849.4,
+        "peak_memory_mib": 661.03,
+        "model_params_m": 29.37
+      },
+      {
+        "label": "mwg_ew_basis_bank_r128",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 1.611,
+        "throughput_tokens_per_s": 1271192.4,
+        "peak_memory_mib": 741.03,
+        "model_params_m": 57.68
+      },
+      {
+        "label": "mwg_ew_basis_bank_r256",
+        "batch_size": 4,
+        "seq_len": 512,
+        "latency_ms": 2.977,
+        "throughput_tokens_per_s": 687970.6,
+        "peak_memory_mib": 902.04,
+        "model_params_m": 114.31
+      }
+    ],
+    "quality": [
+      {
+        "max_abs_error": 0.565918,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r32"
+      },
+      {
+        "max_abs_error": 0.565918,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r64"
+      },
+      {
+        "max_abs_error": 0.565918,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r128"
+      },
+      {
+        "max_abs_error": 0.565918,
+        "mean_relative_error": NaN,
+        "cosine_similarity": 0.0,
+        "label": "mwg_ew_basis_bank_r256"
+      }
+    ],
+    "hbm": [
+      {
+        "label": "dense_baseline",
+        "total_param_bytes": 352321536,
+        "total_param_mib": 336.0,
+        "estimated_hbm_read_per_forward_mib": 336.0
+      },
+      {
+        "label": "mwg_ew_basis_bank_r32",
+        "total_param_bytes": 30433280,
+        "total_param_mib": 29.02,
+        "estimated_hbm_read_per_forward_mib": 29.02
+      },
+      {
+        "label": "mwg_ew_basis_bank_r64",
+        "total_param_bytes": 58744832,
+        "total_param_mib": 56.02,
+        "estimated_hbm_read_per_forward_mib": 56.02
+      },
+      {
+        "label": "mwg_ew_basis_bank_r128",
+        "total_param_bytes": 115367936,
+        "total_param_mib": 110.02,
+        "estimated_hbm_read_per_forward_mib": 110.02
+      },
+      {
+        "label": "mwg_ew_basis_bank_r256",
+        "total_param_bytes": 228614144,
+        "total_param_mib": 218.02,
+        "estimated_hbm_read_per_forward_mib": 218.02
+      }
+    ]
+  }
+]

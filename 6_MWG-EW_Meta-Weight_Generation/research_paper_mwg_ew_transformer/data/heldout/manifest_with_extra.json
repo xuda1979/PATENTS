@@ -1,0 +1,26 @@
+{
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "texts": "data/heldout/gsm8k_test.txt"
+    },
+    {
+      "name": "mbpp_test",
+      "texts": "data/heldout/mbpp_test.txt"
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "texts": "data/heldout/alpaca_cleaned_train_tail.txt"
+    },
+    {
+      "name": "wikitext103_validation_extra",
+      "family": "general_language_modeling",
+      "texts": "data/heldout_extra/wikitext103_validation_extra.txt"
+    },
+    {
+      "name": "hellaswag_validation_extra",
+      "family": "commonsense_reasoning",
+      "texts": "data/heldout_extra/hellaswag_validation_extra.txt"
+    }
+  ]
+}

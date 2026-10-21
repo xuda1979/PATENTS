@@ -1,0 +1,24 @@
+{
+  "note": "Final shipped-kernel confirmation runs (2026-08-28T16:30Z, single Ascend 910B2, CANN 8.5). Shipped kernel: v1 single-core with host fast path (cached tiling/workspace, cached fp16 weight image); v3 8-core variant archived (correct standalone, unstable under harness multi-call pattern).",
+  "probe_geometry": {
+    "raw_report": "results_SHIPPED_probe.json (remote)",
+    "sha256_12": "a39fc10837dc",
+    "config": {"d": 4096, "m": 14336, "rank": 128, "controller_hidden": 128, "batch": 1, "seq": 128, "amplitude": 0.05, "dtype": "fp16", "seed": 1234},
+    "validations": {
+      "dense_vs_persistent_factorization": {"passed": true, "max_abs": 0.0029296875},
+      "materialized_vs_fused": {"passed": true, "max_abs": 0.001953125, "mean_abs": 0.00013445966760627925}
+    },
+    "median_ms": {"dense": 0.4611, "persistent": 0.2719, "materialized": 0.8509, "fused": 0.8234},
+    "fused_vs_materialized": 0.9679,
+    "headline": "fused no-store arm is 3.2% FASTER than the materialized arm"
+  },
+  "largeT_geometry": {
+    "raw_report": "results_SHIPPED_larget.json (remote)",
+    "sha256_12": "9e2ecc811678",
+    "config": {"batch": 16, "seq": 256, "note": "T=4096, core tile 2 MiB > L2"},
+    "validations": {"materialized_vs_fused": {"passed": true, "max_abs": 0.0029296875}},
+    "median_ms": {"materialized": 1.3932, "fused": 2.6821},
+    "fused_vs_materialized": 1.9252,
+    "headline": "single-core epilogue remains the scaling limit; v2 warp-tiled epilogue is the lever"
+  }
+}

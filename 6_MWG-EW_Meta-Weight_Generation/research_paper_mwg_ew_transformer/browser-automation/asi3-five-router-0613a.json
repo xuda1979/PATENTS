@@ -1,0 +1,478 @@
+{
+  "ok": true,
+  "submit": true,
+  "browserMode": "headless",
+  "launchFallbackUsed": false,
+  "bridge": null,
+  "taskName": "asi3-five-router-0613a",
+  "imageName": "qwen3.5-27B-35B-122B-397B-031626-zx",
+  "resourceGroup": "huanxin-all-resource",
+  "resourceGroupType": "公共资源组",
+  "priority": "中",
+  "resourceConfig": {
+    "instanceCount": 1,
+    "acceleratorCardsPerInstance": 2,
+    "cpuPerInstance": 40,
+    "memoryPerInstance": 480
+  },
+  "usedProfile": {
+    "profileDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "isolated": false,
+    "sourceDir": "/Users/daxu/software/quantum-gpt/browser-automation/profile",
+    "autoIsolated": false,
+    "baseProfileLocked": false
+  },
+  "launchSpec": {
+    "remote_root": "/vllm-workspace/mwg-ew-transformer-research",
+    "output_dir": "",
+    "log_path": "",
+    "job_name": "ASI3-token-router-global",
+    "remote_command": "set -euo pipefail && umask 077 && echo __ASI3_TASK_COMMAND_BOOT__ && printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf && if ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null && rclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress && chmod 700 /tmp/remote_ASI3_token_router_global_payload.sh && HUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0,1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+    "execution_command": "set -euo pipefail\numask 077\necho __ASI3_TASK_COMMAND_BOOT__\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\nif ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0,1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+    "executionCommand": "set -euo pipefail\numask 077\necho __ASI3_TASK_COMMAND_BOOT__\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\nif ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0,1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh"
+  },
+  "executionCommand": "set -euo pipefail\numask 077\necho __ASI3_TASK_COMMAND_BOOT__\nprintf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf\nif ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null\nrclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress\nchmod 700 /tmp/remote_ASI3_token_router_global_payload.sh\nHUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0,1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh",
+  "networkEvents": [
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/portal/messagecenter/web/getMailList",
+      "status": 200,
+      "requestPreview": "{\"pageNum\":\"1\",\"pageSize\":\"0\",\"readStatus\":\"0\"}",
+      "responsePreview": "{\"state\":\"OK\",\"requestId\":null,\"body\":{\"pageNum\":1,\"pageSize\":0,\"list\":[{\"mailId\":71446,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 12:40:40\"},{\"mailId\":71443,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-05 11:04:37\"},{\"mailId\":71378,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】API订购申请审批完成通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-06-04 16:20:56\"},{\"mailId\":57566,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区】资产公开申请审批通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-05-14 15:31:51\"},{\"mailId\":46887,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-28 09:11:12\"},{\"mailId\":45699,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】扩容申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-21 11:32:25\"},{\"mailId\":45441,\"readStatus\":\"0\",\"mailTitle\":\"【焕新社区我的项目】新建项目申请处理通知\",\"mailType\":\"1\",\"mailTypeName\":\"服务信息\",\"receiveTime\":\"2026-04-20 09:07:33\"}],\"total\":7,\"unreadCount\":7},\"errorCode\":null,\"errorMessage\":null,\"errorParams\":null}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/image/v1/preset_image/preset_image_list",
+      "status": 200,
+      "requestPreview": "{\"scene\":[1,2],\"page\":1,\"pageSize\":9999999}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"data\":[{\"id\":376,\"poolId\":6,\"createBy\":\"ma_wenjie\",\"imageType\":0,\"imageName\":\"tyzjx\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"1.0.RC3\"},\"pyVersion\":\"python3.11.12\",\"scene\":2,\"architecture\":0,\"chipType\":1,\"ideType\":[\"Jupyter\",\"VSCode\"],\"size\":13012181820,\"tags\":[\"222\"],\"startCommand\":\"axiba\",\"createTime\":\"2026-03-31 18:27:17\",\"updateTime\":\"2026-03-31 18:27:17\",\"shelveTime\":\"2026-04-01 16:47:35\",\"description\":\"镜像描述\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/test@sha256:9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"imageId\":\"9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"workingDir\":\"test\",\"imagePresetExtension\":{\"id\":241,\"presetId\":376,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-03-31T10:27:17.000+00:00\",\"updateTime\":\"2026-03-31T10:27:17.000+00:00\"},\"status\":0},{\"id\":378,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.1.RC1\"},\"pyVersion\":\"python3.11.10\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":16473590943,\"tags\":[\"preset-20250929-070525-125\"],\"startCommand\":\"tail -f /dev/null\",\"createTime\":\"2026-04-02 09:42:53\",\"updateTime\":\"2026-04-02 09:42:53\",\"shelveTime\":\"2026-06-05 16:58:23\",\"description\":\"MindIE 升级到2.1.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/syyatb070525125@sha256:385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"imageId\":\"385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":243,\"presetId\":378,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T01:42:53.000+00:00\",\"updateTime\":\"2026-04-02T01:42:53.000+00:00\"},\"status\":0},{\"id\":380,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.2.RC1\"},\"pyVersion\":\"Python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":19184749211,\"tags\":[\"preset-20251205-063413-055\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json} -n ${model_name} -w ${world_size}\",\"createTime\":\"2026-04-02 14:44:21\",\"updateTime\":\"2026-04-02 14:44:21\",\"shelveTime\":\"2026-04-02 14:44:26\",\"description\":\"MindIE 升级到2.2.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署、健康检查、自动扩缩容\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/mindie063413055@sha256:af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"imageId\":\"af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":245,\"presetId\":380,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T06:44:21.000+00:00\",\"updateTime\":\"2026-04-02T06:44:21.000+00:00\"},\"status\":0},{\"id\":383,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.0.T3.1\"},\"pyVersion\":\"python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":15021921800,\"tags\":[\"preset-20251205-030713-726\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json}\",\"createTime\":\"2026-04-03 11:23:04\",\"updateTime\":\"2026-04-03 11:23:04\",\"shelveTime\":\"2026-04-03 11:23:09\",\"description\":\"大模型推理预置镜像，支持DeepSeek、Qwen部署，支持DeepSeek自动扩缩容，扩容命令参考/workspace/deepseek/README.md\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/preset030713726@sha256:6e0f"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/dataset/v1/external/query/noShare/versionIds",
+      "status": 200,
+      "requestPreview": "{\"page\":0,\"pageSize\":0,\"isEnabled\":1,\"modelName\":\"0\"}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"page\":null,\"pageSize\":null,\"total\":0,\"list\":null},\"traceId\":\"06cb26ea-79c8-45d7-b0af-f8881f8a3112\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/image/v1/preset_image/preset_image_list",
+      "status": 200,
+      "requestPreview": "{\"scene\":[1,2],\"page\":1,\"pageSize\":9999999}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"data\":[{\"id\":376,\"poolId\":6,\"createBy\":\"ma_wenjie\",\"imageType\":0,\"imageName\":\"tyzjx\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"1.0.RC3\"},\"pyVersion\":\"python3.11.12\",\"scene\":2,\"architecture\":0,\"chipType\":1,\"ideType\":[\"Jupyter\",\"VSCode\"],\"size\":13012181820,\"tags\":[\"222\"],\"startCommand\":\"axiba\",\"createTime\":\"2026-03-31 18:27:17\",\"updateTime\":\"2026-03-31 18:27:17\",\"shelveTime\":\"2026-04-01 16:47:35\",\"description\":\"镜像描述\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/test@sha256:9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"imageId\":\"9e1eba95cc1b81451751d98c1483c0a6ab2b2d8ed75aad72deda5fd136baf162\",\"workingDir\":\"test\",\"imagePresetExtension\":{\"id\":241,\"presetId\":376,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-03-31T10:27:17.000+00:00\",\"updateTime\":\"2026-03-31T10:27:17.000+00:00\"},\"status\":0},{\"id\":378,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.1.RC1\"},\"pyVersion\":\"python3.11.10\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":16473590943,\"tags\":[\"preset-20250929-070525-125\"],\"startCommand\":\"tail -f /dev/null\",\"createTime\":\"2026-04-02 09:42:53\",\"updateTime\":\"2026-04-02 09:42:53\",\"shelveTime\":\"2026-06-05 16:58:23\",\"description\":\"MindIE 升级到2.1.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/syyatb070525125@sha256:385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"imageId\":\"385c7ad629900772622953007b27cbb82a159ac04fd8b8ffdcc06729175e0095\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":243,\"presetId\":378,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T01:42:53.000+00:00\",\"updateTime\":\"2026-04-02T01:42:53.000+00:00\"},\"status\":0},{\"id\":380,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.2.RC1\"},\"pyVersion\":\"Python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":19184749211,\"tags\":[\"preset-20251205-063413-055\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json} -n ${model_name} -w ${world_size}\",\"createTime\":\"2026-04-02 14:44:21\",\"updateTime\":\"2026-04-02 14:44:21\",\"shelveTime\":\"2026-04-02 14:44:26\",\"description\":\"MindIE 升级到2.2.RC1，支持DS、Qwen3、Jiutian等模型，支持Qwen3、Jiutian 75B Function Call流式输出，支持分布式部署、健康检查、自动扩缩容\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/mindie063413055@sha256:af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"imageId\":\"af2f18a4cd2594f2cbd7c9a712a4c98d5e1a430c1acc529be59d69eae28f15f7\",\"workingDir\":\"/workspace\",\"imagePresetExtension\":{\"id\":245,\"presetId\":380,\"frameworkType\":-1,\"port\":-1,\"protocolType\":-1,\"externalAccess\":-1,\"streamRequest\":\"-\",\"batchRequest\":\"-\",\"streamResponse\":\"-\",\"batchResponse\":\"-\",\"createTime\":\"2026-04-02T06:44:21.000+00:00\",\"updateTime\":\"2026-04-02T06:44:21.000+00:00\"},\"status\":0},{\"id\":383,\"poolId\":6,\"createBy\":\"asjiadandan\",\"imageType\":0,\"imageName\":\"atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64\",\"framework\":{\"frameworkName\":\"Mindie\",\"frameworkVersion\":\"2.0.T3.1\"},\"pyVersion\":\"python3.11\",\"scene\":2,\"architecture\":1,\"chipType\":2,\"ideType\":[\"-\"],\"size\":15021921800,\"tags\":[\"preset-20251205-030713-726\"],\"startCommand\":\"bash mindie_start.sh -m ${/model} -c ${mindie_config.json}\",\"createTime\":\"2026-04-03 11:23:04\",\"updateTime\":\"2026-04-03 11:23:04\",\"shelveTime\":\"2026-04-03 11:23:09\",\"description\":\"大模型推理预置镜像，支持DeepSeek、Qwen部署，支持DeepSeek自动扩缩容，扩容命令参考/workspace/deepseek/README.md\",\"address\":\"mirror.kunlun.com:8989/kunlun-preset/preset030713726@sha256:6e0f"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/dataset/v1/external/preset/query",
+      "status": 200,
+      "requestPreview": "{\"page\":0,\"pageSize\":0,\"isEnabled\":1}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"page\":0,\"pageSize\":0,\"total\":0,\"list\":[]},\"traceId\":\"3eaf133d-0367-4c89-8114-3ae493270013\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://aihuanxin.cn/kunlun/web/dataset/v1/external/query/share/versionIds",
+      "status": 200,
+      "requestPreview": "{\"page\":0,\"pageSize\":0,\"isEnabled\":1,\"modelName\":\"0\"}",
+      "responsePreview": "{\"code\":0,\"msg\":\"OK\",\"data\":{\"page\":null,\"pageSize\":null,\"total\":0,\"list\":null},\"traceId\":\"136cabab-cbaa-4a0c-831a-e9ea0dc0422d\"}"
+    }
+  ],
+  "submitResult": {
+    "submitted": false,
+    "blockedReason": "project_quota_exceeded",
+    "clickAttempted": true,
+    "drawerOpenAfterClick": true,
+    "postClickNetworkEvents": [],
+    "visibleMessages": [
+      "超出项目空间配额"
+    ],
+    "resourceState": {
+      "alertText": "当前项目空间加速卡剩余/总量为：1 / 50卡",
+      "quotaRemaining": 1,
+      "quotaTotal": 50,
+      "instanceCount": 1,
+      "acceleratorCardsPerInstance": 2,
+      "cpuPerInstance": 40,
+      "memoryPerInstance": 480,
+      "requestedAcceleratorCards": 2
+    },
+    "createPayloadOverride": null,
+    "preSubmitDiagnostics": {
+      "activeElement": {
+        "tagName": "BODY",
+        "id": "",
+        "className": "",
+        "text": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被"
+      },
+      "drawerCount": 2,
+      "drawers": [
+        {
+          "className": "ant-drawer-content-wrapper",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 1200,
+            "height": 1000
+          },
+          "textPreview": "提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail umask 077 echo __ASI3_TASK_COMMAND_BOOT__ printf '%s\\n' '[iner-aihuanxin]' 'ty"
+        },
+        {
+          "className": "ant-drawer-content train-create-drawer",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 1200,
+            "height": 1000
+          },
+          "textPreview": "提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail umask 077 echo __ASI3_TASK_COMMAND_BOOT__ printf '%s\\n' '[iner-aihuanxin]' 'ty"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "ant-drawer-close",
+          "rect": {
+            "x": 1542,
+            "y": 19,
+            "width": 22,
+            "height": 18
+          }
+        },
+        {
+          "text": "开 关",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "ant-switch css-3nz3m5",
+          "rect": {
+            "x": 571,
+            "y": -629,
+            "width": 45,
+            "height": 22
+          }
+        },
+        {
+          "text": "查看详情",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-link",
+          "rect": {
+            "x": 841,
+            "y": -181,
+            "width": 74,
+            "height": 16
+          }
+        },
+        {
+          "text": "刷新",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-link",
+          "rect": {
+            "x": 1465,
+            "y": 331,
+            "width": 60,
+            "height": 32
+          }
+        },
+        {
+          "text": "选择",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-sm ant-btn-background-ghost show-drawer-button",
+          "rect": {
+            "x": 571,
+            "y": 592,
+            "width": 80,
+            "height": 32
+          }
+        },
+        {
+          "text": "取 消",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-default",
+          "rect": {
+            "x": 1442,
+            "y": 944,
+            "width": 64,
+            "height": 32
+          }
+        },
+        {
+          "text": "确 定",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-primary kl-create-btn",
+          "rect": {
+            "x": 1514,
+            "y": 944,
+            "width": 62,
+            "height": 32
+          }
+        }
+      ],
+      "errors": [
+        "所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回",
+        "30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格",
+        "请选择一个适用于训练场景的镜像。",
+        "训练任务占用资源为实例数乘以单实例资源配置，训练任务占用资源不得超出项目空间配额，当前项目空间加速卡剩余/总量为：1 / 50卡 刷新",
+        "超出项目空间配额",
+        "超出项目空间配额",
+        "超出项目空间配额",
+        "超出项目空间配额",
+        "请输入[1-40]之间的正整数",
+        "请输入[1-480]之间的正整数"
+      ]
+    },
+    "postSubmitDiagnostics": {
+      "activeElement": {
+        "tagName": "BUTTON",
+        "id": "",
+        "className": "css-3nz3m5 ant-btn ant-btn-primary kl-create-btn",
+        "text": "确 定"
+      },
+      "drawerCount": 2,
+      "drawers": [
+        {
+          "className": "ant-drawer-content-wrapper",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 1200,
+            "height": 1000
+          },
+          "textPreview": "提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail umask 077 echo __ASI3_TASK_COMMAND_BOOT__ printf '%s\\n' '[iner-aihuanxin]' 'ty"
+        },
+        {
+          "className": "ant-drawer-content train-create-drawer",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 1200,
+            "height": 1000
+          },
+          "textPreview": "提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail umask 077 echo __ASI3_TASK_COMMAND_BOOT__ printf '%s\\n' '[iner-aihuanxin]' 'ty"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "ant-drawer-close",
+          "rect": {
+            "x": 1542,
+            "y": 19,
+            "width": 22,
+            "height": 18
+          }
+        },
+        {
+          "text": "开 关",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "ant-switch css-3nz3m5",
+          "rect": {
+            "x": 571,
+            "y": -629,
+            "width": 45,
+            "height": 22
+          }
+        },
+        {
+          "text": "查看详情",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-link",
+          "rect": {
+            "x": 841,
+            "y": -181,
+            "width": 74,
+            "height": 16
+          }
+        },
+        {
+          "text": "刷新",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-link",
+          "rect": {
+            "x": 1465,
+            "y": 331,
+            "width": 60,
+            "height": 32
+          }
+        },
+        {
+          "text": "选择",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-sm ant-btn-background-ghost show-drawer-button",
+          "rect": {
+            "x": 571,
+            "y": 592,
+            "width": 80,
+            "height": 32
+          }
+        },
+        {
+          "text": "取 消",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-default",
+          "rect": {
+            "x": 1442,
+            "y": 944,
+            "width": 64,
+            "height": 32
+          }
+        },
+        {
+          "text": "确 定",
+          "disabled": false,
+          "ariaDisabled": null,
+          "className": "css-3nz3m5 ant-btn ant-btn-primary kl-create-btn",
+          "rect": {
+            "x": 1514,
+            "y": 944,
+            "width": 62,
+            "height": 32
+          }
+        }
+      ],
+      "errors": [
+        "所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回",
+        "30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格",
+        "请选择一个适用于训练场景的镜像。",
+        "训练任务占用资源为实例数乘以单实例资源配置，训练任务占用资源不得超出项目空间配额，当前项目空间加速卡剩余/总量为：1 / 50卡 刷新",
+        "超出项目空间配额",
+        "超出项目空间配额",
+        "超出项目空间配额",
+        "超出项目空间配额",
+        "请输入[1-40]之间的正整数",
+        "请输入[1-480]之间的正整数"
+      ]
+    },
+    "taskList": null
+  },
+  "title": "焕新社区",
+  "url": "https://aihuanxin.cn/kunlun/kl-web?poolId=6&projectId=21b4208dde424e96b159362ef49c9c96#/train-dev/environment/dl-c72bd81a96e33134bbe0ae4a478fbab0?name=ASI3",
+  "bodyPreview": "哈尔滨-1 帮助中心 消息中心 xuda2025 我的项目 移动研究院未来院 项目空间详情 模型广场 模型训练 开发环境 训练任务 模型调优 有监督微调 模型推理 推理服务 应用接入 调用统计 资产管理 模型管理 镜像管理 文件管理 数据集管理 运营运维 用量管理 告警管理 操作日志 项目空间管理/ 模型训练/ 开发环境/ 开发环境详情/ 打开环境 ASI3 所有开发环境合计可最多占用32卡，超出将无法启动，请提交训练任务；开发环境使用完毕后请及时手动停止，如长时间闲置，将被自动回收，状态更新为已锁定；在运行镜像中安装软件及依赖后，请务必及时进行“保存镜像”操作，以实现镜像持久化保存，否则，当开发环境被停止或锁定后，相关安装文件将丢失无法找回 Jupyter VSCode Shell终端 可视化 保存镜像 任务列表 提交任务 提交任务 训练任务名称 30个字符以内，必须以中英文或数字开头，支持小括号、短横线和空格 优先级 高 中 低 断点续训 开 关 任务失败后自动重试 运行镜像 请选择一个适用于训练场景的镜像。 平台预置镜像 自定义镜像 镜像名称 适用场景 架构 芯片类型 tyzjx 训练推理 X86 GPU atb_mindie_v2.0.3:2.1.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v2.1.0:2.2.RC1-800I-A2-py311-openeuler24.03-lts 训练推理 ARM NPU atb_mindie_v1.3.4:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.1.0:0.11.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_qwen3.5_v0.1:npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU tei_v1.0:1.0.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwen3.5-27B-35B-122B-397B-031626-zx 训练推理 ARM NPU atb_mindie_v1.2.0:1.0.RC3-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU qwenvlzero_v8 训练推理 ARM NPU python3.11 训练推理 ARM NPU pytorch_v1.1:2.4.0-npu-py310-ubuntu22.04-aarch64 训练推理 ARM NPU vLLM-Ascend_v1.2.3:0.13.0-npu-py311-ubuntu22.04-aarch64 训练推理 ARM NPU 已选镜像： qwen3.5-27B-35B-122B-397B-031626-zx 查看详情 执行命令 set -euo pipefail umask 077 echo __ASI3_TASK_COMMAND_BOOT__ printf '%s\\n' '[iner-aihuanxin]' 'type = s3' 'provider = Other' 'access_key_id = [REDACTED]' 'secret_access_key = [REDACTED]' 'endpoint = https://iner.aihuanxin.cn' 'region = us-east-1' 'acl = private' 'force_path_style = true' > /tmp/iner-rclone.conf if ! command -v rclone >/dev/null 2>&1; then if [ -f /root/work/filestorage/rclone-bin ]; then cp /root/work/filestorage/rclone-bin /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif [ -f /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 ]; then cp /vllm-workspace/mwg-ew-transformer-research/tools/preseed/rclone-linux-arm64 /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; elif command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then d=$(mktemp -d /tmp/rclone.XXXXXX) && curl -fsSL --retry 3 https://downloads.rclone.org/rclone-current-linux-arm64.zip -o $d/rclone.zip && python3 -m zipfile -e $d/rclone.zip $d/x && f=$(find $d/x -type f -name rclone | head -1) && cp $f /tmp/rclone && chmod 700 /tmp/rclone && export PATH=/tmp:$PATH; fi; fi; command -v rclone >/dev/null rclone --config /tmp/iner-rclone.conf copyto iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/scripts/remote_ASI3_token_router_global_payload.sh /tmp/remote_ASI3_token_router_global_payload.sh --s3-no-check-bucket --progress chmod 700 /tmp/remote_ASI3_token_router_global_payload.sh HUANXIN_ASI3_ENV=ASI3 HUANXIN_ASI3_REMOTE_ROOT=/vllm-workspace/mwg-ew-transformer-research HUANXIN_ASI3_S3_CODE_ROOT=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer HUANXIN_ASI3_ARTIFACT_PREFIX=iner-aihuanxin:jtdlp-21b4208dde424e96b159362ef49c9c96/mwg-ew-patent/research_paper_mwg_ew_transformer/results/asi3_token_router_global_task_artifacts HUANXIN_ASI3_RCLONE_CONFIG=/tmp/iner-rclone.conf ASCEND_RT_VISIBLE_DEVICES='0,1' HUANXIN_ASI3_ROUTER_PATCH=/vllm-workspace/mwg-ew-transformer-research/results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt HUANXIN_ASI3_ROUTER_SPLIT_MANIFEST=data/heldout/combined_extra_splits/manifest.json HUANXIN_ASI3_ROUTER_FRACTIONS=0.01,0.03,0.05,0.10,0.25,0.50 HUANXIN_ASI3_ROUTER_JOINT_BUDGETS=0.05,0.10,0.25 HUANXIN_ASI3_ROUTER_THRESHOLD_POLICY=suite_local HUANXIN_ASI3_ROUTER_RISK_MAX_PREDICTED_DELTA=0.0 HUANXIN_ASI3_ROUTER_TRAIN_EXAMPLES=0 HUANXIN_ASI3_ROUTER_EVAL_EXAMPLES=0 HUANXIN_ASI3_ROUTER_SEQ=256 HUANXIN_ASI3_ROUTER_SEEDS=0,1,2 bash /tmp/remote_ASI3_token_router_global_payload.sh 资源组 请选择一个适用于训练场景和运行镜像的资源组 公共资源组 专属资源组 已选资源组：huanxin-all-resource 资源组名称 资源类型 加速卡类型 占用情况 huanxin-all-resource 加速卡 昇腾910B 拥挤 测试资源组 加速卡 昇腾910B 拥挤 实例 训练任务占用资源为实例数乘以单实例资源配置，训练任务占用资源不得超出项目空间配额，当前项目空间加速卡剩余/总量为：1 / 50卡 刷新 实例总数配置 运行实例 超出项目空间配额 单实例资源配置 使用加速卡昇腾910B 卡 超出项目空间配额 使用CPU 核 请输入[1-40]之间的正整数 使用内存 GB 请输入[1-480]之间的正整数 挂载数据集 选择 已选数据集：0 数据集来源 数据集名称 数据集版本 数据集描述 操作 暂无挂载数据集 取 消确 定",
+  "headings": [
+    "提交任务",
+    "训练任务名称",
+    "优先级",
+    "高",
+    "中",
+    "低",
+    "断点续训",
+    "运行镜像",
+    "平台预置镜像",
+    "自定义镜像",
+    "执行命令",
+    "资源组",
+    "公共资源组",
+    "专属资源组",
+    "实例",
+    "挂载数据集"
+  ],
+  "buttons": [
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-alert-close-icon"
+    },
+    {
+      "text": "可视化",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "保存镜像",
+      "disabled": true,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "任务列表",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "提交任务",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-background-ghost"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-drawer-close"
+    },
+    {
+      "text": "开 关",
+      "disabled": false,
+      "className": "ant-switch css-3nz3m5"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "查看详情",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-link"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "刷新",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-link"
+    },
+    {
+      "text": "选择",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-primary ant-btn-sm ant-btn-background-ghost show-drawer-button"
+    },
+    {
+      "text": "",
+      "disabled": false,
+      "className": "ant-table-filter-trigger ant-dropdown-trigger"
+    },
+    {
+      "text": "取 消",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-default"
+    },
+    {
+      "text": "确 定",
+      "disabled": false,
+      "className": "css-3nz3m5 ant-btn ant-btn-primary kl-create-btn"
+    }
+  ],
+  "timestamp": "2026-06-13T14:23:34.402Z"
+}

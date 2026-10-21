@@ -1,0 +1,194 @@
+{
+  "run_id": "asi3_layer16_capacity_single_20260522T151513Z",
+  "status": {
+    "run_id": "asi3_layer16_capacity_single_20260522T151513Z",
+    "state": "done",
+    "updated_at": "2026-05-22T15:18:02Z",
+    "outdir": "results/asi3_layer16_capacity_single_20260522T151513Z",
+    "layer": 16,
+    "ranks": "384,512",
+    "nproc": 1,
+    "result_json": [
+      "results/asi3_layer16_capacity_single_20260522T151513Z/layer16/mwg_quality_distillation_20260522T151636Z.json"
+    ],
+    "checkpoints": [
+      "results/asi3_layer16_capacity_single_20260522T151513Z/layer16/checkpoints/mwg_expert_residual_r384.pt",
+      "results/asi3_layer16_capacity_single_20260522T151513Z/layer16/checkpoints/mwg_expert_residual_r512.pt"
+    ]
+  },
+  "metrics": {
+    "layer16_r256_diverse64": {
+      "path": "results/asi3_multilayer_quality_20260522T132805Z/ppl_single_layer16_r256_diverse64_eval128.json",
+      "dense_ppl": 62.68942108508478,
+      "patched_ppl": 69.24057910306949,
+      "tokens": 5469,
+      "delta_loss": 0.09939438330231276,
+      "ppl_ratio": 1.1045018107455993
+    },
+    "layer16_r384_diverse64": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_diverse64_eval128.json",
+      "dense_ppl": 62.68941706496407,
+      "patched_ppl": 69.68100733071316,
+      "tokens": 5469,
+      "delta_loss": 0.1057351424153925,
+      "ppl_ratio": 1.1115274410432596
+    },
+    "layer16_r512_diverse64": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r512_diverse64_eval128.json",
+      "dense_ppl": 62.68941849427957,
+      "patched_ppl": 70.64036207456806,
+      "tokens": 5469,
+      "delta_loss": 0.11940901256344372,
+      "ppl_ratio": 1.1268307119647953
+    },
+    "layer16_r256_heldout12": {
+      "path": "results/asi3_multilayer_quality_20260522T132805Z/ppl_single_layer16_r256_heldout12_eval60.json",
+      "dense_ppl": 58.14194564578189,
+      "patched_ppl": 63.814403339639156,
+      "tokens": 2560,
+      "delta_loss": 0.09309156313538569,
+      "ppl_ratio": 1.0975622269061234
+    },
+    "layer16_r384_heldout12": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_heldout12_eval60.json",
+      "dense_ppl": 58.14194424874011,
+      "patched_ppl": 61.70993866892701,
+      "tokens": 2560,
+      "delta_loss": 0.059557663090527235,
+      "ppl_ratio": 1.0613669609141805
+    },
+    "layer16_r512_heldout12": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r512_heldout12_eval60.json",
+      "dense_ppl": 58.141940328359524,
+      "patched_ppl": 65.0663638676201,
+      "tokens": 2560,
+      "delta_loss": 0.1125204636715349,
+      "ppl_ratio": 1.1190951574741839
+    },
+    "joint_8_16_diverse64": {
+      "path": "results/asi3_multilayer_quality_20260522T132805Z/ppl_patch_layers8_16_r256_joint_cal_diverse64_eval128.json",
+      "dense_ppl": 62.68941714695158,
+      "patched_ppl": 85.0860908162654,
+      "tokens": 5469,
+      "delta_loss": 0.30547092919551133,
+      "ppl_ratio": 1.3572640277834025
+    },
+    "layer16_r256_belle256": {
+      "path": "results/asi3_multilayer_quality_20260522T132805Z/ppl_single_layer16_r256_belle256_eval128.json",
+      "dense_ppl": 8.370014148110094,
+      "patched_ppl": 11.767203665279713,
+      "tokens": 50838,
+      "delta_loss": 0.3406607366699994,
+      "ppl_ratio": 1.4058761977047178
+    },
+    "layer16_r384_belle256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle256_eval128.json",
+      "dense_ppl": 8.37001406291048,
+      "patched_ppl": 10.770937792103373,
+      "tokens": 50838,
+      "delta_loss": 0.2521959971967016,
+      "ppl_ratio": 1.2868482312152802
+    },
+    "layer16_r384_belle_logit_cal_400_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_logit_cal_400_heldout256_eval128.json",
+      "dense_ppl": 8.438938753848294,
+      "patched_ppl": 10.170360478273173,
+      "tokens": 51267,
+      "delta_loss": 0.18662109405367966,
+      "ppl_ratio": 1.205170552237427
+    },
+    "layer16_r384_belle_logit_cal_800_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_logit_cal_800_heldout256_eval128.json",
+      "dense_ppl": 8.43893880241462,
+      "patched_ppl": 10.083962813957038,
+      "tokens": 51267,
+      "delta_loss": 0.17808975529907434,
+      "ppl_ratio": 1.1949325679517584
+    },
+    "layer16_r384_belle_logit_cal_2000_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_logit_cal_2000_heldout256_eval128_tb2.json",
+      "dense_ppl": 8.438938997916152,
+      "patched_ppl": 10.030673045415691,
+      "tokens": 51267,
+      "delta_loss": 0.17279111339621478,
+      "ppl_ratio": 1.1886177928164416
+    },
+    "layer16_r384_belle_lmce_cal_400_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_lmce_cal_400_heldout256_eval128_tb2.json",
+      "dense_ppl": 8.438938719469226,
+      "patched_ppl": 9.985760929974118,
+      "tokens": 51267,
+      "delta_loss": 0.16830361470983224,
+      "ppl_ratio": 1.1832958221317882
+    },
+    "layer16_r384_belle_lmce_cal_800_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_lmce_cal_800_heldout256_eval128_tb2.json",
+      "dense_ppl": 8.438939123698031,
+      "patched_ppl": 9.964442805799397,
+      "tokens": 51267,
+      "delta_loss": 0.16616643251533691,
+      "ppl_ratio": 1.1807696038258508
+    },
+    "layer16_r384_belle_lmce_cal_1200_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_lmce_cal_1200_heldout256_eval128_tb2.json",
+      "dense_ppl": 8.438938602105514,
+      "patched_ppl": 9.957322913628778,
+      "tokens": 51267,
+      "delta_loss": 0.16545170904017414,
+      "ppl_ratio": 1.17992598158546
+    },
+    "layer16_r384_belle_lmce_cal_1200_diverse64": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_lmce_cal_1200_diverse64_eval128.json",
+      "dense_ppl": 62.371835545074404,
+      "patched_ppl": 67.79831298824023,
+      "tokens": 2736,
+      "ppl_ratio": 1.0870020482120373
+    },
+    "layer16_r384_belle_lmce_cal_1200_heldout12": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_lmce_cal_1200_heldout12_eval60.json",
+      "dense_ppl": 58.123344703699885,
+      "patched_ppl": 60.47587981214374,
+      "tokens": 1280,
+      "ppl_ratio": 1.0404748749480361
+    },
+    "layer16_r512_belle_logit_cal_800_heldout256": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r512_belle_logit_cal_800_heldout256_eval128_tb2.json",
+      "dense_ppl": 8.438938694195112,
+      "patched_ppl": 10.846521855894443,
+      "tokens": 51267,
+      "delta_loss": 0.2509879087493547,
+      "ppl_ratio": 1.2852945434187635
+    },
+    "layer16_r384_belle_lmce_cal_1200_heldout256_v2": {
+      "path": "results/asi3_layer16_capacity_single_20260522T151513Z/ppl_layer16_r384_belle_lmce_cal_1200_heldout256_v2_eval128_tb2.json",
+      "dense_ppl": 8.438938368398485,
+      "patched_ppl": 9.957322565911012,
+      "tokens": 51267,
+      "delta_loss": 0.16545170181325464,
+      "ppl_ratio": 1.1799259730582297
+    }
+  },
+  "notes": [
+    "8-way distributed r384/r512 attempt failed immediately; single-NPU run completed.",
+    "Layer16 r384 is best on heldout12; r256 remains best on full diverse64 aggregate.",
+    "Two-layer joint-calibrated 8+16 result overfits the original small/default gate and should not be the main claim.",
+    "Belle256 instruction-style validation is larger (~50k tokens) and shows layer16 still degrades materially: r384 ratio 1.287, r256 ratio 1.406.",
+    "BELLE held-out logit calibration improves monotonically so far: pure r384 1.2898, 80-step 1.2309, 200-step 1.2185, 400-step 1.2052.",
+    "800-step continuation from the 400-step logit-cal checkpoint further improved BELLE held-out to 1.1949, but degradation remains material.",
+    "Longer r384 logit-MSE continuation flattened around 1.1886 on full BELLE held-out; r512 logit-MSE calibration was worse at 1.2853.",
+    "Direct LM cross-entropy calibration is the strongest current algorithmic variant: BELLE held-out ratio 1.1799 after 1200 LM-CE steps, diverse64 1.0870, heldout12 1.0405.",
+    "Despite the improvement, the evidence remains below top-journal readiness: one split, small auxiliary diverse checks, no multiple seeds, limited baselines, and no fused-kernel/hardware-counter evidence.",
+    "BELLE heldout-v2 check matches the LM-CE-1200 held-out result: ratio 1.1799 over 51,267 tokens, so it is a consistency check rather than an independent benchmark.",
+    "Same-rank persistent low-rank baseline for layer16 r384 reaches BELLE held-out ratio 1.3729 over 51,267 tokens, worse than LM-CE-calibrated MWG at 1.1799."
+  ],
+  "ppl": {
+    "layer16_persistent_low_rank_r384_heldout256": {
+      "path": "results/asi3_layer16_persistent_baseline_1npu_20260523T065948Z/ppl_layer16_persistent_r384_heldout256_eval128_tb2.json",
+      "dense_ppl": 8.438938592313757,
+      "patched_ppl": 11.585423538646449,
+      "tokens": 51267,
+      "delta_loss": 0.31689117494822705,
+      "ppl_ratio": 1.3728531629793503
+    }
+  }
+}

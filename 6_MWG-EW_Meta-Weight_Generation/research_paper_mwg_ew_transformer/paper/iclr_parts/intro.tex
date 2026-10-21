@@ -1,0 +1,137 @@
+\section{Introduction}
+
+Modern Transformers \cite{vaswani2017attention,kaplan2020scaling,hoffmann2022chinchilla}
+are built around a durable-parameter assumption: large weight tensors are
+stored as model state, fetched whenever a layer executes, updated by the
+optimizer, and synchronized during distributed training. This assumption is
+natural for learning, but not free for systems: in many serving and training
+regimes, FFN projections are among the largest repeatedly streamed objects in
+the block, and quantization, sparsity, and kernel engineering all preserve the
+same lifetime---a parameter tensor remains a durable object the runtime must
+move.
+
+This paper asks whether lifetime itself can be part of a kernel interface.  A
+generated operand is useful only if its value is created from causal context,
+consumed close to the compute unit, and prevented from escaping to persistent
+state or ordinary global-memory descriptor storage---a
+\emph{no-escape/no-store} contract. The strong claim is inference-scoped:
+training additionally needs saved descriptors or deterministic backward
+rematerialization. We measure the latter at the FFN level, where
+recompute-in-backward cuts the saved-for-backward activation footprint by
+$24.5\times$--$71.8\times$ at exact gradient equality. The paper is presented
+as a \emph{runtime proposal with measured mechanism evidence and a feasibility
+analysis}, not as a completed efficiency method: every claim is labeled
+measured, analytic, or unimplemented (Table~\ref{tab:evidencemap}).
+
+We make one architecture the center of the paper.  For each FFN projection
+$p$, persistent rank-$r$ factors $U_p,V_p$ surround a small generated core
+$M_{p,\mathcal G}$ shared by a causal token group $\mathcal G$:
+\begin{equation}
+\Pi_{p,\mathcal G}(X_{\mathcal G})=
+\bigl((X_{\mathcal G}U_p)M_{p,\mathcal G}\bigr)V_p.
+\label{eq:core-intro}
+\end{equation}
+The canonical implementation uses $M=\operatorname{Diag}(z)$ and emits three
+rank vectors $(z_u,z_g,z_d)$.  This is intentionally narrower than generating
+complete $(U_t,V_t)$ pairs, but it makes the volatile object small enough to be
+a plausible scratch-resident operand.  Full factor synthesis remains a useful
+negative boundary because its per-call payload can exceed the dense weights
+unless descriptors are reused across large groups.
+
+Three artifacts must not be conflated---the ephemeral-core target (the
+proposed method), the historical systems benchmark (isolates low rank, not
+lifetime), and the causal software prototype (tests information flow, not
+quality or HBM behavior); Table~\ref{tab:artifact-separation},
+Appendix~\ref{app:artifacts}, details their evidential roles.
+
+The integrity audit is therefore part of the result rather than a caveat.  The
+original controller pooled complete teacher-forced sequences and batches, so
+earlier tokens depended on future tokens and unrelated examples; nominal
+router seeds did not resample data; and \texttt{torch.where} selected outputs
+only after both branches had executed.  We withdraw those quality and traffic
+interpretations; the surviving evidence is a persistent-low-rank
+microbenchmark, a negative generated/materialized control, corrected
+accounting, and software tests for the redesigned causal core.
+
+\begin{definition}[Ephemeral low-rank core]
+For a causal token group $\mathcal G$, an ephemeral core is
+$M_{p,\mathcal G}=G_\theta(c_{\mathcal G},\ell,p)$ in a declared structured
+family $\mathcal M_r$.  It is generated into kernel-local scratch, consumed by
+Eq.~\eqref{eq:core-intro}, and is neither returned nor aliased by another
+operator, nor committed to persistent state nor stored in a global-memory
+descriptor buffer during inference.
+\end{definition}
+
+\begin{definition}[Parameter-lifetime class]
+A weight-like object has lifetime class $(\tau,\sigma)$, where $\tau$ is its
+maximum reuse interval and $\sigma$ is the deepest memory or synchronization
+boundary it crosses. Dense FFN weights have long $\tau$ and cross the
+model-state boundary; \mwg{} keeps $U_p,V_p,\theta$ durable but assigns each
+generated core short $\tau$ and scratch-level $\sigma$.
+\end{definition}
+
+\begin{definition}[Eligibility-preserving replacement]
+Let $x$ denote a dispatchable whole call and $g(x)\in\{0,1\}$ choose the
+ephemeral path.  A replacement is eligibility preserving at call budget
+$\routebudget$ if $\E[g(x)]\le\routebudget$, a causal disjoint evaluation is
+non-inferior within a predeclared paired margin, and
+$\Pr(\Delta(x)>\epsilon\mid g(x)=1)\le\alpha$ for predeclared tail-risk
+parameters $(\epsilon,\alpha)$.
+\end{definition}
+
+\paragraph{Sampling assumptions for tail-risk certification.}
+The tail-risk inequality in Definition~3 is a population statement.  Certifying
+it from data requires an explicit sampling model: the selected calls
+$\{x: g(x)=1\}$ must be drawn independently from a fixed dispatch
+distribution (i.i.d.), and any empirical bound (e.g., a one-sided binomial
+upper confidence bound on the failure probability from $n$ selected calls)
+inherits only the stated assumptions.  Correlated tokens within a batch,
+adaptively selected calls, or distribution shift between calibration and
+deployment invalidate the i.i.d.\ premise and require a different
+certification route (e.g., concentration under declared mixing, or online
+monitoring with sequential tests).  This paper specifies the requirement but
+does not certify a numeric tail-risk bound; no empirical failure-probability
+claim is made.
+
+
+\paragraph{Notation.}
+We write $d$ for the hidden dimension, $m$ for the FFN intermediate dimension,
+$r$ for factor rank, $B$ for batch size, $S$ for sequence length, and $T=BS$
+for tokens per FFN call.  A core is shared by a causal group of $q$ tokens.
+$\Gamma(r)=r(d+m)/(dm)$ is the persistent-factor-to-dense element ratio; it is
+not a device-traffic measurement.  For the proposed router, excess loss is
+$\Delta(x)=\loss_{\mathrm{mwg}}(x)-\loss_{\mathrm{dense}}(x)$: smaller values
+favor patching, and an eligibility bound patches only when
+$\widehat\Delta(x)\le\Delta_{\max}$. Payload is $\traffic$,
+loss is $\loss$, and expectation is $\E$.
+
+\paragraph{Contributions.}
+\begin{itemize}
+  \item An inference-side no-escape/no-store operator for ephemeral low-rank
+  cores, separated from persistent factors and training rematerialization;
+  three token-local diagonal cores replace six non-identifiable
+  paired scales, removing one explicitly described redundancy;
+  causality, algebra, and checkpoint behavior are verified in
+  software tests.
+  \item Call-level payload and reuse break-even conditions, whole-call versus
+  token-fraction dispatch, and a repaired approximation result whose retained
+  Frobenius energy matches its matrix norm.
+  \item The fused no-store arm as an audited, hash-bound Ascend-C operator,
+  and the predeclared four-arm experiment run on device: algebraic
+  equivalence at the fp16 rounding floor, core DRAM traffic verified
+  output-only, and \emph{parity} with the materialized arm at L2-resident
+  geometry after host fast-pathing (beyond-L2 deficit isolated to a
+  single-core epilogue; the measured v4 multi-core rewrite is
+  bit-identical to v1 and $1.13\times$--$3.03\times$ faster across
+  $T{=}128$--$4096$; Section~\ref{sec:systems}).  Separately, on the training
+  side (where the core is recomputed, not stored), the low-rank
+  parameterization yields an optimizer-inclusive
+  training step
+  synchronized across four \texttt{DistributedDataParallel} workers
+  that runs $3.37\times$--$4.14\times$ faster than dense---a rank effect, not
+  a no-store effect.
+  \item Withdrawal of invalid quality/routing evidence, plus a scoped
+  persistent-low-rank measurement and an unfavorable conditioning control,
+  for context.
+\end{itemize}
+

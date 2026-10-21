@@ -1,0 +1,7 @@
+{
+  "run_id": "asi3_runtime_profiler_probe_20260525T192357Z",
+  "state": "done",
+  "updated_at": "2026-05-25T19:24:14Z",
+  "outdir": "results/asi3_runtime_profiler_probe_20260525T192357Z",
+  "summary_json": "results/asi3_runtime_profiler_probe_20260525T192357Z/mwg_runtime_profiler_probe_latest.json"
+}

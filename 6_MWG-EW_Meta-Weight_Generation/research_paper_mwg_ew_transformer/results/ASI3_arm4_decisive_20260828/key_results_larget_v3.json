@@ -1,0 +1,32 @@
+{
+  "created_at": "20260828T161122Z",
+  "config": {
+    "d": 4096,
+    "m": 14336,
+    "rank": 128,
+    "controller_hidden": 128,
+    "batch": 16,
+    "seq": 256,
+    "amplitude": 0.05,
+    "dtype": "fp16",
+    "seed": 1234
+  },
+  "validations": {
+    "materialized_vs_fused": {
+      "passed": true,
+      "max_abs": 0.0029296875,
+      "mean_abs": 0.00013570395822171122,
+      "max_rel": 0.26187896728515625,
+      "rtol": 0.005,
+      "atol": 0.005
+    }
+  },
+  "materialized": {
+    "median_ms": 1.357075,
+    "std_ms": 0.01305512026973674
+  },
+  "fused": {
+    "median_ms": 2.727791,
+    "std_ms": 0.08876221766843798
+  }
+}

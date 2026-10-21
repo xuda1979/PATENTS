@@ -1,0 +1,13 @@
+.venv/
+.venv311/
+__pycache__/
+*.pyc
+*.pyo
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+*.bin
+results/local/
+logs/
+.pytest_cache/

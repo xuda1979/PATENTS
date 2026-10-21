@@ -1,0 +1,30 @@
+\section{Experimental Protocol}
+\label{sec:protocol}
+
+All arm-3/arm-4 comparisons run one harness
+(\texttt{mwg\_four\_arm\_lifetime\_benchmark.py}) on a single Ascend 910B2
+(CANN 8.5) at $(d,m)=(4096,14336)$, rank 128, fp16, seed 1234, with a host
+timer plus device synchronize. Probe geometry: $B{=}1,S{=}128$, 30 warmup,
+200 timed iterations $\times$ 5 repeats; large-$T$: $B{=}16,S{=}256$, 20
+warmup, 100 iterations $\times$ 3 repeats. Before timing the harness
+re-verifies the SHA-256 source-plus-binary contract manifest and gates on
+algebraic equivalence against materialization ($\mathrm{rtol}=\mathrm{atol}
+=5\times10^{-3}$); any failure aborts. Counters come from matched
+\texttt{msprof} \texttt{Memory}/\texttt{L2Cache}/\texttt{PipeUtilization}/
+\texttt{ArithmeticUtilization} passes over the same invocation pattern per
+arm (Appendix~\ref{app:counters}). Historical sweeps used one process per
+visible device (1--8) timing locally without optimizer steps or integrated
+DDP synchronization and a separate synthetic all-reduce proxy; those are
+forward--backward microbenchmark results, not training-throughput disguise.
+A fresh synchronized-DDP rerun (Table~\ref{tab:ddptrain},
+Appendix~\ref{app:histtables}) now measures the real
+\texttt{DistributedDataParallel} training step on four processes with gradient
+all-reduce inside the timed region ($2.87\times$--$3.17\times$ vs.\ dense),
+and a second run (Table~\ref{tab:ddptrainopt}, Appendix~\ref{app:histtables})
+adds the elementwise AdamW update to the timed region
+($3.37\times$--$4.14\times$; the update does not cancel---dense pays $9.0$~ms
+against the low-rank arm's $1.0$--$1.3$~ms). Fresh
+runs must preserve per-launch/per-rank samples, environment/model/code/data
+hashes, synchronized and optimizer-inclusive timers, and device-counter
+definitions; quality reruns must pre-register layers and use positive hashed
+near-deduplicated splits (Appendix~\ref{app:audit-provenance}).

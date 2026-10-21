@@ -1,0 +1,80 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Transformer FFNs, conditional computation, and experts.}
+Position-wise FFNs \cite{vaswani2017attention}, in gated variants
+\cite{shazeer2020gptj}, dominate parameter count. Conditional computation
+reduces activated compute: sparse MoE via the sparsely-gated mixture,
+GShard, Switch, and DeepSeek-V2
+\cite{shazeer2017outrageously,lepikhin2021gshard,fedus2022switch,deepseek2024v2}
+(design space:
+\cite{fedus2022review,dai2024deepseekmoe}), token-level conditional compute
+\cite{raposo2024mod}, and adaptive computation time
+\cite{graves2016act}. \mwg{} shares the conditional spirit but conditions
+on a different object: rather than selecting among persistent expert
+weights, it decides whether a weight-like operand should be generated and
+kept ephemeral at all, with a risk-calibrated dense-fallback router as a
+budgeted eligibility gate, not a load-balanced expert assignment.
+
+\paragraph{Low-rank, structured, and generated weights.}
+Low-rank factorization compresses FFN weights
+\cite{sainath2013lowrank,dao2022monarch}; LoRA/QLoRA add low-rank
+factors for adaptation \cite{hu2022lora,dettmers2023qlora}---all kept
+durable. Hypernetworks generate weights from learned embeddings
+\cite{ha2017hypernetworks}; SMASH predicts weights for architecture
+search \cite{brock2018smash}; Dynamic Filter Networks and CondConv
+condition kernels on the input
+\cite{debrabandere2016dynamic,yang2019condconv}; HyperGrid applies a
+hypernetwork to Transformer FFNs \cite{tay2021hypergrid}; Ouroboros
+modulates low-rank bases from the hidden state \cite{jaber2026ouroboros};
+fast-weight programmers are a related transient lineage
+\cite{schlag2021fastweights}. \mwg{} keeps thin factors $U_p,V_p$
+durable but conditionally generates a much smaller structured core with
+a short lifetime; our narrower proposed distinction is the explicit
+no-escape/no-store (``no-write-back'') lifetime interface and its
+accounting, now backed by the fused four-arm measurement of
+Section~\ref{sec:systems}.
+
+\paragraph{Compression, quantization, and distributed training.}
+GPTQ and AWQ reduce bits per parameter while preserving the
+durable-tensor lifetime \cite{frantar2023gptq,lin2024awq}; the lifetime
+interface is orthogonal and composable. Gradient compression
+\cite{lin2018dgc,alistarh2017qsgd,vogels2019powersgd}, optimizer
+sharding \cite{rajbhandari2020zero}, and tensor/pipeline parallelism
+\cite{narayanan2021megatron,korthikanti2023megatron} all operate on a
+fixed synchronized parameter set; \mwg{} instead shrinks that set
+itself, and the techniques compose.
+
+\paragraph{Conditional sparsity and weight residency.}
+A second inference-side family makes weight \emph{fetches} conditional:
+Deja Vu predicts per-token contextually sparse neurons and reads only
+those weights \cite{liu2023dejavu}; PowerInfer exploits power-law
+activation to pin ``hot'' weights on device and leave ``cold'' ones in
+host memory \cite{song2024powerinfer}; LLM-in-a-flash streams weights
+from flash storage on demand under DRAM limits
+\cite{alizadeh2024llminflash}. All three keep every weight durable
+somewhere in the hierarchy and condition its \emph{transfer}; \mwg{}
+instead conditions the weight's \emph{existence}, generating the small
+core from durable thin factors so that no copy of it resides anywhere
+between calls. The distinction matters for capacity-bound deployment
+(the generated core consumes zero persistent storage) but comes at the
+cost of per-call generation, which our four-arm measurement prices
+(Section~\ref{sec:systems}). The operational router we propose but do
+not realize (Section~\ref{sec:results}) would occupy the same slot Deja
+Vu's low-rank predictor occupies in that lineage.
+
+\paragraph{IO-aware kernels, KV compression, and fused FFNs.}
+FlashAttention reduces attention activation movement through IO-aware
+kernels \cite{dao2022flashattention}; MLA-style methods compress the KV
+cache \cite{deepseek2024v2}---both target activations or past-token
+state, not weight lifetimes. Fused or IO-aware FFN implementations
+(FlashMHF: dynamically weighted FFN subnetworks with an SRAM-fused
+kernel \cite{zhang2025flashmhf}) reduce per-call memory overhead within
+a durable lifetime; \mwg{} would create and consume the small core only
+inside the fused invocation. FlashMHF is closest on the systems axis;
+our distinguishing claim is the lifetime contract itself. Speculative
+decoding \cite{leviathan2023speculative} structurally resembles the
+intended router but trades compute for latency on the token axis,
+whereas \mwg{} trades compute for bandwidth on the weight axis.
+Table~\ref{tab:positioning} (Appendix~\ref{app:positioning}) summarizes
+the mechanism-level positioning.

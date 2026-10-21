@@ -1,0 +1,122 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{基于声子本征模复用的量子低密度奇偶校验码综合征存储与读取方法} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、xudayj@chinamobile.com、+86-13521894156} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026.06.10} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{与量子计算的关联说明：}
+
+本发明面向容错量子计算中的 qLDPC 量子纠错综合征提取。qLDPC 码具有较高编码率，但在离子阱平台上需要频繁测量多个高权重、互相重叠的稳定子。现有方案通常依赖专用辅助离子和较深的 MS 门序列。本发明将 qLDPC Tanner 图校验节点映射到线性离子链的可寻址正交声子本征模，以声子二值指针态或二值占据窗口暂存综合征，并通过共享读出离子逐模读取，可降低辅助离子开销并提升并行度。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 二、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索关键词：}
+(1) 量子低密度奇偶校验码, qLDPC, 综合征提取
+(2) 离子阱量子纠错, 高权重稳定子, 辅助离子
+(3) 声子模式, 振动本征模, 状态依赖力
+(4) 边带读出, 双种类离子, Tanner 图编译
+
+\textbf{外文检索关键词：}
+(1) Quantum LDPC codes, qLDPC syndrome extraction
+(2) Trapped ion quantum error correction, high-weight stabilizer
+(3) Phonon modes, vibrational eigenmodes, state-dependent force
+(4) Sideband readout, dual-species ion, Tanner graph compiler
+
+% 三、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{1.5cm}|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{相关度类别} & \textbf{文献信息 (标题/来源/作者/日期)} \\
+\hline
+1 & A (基础技术) & \textbf{Asymptotically Good Quantum and Locally Testable Classical LDPC Codes} \newline arXiv, 2021 \newline Panteleev, P. and Kalachev, G. \\
+\hline
+2 & A (基础技术) & \textbf{Quantum computation and simulation with vibrational modes of trapped ions} \newline npj Quantum Information, 2021 \newline Chen, W., et al. \\
+\hline
+3 & Y (相关技术) & \textbf{Fault-tolerant parity readout on a shuttling-based trapped-ion quantum computer} \newline Physical Review X, 2021 \newline Hilder, J., et al. \\
+\hline
+4 & Y (相关技术) & \textbf{Quantum error correction for long chains of trapped ions} \newline arXiv, 2025 \newline Ye, M. and Delfosse, N. \\
+\hline
+\end{longtable}
+
+% 四、分析评述
+\section*{三、分析评述}
+
+\textbf{1. 与文献1 (qLDPC 码基础) 的对比分析：}
+文献1证明了优良 qLDPC 码族的理论价值，说明高编码率量子纠错码可支持大规模容错量子计算。但其重点在编码构造和距离性质，并未公开离子阱平台中如何用声子本征模替代每校验专用辅助离子来存储多个综合征。
+
+\textbf{2. 与文献2 (离子振动模式量子信息处理) 的对比分析：}
+文献2公开了离子振动模式可作为量子计算和量子模拟资源，并涉及模式操控、冷却和边带耦合。本发明不同之处在于，将多个运动模式作为 qLDPC 校验节点的二值综合征寄存器，并引入 Tanner 图到模式频谱的编译映射。
+
+\textbf{3. 与文献3 (离子阱容错奇偶读出) 的对比分析：}
+文献3涉及离子阱平台上的容错奇偶读出，但其核心仍是面向特定奇偶测量结构的读出流程。本发明进一步面向 qLDPC 高权重、重叠稳定子，提出多色状态依赖力并行写入多个正交声子模式。
+
+\textbf{4. 与文献4 (长离子链量子纠错) 的对比分析：}
+文献4讨论长离子链中的量子纠错方案和离子阱平台约束，但未公开将校验节点映射为声子二值指针态存储，也未公开共享读出离子按模式读取 qLDPC 综合征的完整执行链路。
+
+% 五、检索结论
+\section*{四、检索结论}
+
+经检索，未发现与本申请全部技术特征相同的现有技术。本申请提出的“qLDPC Tanner 图校验节点到离子链可寻址声子本征模的映射、以声子二值指针态或二值占据窗口暂存综合征、多稳定子并行写入、模式复位以及共享读出离子逐模读取”的组合方案，区别于传统辅助离子综合征提取和单纯声子门媒介利用，具有较强的新颖性和创造性。
+
+\end{document}

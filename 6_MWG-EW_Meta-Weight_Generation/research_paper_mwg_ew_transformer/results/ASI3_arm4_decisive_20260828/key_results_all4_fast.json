@@ -1,0 +1,39 @@
+{
+  "created_at": "20260828T160104Z",
+  "config": {
+    "d": 4096,
+    "m": 14336,
+    "rank": 128,
+    "controller_hidden": 128,
+    "batch": 1,
+    "seq": 128,
+    "amplitude": 0.05,
+    "dtype": "fp16",
+    "seed": 1234
+  },
+  "validations": {
+    "dense_vs_persistent_factorization": {
+      "passed": true,
+      "max_abs": 0.0029296875,
+      "mean_abs": 0.0004170740721747279,
+      "max_rel": 0.5168914794921875,
+      "rtol": 0.005,
+      "atol": 0.005
+    },
+    "materialized_vs_fused": {
+      "passed": true,
+      "max_abs": 0.001953125,
+      "mean_abs": 0.00013445966760627925,
+      "max_rel": 0.1949310302734375,
+      "rtol": 0.005,
+      "atol": 0.005
+    }
+  },
+  "arm4_execution_observed": null,
+  "medians": {
+    "dense": 0.459339,
+    "persistent": 0.258982,
+    "materialized": 0.8440315,
+    "fused": 0.848882
+  }
+}

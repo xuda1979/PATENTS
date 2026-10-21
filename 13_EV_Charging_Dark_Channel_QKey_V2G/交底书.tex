@@ -1,0 +1,175 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{setspace}
+\usetikzlibrary{positioning,arrows.meta}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+\title{\textbf{发明专利技术交底书}\\[0.5em]\Large 基于新能源汽车复合充电线缆暗通道的离线量子密钥物理注入与 V2G 动态调度方法、系统及装置}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{发明名称}
+基于新能源汽车复合充电线缆暗通道的离线量子密钥物理注入与 V2G 动态调度方法、系统及装置。
+
+\textbf{英文名称}: Offline Quantum Key Physical Injection and V2G Dynamic Scheduling Method, System and Apparatus Based on a Dark Channel in a Composite EV Charging Cable.
+
+\section{申请人信息}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+申请人名称 & 待补充 \\
+\hline
+申请人类型 & 企业或研究机构，待补充 \\
+\hline
+国籍或注册地 & 待补充 \\
+\hline
+通讯地址 & 待补充 \\
+\hline
+联系人及电话 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{发明人信息}
+\subsection{第一发明人}
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+字段 & 内容 \\
+\hline
+姓名 & 待补充 \\
+\hline
+工作单位 & 待补充 \\
+\hline
+联系电话 & 待补充 \\
+\hline
+电子邮箱 & 待补充 \\
+\hline
+\end{tabular}
+
+\section{技术领域}
+本申请涉及车联网安全、智能充电、V2G/V2H、电力调度、量子安全通信和密钥管理技术，尤其涉及在充电连接期间利用复合线缆中的光学暗通道完成离线量子密钥注入。
+
+\section{背景技术}
+\subsection{现有技术的局限性}
+V2G 规模化后，调度指令、计量数据和结算凭证一旦被批量伪造，可能形成电网级系统性风险。现有车桩云安全主要依赖 PKI、TLS 和远程网络，密钥生命周期复杂，且长期抗量子能力不足。量子密钥分发通常依赖固定站点和专用链路，难以直接覆盖移动中的车辆终端。
+
+\subsection{相关技术路线与工程瓶颈}
+车辆与充电桩之间存在持续数十分钟的稳定物理接触窗口，这是远比车辆行驶过程更容易受控的高安全补钥时机。现有充电线缆和接口主要面向电力传输、PLC、CP/PP 等经典通信，并未把这一窗口作为离线量子密钥注入与后续密钥预算管理的入口。
+
+\subsection{审查中可能关注的现有技术边界}
+公开资料已经分别覆盖 EV 充电安全、PQC 迁移、充电连接器结构和电网场景 QKD，但尚未发现将“线缆内光学暗通道、充电窗口内短距 QKD、车端密钥池以及 V2G 风险等级调度”统一到单一系统的方法。
+
+\section{发明内容}
+\subsection{发明目的}
+本申请的目的在于，将量子密钥生成从车辆行驶过程中的实时通信问题转化为充电期间的离线物理注入问题，使车辆在离桩后仍可基于预置密钥池完成高安全认证、控制和结算，并支持按风险等级动态消耗密钥。
+
+\subsection{技术方案}
+\subsubsection{创新点 A：复合充电线缆中的光学暗通道}
+在充电枪线缆内部集成至少一条光学传输通道，并在连接器内部设置自动光耦合结构，使插枪后形成封闭、低泄露的短距点对点光链路。
+
+\subsubsection{创新点 B：充电窗口内的离线量子密钥注入}
+车辆与充电桩完成经典握手和链路自检后，在暗通道上执行短距 QKD 或等效量子噪声受限密钥生成流程，并把得到的密钥材料写入车端 HSM 或 TEE。
+
+\subsubsection{创新点 C：按用途分区的车端密钥池}
+密钥池按调度控制、计量签名、结算加密、OTA 或诊断等用途分区，并把 KeyID、会话 ID、车辆身份和桩身份绑定到索引账本。
+
+\subsubsection{创新点 D：V2G 风险驱动的密钥预算调度}
+云侧聚合器根据业务类型、风险等级和剩余密钥预算动态下发消耗策略，使车辆在离桩后仍能基于离线密钥完成多次控制与结算。
+
+\subsubsection{创新点 E：不泄露明文密钥的审计元数据}
+桩侧和云侧记录会话 ID、链路质量、参数摘要、KeyID 区间和策略版本哈希，为审计和争议处理提供证据。
+
+\subsubsection{创新点 F：可拆解、可检测的产品结构证据}
+线缆和连接器中的独立光通道、光耦合结构、桩侧低功率光发射接收模块以及云侧密钥预算服务共同构成可取证的实施外观。
+
+\section{附图说明}
+图1示出基于充电线缆暗通道的离线量子密钥注入与 V2G 调度架构。图2示出充电窗口内离线量子密钥注入与后续消耗流程。
+
+\section{具体实施方式}
+\subsection{系统架构}
+系统由车端光学模块与 HSM、桩端光学模块与控制器、复合充电线缆和连接器、以及云侧聚合器与审计服务组成。暗通道承担密钥材料生成，经典链路承担握手和策略同步，云侧承担预算调度和证据留存。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1cm]
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm] (a) {充电桩量子注入模块};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, right=of a] (b) {复合线缆光学暗通道};
+\node[draw, rounded corners, minimum width=3.2cm, minimum height=1cm, right=of b] (c) {车端 HSM 与密钥池};
+\node[draw, rounded corners, minimum width=3cm, minimum height=1cm, below=of b] (d) {云侧聚合器与审计};
+\draw[->, thick] (a) -- (b);
+\draw[->, thick] (b) -- (c);
+\draw[->, thick] (b) -- (d);
+\draw[->, thick] (d) -| (c);
+\end{tikzpicture}
+\caption{图1 基于充电线缆暗通道的离线量子密钥注入与 V2G 调度架构}
+\end{figure}
+
+\subsection{实施步骤}
+\subsubsection{实施例 1：面向 V2G 调度指令的离线一次一密 MAC}
+车辆插枪后，车桩先按 ISO 15118 建立经典安全会话并做暗通道自检；随后执行短距量子密钥生成，所得 KeyID 和 KeyBlock 写入车端 HSM。车辆离桩后，聚合器按预设索引规则调用对应密钥，对每条调度命令使用独立认证材料。
+
+\subsubsection{实施例 2：分区式密钥池与结算保护}
+结算相关密钥与控制相关密钥分开存放，异常争议时仅核对索引账本和会话元数据，而不暴露原始密钥块。
+
+\subsubsection{实施例 3：下一次充电的自动补钥}
+当车端检测到密钥池低于阈值或策略版本更新时，在下一次充电握手中自动申请补钥，并由桩侧和云侧完成新一轮索引登记。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm]
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm] (s1) {插枪握手并检测暗通道连通性};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s1] (s2) {在暗通道上执行短距量子密钥生成};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s2] (s3) {车端写入 KeyID 与 KeyBlock 并登记元数据};
+\node[draw, rounded corners, minimum width=11cm, minimum height=0.9cm, below=of s3] (s4) {离桩后按风险等级消耗密钥完成调度与结算};
+\draw[->, thick] (s1) -- (s2);
+\draw[->, thick] (s2) -- (s3);
+\draw[->, thick] (s3) -- (s4);
+\end{tikzpicture}
+\caption{图2 充电窗口内离线量子密钥注入与后续消耗流程}
+\end{figure}
+
+\section{技术效果}
+\subsection{安全效果}
+本申请将高安全密钥获取从移动网络实时分发转移到受控的充电物理接触窗口，显著降低空口、漫游和中间人攻击面。暗通道的封闭结构也降低了链路监听和误对准风险。
+
+\subsection{产业化与经济可行性}
+充电运营商、车企和网关或 HSM 厂商均可围绕“线缆结构、协议栈、密钥预算服务”形成标准或授权。相比建设面向车辆移动终端的广域量子网络，该方案更符合短期内可落地的产业路径。
+
+\subsection{可取证性与实施稳定性}
+侵权取证既可以在物理层通过拆解线缆和连接器观察独立光通道，也可以在协议层通过日志和 API 字段识别量子会话、KeyID 索引和预算调度。系统采用元数据而非明文密钥审计，兼顾安全与可追溯。
+
+\section{权利要求书}
+\subsection{独立权利要求}
+\begin{itemize}
+\item 一种离线量子密钥物理注入方法，其特征在于，在新能源汽车充电连接期间利用复合充电线缆中的光学暗通道完成量子密钥生成并写入车端安全模块。
+\item 所述生成的密钥按用途分区形成车端密钥池，并与充电会话标识及车辆身份绑定。
+\item 一种 V2G 动态调度系统，其特征在于，云侧聚合器根据密钥预算和风险等级下发密钥消耗策略。
+\item 一种复合充电线缆及连接器结构，其特征在于，同时包含功率导体和光学暗通道，并在插接时形成自动光耦合。
+\end{itemize}
+
+\subsection{从属权利要求}
+\begin{itemize}
+\item 经典握手采用 ISO 15118 兼容流程。
+\item 车端安全模块为 HSM、TEE 或车载安全控制器中的至少一种。
+\item 云侧记录不泄露明文密钥的会话元数据和策略版本哈希。
+\item 暗通道采用塑料光纤、短距多模光纤或其他波导中的至少一种。
+\end{itemize}
+
+\section{说明书摘要}
+本申请公开了一种基于新能源汽车复合充电线缆暗通道的离线量子密钥物理注入与 V2G 动态调度方法、系统及装置。该方案在车辆与充电桩的物理连接期间，利用线缆内光学暗通道执行短距量子密钥生成，并将所得密钥按用途分区写入车端 HSM 或 TEE，形成可离线消耗的密钥池。聚合器依据风险等级和剩余预算动态下发消耗策略，从而在车辆离桩后继续保障 V2G 控制与结算安全。
+\end{document}

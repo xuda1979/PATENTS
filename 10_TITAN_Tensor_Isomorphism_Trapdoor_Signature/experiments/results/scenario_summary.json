@@ -1,0 +1,310 @@
+{
+  "source_summary": "/Users/daxu/PATENTS/10_TITAN_Tensor_Isomorphism_Trapdoor_Signature/experiments/results/summary.json",
+  "note": "Policy-side scenario experiment executed locally with Python standard library; signature latency/correctness metrics are imported from the repository's existing real benchmark summary.json and mapped to the corresponding deployment scenario.",
+  "scenario_count": 3,
+  "record_count": 600,
+  "scenarios": [
+    {
+      "scenario": "量子计算网络节点准入",
+      "scenario_code": "quantum_network_node_admission",
+      "deployment_entry": "节点准入控制器",
+      "mapped_scheme": "titan-n8-r16",
+      "iterations": 50,
+      "structured_payload_bytes": {
+        "min": 292,
+        "max": 295,
+        "mean": 293.5
+      },
+      "valid_payload_policy_experiment": {
+        "accept_count": 50,
+        "total": 50,
+        "accept_rate_pct": 100.0
+      },
+      "field_tampering_policy_experiment": {
+        "reject_count": 150,
+        "total": 150,
+        "reject_rate_pct": 100.0,
+        "breakdown": [
+          {
+            "field": "certificate_digest",
+            "tamper_name": "证书摘要篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "certificate_registry_mismatch",
+            "sample_payload": {
+              "scenario": "quantum_network_node_admission",
+              "certificate_digest": "tampered-cert-0000",
+              "node_id": "qnode-0000",
+              "node_role": "scheduler",
+              "scheduling_domain": "domain-a",
+              "session_timestamp": 1710000000,
+              "handshake_nonce": "a8f5132cc64d5b484e02bbd9278204ad"
+            }
+          },
+          {
+            "field": "node_role",
+            "tamper_name": "节点角色篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "role_not_allowed",
+            "sample_payload": {
+              "scenario": "quantum_network_node_admission",
+              "certificate_digest": "0eff0eb1226da21ee5043c51295079853e45aebca203d310ac32db877ec1cd1b",
+              "node_id": "qnode-0000",
+              "node_role": "observer",
+              "scheduling_domain": "domain-a",
+              "session_timestamp": 1710000000,
+              "handshake_nonce": "a8f5132cc64d5b484e02bbd9278204ad"
+            }
+          },
+          {
+            "field": "scheduling_domain",
+            "tamper_name": "调度域篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "domain_mismatch",
+            "sample_payload": {
+              "scenario": "quantum_network_node_admission",
+              "certificate_digest": "0eff0eb1226da21ee5043c51295079853e45aebca203d310ac32db877ec1cd1b",
+              "node_id": "qnode-0000",
+              "node_role": "scheduler",
+              "scheduling_domain": "domain-z",
+              "session_timestamp": 1710000000,
+              "handshake_nonce": "a8f5132cc64d5b484e02bbd9278204ad"
+            }
+          }
+        ]
+      },
+      "imported_signature_benchmark": {
+        "source_summary": "/Users/daxu/PATENTS/10_TITAN_Tensor_Isomorphism_Trapdoor_Signature/experiments/results/summary.json",
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "verify_success_rate_pct": 100.0,
+        "tampered_message_reject_count": 50,
+        "tampered_message_reject_total": 50,
+        "tampered_message_reject_rate_pct": 100.0,
+        "tampered_signature_reject_count": 50,
+        "tampered_signature_reject_rate_pct": 100.0,
+        "sign_mean_ms": 16.534,
+        "sign_p95_ms": 19.422,
+        "verify_mean_ms": 1.808,
+        "verify_p95_ms": 2.674,
+        "verify_throughput_sig_s": 553.097,
+        "pk_bytes": 512,
+        "sig_bytes": 3104
+      },
+      "sample_valid_payload": {
+        "scenario": "quantum_network_node_admission",
+        "certificate_digest": "0eff0eb1226da21ee5043c51295079853e45aebca203d310ac32db877ec1cd1b",
+        "node_id": "qnode-0000",
+        "node_role": "scheduler",
+        "scheduling_domain": "domain-a",
+        "session_timestamp": 1710000000,
+        "handshake_nonce": "a8f5132cc64d5b484e02bbd9278204ad"
+      }
+    },
+    {
+      "scenario": "AI加速设备固件升级",
+      "scenario_code": "ai_accelerator_firmware_upgrade",
+      "deployment_entry": "可信启动链/升级代理",
+      "mapped_scheme": "titan-n10-r32",
+      "iterations": 50,
+      "structured_payload_bytes": {
+        "min": 232,
+        "max": 232,
+        "mean": 232
+      },
+      "valid_payload_policy_experiment": {
+        "accept_count": 50,
+        "total": 50,
+        "accept_rate_pct": 100.0
+      },
+      "field_tampering_policy_experiment": {
+        "reject_count": 150,
+        "total": 150,
+        "reject_rate_pct": 100.0,
+        "breakdown": [
+          {
+            "field": "device_model",
+            "tamper_name": "设备型号篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "device_model_mismatch",
+            "sample_payload": {
+              "scenario": "ai_accelerator_firmware_upgrade",
+              "device_model": "CM-A200",
+              "firmware_version": "1.2.0",
+              "image_digest": "d4160463830ac3fc8337e9bcefdf87cecc6ca75dd961669e66a461417ab3207b",
+              "rollback_counter": 5,
+              "release_timestamp": 1711000000
+            }
+          },
+          {
+            "field": "image_digest",
+            "tamper_name": "镜像摘要篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "image_digest_registry_mismatch",
+            "sample_payload": {
+              "scenario": "ai_accelerator_firmware_upgrade",
+              "device_model": "CM-A100",
+              "firmware_version": "1.2.0",
+              "image_digest": "tampered-image-0000",
+              "rollback_counter": 5,
+              "release_timestamp": 1711000000
+            }
+          },
+          {
+            "field": "rollback_counter",
+            "tamper_name": "回滚计数器篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "rollback_counter_too_small",
+            "sample_payload": {
+              "scenario": "ai_accelerator_firmware_upgrade",
+              "device_model": "CM-A100",
+              "firmware_version": "1.2.0",
+              "image_digest": "d4160463830ac3fc8337e9bcefdf87cecc6ca75dd961669e66a461417ab3207b",
+              "rollback_counter": 3,
+              "release_timestamp": 1711000000
+            }
+          }
+        ]
+      },
+      "imported_signature_benchmark": {
+        "source_summary": "/Users/daxu/PATENTS/10_TITAN_Tensor_Isomorphism_Trapdoor_Signature/experiments/results/summary.json",
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "verify_success_rate_pct": 100.0,
+        "tampered_message_reject_count": 50,
+        "tampered_message_reject_total": 50,
+        "tampered_message_reject_rate_pct": 100.0,
+        "tampered_signature_reject_count": 50,
+        "tampered_signature_reject_rate_pct": 100.0,
+        "sign_mean_ms": 43.297,
+        "sign_p95_ms": 64.075,
+        "verify_mean_ms": 4.136,
+        "verify_p95_ms": 5.343,
+        "verify_throughput_sig_s": 241.779,
+        "pk_bytes": 1000,
+        "sig_bytes": 9632
+      },
+      "sample_valid_payload": {
+        "scenario": "ai_accelerator_firmware_upgrade",
+        "device_model": "CM-A100",
+        "firmware_version": "1.2.0",
+        "image_digest": "d4160463830ac3fc8337e9bcefdf87cecc6ca75dd961669e66a461417ab3207b",
+        "rollback_counter": 5,
+        "release_timestamp": 1711000000
+      }
+    },
+    {
+      "scenario": "模型发布完整性校验",
+      "scenario_code": "model_release_integrity",
+      "deployment_entry": "模型仓库发布/下载校验代理",
+      "mapped_scheme": "titan-n12-r32",
+      "iterations": 50,
+      "structured_payload_bytes": {
+        "min": 331,
+        "max": 331,
+        "mean": 331
+      },
+      "valid_payload_policy_experiment": {
+        "accept_count": 50,
+        "total": 50,
+        "accept_rate_pct": 100.0
+      },
+      "field_tampering_policy_experiment": {
+        "reject_count": 150,
+        "total": 150,
+        "reject_rate_pct": 100.0,
+        "breakdown": [
+          {
+            "field": "dependency_digest",
+            "tamper_name": "依赖摘要篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "dependency_digest_mismatch",
+            "sample_payload": {
+              "scenario": "model_release_integrity",
+              "model_id": "cm-llm-0000",
+              "weight_digest": "a2efc2892f230e9204cef100b24b231a40f96551dea98f4c6ad4f4826697cf1a",
+              "framework_version": "PyTorch-2.3.1",
+              "target_accelerator": "Ascend-910B",
+              "dependency_digest": "deadbeef",
+              "release_tag": "2026.04.01"
+            }
+          },
+          {
+            "field": "target_accelerator",
+            "tamper_name": "目标加速器篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "accelerator_mismatch",
+            "sample_payload": {
+              "scenario": "model_release_integrity",
+              "model_id": "cm-llm-0000",
+              "weight_digest": "a2efc2892f230e9204cef100b24b231a40f96551dea98f4c6ad4f4826697cf1a",
+              "framework_version": "PyTorch-2.3.1",
+              "target_accelerator": "Ascend-310P",
+              "dependency_digest": "aab4f97ac34cf93fa65e5cc8df4890631a5357dab91b7dfa6152cbcfdd534272",
+              "release_tag": "2026.04.01"
+            }
+          },
+          {
+            "field": "weight_digest",
+            "tamper_name": "权重摘要篡改",
+            "reject_count": 50,
+            "total": 50,
+            "reject_rate_pct": 100.0,
+            "dominant_reason": "weight_digest_registry_mismatch",
+            "sample_payload": {
+              "scenario": "model_release_integrity",
+              "model_id": "cm-llm-0000",
+              "weight_digest": "tampered-weight-0000",
+              "framework_version": "PyTorch-2.3.1",
+              "target_accelerator": "Ascend-910B",
+              "dependency_digest": "aab4f97ac34cf93fa65e5cc8df4890631a5357dab91b7dfa6152cbcfdd534272",
+              "release_tag": "2026.04.01"
+            }
+          }
+        ]
+      },
+      "imported_signature_benchmark": {
+        "source_summary": "/Users/daxu/PATENTS/10_TITAN_Tensor_Isomorphism_Trapdoor_Signature/experiments/results/summary.json",
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "verify_success_rate_pct": 100.0,
+        "tampered_message_reject_count": 50,
+        "tampered_message_reject_total": 50,
+        "tampered_message_reject_rate_pct": 100.0,
+        "tampered_signature_reject_count": 50,
+        "tampered_signature_reject_rate_pct": 100.0,
+        "sign_mean_ms": 50.15,
+        "sign_p95_ms": 54.427,
+        "verify_mean_ms": 4.806,
+        "verify_p95_ms": 6.271,
+        "verify_throughput_sig_s": 208.073,
+        "pk_bytes": 1728,
+        "sig_bytes": 13856
+      },
+      "sample_valid_payload": {
+        "scenario": "model_release_integrity",
+        "model_id": "cm-llm-0000",
+        "weight_digest": "a2efc2892f230e9204cef100b24b231a40f96551dea98f4c6ad4f4826697cf1a",
+        "framework_version": "PyTorch-2.3.1",
+        "target_accelerator": "Ascend-910B",
+        "dependency_digest": "aab4f97ac34cf93fa65e5cc8df4890631a5357dab91b7dfa6152cbcfdd534272",
+        "release_tag": "2026.04.01"
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+ "tol": 0.01,
+ "seqA_diag9_order": {
+  "npu_ref_vs_cpu_truth": 2.384185791015625e-07,
+  "v1_vs_cpu_truth": 0.0010790824890136719,
+  "v4_vs_cpu_truth": 0.0010790824890136719,
+  "v1_vs_npu_ref": 0.0010790824890136719,
+  "v4_vs_npu_ref": 0.0010790824890136719,
+  "v1_vs_v4": 0.0
+ },
+ "seqB_fresh_after_warm": {
+  "npu_ref2_vs_cpu_truth": 2.384185791015625e-07,
+  "v1_vs_cpu_truth": 0.1528615951538086,
+  "v4_vs_cpu_truth": 0.15133631229400635,
+  "v1_vs_npu_ref2": 0.1528615951538086,
+  "v4_vs_npu_ref2": 0.15133631229400635,
+  "v1_vs_v4": 0.193359375
+ },
+ "seqC_ref_first_then_ops": {
+  "npu_ref3_vs_cpu_truth": 2.384185791015625e-07,
+  "v1_vs_cpu_truth": NaN,
+  "v4_vs_cpu_truth": 0.0010790824890136719,
+  "v1_vs_npu_ref3": NaN,
+  "v4_vs_npu_ref3": 0.0010790824890136719,
+  "v1_vs_v4": NaN
+ }
+}

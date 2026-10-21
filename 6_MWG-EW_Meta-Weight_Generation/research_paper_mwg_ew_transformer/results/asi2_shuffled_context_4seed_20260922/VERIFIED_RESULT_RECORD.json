@@ -1,0 +1,72 @@
+{
+  "run_id": "asi2_shuffled_context_4seed_20260922T042246Z",
+  "run_date": "2026-09-22",
+  "completed": true,
+  "seeds": [
+    "2026",
+    "2027",
+    "2028",
+    "2029"
+  ],
+  "n_seeds": 4,
+  "description": "4-seed shuffled-context control experiment. Tests whether context-conditioning in the token_diag_core generator provides measurable benefit over a shuffled-context control, or whether the diagonal core advantage is purely a parameter-count effect.",
+  "summary": {
+    "persistent_low_rank_r384": {
+      "rel_mse_mean": 0.4498,
+      "rel_mse_std": 0.0013,
+      "cosine_mean": 0.7423,
+      "cosine_std": 0.0008
+    },
+    "persistent_low_rank_r401": {
+      "rel_mse_mean": 0.4405,
+      "rel_mse_std": 0.0012,
+      "cosine_mean": 0.7485,
+      "cosine_std": 0.0008
+    },
+    "mwg_token_diag_core_r384": {
+      "rel_mse_mean": 0.4462,
+      "rel_mse_std": 0.0013,
+      "cosine_mean": 0.745,
+      "cosine_std": 0.0008
+    },
+    "mwg_token_diag_core_r401": {
+      "rel_mse_mean": 0.4365,
+      "rel_mse_std": 0.0012,
+      "cosine_mean": 0.7518,
+      "cosine_std": 0.0008
+    },
+    "mwg_shuffled_diag_core_r384": {
+      "rel_mse_mean": 0.4491,
+      "rel_mse_std": 0.0013,
+      "cosine_mean": 0.7428,
+      "cosine_std": 0.0009
+    },
+    "mwg_shuffled_diag_core_r401": {
+      "rel_mse_mean": 0.4397,
+      "rel_mse_std": 0.0012,
+      "cosine_mean": 0.749,
+      "cosine_std": 0.0008
+    },
+    "static_svd_r384": {
+      "rel_mse_mean": 0.8369,
+      "rel_mse_std": 0.0017,
+      "cosine_mean": 0.4107,
+      "cosine_std": 0.0018
+    },
+    "static_svd_r401": {
+      "rel_mse_mean": 0.826,
+      "rel_mse_std": 0.0017,
+      "cosine_mean": 0.4236,
+      "cosine_std": 0.0017
+    }
+  },
+  "key_findings": [
+    "Causal core beats shuffled control at r384: 0.4462 vs 0.4491 (diff 0.0029, ~0.6%)",
+    "Causal core beats shuffled control at r401: 0.4365 vs 0.4397 (diff 0.0032, ~0.7%)",
+    "Shuffled control is close to persistent low-rank at r384: 0.4491 vs 0.4498 (diff 0.0007)",
+    "Shuffled control is close to persistent low-rank at r401: 0.4397 vs 0.4405 (diff 0.0008)",
+    "Context-conditioning provides a small but consistent measurable benefit",
+    "Most of the diagonal core advantage comes from trainable parameters, not context-conditioning",
+    "This directly addresses the reviewer requirement for a shuffled-context control"
+  ]
+}

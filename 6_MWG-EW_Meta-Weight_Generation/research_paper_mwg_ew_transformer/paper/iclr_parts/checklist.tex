@@ -1,0 +1,139 @@
+\section{ICLR 2027 Paper Checklist}
+\label{app:paper-checklist}
+
+(Reminder: this checklist is part of the paper and is required by the venue.)
+
+\subsection*{Claims}
+\begin{itemize}
+  \item \textbf{Question 1}: For all models and algorithms presented, check if you
+  include clear statements of the associated computational costs.
+  [Yes] — the analytic traffic/compute model (Section~\ref{sec:analysis}) and the
+  measured per-arm latencies carry explicit cost expressions and units.
+  \item \textbf{Question 2}: For each experiment, check if you include clear
+  statements of the goals, the hardware and software used, and the amount of
+  compute used.
+  [Yes] — every measured table states the accelerator (Ascend 910B2, CANN 8.5,
+  torch\_npu 2.9), the launcher, process count, and the timing protocol.
+  \item \textbf{Question 3}: For each experiment, check if you include the
+  uncertainty/error bars on results and the number of trials.
+  [Yes] — reported means $\pm$ standard deviation over three launches /
+  five repeats where applicable, with per-launch raw JSON retained.
+  \item \textbf{Question 4}: Check if you provide comparisons with multiple
+  baselines.
+  [Yes] — dense, static SVD, persistent low rank (multiple ranks), the
+  near-equal-budget persistent control (persistent r401 at 48.2~MiB vs.\
+  causal r384 at 48.1~MiB; the r512 cross-rank comparison is explicitly
+  labeled not parameter-matched), and a shuffled-context control are
+  all reported.
+  \item \textbf{Question 5}: Check if you provide a breakdown of the methods
+  by contributions (method, data, compute, infrastructure).
+  [Yes] — the evidence ladder (Table~\ref{tab:evidencemap}) separates the
+  measured mechanism result from analytic and open items.
+  \item \textbf{Question 6}: Check if you discuss the limitations of your work.
+  [Yes] — Discussion and the required-accelerator-validation list scope the
+  causal-quality, branch-skipping, training-lifecycle, and end-to-end limits.
+  \item \textbf{Question 7}: For any theoretical claim, check if you state both
+  its assumptions and its complexity.
+  [Yes] — Propositions are given with explicit algebraic conditions and
+  complexity expressions.
+\end{itemize}
+
+\subsection*{Limitations}
+\begin{itemize}
+  \item \textbf{Question 8}: Check if you include clear statements of any
+  limitations of your work.
+  [Yes] — see Discussion; causal quality is measured (same-rank parity with a
+  trained persistent control at r384, r401, and r512 from one coherent run
+  family, strictly better than static SVD; at the near-equal-budget pair the
+  generated arm carries a $+1.95\%$ relative-MSE penalty, so an adaptive rank
+  allocation—not lifetime—remains the route to exact-budget equality), and the
+  central limitation is that end-to-end benefit and branch-skipping dispatch
+  remain open (mechanism verified on device; the measured v4 multi-core
+  kernel resolves the beyond-L2 kernel-level deficit, up to $3.03\times$
+  faster than v1 at $T{=}4096$).
+\end{itemize}
+
+\subsection*{Theory}
+\begin{itemize}
+  \item \textbf{Question 9}: Check if you include the complexity of any
+  proposed algorithms.
+  [Yes] — Section~\ref{sec:analysis} provides exact closed-form traffic,
+  computation, and working-set expressions.
+  \item \textbf{Question 10}: Check if you list the assumptions of any
+  theoretical work clearly and describe the implications of relaxing them.
+  [Yes] — the break-even analysis states its geometry assumptions and the
+  proposition proofs note where the counts simplify.
+\end{itemize}
+
+\subsection*{Experimental Results}
+\begin{itemize}
+  \item \textbf{Question 11}: Check if you include the code, data, and
+  instructions needed to reproduce the main experimental results.
+  [Yes] — the harness, kernel source, contract-manifest generator, and
+  per-run JSON (with SHA-256) are in the supplementary material and
+  scheduled for public release at acceptance.
+  \item \textbf{Question 12}: Check if you specify all the training details
+  (hyperparameters, schedule, data splits, seeds).
+  [Yes] — the oscillatory/launch configuration, ranks, seeds (2026--2029 for
+  the quality families; earlier three-seed runs are labeled as such where
+  retained), dtype, and frozen hashed data splits are declared in the
+  protocol; every quality-table row is bound to its run family in
+  \texttt{results/REGISTRY.md}.
+  \item \textbf{Question 13}: Check if you report error bars for every
+  experiment, and give a clear explanation of how they were computed.
+  [Yes] — standard-deviation error bars with the number of launches stated
+  per table.
+  \item \textbf{Question 14}: Check if you provide the exact number of
+  evaluation runs and hyperparameter searches performed.
+  [Yes] — the number of launches, warmup/timed iterations, and repeats are
+  stated in each table caption.
+  \item \textbf{Question 15}: Check if you report the average of many
+  runs, or the best run, with a clear explanation.
+  [Yes] — means over repeated launches; the probe arms report medians over
+  repeated full runs with the noise band stated.
+  \item \textbf{Question 16}: When comparing methods, check if you discuss
+  the choice of hyperparameters for all methods.
+  [Yes] — ranks, controller geometry, dtype, and the matched parameter
+  budget are specified for each arm.
+\end{itemize}
+
+\subsection*{Computational Experiments}
+\begin{itemize}
+  \item \textbf{Question 17}: State clearly whether the experiments were
+  performed on a specific and corresponding hardware.
+  [Yes] — all systems measurements are on Ascend 910B2 with the exact
+  CANN/torch\_npu versions stated.
+  \item \textbf{Question 18}: State the number of variants of the
+  experimental system used in the experiments.
+  [Yes] — the four-arm ladder plus the dense/static/persistent controls
+  are enumerated.
+  \item \textbf{Question 19}: State how much total compute time the
+  experiments used.
+  [Yes] — the protocol and evidence ladder report launch counts and the
+  historical compute scope; per-run wall-clock is recorded in the retained
+  logs.
+  \item \textbf{Question 20}: Describe whether the computational experiments
+  use text-based or synthetic data and, if constructed by the authors,
+  whether they are provided.
+  [Yes] — the quality protocol uses named corpora (GSM8K, MBPP, Alpaca,
+  WikiText-103, HellaSwag) with hashed disjoint splits; the systems harness
+  uses declared tensor geometry rather than external data.
+\end{itemize}
+
+\subsection*{Code}
+\begin{itemize}
+  \item \textbf{Question 21}: State clearly whether code is provided and,
+  if so, where/how.
+  [Yes] — code and per-run artifacts are in the supplementary material and
+  scheduled for public release upon acceptance; see also the Data/Code
+  availability statements.
+  \item \textbf{Question 22}: State whether the code is runnable in a
+  documented way (build, dependencies, commands).
+  [Yes] — the kernel build (CMake), harness launchers, and reproduction
+  commands are documented in the supplementary material.
+  \item \textbf{Question 23}: State whether the code will be runnable on
+  standard compute resources.
+  [No / Not fully] — device measurements require an Ascend 910B2 + CANN 8.5
+  host; the analytic and unit-test portions run on standard resources. We
+  state this constraint explicitly.
+\end{itemize}

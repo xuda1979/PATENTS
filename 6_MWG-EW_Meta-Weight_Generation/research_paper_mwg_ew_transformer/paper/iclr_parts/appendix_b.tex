@@ -1,0 +1,1074 @@
+\section{Measured Counter Detail}
+\label{app:counters}
+
+\paragraph{Matched profiler passes.}
+All counter evidence comes from matched \texttt{msprof} op-level aggregation
+passes over the same harness invocation pattern for arms 3 and 4 (same
+geometry, seeds, iteration counts, and warmup). Four metric families were
+collected at the large-$T$ geometry: \texttt{Memory},
+\texttt{L2Cache}, \texttt{PipeUtilization}, and
+\texttt{ArithmeticUtilization}, all returning successfully.
+
+\paragraph{Kernel-level decomposition at $T{=}4096$}
+(Table~\ref{tab:opdecomp}). The fused arm's \texttt{ephemeral} kernel
+(single vector core) accounts for $23.8$~ms of the pass---more than all
+library matmuls of either arm combined ($\approx 9.1$--$9.4$~ms)---while its
+DRAM traffic is output-only. This is the direct counter evidence that (i) the
+no-store mechanism holds (no core write-back appears) and (ii) the remaining
+latency deficit is compute-bound single-core epilogue work, not memory
+traffic---consistent with the ledger, since the two descriptor copies the
+no-store arm eliminates (the $6\,\mathbf 1_{\mathrm{mat}}nr$ term of
+Eq.~\eqref{eq:traffic-ledger}) are small relative to the epilogue compute
+at these shapes, so removing them cannot yet move latency.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Op-level kernel durations (ms) over one matched large-$T$
+profiler pass per arm (op-level aggregation; the \texttt{Memory}-pass
+durations are shown). The \texttt{ephemeral} row exists only in the fused
+arm; the core round-trip rows (\texttt{Tanh}/\texttt{Muls}/\texttt{Adds}
+followed by a cast to global memory) exist only in the materialized arm.}
+\label{tab:opdecomp}
+\begin{tabular}{lrrrr}
+\toprule
+Op & Arm 3 count & Arm 3 ms & Arm 4 count & Arm 4 ms \\
+\midrule
+Matmul (library)      & 190 & 9.01 & 143 & 9.17 \\
+Ephemeral (fused gen+apply) & -- & -- & 57 & 23.82 \\
+Mul (gating)          & 76  & 6.62 & 23  & 6.71 \\
+Cast                  & 78  & 1.30 & 140 & 1.51 \\
+SiLU                  & --  & --   & 40  & 2.75 \\
+Add                   & 76  & 0.53 & 23  & 0.16 \\
+Tanh (core element)   & 57  & 0.57 & --  & -- \\
+Muls (core element)   & 57  & 0.42 & --  & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Toolchain gaps.}
+\texttt{energy\_joules} and \texttt{occupancy\_percent} are not exposed by
+the \texttt{Memory}/\texttt{PipeUtilization} metric families on this CANN
+build (8.5); we document this as a toolchain gap, not a skipped measurement.
+Op-level L2 byte counters report zero under this \texttt{msprof} version's
+summary even when L2 traffic demonstrably occurs; L2 residency at probe
+geometry is therefore established through the \texttt{Memory}-pass DRAM
+byte totals (both arms' working sets L2-resident; fused-arm DRAM traffic
+output-only), not through L2 counters.
+
+\paragraph{Counter-file provenance.}
+Per-pass summaries were pulled from the measurement host with SHA-256
+verification; the verified extracts are the evidence of record, and raw
+JSON remains on the host. The publication-format record keeps
+\texttt{no\_store\_claim\_ready=false} only because the energy/occupancy
+fields above are unavailable from this \texttt{msprof} build---the
+no-store property itself is directly counter-verified through the absence
+of core write-back traffic and core round-trip ops in the fused trace.
+
+\section{Historical Systems Tables}
+\label{app:histtables}
+
+Tables~\ref{tab:lifetimeablation}, \ref{tab:quality}, \ref{tab:scalingsweep}, and \ref{tab:statecomm} below preserve
+the historical eight-process microbenchmark and the separate synthetic
+all-reduce payload sizing for completeness; Section~\ref{sec:results}
+explains their interpretive boundary. The conditioning ablation
+(Table~\ref{tab:lifetimeablation}, main text) holds base-factor rank fixed
+but skips controller/rescaling execution in the unconditioned arm, so the
+arms are not compute- or state-identical; even with that caveat the
+direction is unambiguous---conditioning/materialization is costly in the
+unfused prototype.
+
+\begin{table}[h]
+\centering
+\caption{Historical eight-process forward--backward microbenchmark at
+$(d,m)=(4096,14336)$ and $(B,S)=(2,512)$.  Mean$\pm$standard deviation over
+three launches; each launch ran three warmup iterations followed by ten
+forward and three training timing iterations.  DDP synchronization and
+optimizer steps are excluded.}
+\label{tab:scalingsweep}
+\begin{tabular}{rrrr}
+\toprule
+Rank & F+B ms & Speedup vs. dense & Tokens/s \\
+\midrule
+Dense & $5.528^{\dagger}$ & $1.000\times$ & 1.482M \\
+64  & $3.409\pm0.100$ & $1.622\pm0.059\times$ & 2.405M \\
+128 & $3.375\pm0.069$ & $1.638\pm0.030\times$ & 2.428M \\
+256 & $3.429\pm0.083$ & $1.612\pm0.029\times$ & 2.390M \\
+384 & $3.379\pm0.069$ & $1.636\pm0.029\times$ & 2.425M \\
+\bottomrule
+\end{tabular}
+\\[-1mm]
+{\footnotesize $^{\dagger}$Dense aggregate reconstructed from the archived
+means and speedup ratios; its per-launch raw JSON and launch-level deviation
+are unavailable.}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{DDP-synchronized training step on 4$\times$Ascend~910B2 at the
+8B-scale geometry $(d,m)=(4096,14336)$, $B{=}2,S{=}512$ (fresh ASI2 run,
+2026-09-22).  Each timed step is zero-grad, forward, squared loss, backward,
+\emph{with} DistributedDataParallel gradient all-reduce firing (bucket cap
+25~MiB); the elementwise optimizer update is excluded from the timed region
+and, when included, differs across arms (Table~\ref{tab:ddptrainopt}:
+$8.97$~ms dense vs.\ $1.0$--$1.3$~ms low-rank arms).  Three repeats of
+five measured iterations; barrier and device
+synchronize around every iteration; max-over-ranks timing.}
+\label{tab:ddptrain}
+\begin{tabular}{lrr}
+\toprule
+Arm & Sync.\ train ms & Speedup vs.\ dense \\
+\midrule
+Dense & $15.230\pm0.186$ & $1.000\times$ \\
+MWG r32  & $4.888\pm0.178$ & $3.116\times$ \\
+MWG r64  & $4.829\pm0.199$ & $3.154\times$ \\
+MWG r128 & $4.873\pm0.125$ & $3.126\times$ \\
+MWG r256 & $4.803\pm0.137$ & $3.171\times$ \\
+MWG r384 & $5.071\pm0.139$ & $3.003\times$ \\
+MWG r512 & $5.306\pm0.095$ & $2.870\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Optimizer-inclusive DDP-synchronized training step on
+4$\times$Ascend~910B2 at the 8B-scale geometry $(d,m)=(4096,14336)$,
+$B{=}2,S{=}512$ (fresh ASI2 run, 2026-09-23).  Each timed step is zero-grad,
+forward, squared loss, backward \emph{with} DistributedDataParallel gradient
+all-reduce (bucket cap 25~MiB) \emph{and} the elementwise AdamW update
+($\mathrm{lr}{=}10^{-3}$, no weight decay).  Three repeats of five measured
+iterations; barrier and device synchronize around every iteration;
+max-over-ranks timing.}
+\label{tab:ddptrainopt}
+\begin{tabular}{lrr}
+\toprule
+Arm & Opt-incl.\ sync.\ train ms & Speedup vs.\ dense \\
+\midrule
+Dense & $24.591\pm0.596$ & $1.000\times$ \\
+MWG r32  & $6.095\pm0.294$ & $4.034\times$ \\
+MWG r64  & $6.153\pm0.486$ & $3.997\times$ \\
+MWG r96  & $6.526\pm0.938$ & $3.768\times$ \\
+MWG r128 & $6.011\pm0.100$ & $4.091\times$ \\
+MWG r192 & $5.940\pm0.120$ & $4.140\times$ \\
+MWG r256 & $5.984\pm0.214$ & $4.109\times$ \\
+MWG r384 & $5.989\pm0.201$ & $4.106\times$ \\
+MWG r512 & $7.292\pm1.263$ & $3.372\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Synchronized-DDP training step.}
+The historical sweeps above time local forward--backward without gradient
+synchronization.  Table~\ref{tab:ddptrain} adds the synchronized
+measurement: a real \texttt{DistributedDataParallel} step on four
+processes,
+where backward's gradient all-reduce is included in the timed region.  The
+dense arm pays a $3.0\times$ synchronization premium ($15.23$ vs.\ $5.02$~ms
+unsynchronized) because its $3dm$ gradient volume dominates the collective;
+the low-rank arm's $r(d+m)$ gradient volume keeps the synchronized step at
+$4.8$--$5.3$~ms, a $2.87\times$--$3.17\times$ speedup over dense.  The
+speedup decreases with rank (r512 is lowest at $2.87\times$) as the
+low-rank gradient volume approaches the dense communication cost, exactly
+as the traffic model of Section~\ref{sec:analysis} predicts.
+
+\paragraph{Optimizer-inclusive synchronized step.}
+Table~\ref{tab:ddptrainopt} extends the synchronized measurement to the
+complete training step, adding the elementwise AdamW update inside the timed
+region.  The update does \emph{not} cancel across arms: dense pays
+$8.97$~ms to update its $3dm$ parameters against $1.0$--$1.3$~ms for the
+low-rank arm's $r(d{+}m)$ parameters, so the optimizer-inclusive speedup
+widens to $3.37\times$--$4.14\times$ (r192 highest; r512 lowest, where its
+larger gradient volume and update cost approach dense's communication
+regime).
+
+\begin{table}[h]
+\centering
+\caption{Element-first state accounting and separate eight-process synthetic
+all-reduce latency.  Factors use fp16; the legacy controller uses fp32.  The
+collective is a proxy, not an integrated DDP step or HBM measurement.}
+\label{tab:statecomm}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & Factor elems. (M) & Ctrl. elems. (M) & Factor MiB & Ctrl. MiB & Total MiB & AR ms \\
+\midrule
+Dense & 176.161 & 0 & 336.000 & 0 & 336.000 & 6.91 \\
+Rank 64  & 3.539 & 1.148 & 6.750 & 4.377 & 11.127 & 1.15 \\
+Rank 128 & 7.078 & 1.246 & 13.500 & 4.754 & 18.254 & 1.28 \\
+Rank 256 & 14.156 & 1.444 & 27.000 & 5.508 & 32.508 & 1.42 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\section{Eligibility Routing Details}
+\label{app:routing}
+
+The deployable per-call decision is
+\begin{equation}
+g_{\routebudget}(x)=
+\left(\mathbf 1\{\widehat R(x)<\tau_{\routebudget}\}
++\mathbf 1\{\widehat R(x)=\tau_{\routebudget}\}h_{\routebudget}(x)\right)
+\mathbf 1\{\widehat R(x)\le\Delta_{\max}\},
+\label{eq:router}
+\end{equation}
+where the keyed tie rule $h_{\routebudget}$ depends only on a stable call
+identifier, not future calls. The realized test or deployment rate need not
+equal the calibration rate and must be reported with uncertainty. A scheduler
+may rank only an already-present concurrent dispatch window if it needs a hard
+instantaneous cap; it may not inspect future calls.
+
+\begin{proposition}[Budgeted value and safety conditions]
+\label{prop:budget}
+Let $S_{\routebudget}=\{x:g_{\routebudget}(x)=1\}$ for complete dispatchable
+calls. Suppose each selected generated call saves $s_r$ bytes or communication
+units relative to the dense call, and let $o_r$ be the router, launch, staging,
+and any dense-residency overhead paid per candidate call. The expected net
+systems saving per candidate call is
+\begin{equation}
+\Pr[x\in S_{\routebudget}]s_r-o_r.
+\end{equation}
+Quality preservation additionally requires both a predeclared mean
+non-inferiority margin $\delta_{\rm NI}$ and tail-risk limit:
+\begin{equation}
+\E[\Delta(x)\mid x\in S_{\routebudget}]\le\delta_{\rm NI},\qquad
+\Pr[\Delta(x)>\epsilon\mid x\in S_{\routebudget}]\le\alpha.
+\end{equation}
+Mean safety alone cannot exclude severe tail failures; high quantiles and
+worst-domain results must therefore accompany the aggregate.
+\end{proposition}
+\begin{proof}
+The expected selected-call saving is
+$\E[g_{\routebudget}(x)s_r]=\Pr[x\in S_{\routebudget}]s_r$; $o_r$ is paid for
+every candidate call regardless of the routing decision. The two quality
+inequalities are evaluation requirements rather than consequences of the
+systems identity.  Their estimates require confidence intervals or calibrated
+risk guarantees on disjoint data.
+\end{proof}
+
+\section{Approximation Analysis}
+\label{app:approx}
+
+\begin{proposition}[Frobenius-error FFN distortion bound]
+\label{prop:approx}
+View $X$ as the tokens in one group on which each approximating matrix
+$\widetilde W_p$ is fixed.  Let $A=\phi(XW_{\mathrm{gate}})$,
+$B=XW_{\mathrm{up}}$, $\widetilde A=\phi(X\widetilde W_{\mathrm{gate}})$, and
+$\widetilde B=X\widetilde W_{\mathrm{up}}$.  Suppose
+$\norm{W_p-\widetilde W_p}_F\le\delta_p$ for
+$p\in\{g,u,d\}$, $\phi$ is elementwise $L_\phi$-Lipschitz,
+$\norm{B}_{\max}\le M_u$, and
+$\norm{\widetilde A}_{\max}\le M_g$. Then
+\begin{equation}
+\norm{Y-\widetilde{Y}}_F
+\le \norm{W_d}_2\norm{X}_2
+  \left(M_uL_\phi\delta_g+M_g\delta_u\right)
+  + \norm{\widetilde A\odot\widetilde B}_2\delta_d.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Write $C=A\odot B$ and
+$\widetilde C=\widetilde A\odot\widetilde B$.  Then
+\begin{align}
+\norm{C-\widetilde C}_F
+&\le \norm{(A-\widetilde A)\odot B}_F
+   +\norm{\widetilde A\odot(B-\widetilde B)}_F \\
+&\le M_u\norm{A-\widetilde A}_F
+   +M_g\norm{B-\widetilde B}_F \\
+&\le \norm{X}_2(M_uL_\phi\delta_g+M_g\delta_u),
+\end{align}
+using $\norm{X\Delta W}_F\le\norm{X}_2\norm{\Delta W}_F$.
+Finally,
+$Y-\widetilde Y=(C-\widetilde C)W_d
++\widetilde C(W_d-\widetilde W_d)$.  Apply
+$\norm{PQ}_F\le\norm{P}_F\norm{Q}_2$ to the first term and
+$\norm{PQ}_F\le\norm{P}_2\norm{Q}_F$ to the second.
+\end{proof}
+
+\begin{corollary}[Truncated-SVD specialization]
+\label{cor:rankapprox}
+For nonzero $W_p$, let
+\begin{equation}
+E_r(W_p)=\frac{\sum_{i=1}^{r}\sigma_i(W_p)^2}{\norm{W_p}_F^2}
+\end{equation}
+be the retained singular-value energy of $W_p$ at rank $r$.  For the rank-$r$
+truncated SVD,
+\begin{equation}
+\delta_p=\norm{W_p-W_p^{(r)}}_F
+=\norm{W_p}_F\sqrt{1-E_r(W_p)}.
+\end{equation}
+Substitution into Proposition~\ref{prop:approx} expresses each approximation-
+error term through retained Frobenius energy; the activation and operator-norm
+factors in the bound remain data dependent.  For a token-conditioned $q=1$
+core, the proposition applies token by token and can be aggregated over groups.
+By Eckart--Young--Mirsky, this SVD is
+optimal among rank-at-most-$r$ approximations for unweighted fixed-matrix
+Frobenius error.  A data-conditioned model may optimize activation-weighted or
+task loss instead, but this elementary sensitivity bound establishes neither
+learnability, generalization, router predictability, nor a systems--quality
+tradeoff.
+\end{corollary}
+
+
+
+\section{Analytic Reuse Break-even Table}
+\label{app:regimecall}
+
+\begin{table}[h]
+\centering
+\caption{Analytic reuse break-even at $B{=}1,S{=}1024$ for the systems
+geometry $(d,m,r)=(4096,14336,128)$ and the quality geometry
+$(1536,8960,384)$.  $\Gamma_{\mathrm{call}}$ is the full-factor base-only
+ratio of Eq.~\eqref{eq:full-factor-call};
+$\rho_{\mathrm{core}}^{\mathrm{logical}}$ is the diagonal-core ratio of
+Eq.~\eqref{eq:core-payload}.  Bold rows are the first $q$ at which
+$\Gamma_{\mathrm{call}}<1$.  All values are optimistic logical payloads
+that omit controller, source-state, and bank traffic; none is an HBM
+measurement.}
+\label{tab:regimecall}
+\begin{tabular}{rrrrr}
+\toprule
+$q$ & $\lceil S/q\rceil$ & $\Gamma_{\mathrm{call}}$ (8B) & $\Gamma_{\mathrm{call}}$ (1.5B) & $\rho_{\mathrm{core}}^{\mathrm{logical}}$ (8B / 1.5B) \\
+\midrule
+1   & 1024 & 41.14 & 299.89 & 0.0424 / 0.3214 \\
+8   & 128  & 5.14  & 37.49  & 0.0405 / 0.2964 \\
+32  & 32   & 1.29  & 9.37   & 0.0402 / 0.2938 \\
+\textbf{43}  & 24  & \textbf{0.96} & 7.03   & 0.0402 / 0.2935 \\
+128 & 8    & 0.32  & 2.34   & 0.0402 / 0.2931 \\
+\textbf{342} & 3   & 0.12  & \textbf{0.88} & 0.0402 / 0.2929 \\
+512 & 2    & 0.08  & 0.59   & 0.0402 / 0.2929 \\
+1024& 1    & 0.04  & 0.29   & 0.0402 / 0.2929 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Causal Replacement: Legacy Redundancy}
+\label{app:causal}
+
+\begin{proposition}[Redundancy of paired diagonal scales]
+For $s,s'\in\R^r$, the legacy projection
+$((xU)\odot s\odot s')V$ depends on $(s,s')$ only through
+$z=s\odot s'$.  Hence it has no more representational power than
+Eq.~\eqref{eq:diag-core} and is non-identifiable under
+$(s,s')\mapsto(s\odot c,s'\oslash c)$ for componentwise nonzero $c$.
+\end{proposition}
+\begin{proof}
+Associativity and commutativity of elementwise multiplication give the first
+claim; the stated transformation preserves every component of $s\odot s'$.
+\end{proof}
+
+\paragraph{Scope of the claim.}
+This proposition removes \emph{one} explicitly described redundancy: the
+legacy paired-scale factorization.  It does not make the complete redesigned
+parameterization identifiable.  When the factors are trained, any invertible
+componentwise scaling $c\in\R^{r}$ with $U\mapsto U\,\mathrm{diag}(c)$ and
+$V\mapsto V\,\mathrm{diag}(c)^{-1}$ preserves the projection
+$y=(xU)\,\mathrm{diag}(z)\,V$, because componentwise diagonal matrices commute
+with the diagonal core.  We therefore claim only the removal of the paired-scale
+redundancy, not full identifiability of the factors.
+
+The legacy \texttt{token\_expert\_residual} mode remains loadable only for
+checkpoint compatibility.  Its soft mixture evaluates every expert and offers
+no conditional-compute saving.  A $6r$ controller head cannot in general be
+converted into an equivalent affine $3r$ head, so the redesigned mode requires
+fresh training.  The current tests validate its information boundary and
+algebra, not model quality, kernel fusion, branch skipping, or physical HBM
+traffic.
+
+\paragraph{Measured multi-seed causal quality.}
+We trained the causal diagonal-core core and its controls on four disjoint
+seeds (2026/2027/2028/2029) over frozen, hash-bound, numerically near-duplicate-free
+train/dev/test splits (zero exact and near-duplicate cross-split overlap),
+each on layer~16 of Qwen2.5-1.5B \cite{qwen2025qwen25} in fp32, 5000 steps,
+and evaluated each once
+on an untouched test split.
+\paragraph{Activation extraction protocol.}
+The splits derive from five public text suites (GSM8K test, MBPP test, the
+tail of the cleaned Alpaca training set, WikiText-103 validation, and
+HellaSwag validation; 1234 source records), shuffled once with a fixed seed
+(20260823) and split 50/25/25 into 630/300/303 train/dev/test rows.  Deduplication
+precedes the split: Unicode NFKC normalization, whitespace collapse, case
+folding, masking of numeric substrings, 4-gram profiles with a 0.82
+near-duplicate threshold (1 record removed, zero cross-split near-duplicate
+links).  Split SHA-256 hashes and per-suite row counts are frozen in
+\texttt{data/quality/manifest.json}; the test policy (no test use for
+training, layer/rank/checkpoint selection, or early stopping) was written
+before fitting.  Hidden states are the layer-16 FFN inputs of the instruct
+model on raw text rows, max 315 training batches of batch size 1 and 128
+evaluation batches, teacher targets taken from the dense FFN output; the
+fp32 fitting loss is relative MSE reconstruction of that output.  This is a
+single-layer frozen-teacher protocol: it does not measure perplexity,
+generation quality, or any end-to-end language-model behavior, and none of
+its conclusions transfer to those settings (see the evidence map,
+Table~\ref{tab:evidencemap}). The dense teacher control is exact
+(relative-MSE $0$, cosine $1$) in every report, the reports are marked
+\texttt{evidence\_mode} under the \texttt{ASI2} label, and every checkpoint
+and report fingerprint is verified. Table~\ref{tab:causalquality-app}
+reports the mean$\pm$std over seeds. All quality tables in this appendix are
+regenerated from a single coherent run family
+(\texttt{asi2\_rank512\_control\_20260922T080042Z}) by
+\texttt{scripts/make\_tables.py}, which refuses to mix rows from different
+runs; the run ID is printed in every caption
+(see \texttt{results/REGISTRY.md}).
+
+\paragraph{Cross-family reconciliation.}
+An earlier version of Tables 10--12 mixed rows from three distinct
+executions (the rank-512 control run, the shuffled-context run of the same
+date, and a 2026-09-20 closing run), which is why numbers such as
+persistent r384 $0.4458$ or $0.4498$ appeared in different tables: they are
+values from different run families, not contradictory measurements of one
+run.  The registry binds each family (run ID, seeds, code hash, record
+SHA-256) and marks every cross-family combination deprecated; the retained
+families are kept as independent replications, and all paper
+tables now draw exclusively from the canonical family above.  The retained
+replications confirm \emph{parity}, not a directional edge: each family's
+paired causal$-$persistent difference is within $0.0014$ relative MSE of
+zero, but the sign of that sub-margin difference is \emph{not} stable across
+families (Family~1 favors the causal core by $-0.0007$ to $-0.0008$ at
+r384/r401; the closing-pull family favors the persistent control by
+$+0.0005$), so no directional causal-quality claim is made.
+
+\input{generated_tables/table10_causalquality}
+
+\paragraph{Predeclared non-inferiority margin.}
+Because a non-significant difference is not evidence of equivalence, all
+parity claims below are evaluated against a predeclared practical
+non-inferiority margin $\delta_{\rm NI}=0.005$ relative MSE
+($\approx1\%$ of the persistent control's error): the 95\% confidence
+interval of the paired per-seed difference must lie inside
+$[-\delta_{\rm NI},+\delta_{\rm NI}]$ for a parity claim to be made, and
+seeds are treated as the unit of independence (four paired observations,
+$t(3)$ intervals).  The margin was fixed before the coherent-family rebuild
+and applies uniformly to every comparison in this subsection.
+
+Three findings follow, all from the single coherent family. First, the
+\emph{generated} diagonal core reaches \emph{same-rank parity} with a trained
+persistent low-rank factor: its relative-MSE $0.4489\pm0.0013$ and cosine
+$0.7429\pm0.0009$ match the persistent r384 control ($0.4496\pm0.0014$,
+$0.7424\pm0.0009$); the paired per-seed difference is $-0.00075\pm0.00038$
+with 95\% CI $[-0.00136,-0.00015]$ ($t(3){=}-3.94$, n.s.\ at $n{=}4$), and
+the interval lies inside the predeclared margin
+$[-0.005,+0.005]$, so the parity claim is interval-based rather than
+inferred from non-significance. A core generated on the fly and
+never stored thus obtains the same fitted quality as a persistent weight of the
+same rank, so the ephemeral no-store contract need not trade away
+representation quality at matched rank. Second, the trained low-rank path is
+essential: at the same rank both the generated core and the persistent control
+are markedly better than a frozen static-SVD baseline ($0.449$ vs.\ $0.837$ at
+r384, $0.383$ vs.\ $0.754$ at r512). Third, at the near-equal-budget pair the
+persistent r401 control (48.2~MiB) is better than the generated r384 core
+(48.1~MiB): $0.4403$ vs.\ $0.4489$, $+1.95\%$ relative MSE for the generated
+arm. This residual gap does \emph{not} close at matched rank: the generated
+core trained at the same rank ($r{=}401$) matches persistent r401 in
+reconstruction ($0.4395$ vs.\ $0.4403$, paired difference
+$-0.00080\pm0.00041$), and at $r{=}512$ likewise ($0.3820$ vs.\ $0.3833$),
+but because the generated core carries controller and diagonal overhead it
+uses more parameters at equal rank (50.2 vs.\ 48.2~MiB at r401), so the
+equal-parameter comparison retains a penalty that same-rank parity does not
+remove; whether an adaptive rank allocation can close it is untested. The
+causal claim is a
+positive equal-rank parity result across three ranks, with an honest
+$+1.95\%$ penalty at the near-equal-budget (48.1 vs.\ 48.2~MiB) comparison.
+
+\paragraph{Shuffled-context control.}
+A reviewer asked whether the generator's context-conditioning actually
+matters, or whether the diagonal core's benefit is purely a parameter-count
+effect.  We tested this by training a \emph{shuffled-context control}:
+the same \texttt{token\_diag\_core} architecture, but with the generator's
+input permuted across the batch dimension so that each token sees a random
+other token's hidden state.  The actual projection still uses the real $x$;
+only the generator's conditioning context is shuffled.
+
+Table~\ref{tab:shuffled} reports the 4-seed result, drawn from the same run
+family as Table~\ref{tab:causalquality-app} (a previous version of this table
+mixed rows from two different runs; the mixed-source numbers, including a
+$0.0029$ ``causal edge,'' are deprecated and must not be cited). Within the
+coherent family the context-conditioning effect is small: at r384 the paired
+causal$-$shuffled difference is $-0.00021\pm0.00003$ with 95\% CI
+$[-0.00026,-0.00015]$ ($t(3){=}-12.31$, causal better in all four seeds), at
+r401 $-0.00020\pm0.00004$ with 95\% CI $[-0.00026,-0.00013]$
+($t(3){=}-10.13$), and at r512 $+0.00002\pm0.00002$ with 95\% CI
+$[-0.00001,+0.00006]$ ($t(3){=}{+}2.50$, n.s.): about $0.05\%$ of MSE
+at r384/r401, an order of magnitude smaller than the deprecated mixed-source
+figure. At r512 the interval straddles zero and its upper bound
+($+0.00006$) is two orders of magnitude inside $\delta_{\rm NI}$, so
+\emph{the causal core shows no context-conditioning advantage over the
+shuffled control at r512} --- a negative result we state plainly. The
+shuffled control sits between the
+causal core and the persistent baseline at r384/r401 but coincides with the
+causal core at r512. Most of the diagonal-core advantage comes from the
+trainable per-token correction itself, not from context-dependent generation.
+This is an honest negative-leaning finding: the conditional generation
+mechanism is not yet the primary quality driver at this scale, and the
+controller-vs-quality question remains unfavorable to the method at this
+scale.
+
+\input{generated_tables/table11_shuffled}
+
+\paragraph{Rank-512 control.}
+A rank-512 persistent baseline tests whether the
+generated core's quality is simply a capacity effect.  We reran the identical
+protocol with a third rank, 512, for all three arms in the same run family
+(four seeds, same teacher, splits, and hyperparameters; \texttt{md5} of the
+harness unchanged).
+Table~\ref{tab:rank512control} reports the result. Two conclusions follow.
+First, same-rank parity persists at the new rank: the causal diagonal core
+($0.3820\pm0.001$) matches persistent low rank ($0.3833\pm0.001$), with the
+paired per-seed difference $-0.00132\pm0.00004$ and 95\% CI
+$[-0.00138,-0.00125]$ (paired $t(3){=}-65.9$: statistically resolvable but
+inside the predeclared $\delta_{\rm NI}=0.005$ margin, causal better in all
+four seeds; the interval-based statement is practical parity, not
+equivalence). Second,
+and decisively, a persistent factor at rank 512 beats the generated core at
+rank 384 by $14.6\%$ relative MSE ($0.3833$ vs.\ $0.4489$; paired
+$t(3){=}-514$, $p{<}10^{-3}$): raw rank dominates the small same-rank
+generation advantage, so the diagonal core cannot substitute for capacity,
+and the ephemerality value proposition must rest on bandwidth/lifetime, not
+on quality. We note that this cross-rank comparison is \emph{not}
+parameter-matched (61.5 vs.\ 48.1~MiB, a $27.9\%$ storage delta); the only
+near-equal-budget pair is persistent r401 vs.\ causal r384 (48.2 vs.\
+48.1~MiB), which favors persistent by $+1.95\%$ relative MSE (see
+Table~\ref{tab:causalquality-app} narrative). The static-SVD row ($0.7541$
+at r512) confirms that training, not rank alone, drives the observed
+quality.
+
+\input{generated_tables/table12_rank512control}
+
+\section{Traffic Ledger}
+\label{app:ledger}
+
+\begin{equation}
+L_{\mathrm{sched}}=
+e_{UV}\,3r(d+m)+e_G P_G+e_K P_{\mathrm{bank}}(K)
++c_xTd+3nr+6\,\mathbf 1_{\mathrm{mat}}nr,
+\label{eq:traffic-ledger}
+\end{equation}
+where $e_{UV},e_G,e_K$ are recorded load multiplicities, $P_G$ is controller
+state, $P_{\mathrm{bank}}(K)$ is any persistent basis/expert bank,
+$c_x$ counts extra source-state passes, and $\mathbf 1_{\mathrm{mat}}$ marks a
+global store plus reload of the $3nr$ core values. This ledger includes
+scratch-level values and is still not an HBM prediction: cache hits can suppress
+durable reads, while allocator, activation, and writeback traffic add terms.
+
+\section{Complexity Details}
+\label{app:complexity}
+
+\paragraph{Element-first parameter accounting.}
+The dense FFN has $3dm$ trainable elements.  The canonical diagonal-core model
+has $3r(d+m)$ persistent factor elements plus $P_G$ controller elements; the
+generated $3nr$ core values are runtime intermediates, not optimizer
+parameters.  With gradient element width $e_g$, the unsharded all-reduce
+payload is $e_g[3r(d+m)+P_G]$.  A legacy bank of $K$ persistent rank-$r_e$
+residual experts adds $3Kr_e(d+m)$ elements, and soft routing does not skip
+their execution.  The canonical method sets $K=0$.  State tables report these
+element classes separately before applying fp16 factor and fp32 controller
+widths; no mixed-dtype total is labeled simply ``fp16.''
+
+\paragraph{Computational complexity.}
+The dense gated FFN performs three large matrix products:
+$\mathcal{C}_{\mathrm{dense}} = \Theta(3Tdm)$ MACs. The associative
+\mwg{} path computes $XU_r$ and then $ZV_r$ for the up, gate, and down
+projections: $\mathcal{C}_{\mathrm{mwg,assoc}} = \Theta(3Tr(d+m))$. For
+diagonal cores, core application adds $\Theta(3Tr)$ elementwise work and the
+controller is evaluated $n=B\lceil S/q\rceil$ times under batch-isolated
+grouping: $\mathcal{C}_{\mathrm{diag}}=\Theta(3Tr(d+m)+3Tr+nC_G)$. Full
+factor synthesis instead emits $\Theta(3nr(d+m))$ values before the same
+associative projection work. A legacy soft mixture of $K$ rank-$r_e$ experts
+evaluates all $K$ residual paths; mixture weights alone do not sparsify that
+work. Consequently $\Gamma(r)$ is only the leading persistent-factor compute
+ratio. Small GEMMs, controller launches, and poor utilization can dominate,
+as suggested by the nearly rank-flat historical timings.
+
+\paragraph{Working-set complexity.}
+The dense persistent state is $\Theta(3dm)$ elements per layer, whereas the
+core method stores $\Theta(3r(d+m)+P_G)$ durable elements. Its diagonal core
+has only $3r$ live values per group. Full factor synthesis would instead need
+$\Theta(3r(d+m))$ live descriptor values, or a smaller tile-local subset.
+These are logical working sets. Only an address-range trace and device
+counters can establish that a generated core remained on chip.
+
+\section{Break-even Proposition and Proof}
+\label{app:breakeven}
+
+\begin{proposition}[Exact full-factor reuse break-even]\label{prop:breakeven}
+Let $\gamma=\Gamma(r)<1$ and
+$n_{\max}=\lceil1/\gamma\rceil-1$.  Set
+$g_{\max}=\lfloor n_{\max}/B\rfloor$.  Under the optimistic one-copy
+accounting, a batch-isolated strict reduction exists exactly when
+$g_{\max}\ge1$, and then $\Gamma_{\mathrm{call}}(r,q)<1$ exactly when
+\begin{equation}
+q\ge q_{\min}:=
+\left\lceil\frac{S}{g_{\max}}\right\rceil.
+\end{equation}
+If $\gamma\ge1$ or $g_{\max}<1$, no within-example reuse group gives a
+strict base-payload reduction.
+\end{proposition}
+\begin{proof}[Proof of Proposition~\ref{prop:breakeven}]
+$\Gamma_{\mathrm{call}}<1$ is equivalent to
+$B\lceil S/q\rceil<1/\gamma$, hence to
+$B\lceil S/q\rceil\le n_{\max}$.  This requires
+$\lceil S/q\rceil\le\lfloor n_{\max}/B\rfloor=g_{\max}$ and is equivalent to
+the stated integer threshold when $g_{\max}\ge1$.
+\end{proof}
+
+\section{Lifecycle Figure}
+\label{app:lifecycle}
+
+\begin{figure}[h]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\footnotesize,
+  node distance=7mm and 9mm,
+  every node/.style={align=center},
+  dur/.style={draw=black!60,rounded corners=2pt,inner sep=4pt,fill=black!4},
+  gen/.style={draw=blue!60!black,rounded corners=2pt,inner sep=4pt,fill=blue!8},
+  ker/.style={draw=green!50!black,rounded corners=2pt,inner sep=4pt,fill=green!8},
+  rel/.style={draw=red!60!black,rounded corners=2pt,inner sep=4pt,fill=red!8},
+  arr/.style={-{Stealth[length=2mm]},thick,black!70},
+  lab/.style={font=\scriptsize\itshape,black!70},
+  box/.style={draw=black!30,rounded corners=3pt,inner sep=6pt},
+]
+\node[dur] (hbm) {HBM: durable\\$U_p,V_p,\theta$};
+\node[dur, right=of hbm] (l2) {L2 / cache\\staging};
+\node[gen, right=of l2] (gen) {Generator\\$G_\theta(c_{\mathcal G})$};
+\node[ker, right=of gen] (core) {SRAM / scratch\\$M_{p,\mathcal G}$, $r{\times}r$ diag.\\$r$ scalars / projection};
+\node[ker, right=of core] (fmm) {Fused FFN\\$((XU)M)V$};
+\node[rel, right=of fmm] (rel) {Overwrite};
+
+\draw[arr] (hbm) -- node[lab,above]{persistent reads} (l2);
+\draw[arr] (l2) -- (gen);
+\draw[arr] (l2.north) to[bend left=18] node[lab,above]{basis reads} (fmm.north);
+\draw[arr] (gen) -- node[lab,above]{emit} (core);
+\draw[arr] (core) -- node[lab,above]{consume} (fmm);
+\draw[arr] (fmm) -- (rel);
+
+\begin{scope}[on background layer]
+\node[box,fit=(hbm)(l2)] {};
+\node[box,fit=(gen)(core)(fmm)(rel)] {};
+\end{scope}
+
+\draw[arr,dashed,red!60!black] (core.south) .. controls +(0,-8mm) and +(0,-8mm) ..
+  node[lab,below,midway]{forbidden core store} (hbm.south);
+\draw[arr,dashed,blue!60!black] (hbm.north) .. controls +(0,14mm) and +(0,14mm) ..
+  node[lab,above,midway]{training replay / rematerialization (measured at FFN level)} (gen.north);
+\end{tikzpicture}
+}
+\caption{Target memory hierarchy and lifecycle, not a measured implementation
+of this hardware hierarchy. Persistent factors and generator weights may be
+read from HBM through cache; the generated core is confined to the fused
+invocation.  The red dashed path is forbidden by the inference contract.  The
+blue path is the separate training-rematerialization option, measured at the
+FFN level (Table~\ref{tab:lifecycle}) but not yet inside the fused kernel.}
+\label{fig:lifecycle}
+\end{figure}
+
+\section{Deployment Regimes}
+\label{app:regimes}
+
+\begin{table}[h]
+\centering
+\caption{Deployment regimes.  The canonical method uses $K=0$ residual
+experts; any $K>0$ adds durable expert reads and, under soft routing, evaluates
+all experts.}
+\label{tab:regimes}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}}
+\toprule
+Workload & Call tokens $T$ & Causal reuse $q$ & Principal constraint \\
+\midrule
+Prefill & $BS$, $S>1$ & $q=1$ for token-local cores; larger $q$ needs a prefix-safe shared context & Full factors require large reuse; diagonal cores keep generation small \\
+Cached decode & active batch $B$, $S=1$ & Usually one core per active sequence state & Launch/controller cost can dominate; report latency and continuous-batch throughput \\
+Continuous batching & variable $B$ & Grouping only if semantics permit a shared core & Report regrouping, staging, and whole-call dispatch overhead \\
+Training & $BS$ & Model-dependent & Recompute-in-backward measured: $24.5\times$--$71.8\times$ saved-footprint reduction at exact gradient equality (Table~\ref{tab:lifecycle}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Mechanism-Level Positioning Table}
+\label{app:positioning}
+
+Related-work positioning at the mechanism level (Section~\ref{sec:related}):
+
+\begin{table}[h]
+\centering
+\caption{Closest mechanism-level comparisons.  Entries state what each
+cited work \emph{reports} about its own implementation; ``n/r'' (not
+reported) marks a capability the cited paper does not address and is
+\emph{not} evidence of absence.  ``Measured'' reflects the four-arm probe
+of Table~\ref{tab:fourarmmeasured} (fused no-store execution with matched
+profiler passes); ``Target'' marks the one remaining column (branch skip)
+not yet realized.}
+\label{tab:positioning}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}ccc}
+\toprule
+Method & Generated object & Persistent state & Fusion & Skip & HBM counters \\
+\midrule
+HyperGrid & Grid-wise projection controls & Hypernetwork / base model & n/r & n/r & n/r \\
+Ouroboros & Diagonal LoRA modulation & Frozen SVD-LoRA bases & n/r & n/r & n/r \\
+FlashMHF & Subnetwork mixture weights & FFN subnetworks & Reported & n/r & n/r \\
+MoE family & Expert index / weights & Expert banks & Varies & Reported & Varies \\
+This work & Diagonal low-rank core & $U_p,V_p,G_\theta$ & Measured & Target & Partial \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Historical single-process conditioning ablation, averaged over
+ranks 32--512.  Retained as design exploration only: its non-causal
+controller and overlapping evaluation invalidate any quality or routing
+interpretation (Appendix~\ref{app:audit-provenance}).  Speedups use each
+launch family's dense control; the timing
+protocol matches the eight-process sweep (three warmup, ten forward, and
+three training iterations per launch).}
+\label{tab:lifetimeablation}
+\begin{tabular}{lrr}
+\toprule
+Execution arm & Mean F+B ms & Mean speedup \\
+\midrule
+Conditioned/materialized factors & 3.28 & $1.51\times$ \\
+Persistent-factor execution & 1.53 & $3.22\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Corrected historical \emph{layer-0} reconstruction diagnostic on
+Qwen2.5-1.5B.  fp32 parameter sizes are shown.}
+\label{tab:quality}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Rank & Rel. MSE & Cosine & Params MiB \\
+\midrule
+Static SVD & 64 & 0.989 & 0.133 & 7.688 \\
+Persistent low rank & 64 & 0.967 & 0.226 & 7.688 \\
+Rank-scale prototype & 64 & 0.967 & 0.226 & 9.096 \\
+Static SVD & 128 & 0.972 & 0.188 & 15.375 \\
+Persistent low rank & 128 & 0.943 & 0.257 & 15.375 \\
+Rank-scale prototype & 128 & 0.943 & 0.257 & 17.066 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Artifact Separation}
+\label{app:artifacts}
+
+\begin{table}[h]
+\centering
+\caption{Target, historical benchmark, and causal prototype are distinct.}
+\label{tab:artifact-separation}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}}
+\toprule
+Artifact & Weight-like object & Evidential role \\
+\midrule
+Ephemeral-core target & Persistent $U_p,V_p$; generated structured $M_{p,\mathcal G}$ in scratch & Proposed inference operator; fused no-store kernel measured on device (Section~\ref{sec:systems}) \\
+Systems benchmark & Persistent low-rank $U_p,V_p$ and an ordinary scale head & Measures scoped forward--backward speed; cannot attribute benefit to lifetime \\
+Causal software mode & Token-local diagonal cores over persistent $U_p,V_p$ & Tests prefix/batch invariance and algebra; trained multi-seed quality measured (Table~\ref{tab:causalquality-app}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conditional Memory-Bound Speedup}
+\label{app:speedup}
+
+\begin{proposition}[Conditional memory-bound speedup]
+\label{prop:speedup}
+Assume $L_d=C_d+\kappa\traffic_d$ and
+$L_m=C_m+\kappa\traffic_m$, where $C_d$ and $C_m$ include their respective
+launch, control-generation, and compute costs. Then the generated path is
+faster exactly when
+\begin{equation}
+C_m-C_d < \kappa(\traffic_d-\traffic_m).
+\end{equation}
+If both non-memory terms are negligible and
+$\rho_{\mathrm{call}}=\traffic_m/\traffic_d$, the limiting speedup is
+$1/\rho_{\mathrm{call}}$.
+\end{proposition}
+\begin{proof}
+Rearranging $L_m<L_d$ gives the stated inequality. When $C_d$ and $C_m$
+vanish relative to their memory terms, $L_d/L_m$ tends to
+$\traffic_d/\traffic_m=1/\rho_{\mathrm{call}}$.
+\end{proof}
+
+\section{Four-Arm Measurement Figures}
+\label{app:fourarmfig}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figs/fourarm_ladder.pdf}
+\caption{Measured four-arm evidence (data from the runs behind
+Table~\ref{tab:fourarmmeasured}; medians over $200$ timed iterations
+$\times$ 5 repeats). (a) At the probe geometry ($T{=}128$, working set
+L2-resident by the DRAM-byte criterion of Appendix~\ref{app:counters}),
+the shipped fused no-store arm sits at parity with the
+materialized arm (final shipped confirmation: fused $0.823$~ms vs.\
+materialized $0.851$~ms, i.e.\ $3.2\%$ faster; the $\pm3\%$ band straddles
+$1.0\times$ across repeated full runs)---once host work is amortized there
+is no residual device penalty for generating and consuming the core
+on chip. (b) At $T{=}4096$ the logical per-projection core ($2$~MiB
+fp32, $r{=}128$) exceeds the
+$192$~KiB per-core UB (L2 residency inferred from DRAM byte totals, not
+L2 counters; UB overflow is not evidence of L2 overflow, and the exact
+L2 capacity is not separately measured); the v1-kernel fused arm is
+$1.93\times$ slower, and matched
+profiler passes
+localize the deficit to the single-core epilogue
+(Figure~\ref{fig:opdecomp}), not to core write-back traffic, which is
+absent in the fused trace at both geometries. (The measured v4
+multi-core rewrite of Section~\ref{sec:systems} resolves this deficit:
+bit-identical to v1, $3.03\times$ faster at this geometry.)}
+\label{fig:fourarm}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\linewidth]{figs/op_decomp.pdf}
+\caption{Op-level kernel durations over matched large-$T$
+\texttt{msprof} passes (Appendix~\ref{app:counters},
+Table~\ref{tab:opdecomp}). The fused arm's \texttt{ephemeral}
+generation+apply kernel runs on a single vector core and costs more than
+all library matmuls of either arm combined, while its DRAM traffic is
+output-only: the no-store property is directly visible, and the scaling
+deficit is compute-bound epilogue work---the target of the v4
+multi-core M-distributed epilogue design.}
+\label{fig:opdecomp}
+\end{figure}
+
+\section{Four-Arm Table}
+\label{app:fourarms}
+
+\begin{table}[h]
+\centering
+\caption{Four-arm comparison.  The decisive lifetime contrast is arm
+3 versus arm 4, not dense versus low rank.}
+\label{tab:four-arms}
+\begin{tabular}{clll}
+\toprule
+Arm & Persistent projection state & Generated object & Execution \\
+\midrule
+1 & Dense $W_p$ & none & Dense kernels \\
+2 & Low-rank $U_p,V_p$ & none & Ordinary factor kernels \\
+3 & Same $U_p,V_p,\theta$ as arm 4 & $M_{p,\mathcal G}$ & Global-memory materialization \\
+4 & Same $U_p,V_p,\theta$ as arm 3 & Same $M_{p,\mathcal G}$ & Fused scratch-only, no store \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Measured Training Lifecycle}
+\label{app:training-lifecycle}
+
+The generated diagonal core is a deterministic function of its pre-FFN input,
+so backward can recompute it from a replayed input instead of materializing
+and saving its intermediate activations.  We measured both lifecycles on the
+NPU (Ascend 910B2, single-FFN, three seeds each): \emph{materialize-and-save}
+(standard autograd) versus \emph{recompute-in-backward} (gradient
+checkpointing).  Table~\ref{tab:lifecycle} reports the saved-for-backward
+activation footprint, the trainer-visible peak allocator, and the
+gradient-equality check.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Measured FFN-level training lifecycle on Ascend 910B2 (three seeds
+per config, all matching exactly).  Column $B,S$ is the batch and sequence
+length; all configs use $(2,64)$ except the $146.98$-MiB row at $(4,128)$.
+Recompute-in-backward cuts the
+saved-for-backward activation footprint by $24.5\times$--$71.8\times$ relative
+to materialize-and-save, with exact gradient equality ($\max$ abs diff $0.0$)
+in all 12 trials.  Peak allocator is comparable at these single-FFN shapes; the
+recompute path trades a small recompute-FLOP overhead for the large
+saved-footprint reduction.  Single-layer scoped, matching the paper's scope;
+full-model peak memory and end-to-end training benefit remain open.}
+\label{tab:lifecycle}
+\begin{tabular}{ccccrrr}
+\toprule
+$d$ & $m$ & $r$ & $B,S$ & save (MiB) & recompute (MiB) & reduction \\
+\midrule
+1536 & 8960 & 384 & $2,64$ & $86.04$ & $1.50$ & $57.4\times$ \\
+1536 & 8960 & 384 & $4,128$ & $146.98$ & $6.00$ & $24.5\times$ \\
+1536 & 8960 & 512 & $2,64$ & $107.76$ & $1.50$ & $71.8\times$ \\
+2048 & 11008 & 384 & $2,64$ & $107.70$ & $2.00$ & $53.9\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+To verify the depth-scaling claim that the saved-for-backward footprint
+grows with model depth, we measured recompute-in-backward across a stack of
+$N\!\in\!\{1,4,8,16\}$ matched pure FFN layers at both geometries
+(Table~\ref{tab:lifecycle-depth}, Ascend 910B2).  The per-layer footprint
+reduction is the geometric constant $(d{+}m)/d$---$6.38\times$ at
+$d{=}2048,m{=}11008$ and $6.83\times$ at $d{=}1536,m{=}8960$---and is
+\emph{independent of depth}, so the recompute advantage does not shrink in
+deeper models.  Because the materialize-and-save footprint grows linearly with
+$N$ while recompute stays at $N{\cdot}d$, the absolute bytes saved increase
+monotonically with depth (e.g.\ at $N{=}16$ a stack spares $70$~MiB of
+saved-for-backward activation per pass at $d{=}1536$, and $86$~MiB at
+$d{=}2048$).  Gradient equality is
+exact ($0.0$) in all 8 multi-layer configurations (single seed), so the
+memory saving does not perturb training dynamics at any depth.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Measured training lifecycle across a stack of $N$ matched FFN layers
+(Ascend 910B2, $B{=}2$, $S{=}64$, fp32; \textsc{v2}, 2026-09-13).
+\emph{Save} is the materialize-and-save saved-for-backward activation
+footprint, \emph{recompute} that under recompute-in-backward.  The per-layer
+reduction $(d{+}m)/d$ is depth-independent; the absolute footprint saved
+grows linearly with depth $N$.  Gradient max-abs difference $=0.0$ in all 8
+configurations (single seed).}
+\label{tab:lifecycle-depth}
+\begin{tabular}{cccrrr}
+\toprule
+$d$ & $m$ & $N$ & save (MiB) & recompute (MiB) & reduction \\
+\midrule
+1536 & 8960 & 1 & $5.12$ & $0.75$ & $6.83\times$ \\
+1536 & 8960 & 4 & $20.50$ & $3.00$ & $6.83\times$ \\
+1536 & 8960 & 8 & $41.00$ & $6.00$ & $6.83\times$ \\
+1536 & 8960 & 16 & $82.00$ & $12.00$ & $6.83\times$ \\
+2048 & 11008 & 1 & $6.38$ & $1.00$ & $6.38\times$ \\
+2048 & 11008 & 4 & $25.50$ & $4.00$ & $6.38\times$ \\
+2048 & 11008 & 8 & $51.00$ & $8.00$ & $6.38\times$ \\
+2048 & 11008 & 16 & $102.00$ & $16.00$ & $6.38\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The saved-for-backward activation budget---the quantity that scales with
+depth, batch, and sequence---is reduced by $24.5\times$--$71.8\times$.
+Because gradient equality is exact, the saving does not perturb learning
+dynamics.  Scope: this is a saved-tensor accounting reduction, not a measured
+peak-memory reduction; at these single-FFN shapes the trainer-visible peak
+allocator is comparable between the two paths, and complete-Transformer peak
+memory (attention saved tensors, allocator behavior) is not measured here.  This closes the
+FFN-level training-lifecycle item; the fused kernel's own training path
+(retained context and generator recomputation inside the fused op, plus a
+synchronized optimizer step) remains scoped future work, and the strict
+principal contract stays inference-only.
+
+\section{v4 Multi-Core Epilogue Design}
+\label{app:v4design}
+
+This appendix carries the full design detail of the v4 multi-core
+epilogue summarized in Section~\ref{sec:systems}; the projections below
+predate the decisive measurement and are retained as written, with the
+measured decisive result recorded in the closing paragraph.
+
+\paragraph{Failure mode of the archived v3 attempt and the v4 redesign.}
+The v3 N-distribution attempt and its aicore-exception-507015 failure
+under sequential launches are summarized in Section~\ref{sec:systems};
+the root cause was the KFC matmul workspace shared across cores without
+isolation, causing write--read collisions on back-to-back calls.  The
+redesigned v4 kernel addresses both the v1 bottleneck and this failure
+mode through the three coordinated mechanisms summarized in
+Section~\ref{sec:systems}, detailed here:
+
+\begin{enumerate}
+  \item \emph{M-only multi-core distribution.}  Each AICore handles a
+    disjoint range of $M$-tiles (tokens) with \texttt{baseN} pinned to~$r$
+    (no N-split), so all cores share the same $B$ (weight) and bias tensors
+    in global memory.  The host computes
+    $\texttt{block\_dim}=\min(\lceil T/\texttt{baseM}\rceil,\,8)$ and each
+    core's tile range from \texttt{GetBlockIdx()}/\texttt{GetBlockNum()}.
+    Because the $M$-dimension is token-aligned, there is no cross-core
+    synchronization and no inter-core data dependency.  \texttt{baseM} is
+    halved from~128 to~64 to fit the double-buffered UB budget (see below).
+
+  \item \emph{Per-core workspace isolation.}  The host allocates
+    $\texttt{block\_dim}\times\texttt{per\_core\_ws}$ bytes of workspace,
+    and each core's \texttt{REGIST\_MATMUL\_OBJ} receives a unique,
+    non-overlapping slice at $\texttt{workspace}+\texttt{blockIdx}\times
+    \texttt{per\_core\_ws}$.  This eliminates the shared-workspace
+    collision that caused the v3 fault, at the cost of ${\sim}8\times$ more
+    workspace memory (still $<\!1$~MiB total at the probe geometry).
+
+  \item \emph{Double-buffered UB pipelining.}  All three queues (matmul
+    $C$ output, activation staging, final output) use
+    \texttt{BUFFER\_NUM=2}, enabling cube$\to$vector overlap within each
+    core: while the vector unit processes tile~$i$'s epilogue
+    (\texttt{Tanh}/\texttt{Muls}/\texttt{Adds}/\texttt{Mul}/\texttt{Cast}),
+    the cube unit begins tile~$i{+}1$'s matmul into the alternate buffer.
+    At \texttt{baseM}$=64$, $r=128$, $H=128$, the per-tile UB footprint is
+    $2\times(C\;\text{32\,KiB}+\text{act 16\,KiB}+\text{out 16\,KiB})
+    +\text{matmul staging}\sim\text{32\,KiB}\approx\text{160\,KiB}$,
+    within the 192~KiB UB per core on the 910B2.
+\end{enumerate}
+
+\paragraph{How the restructuring resolves the bottleneck.}
+The v1 bottleneck has three independent causes, and the v4 design addresses
+each in a distinct way.  \emph{(i) Serial cube$\to$vector dependency.}  In v1,
+\texttt{GetTensorC} blocks until the entire $C$ tile is in UB before
+\texttt{Tanh} can begin; at $T{=}4096$ this serializes $32$ tiles.  The
+$\sim$2~ms per-tile figure recorded in the v1 profiler pass is the
+profiler-attributed aggregate across the full call (all tiles), not the
+per-tile wall time; per-tile wall time is $\sim$60--80~$\mu$s, consistent
+with the measured 2.682~ms total.  The double-buffered UB pipeline
+(\texttt{BUFFER\_NUM=2}) breaks this dependency: the cube unit writes
+tile~$i{+}1$ into buffer~B while the vector unit consumes tile~$i$ from
+buffer~A, so the two units execute concurrently after a one-tile warm-up.
+The expected per-core speedup from pipelining alone is ${\sim}1.8\times$
+(the vector epilogue and cube matmul have comparable latency at the
+\texttt{baseM}$=64$ tile size).  \emph{(ii) Single-core vector
+utilization.}  In v1, \texttt{block\_dim}$=1$ leaves 7 of 8 AICores idle
+during the epilogue.  The M-only multi-core distribution assigns
+$\lceil T / (\texttt{baseM}\times 8)\rceil$ tiles per core, so all 8~cores
+execute their own cube+vector pipelines in parallel.  Because the
+$M$-dimension is token-aligned, no inter-core synchronization barrier is
+needed---each core writes its disjoint output rows directly to global
+memory.  The expected parallel speedup is ${\sim}3$--$4\times$ (sub-linear
+in 8$\times$ core count due to shared-$B$ L2 read contention).
+\emph{(iii) No room to double-buffer at v1's tile size.}  A previous
+version of this appendix stated that v1 materializes the full $T\times r$
+$C$ matrix in UB before the epilogue begins; that description was wrong and
+has been regenerated from the audited kernel source.  The v1 kernel tiles
+$T$ at \texttt{BASE\_M}$=128$ and holds \emph{one} $128\times r$ fp32 $C$
+tile ($64$~KiB at $r{=}128$) in a depth-1 buffer at a time---the full $C$
+is never resident.  The genuine constraint is that at \texttt{BASE\_M}$=128$
+a second $C$ buffer does not fit: two $64$~KiB buffers are $128$~KiB before
+activation staging, output, and matmul scratch, exceeding the 192~KiB UB,
+so v1 cannot double-buffer and the cube and vector units remain fully
+serial per tile.  The v4 design halves the tile to \texttt{baseM}$=64$
+($32$~KiB per $C$ buffer), which is precisely what makes double-buffering
+affordable: the per-tile UB footprint is
+$64\times128\times4\,\text{B}=32$~KiB for~$C$, plus 16~KiB each for the
+activation staging and output buffers, totaling ${\sim}160$~KiB with
+double-buffering---within the 192~KiB budget.  The combined effect of
+pipelining (${\sim}1.8\times$) and multi-core parallelism
+(${\sim}3$--$4\times$) yields the projected ${\sim}5$--$7\times$ end-to-end
+speedup over v1.
+
+The no-store contract is preserved: each core reads its token slice of
+$X_{\mathrm{ctrl}}$ and the rank activation from global memory, computes the
+matmul and epilogue entirely in UB, and writes only the final fp16 output
+to global memory.  No intermediate core tensor---the $C$ matrix, the
+$\tanh$-scaled intermediate, or the bias-corrected result---is ever written
+to HBM.  The v4 kernel source and benchmark harness are archived in
+\texttt{custom\_ops/ephemeral\_core\_apply/torch\_ext/v4\_multicore/}.
+
+\paragraph{Measured decisive result (2026-10-08) and remaining risk.}
+The design projected ${\sim}5$--$7\times$ over v1 at $T{=}4096$
+(sub-linear in core count due to shared-$B$ L2 contention), which would
+bring the fused arm from $1.93\times$ \emph{slower} than materialization
+to ${\sim}2.5$--$3.5\times$ \emph{faster}.  The measured decisive run on
+ASI2 (hardened harness: two-phase bit-stable reference, NaN attribution,
+per-config retry; 30 warmup/200 iterations/5 repeats per config) returned:
+v4 is algebraically identical to v1 ($\max|\Delta_{v1-v4}|=0$ at every
+config; both at the fp16 rounding floor against the reference), with
+speedups of $1.13\times$ ($T{=}128$), $1.38\times$ ($512$), $1.71\times$
+($1024$), $2.14\times$ ($2048$), and $3.03\times$ ($4096$).  The
+direction is confirmed and the ${\sim}2\times$ viability threshold is
+cleared at $T\ge2048$, but the magnitude falls short of the projection,
+consistent with partial L2-contention saturation from 8~cores reading the
+same $B$~tensor concurrently.  Remaining risks: (a)~UB capacity at
+larger~$r$ (the 160~KiB budget is tight at $r=128$ but would overflow at
+$r\ge 256$ without further tiling), and (b)~the 1000-call sequential
+stability check at $T{=}4096$ (the v3 failure mode) ended in an
+environment-level NaN transient in its unhardened comparison path---the
+hardened five-config equivalence run above was clean, so this is
+recorded as an open stability question, not a kernel defect.
+

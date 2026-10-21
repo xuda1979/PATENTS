@@ -1,0 +1,145 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setstretch{1.5}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{现有技术检索报告}
+\fancyfoot[C]{\thepage}
+\title{\textbf{现有技术检索报告}\\[0.5em]\Large 基于边缘 AI 微秒级突发流量预测的无固定时隙量子与经典光信号动态共纤时分复用系统及方法}
+\author{申请主体待补充}
+\date{2026年3月31日}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{检索参数 / Search Parameters}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+检索日期 & 2026年3月31日 \\
+\hline
+数据库 & Google Patents、USPTO、WIPO、EPO、公开论文数据库 \\
+\hline
+关键词 & QKD classical coexistence same fiber、traffic prediction、Raman noise、optical switch quantum insertion \\
+\hline
+\end{tabular}
+
+\subsection{使用的关键词 / Keywords Used}
+\begin{itemize}
+\item 英文关键词：QKD classical coexistence same fiber，time division multiplexing quantum classical，optical traffic prediction machine learning，Raman noise QKD。
+\item 中文关键词：量子与经典同纤共存，量子经典时分复用，光网络流量预测，拉曼散射量子密钥分发，高速光开关量子插入。
+\end{itemize}
+
+\section{A类：基础性现有技术 / Category A: Foundational Prior Art}
+\subsection{A1. 量子与经典同纤共存}
+公开文献已经较充分说明同纤共存和拉曼噪声抑制是明确工程问题，但未公开基于 AI 的动态窗口生成。
+
+\subsection{A2. CV-QKD 与经典数据共存}
+CV-QKD 与经典数据共存在长距现网中具有现实可行性，但未公开固定时隙之外的预测驱动窗口控制。
+
+\subsection{A3. 同纤复用专利}
+同纤量子经典传输和抑制拉曼噪声已有长期专利布局，但未公开边缘 AI 微秒级窗口预测闭环。
+
+\section{B类：相关应用现有技术 / Category B: Related Application Prior Art}
+\subsection{B1. 固定时隙或衰减方法}
+通过静态参数和衰减策略进行共纤复用属于相邻方案，但不具备无固定时隙的在线窗口生成。
+
+\subsection{B2. 多芯或多模共存}
+多芯、多模或 few-mode fiber 共存方案说明降低噪声的工程目标明确，但依赖空间或波长隔离，不涉及时间窗预测。
+
+\subsection{B3. 光网络资源调度}
+AI 预测可用于光网络资源分配，但现有公开未面向量子链路，也未引入量子侧反馈。
+
+\section{C类：实现与控制现有技术 / Category C: Implementation and Control Prior Art}
+\subsection{C1. 光网络流量预测}
+光网络短期流量预测已经是成熟研究方向，但未与量子插入窗口和光层执行器耦合。
+
+\subsection{C2. 高速门控与时间控制}
+高速光开关或门控在超短时间尺度控制中可行，但现有公开未与量子侧 QBER 闭环耦合。
+
+\section{D类：场景与产品化现有技术 / Category D: Deployment and Product Prior Art}
+\subsection{D1. 量子侧反馈优化}
+量子链路基于 QBER 或成钥率的策略调整方向存在，但未公开与 AI 预测驱动窗口生成一体化实现。
+
+\subsection{D2. 控制器软件化落地}
+控制器软件、光层执行器和运维日志均有工程基础，但尚未看到把这些环节全部围绕无固定时隙量子插入统一组织的公开。
+
+\section{E类：专利检索结果 / Category E: Patent Search Results}
+\subsection{USPTO 检索结果}
+代表性结果包括 US12132829B2（Combining QKD and classical communication）和 US20110019823A1。其相似度主要落在同纤复用与拉曼噪声抑制层面。
+
+\subsection{EPO 检索结果}
+欧洲方向可检出同纤共存论文与专利，以及光网络预测类公开，但尚未发现无固定时隙闭环控制的统一方案。
+
+\subsection{CNIPA 检索结果}
+国内可检出量子通信与经典网络融合方向以及智能光网络资源调度方向，但未公开边缘 AI 与量子侧反馈的完整耦合。
+
+\section{新颖性分析 / Novelty Analysis}
+\subsection{创新点 A：微秒级短期预测}
+光网络预测已知，但把预测目标限定为量子插入可用窗口未见公开。
+
+\subsection{创新点 B：无固定时隙窗口}
+同纤共存和固定时隙 TDM 已知，但非周期窗口在线生成未见同构公开。
+
+\subsection{创新点 C：光层执行与经典整形}
+高速门控器件已知，但与预测结果直接耦合执行量子插入未见统一公开。
+
+\subsection{创新点 D：量子侧反馈闭环}
+QBER 反馈在 QKD 系统中常见，但驱动下一轮窗口预测和保护间隔调整未见同构公开。
+
+\subsection{创新点 E：保守回退}
+回退机制本身常见，但针对本系统的触发条件和回退路径可形成从属保护。
+
+\subsection{创新点 F：可取证日志}
+多数文献不关注产品证据链，本申请将计划、执行和反馈日志统一纳入证据体系。
+
+\section{可专利性评估 / Patentability Assessment}
+\begin{itemize}
+\item 新颖性：中上。未见单一公开覆盖预测、执行和量子反馈闭环。
+\item 创造性：中。需应对“QKD 同纤、AI 预测、光开关”组合论证。
+\item 实用性：明确。可优先在机房短距和城域关键链路部署。
+\item 公开充分：可补强。建议补充特征采样粒度、保护间隔和回退阈值。
+\end{itemize}
+
+\section{权利要求差异化矩阵 / Claim Differentiation Matrix}
+\begin{tabular}{|p{2.8cm}|p{3.8cm}|p{3.8cm}|p{2.8cm}|}
+\hline
+特征 & 本申请 & 相邻技术 & 差异 \\
+\hline
+调度形态 & 无固定时隙、在线生成 & 固定时隙或静态参数 & 更贴合突发流量 \\
+\hline
+控制核心 & 边缘 AI 预测 & 人工或静态配置 & 实现短期窗口感知 \\
+\hline
+闭环信号 & QBER 或成钥率反馈 & 经典业务指标 & 量子侧直接参与控制 \\
+\hline
+执行层 & 光层门控加经典整形 & 仅滤波或波长隔离 & 系统调度能力更强 \\
+\hline
+\end{tabular}
+
+\section{关键区别特征 / Key Distinguishing Features}
+\begin{enumerate}
+\item 以量子插入可用窗口为预测对象，而非一般流量预测。
+\item 采用非周期、可变长度窗口，避免固定时隙浪费。
+\item 用光层门控器件和经典整形执行预测结果。
+\item 利用 QBER 或成钥率形成反馈闭环。
+\item 保留可用于取证和审计的计划与执行日志。
+\end{enumerate}
+
+\section{建议申请策略 / Recommended Filing Strategy}
+\begin{enumerate}
+\item 主权利要求突出“预测对象、窗口生成规则和量子反馈闭环”。
+\item 从属权利要求覆盖特征集合、执行器件、回退条件和日志字段。
+\item 可准备控制器软件版和系统集成版两套权利要求。
+\item 避免把创新点写成一般 AI 预测，应始终落到量子插入窗口调度。
+\end{enumerate}
+
+\section{结论 / Conclusion}
+同纤量子经典共存和光网络 AI 预测各自已有充分公开，但尚未发现将两者结合为“无固定时隙量子插入窗口在线生成”并辅以量子侧反馈闭环的完整系统方案。本申请具有明显的系统调度特征，但在正式申请中需要把预测对象、执行时序和反馈变量限定清楚。
+\end{document}

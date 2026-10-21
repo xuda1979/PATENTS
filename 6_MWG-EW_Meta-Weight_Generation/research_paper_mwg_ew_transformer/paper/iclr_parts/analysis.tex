@@ -1,0 +1,169 @@
+\section{Analysis}
+\label{sec:analysis}
+
+\subsection{Traffic Scaling}
+
+\paragraph{Scope.} The following are element or logical-payload counts, not
+counter measurements; cache reuse, activations, allocator behavior, and
+stores can change physical traffic.
+
+A dense gated FFN contains $3dm$ weight elements.  The canonical core method
+has $3r(d+m)$ persistent factor elements.  Causal, batch-invariant groups do
+not cross unrelated examples, so throughout the primary accounting
+\begin{equation}
+n(B,S,q)=B\left\lceil\frac{S}{q}\right\rceil,
+\qquad 1\le q\le S.
+\label{eq:batch-isolated-groups}
+\end{equation}
+An implementation that deliberately shares a core across examples must declare
+that different semantic contract; it may not silently replace
+Eq.~\eqref{eq:batch-isolated-groups} by $\lceil BS/q\rceil$.  Diagonal cores
+add $3nr$ generated scalars, giving the optimistic one-factor-read logical ratio
+\begin{equation}
+\rho_{\mathrm{core}}^{\mathrm{logical}}(r,q)
+=\frac{3r(d+m)+3nr}{3dm}
+=\Gamma(r)+B\left\lceil\frac{S}{q}\right\rceil\frac{r}{dm}.
+\label{eq:core-payload}
+\end{equation}
+This lower bound omits $G_\theta$, source-state traffic, and cache effects; a
+global-memory implementation that stores and later loads each core adds two
+core copies, which the fused no-store target removes. At $T{=}1024,q{=}1$,
+Eq.~\eqref{eq:core-payload} is $0.0424$ for $(d,m,r)=(4096,14336,128)$ and
+$0.3214$ for $(1536,8960,384)$---analytic ratios, not claimed HBM
+reductions.
+
+For the regime sweep, the more complete scheduled-element ledger
+$L_{\mathrm{sched}}$ (Eq.~\eqref{eq:traffic-ledger},
+Appendix~\ref{app:ledger}) records load multiplicities, controller/bank
+state, source-state passes, and a materialized store-plus-reload term; it
+is still not an HBM prediction, so each measurement must plot both ledger
+components and counter bytes and report the residual.
+
+Generating complete factor pairs for every group emits $3nr(d+m)$ elements
+with base-only ratio
+\begin{equation}
+\Gamma_{\mathrm{call}}(r,q)=
+B\left\lceil\frac{S}{q}\right\rceil\Gamma(r),\qquad
+\Gamma(r)=\frac{r(d+m)}{dm},
+\label{eq:full-factor-call}
+\end{equation}
+the feasibility boundary for full factor synthesis---not the accounting of
+the chosen diagonal-core method.
+
+A batch-isolated strict reduction exists exactly when
+$g_{\max}=\lfloor n_{\max}/B\rfloor\ge1$ with
+$n_{\max}=\lceil1/\gamma\rceil-1$, and then
+$\Gamma_{\mathrm{call}}(r,q)<1$ exactly when
+$q\ge q_{\min}=\lceil S/g_{\max}\rceil$
+(Proposition~\ref{prop:breakeven}, Appendix~\ref{app:breakeven}).
+For $B=1,S=1024$, the systems geometry has $\gamma=9/224$ and requires
+$q\ge43$; the quality geometry has $\gamma=41/140$ and requires $q\ge342$.
+At $q=1$ their ratios are $41.14$ and $299.89$. These optimistic thresholds
+exclude controller, source-state, and basis-bank traffic; a materialized
+store-plus-load is worse. Large $q$ also changes model semantics unless the
+shared context is causal for every token in the group.
+
+Figure~\ref{fig:regimemap} and Appendix Table~\ref{tab:regimecall} evaluate
+these thresholds across the reuse range. The diagonal-core ratio stays
+essentially at $\Gamma(r)$ for every $q$: its generated term
+$n r/(dm)$ contributes at most $0.0022$ (8B) and $0.0286$ (1.5B) at $q{=}1$,
+decaying as $1/q$, whereas full factor synthesis needs $q\ge43$ and
+$q\ge342$ before a base-only payload reduction exists. Controller,
+source-state, and bank traffic move every break-even to larger $q$, and any
+$q>1$ additionally requires a prefix-safe shared context; plotting measured
+latency and counter traffic against these curves is a required sweep
+(Section~\ref{sec:results}).
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.42\linewidth]{figs/regime_map.pdf}
+\caption{Analytic reuse break-even (Table~\ref{tab:regimecall}) as a
+curve family. Full factor synthesis pays a per-call payload that scales as
+$\lceil S/q\rceil$ and only crosses break-even at $q\ge43$ (8B geometry)
+or $q\ge342$ (1.5B geometry); the diagonal-core payload stays essentially
+at $\Gamma(r)$ for every $q$. All curves are optimistic logical payloads,
+not HBM measurements.}
+\label{fig:regimemap}
+\end{figure}
+
+Batch isolation moves these thresholds along $B$: the 8B geometry
+($n_{\max}=24$) requires $q\ge342$ at $B=8$ and admits a reduction only for
+$B\le24$; the 1.5B geometry ($n_{\max}=3$) requires $q\ge1024$ for
+$B\in\{2,3\}$ and none for $B\ge4$, so larger batches make full-factor
+synthesis strictly harder (deployment regimes in Appendix~\ref{app:regimes}).
+A conditional memory-bound speedup condition (Proposition~\ref{prop:speedup},
+Appendix~\ref{app:speedup}) states the generated path is faster exactly when
+$C_m-C_d<\kappa(\traffic_d-\traffic_m)$; the fused-arm measurement
+(Section~\ref{sec:systems}) is the direct device-level test of the
+$C$-terms in that inequality.
+
+\paragraph{Granularity of routing and the dense weight fetch.}
+The dense weights can be skipped only if patched and unpatched tokens are
+separated into \emph{different kernel invocations}; if they are mixed inside
+one invocation, the dense weights are fetched anyway and only the patched
+tokens' MAC count is saved. Let $p_{\mathrm{call}}$ denote the fraction of
+\emph{whole invocations} sent to the generated path. Under an optimistic
+invocation-granularity model, the idealized weight-read mixture is
+\begin{align}
+\label{eq:routedtraffic}
+\traffic_{\mathrm{routed}}(p_{\mathrm{call}})
+&= (1-p_{\mathrm{call}})\,\traffic_{\mathrm{dense}}
+  + p_{\mathrm{call}}\,\traffic_{\mathrm{desc,call}}\nonumber\\
+&= \bigl[(1-p_{\mathrm{call}})
+  + p_{\mathrm{call}}\,\rho_{\mathrm{desc,call}}\bigr]
+  \traffic_{\mathrm{dense}},
+\end{align}
+where $\rho_{\mathrm{desc,call}}=\traffic_{\mathrm{desc,call}}/
+\traffic_{\mathrm{dense}}$ includes base factors, controller/expert reads,
+and generated-control traffic (the base-only $\Gamma_{\mathrm{call}}(r,q)$ is
+not a substitute unless all omitted terms are zero). The idealized saving is
+$p_{\mathrm{call}}(1-\rho_{\mathrm{desc,call}})$, not
+$(1-p_{\mathrm{call}})(1-\Gamma)$; a token patch fraction is not
+$p_{\mathrm{call}}$. The historical mixed router evaluated both branches for
+every invocation, so its realized whole-call fraction was zero and those
+routed-savings estimates are withdrawn.
+
+
+\subsection{Communication, Compute, and Working-Set Complexity}
+\label{sec:complexity}
+
+\paragraph{Gradient communication.}
+In data-parallel training a dense FFN exposes $3dm$ gradient elements per
+block; the canonical diagonal-core model exposes $e_g[3r(d+m)+P_G]$ bytes
+(factors plus controller; the generated core values are runtime
+intermediates, not optimizer parameters), so the synchronized parameter set
+itself shrinks. This is orthogonal to optimizer sharding
+\cite{rajbhandari2020zero}, parallelism strategies
+\cite{narayanan2021megatron,korthikanti2023megatron}, and gradient
+compression \cite{lin2018dgc,alistarh2017qsgd,vogels2019powersgd}; the
+methods compose but their interaction must be measured.
+
+\paragraph{Compute and working set.}
+The dense gated FFN costs $\mathcal{C}_{\mathrm{dense}}=\Theta(3Tdm)$ MACs;
+the associative path with diagonal cores costs
+$\Theta(3Tr(d+m)+3Tr+nC_G)$ with $n=B\lceil S/q\rceil$ and durable state
+$\Theta(3r(d+m)+P_G)$ elements versus $\Theta(3dm)$ dense, the diagonal core
+holding only $3r$ live values per group (Appendix~\ref{app:complexity}).
+These are logical working sets; only an address-range trace and device
+counters establish that a generated core stayed on chip---exactly what the
+four-arm measurement checks.
+
+\subsection{Approximation}
+\label{sec:approx}
+
+The FFN output distortion under weight approximation is bounded by a
+Frobenius-error sensitivity analysis: for Lipschitz activations and bounded
+intermediates, $\norm{Y-\widetilde{Y}}_F$ is controlled by
+$\norm{W_p-\widetilde W_p}_F$ of each projection (Proposition~\ref{prop:approx},
+Appendix~\ref{app:approx}). For truncated-SVD factors, the bound specializes
+to retained singular-value energy $E_r(W_p)$ (Corollary~\ref{cor:rankapprox}):
+$\delta_p=\norm{W_p}_F\sqrt{1-E_r(W_p)}$, optimal among rank-at-most-$r$
+approximations by Eckart--Young--Mirsky. This elementary sensitivity bound
+establishes neither learnability, generalization, router predictability, nor a
+systems--quality tradeoff. Static SVD therefore remains a required
+rank-matched control (an earlier 18-matrix sweep was removed because its raw
+artifacts are unrecoverable); any replacement result must name its checkpoint,
+layer and projection set, model hash, preserve singular tails, and compare
+quality on disjoint data.

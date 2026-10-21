@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+\usepackage[UTF8]{ctex}
+\usepackage[paperwidth=18cm,paperheight=9.5cm,margin=0.3cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\pagestyle{empty}
+\begin{document}
+\begin{center}
+\begin{tikzpicture}[
+  chk/.style={draw,thick,fill=gray!15,minimum size=0.7cm,font=\small},
+  dat/.style={draw,circle,thick,minimum size=0.62cm,font=\small},
+  mod/.style={draw,thick,rounded corners=2pt,minimum width=2.2cm,minimum height=0.7cm,font=\small,align=center},
+  lbl/.style={font=\footnotesize},
+  arr/.style={-{Stealth[length=2.5mm]},thick}]
+
+% Tanner graph
+\node[lbl] at (-5.2,5.6) {qLDPC Tanner 图};
+\foreach \i/\x in {1/-7.6,2/-6.4,3/-5.2,4/-4.0,5/-2.8} {
+  \node[dat] (q\i) at (\x,4.7) {$q_{\i}$};
+}
+\foreach \j/\x in {1/-6.8,2/-5.2,3/-3.6} {
+  \node[chk] (c\j) at (\x,3.1) {$S_{\j}$};
+}
+\draw[thick] (c1)--(q1) (c1)--(q2) (c1)--(q3) (c2)--(q2) (c2)--(q3) (c2)--(q4) (c3)--(q3) (c3)--(q4) (c3)--(q5);
+
+% frequency axis with modes
+\node[lbl] at (3.9,5.6) {可寻址模式频谱（频率间隔 $>\Delta_{\min}$）};
+\foreach \j/\x in {1/1.8,2/3.6,3/5.4} {
+  \draw[thick] (\x,3.0) -- (\x,3.85);
+  \node[mod,minimum width=1.5cm] (mm\j) at (\x,4.25) {$m_{\j}$};
+}
+\draw[arr] (0.6,3.0) -- (7.4,3.0) node[lbl,below left]{$\omega$};
+
+% mapping arrows
+\draw[arr,dashed] (c1.east) .. controls +(1.6,-0.4) and +(-0.8,-1.4) .. (mm1.south west);
+\draw[arr,dashed] (c2.east) .. controls +(2.2,-0.5) and +(-0.9,-1.5) .. (mm2.south west);
+\draw[arr,dashed] (c3.east) .. controls +(2.6,-0.6) and +(-1.0,-1.6) .. (mm3.south west);
+\node[lbl] at (-1.2,1.7) {编译映射：校验节点 $\to$ 正交声子模式};
+
+% batches
+\node[mod,minimum width=6.6cm,minimum height=0.9cm] (b1) at (-4.4,0.4) {第 1 批：$\{S_1,S_3\}$（支撑不冲突，同窗口并行）};
+\node[mod,minimum width=5.8cm,minimum height=0.9cm] (b2) at (3.6,0.4) {第 2 批：$\{S_2\}$（图着色分批调度）};
+\draw[arr] (b1) -- (b2);
+\node[lbl,align=left] at (-0.8,-0.8) {编译约束：模式正交、频率间隔阈值、谱泄漏阈值、热占据阈值、激光寻址冲突};
+\end{tikzpicture}
+\end{center}
+\end{document}

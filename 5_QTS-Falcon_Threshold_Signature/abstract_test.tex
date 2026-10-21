@@ -1,0 +1,236 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{Patent Abstract}\label{patent-abstract}
+
+\subsection{Quantum-Secure Threshold Signature System and Method Based
+on Lattice-Based Falcon
+Algorithm}\label{quantum-secure-threshold-signature-system-and-method-based-on-lattice-based-falcon-algorithm}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Abstract}\label{abstract}
+
+\textbf{Technical Field}: The present invention relates to blockchain
+technology, Post-Quantum Cryptography (PQC), and Multi-Party Computation
+(MPC).
+
+\textbf{Technical Problem}: Existing cross-chain bridges using elliptic
+curve threshold signatures are vulnerable to quantum computing attacks.
+Furthermore, distributed implementation of the Falcon algorithm faces
+discrete Gaussian sampling challenges and O(n) communication complexity.
+
+\textbf{Technical Solution}: A quantum-secure threshold signature system
+comprising: a distributed key generation module for generating
+secret-shared NTRU trapdoor portions among multiple nodes via secure
+multi-party computation; an arithmetic-shared NTT computation module
+utilizing NTT linearity for zero-communication distributed polynomial
+operations; a collaborative rejection sampling module reducing
+communication rounds from O(n) to O(1) through a pre-check commitment
+mechanism; and a signature aggregation module outputting NIST
+Falcon-compliant digital signatures.
+
+\textbf{Technical Effects}: Compared to existing Dilithium threshold
+schemes, signature length is reduced by approximately 3.6 times
+(\textasciitilde666 bytes vs \textasciitilde2420 bytes), blockchain gas
+costs are reduced by approximately 72\%, dynamic node management is
+supported, while maintaining quantum-resistant security properties.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Keywords}\label{keywords}
+
+Post-quantum cryptography; Falcon signature; Threshold signature;
+Multi-party secure computation; NTRU lattice; Cross-chain bridge;
+Discrete Gaussian sampling
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Brief Description of
+Drawings}\label{brief-description-of-drawings}
+
+\textbf{Figure 1}: Overall system architecture diagram showing
+interaction flow between source chain, threshold signature system, and
+target chain
+
+\textbf{Figure 2}: Collaborative rejection sampling flowchart showing
+the three-phase protocol of commitment, pre-check, and reveal
+
+\textbf{Figure 3}: Dynamic node management diagram including three
+scenarios: node addition, revocation, and offline recovery
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{IPC Classifications}\label{ipc-classifications}
+
+\begin{itemize}
+\tightlist
+\item
+  H04L 9/32 --- Digital signatures
+\item
+  H04L 9/30 --- Public key cryptosystems
+\item
+  H04L 9/08 --- Key distribution
+\item
+  G06F 21/64 --- Integrity protection
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Technical Effects
+Summary}\label{technical-effects-summary}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2609}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2319}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3188}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1884}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Technical Metric
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This Invention
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Prior Art (Dilithium)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Improvement
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Signature Length & \textasciitilde666 bytes & \textasciitilde2420 bytes
+& 3.6x smaller \\
+Communication Rounds & O(1) & O(n) & Significantly reduced \\
+Gas Cost & \textasciitilde50,000 & \textasciitilde180,000 & 72\%
+savings \\
+Quantum-Safe & ✓ & ✓ & Equivalent \\
+Dynamic Nodes & ✓ & Limited & Enhanced \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Document Checklist}\label{document-checklist}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Patent Application (Chinese) - \texttt{专利申请书\_中文.md}
+\item
+  Patent Application (English) - \texttt{patent\_draft.md}
+\item
+  Technical Specification - \texttt{technical\_specification.md}
+\item
+  Claims (English) - \texttt{claims\_EN.md}
+\item
+  Abstract (Chinese) - \texttt{摘要\_中文.md}
+\item
+  Abstract (English) - This document
+\item
+  Drawing Specifications - \texttt{drawings\_specification.md}
+\item
+  Prior Art Search Report - \texttt{prior\_art\_report.md}
+\item
+  Experimental Data - \texttt{experimental\_data.md}
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Word Count}\label{word-count}
+
+Abstract body word count: \textasciitilde150 words (compliant with USPTO
+150-word limit)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Priority and Filing
+Strategy}\label{priority-and-filing-strategy}
+
+\textbf{Recommended Filing Sequence:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Initial Filing (China)}: Submit to CNIPA to establish priority
+  date
+\item
+  \textbf{PCT Application}: File within 12 months claiming China
+  priority
+\item
+  \textbf{National Phase}: Enter US, EU, and other jurisdictions within
+  30/31 months
+\end{enumerate}
+
+\textbf{Priority Date}: {[}To be determined upon filing{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This abstract is prepared for international patent filing through
+the PCT route. The Chinese application serves as the priority document.}
+
+\end{document}

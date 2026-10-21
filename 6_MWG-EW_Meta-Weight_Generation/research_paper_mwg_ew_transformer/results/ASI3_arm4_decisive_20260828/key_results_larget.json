@@ -1,0 +1,41 @@
+{
+  "created_at": "20260828T151332Z",
+  "config": {
+    "d": 4096,
+    "m": 14336,
+    "rank": 128,
+    "controller_hidden": 128,
+    "batch": 16,
+    "seq": 256,
+    "amplitude": 0.05,
+    "dtype": "fp16",
+    "seed": 1234
+  },
+  "validations": {
+    "materialized_vs_fused": {
+      "passed": true,
+      "max_abs": 0.0029296875,
+      "mean_abs": 0.00013570395822171122,
+      "max_rel": 0.26187896728515625,
+      "rtol": 0.005,
+      "atol": 0.005
+    }
+  },
+  "arm4_execution_observed": null,
+  "materialized": {
+    "mean_ms": 1.41946389,
+    "median_ms": 1.3835515,
+    "min_ms": 1.348562,
+    "p95_ms": 1.6056020000000004,
+    "std_ms": 0.14339658842908912,
+    "sample_count": 300
+  },
+  "fused": {
+    "mean_ms": 3.0621784466666666,
+    "median_ms": 3.019644,
+    "min_ms": 2.976264,
+    "p95_ms": 3.4376070000000003,
+    "std_ms": 0.1538585755626936,
+    "sample_count": 300
+  }
+}

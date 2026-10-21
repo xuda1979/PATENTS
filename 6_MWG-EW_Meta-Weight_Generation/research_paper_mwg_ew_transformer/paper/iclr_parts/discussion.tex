@@ -1,0 +1,56 @@
+\section{Discussion and Conclusion}
+\label{sec:conclusion}
+
+\textsc{MWG-EW} is a bridge between neural architecture and runtime design:
+the neural component makes a low-rank conditional descriptor useful on some
+inputs; the systems component ensures the descriptor does not quietly become
+another persistent tensor. The parameter-lifetime view---asking which
+weight-like objects must cross durable memory and synchronization
+boundaries---is the broader contribution.
+
+\paragraph{What is established.}
+Four claims are measured (Section~\ref{sec:results}): the fused no-store
+arm at latency parity with materialization on Ascend~910B2 with no core
+write-back; same-rank FFN-layer reconstruction parity of the generated
+diagonal core
+(r384, r401, r512, four seeds, one coherent run family), with a
+$+1.95\%$ equal-budget penalty (persistent r401 vs.\ causal r384 at
+48.2 vs.\ 48.1~MiB) that same-rank parity does not close; recompute-in-backward cutting the training activation
+footprint $24.5\times$--$71.8\times$ at exact gradient equality; and the
+optimizer-inclusive synchronized training step running
+$3.37\times$--$4.14\times$ faster than dense at 8B-scale geometry---a
+low-rank parameter-count effect on the training side, distinct from the
+inference-scoped no-store contract.
+
+\paragraph{What remains open.}
+Three validation gaps separate this prototype from a finished systems
+deployment (enumerated in Section~\ref{sec:results}); each could
+invalidate the core bandwidth-reduction thesis if it does not resolve
+favorably: the operational router is unrealized (a
+\texttt{torch.where} fallback evaluates both branches, and without
+kernel-level conditional execution the benefit collapses to the
+unconditional low-rank case); the beyond-L2 epilogue bottleneck is now
+resolved at the kernel level (the measured v4 fix of
+Section~\ref{sec:systems} is bit-identical to v1 and up to $3.03\times$
+faster at $T{=}4096$, clearing the ${\sim}2\times$ viability threshold),
+but its deployment benefit is bounded by the unmeasured serving stack;
+and deployment-relevant serving
+regimes are unvalidated, so the net off-chip bandwidth reduction at
+deployment scale remains an analytic projection rather than a measured
+end-to-end serving win.
+
+\paragraph{Why the negative results matter.}
+The integrity audit that withdrew prior quality and routing claims is
+part of the result: ephemerality is easy to conflate with ordinary low
+rank, and a \texttt{torch.where} fallback can mask the absence of true
+branch skipping.  The shuffled-context (Table~\ref{tab:shuffled}) and
+rank-512 (Table~\ref{tab:rank512control}) controls add two
+negative-leaning findings: context-conditioning contributes only
+${\sim}0.05\%$ of MSE (paired $-0.00021$ at r384; not detectable at
+r512), and a persistent r512 factor
+beats the generated r384 core by $14.6\%$ relative MSE---rank is the
+dominant quality lever, so the ephemeral core must justify itself on
+bandwidth and lifetime grounds, not quality grounds.  Future work should
+pre-register disjoint evaluations, distinguish token-level patching from
+whole-call dispatch, and measure physical traffic rather than logical
+payload counts.

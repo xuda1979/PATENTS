@@ -1,0 +1,42 @@
+{
+ "materialized": {
+  "total_dram_read_KB": 6.491131698242193,
+  "total_dram_write_KB": 0.32928990332031255,
+  "total_l2_read_KB": 0.0,
+  "total_l2_write_KB": 0.0,
+  "top_ops_by_dram": [
+   [
+    "aclnnMatmul",
+    {
+     "n": 460,
+     "dur_us": 4088.114999999998,
+     "dram_kB": 6.820421601562501
+    }
+   ]
+  ]
+ },
+ "fused": {
+  "total_dram_read_KB": 93.45999209375003,
+  "total_dram_write_KB": 6.316781630859369,
+  "total_l2_read_KB": 0.0,
+  "total_l2_write_KB": 0.0,
+  "top_ops_by_dram": [
+   [
+    "aclnnMatmul",
+    {
+     "n": 332,
+     "dur_us": 56663.29499999998,
+     "dram_kB": 91.10819702929676
+    }
+   ],
+   [
+    "ephemeral",
+    {
+     "n": 138,
+     "dur_us": 8054.484000000001,
+     "dram_kB": 8.6685766953125
+    }
+   ]
+  ]
+ }
+}

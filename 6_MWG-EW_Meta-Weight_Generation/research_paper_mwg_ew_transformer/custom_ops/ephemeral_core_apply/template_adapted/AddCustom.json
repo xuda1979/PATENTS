@@ -1,0 +1,68 @@
+[
+    {
+        "op": "EphemeralCoreApply",
+        "language": "cpp",
+        "input_desc": [
+            {
+                "name": "rank_activation",
+                "param_type": "required",
+                "format": [
+                    "ND"
+                ],
+                "type": [
+                    "float16"
+                ]
+            },
+            {
+                "name": "controller_hidden",
+                "param_type": "required",
+                "format": [
+                    "ND"
+                ],
+                "type": [
+                    "float"
+                ]
+            },
+            {
+                "name": "head_weight",
+                "param_type": "required",
+                "format": [
+                    "ND"
+                ],
+                "type": [
+                    "float"
+                ]
+            },
+            {
+                "name": "head_bias",
+                "param_type": "required",
+                "format": [
+                    "ND"
+                ],
+                "type": [
+                    "float"
+                ]
+            }
+        ],
+        "output_desc": [
+            {
+                "name": "scaled_rank_activation",
+                "param_type": "required",
+                "format": [
+                    "ND"
+                ],
+                "type": [
+                    "float16"
+                ]
+            }
+        ],
+        "attr": [
+            {
+                "name": "amplitude",
+                "param_type": "optional",
+                "type": "float",
+                "default_value": "0.05"
+            }
+        ]
+    }
+]

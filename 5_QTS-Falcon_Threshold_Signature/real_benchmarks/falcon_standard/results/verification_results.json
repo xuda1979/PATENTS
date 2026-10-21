@@ -1,0 +1,251 @@
+{
+  "timestamp_utc": "2026-03-09T12:47:55Z",
+  "elapsed_seconds": 109.65,
+  "results": {
+    "V1_constants": {
+      "q": 12289,
+      "q_correct": true,
+      "parameters": {
+        "256": {
+          "sigma": 163.04153322607107,
+          "sigmin": 1.2570545284063217,
+          "sig_bound": 16468416,
+          "sig_bytelen": 356,
+          "sig_bytelen_correct": true
+        },
+        "512": {
+          "sigma": 165.7366171829776,
+          "sigmin": 1.2778336969128337,
+          "sig_bound": 34034726,
+          "sig_bytelen": 666,
+          "sig_bytelen_correct": true
+        },
+        "1024": {
+          "sigma": 168.38857144654395,
+          "sigmin": 1.298280334344292,
+          "sig_bound": 70265242,
+          "sig_bytelen": 1280,
+          "sig_bytelen_correct": true
+        }
+      },
+      "sigma_512_patent_match": true,
+      "sigma_512_actual": 165.7366171829776
+    },
+    "V2_ntt_linearity": {
+      "trials_per_dim": 100,
+      "dimensions": {
+        "64": {
+          "passed": 100,
+          "total": 100,
+          "ok": true
+        },
+        "128": {
+          "passed": 100,
+          "total": 100,
+          "ok": true
+        },
+        "256": {
+          "passed": 100,
+          "total": 100,
+          "ok": true
+        },
+        "512": {
+          "passed": 100,
+          "total": 100,
+          "ok": true
+        },
+        "1024": {
+          "passed": 100,
+          "total": 100,
+          "ok": true
+        }
+      },
+      "all_pass": true
+    },
+    "V3_ntt_multiplicative": {
+      "trials_per_dim": 50,
+      "dimensions": {
+        "64": {
+          "passed": 50,
+          "total": 50,
+          "ok": true
+        },
+        "256": {
+          "passed": 50,
+          "total": 50,
+          "ok": true
+        },
+        "512": {
+          "passed": 50,
+          "total": 50,
+          "ok": true
+        }
+      },
+      "all_pass": true
+    },
+    "V10_ntt_roundtrip": {
+      "all_pass": true
+    },
+    "V11_share_aggregation": {
+      "n_parties": 7,
+      "polynomial_dim": 512,
+      "coefficient_reconstruction": true,
+      "ntt_aggregation": true,
+      "intt_recovery": true,
+      "all_pass": true
+    },
+    "V12_ntru_relation": {
+      "256": {
+        "hf_eq_g": true,
+        "fG_gF_eq_q": true
+      },
+      "512": {
+        "hf_eq_g": true,
+        "fG_gF_eq_q": true
+      },
+      "1024": {
+        "hf_eq_g": true,
+        "fG_gF_eq_q": true
+      }
+    },
+    "V4_rejection_sampling": {
+      "total_samples": 150,
+      "norm_accepts": 150,
+      "norm_rejects": 0,
+      "compress_fails": 0,
+      "acceptance_rate": 1.0,
+      "avg_attempts": 1.0,
+      "patent_acceptance_rate": 0.652,
+      "patent_avg_attempts": 1.53,
+      "theoretical_M": 1.54,
+      "theoretical_acceptance": 0.6494
+    },
+    "V5_signature_size_dist": {
+      "num_signatures": 200,
+      "mean": 666.0,
+      "std": 0.0,
+      "min": 666,
+      "max": 666,
+      "all_exact_666": true,
+      "patent_size_confirmed": true
+    },
+    "V6_variance_preserving": {
+      "n=3": {
+        "sigma": 165.7366171829776,
+        "sigma_i": 95.688081,
+        "n_parties": 3,
+        "num_samples": 100000,
+        "expected_variance": 27468.63,
+        "measured_variance": 27607.94,
+        "ratio": 1.005072,
+        "match": true
+      },
+      "n=5": {
+        "sigma": 165.7366171829776,
+        "sigma_i": 74.119668,
+        "n_parties": 5,
+        "num_samples": 100000,
+        "expected_variance": 27468.63,
+        "measured_variance": 27590.98,
+        "ratio": 1.004454,
+        "match": true
+      },
+      "n=7": {
+        "sigma": 165.7366171829776,
+        "sigma_i": 62.642553,
+        "n_parties": 7,
+        "num_samples": 100000,
+        "expected_variance": 27468.63,
+        "measured_variance": 27425.83,
+        "ratio": 0.998442,
+        "match": true
+      },
+      "n=11": {
+        "sigma": 165.7366171829776,
+        "sigma_i": 49.97147,
+        "n_parties": 11,
+        "num_samples": 100000,
+        "expected_variance": 27468.63,
+        "measured_variance": 27531.14,
+        "ratio": 1.002276,
+        "match": true
+      },
+      "n=15": {
+        "sigma": 165.7366171829776,
+        "sigma_i": 42.793011,
+        "n_parties": 15,
+        "num_samples": 100000,
+        "expected_variance": 27468.63,
+        "measured_variance": 27541.75,
+        "ratio": 1.002662,
+        "match": true
+      },
+      "polynomial_level": {
+        "dim": 512,
+        "n_parties": 7,
+        "num_trials": 2000,
+        "mean_coef_variance": 27522.09,
+        "expected_variance": 27468.63,
+        "ratio": 1.001946,
+        "match": true
+      },
+      "all_pass": true
+    },
+    "V7_norm_bound": {
+      "256": {
+        "sig_bound": 16468416,
+        "beta_sq_approx": 18631087.0,
+        "mean_norm": 13476055.0,
+        "max_norm": 15274997.0,
+        "utilization": 0.8183
+      },
+      "512": {
+        "sig_bound": 34034726,
+        "beta_sq_approx": 38504246.0,
+        "mean_norm": 27959769.0,
+        "max_norm": 30662132.0,
+        "utilization": 0.8215
+      },
+      "1024": {
+        "sig_bound": 70265242,
+        "beta_sq_approx": 79492636.0,
+        "mean_norm": 58328933.0,
+        "max_norm": 61399294.0,
+        "utilization": 0.8301
+      }
+    },
+    "V8_complexity_scaling": {
+      "256": {
+        "sign_ms": 18.107,
+        "verify_ms": 4.337,
+        "nlogn": 2048.0,
+        "sign_ratio_nlogn": 0.008841,
+        "verify_ratio_nlogn": 0.002118
+      },
+      "512": {
+        "sign_ms": 34.934,
+        "verify_ms": 7.697,
+        "nlogn": 4608.0,
+        "sign_ratio_nlogn": 0.007581,
+        "verify_ratio_nlogn": 0.00167
+      },
+      "1024": {
+        "sign_ms": 63.319,
+        "verify_ms": 15.777,
+        "nlogn": 10240.0,
+        "sign_ratio_nlogn": 0.006183,
+        "verify_ratio_nlogn": 0.001541
+      },
+      "scaling_ok": true
+    },
+    "V9_dilithium_comparison": {
+      "falcon_512_sig": 666,
+      "dilithium2_sig": 2420,
+      "ratio": 3.6336,
+      "patent_ratio": 3.6,
+      "ratio_match": true,
+      "gas_savings_pct": 72.48,
+      "patent_gas_savings_pct": 72.3
+    }
+  }
+}

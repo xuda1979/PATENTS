@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+\usepackage[UTF8]{ctex}
+\usepackage[paperwidth=17.5cm,paperheight=9.8cm,margin=0.4cm]{geometry}
+\usepackage{tikz}
+\begin{document}
+\pagestyle{empty}
+\begin{tikzpicture}[font=\small]
+\begin{scope}[xshift=0cm, yshift=0cm, x=1.35cm, y=0.02cm]
+\draw[->, line width=0.5pt] (0,0) -- (4.7,0) node[below right, font=\small] {场景};
+\draw[->, line width=0.5pt] (0,0) -- (0,340) node[above left, font=\small] {结构化载荷字节数(B)};
+\foreach \y in {0,80,160,240,320} {
+    \draw[gray!35, dashed] (0,\y) -- (4.4,\y);
+    \node[anchor=east, font=\scriptsize] at (-0.05,\y) {\y};
+}
+\filldraw[fill=blue!55, draw=black!35] (0.90,0) rectangle (1.52,293.50);
+\node[font=\scriptsize, rotate=90] at (1.21,308.50) {293.5};
+\node[align=center, font=\scriptsize] at (1.21,-28) {\shortstack{量子计算网络\\节点准入}};
+\filldraw[fill=blue!55, draw=black!35] (2.20,0) rectangle (2.82,232.00);
+\node[font=\scriptsize, rotate=90] at (2.51,247.00) {232.0};
+\node[align=center, font=\scriptsize] at (2.51,-28) {\shortstack{AI加速设备\\固件升级}};
+\filldraw[fill=blue!55, draw=black!35] (3.50,0) rectangle (4.12,331.00);
+\node[font=\scriptsize, rotate=90] at (3.81,346.00) {331.0};
+\node[align=center, font=\scriptsize] at (3.81,-28) {\shortstack{模型发布\\完整性校验}};
+\node[font=\small] at (2.1,356) {结构化场景载荷长度};
+\end{scope}
+
+\begin{scope}[xshift=8.6cm, yshift=1.55cm, x=1.25cm, y=1.8cm]
+\draw[->, line width=0.5pt] (0,0) -- (4.1,0) node[below right, font=\small] {场景};
+\draw[->, line width=0.5pt] (0,0) -- (0,3.4) node[above left, font=\small] {验签时延(ms)};
+\foreach \y/\label in {0/0,1/1,2/2,3/3} {
+    \draw[gray!35, dashed] (0,\y) -- (3.8,\y);
+    \node[anchor=east, font=\scriptsize] at (-0.04,\y) {\label};
+}
+\filldraw[fill=orange!75, draw=black!35] (0.90,0) rectangle (1.14,1.808);
+\filldraw[fill=red!65, draw=black!35] (1.24,0) rectangle (1.48,2.674);
+\node[font=\scriptsize, rotate=90] at (1.02,1.948) {1.808};
+\node[font=\scriptsize, rotate=90] at (1.36,2.814) {2.674};
+\node[align=center, font=\scriptsize] at (1.19,-0.9) {\shortstack{量子计算网络\\节点准入}};
+\filldraw[fill=orange!75, draw=black!35] (2.00,0) rectangle (2.24,4.136);
+\filldraw[fill=red!65, draw=black!35] (2.34,0) rectangle (2.58,5.343);
+\node[font=\scriptsize, rotate=90] at (2.12,4.276) {4.136};
+\node[font=\scriptsize, rotate=90] at (2.46,5.483) {5.343};
+\node[align=center, font=\scriptsize] at (2.29,-0.9) {\shortstack{AI加速设备\\固件升级}};
+\filldraw[fill=orange!75, draw=black!35] (3.10,0) rectangle (3.34,4.806);
+\filldraw[fill=red!65, draw=black!35] (3.44,0) rectangle (3.68,6.271);
+\node[font=\scriptsize, rotate=90] at (3.22,4.946) {4.806};
+\node[font=\scriptsize, rotate=90] at (3.56,6.411) {6.271};
+\node[align=center, font=\scriptsize] at (3.39,-0.9) {\shortstack{模型发布\\完整性校验}};
+\node[font=\small] at (1.9,3.58) {导入真实验签时延};
+\filldraw[fill=orange!75, draw=black!35] (0.1,-1.45) rectangle (0.32,-1.23);
+\node[anchor=west, font=\scriptsize] at (0.42,-1.34) {均值};
+\filldraw[fill=red!65, draw=black!35] (1.2,-1.45) rectangle (1.42,-1.23);
+\node[anchor=west, font=\scriptsize] at (1.52,-1.34) {P95};
+\end{scope}
+
+\node[draw, rounded corners=2pt, fill=green!8, align=left, font=\small, anchor=north west] at (0.2,-0.15) {导入真实基准尺寸：公钥 512 B；签名 3104 B\\来源：experiments/results/summary.json};
+\end{tikzpicture}
+\end{document}

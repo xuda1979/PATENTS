@@ -1,0 +1,329 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,heading=true]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{enumitem,hyperref,fancyhdr,xcolor,setspace}
+\usepackage{ragged2e}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\ctexset{
+    section = {
+        name = {,、},
+        number = \chinese{section},
+        format = {\Large\bfseries\raggedright}
+    }
+}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[1em]
+    {\Huge\heiti 技术交底书} \\[1em]
+\end{center}
+
+\noindent
+{\setstretch{1.15}
+\begin{tabular}{|L{2.8cm}|L{11.8cm}|}
+\hline
+公司编号 &  \\
+\hline
+发明名称 & 基于硅基光电集成的微型化 QKD 芯片封装与校准技术 \\
+\hline
+申报单位 & 研究院 \\
+\hline
+申报类型 & 发明 \\
+\hline
+发明人 & 待补充 \\
+\hline
+技术联系人 & 待补充 \\
+\hline
+注意事项 & 1．技术联系人应为深入了解本申请提案技术方案的技术人员。 \\
+         & 2．请按照集团公司提供的本技术交底书模板逐项填写。 \\
+\hline
+\end{tabular}
+}
+
+\vspace{1cm}
+
+\section{发明名称}
+
+基于硅基光电集成的微型化 QKD 芯片封装与校准技术
+
+\textit{英文名称：Miniaturized QKD Chip Packaging and Calibration Technology Based on Silicon Photonic Integration}
+
+\section{技术领域}
+
+本发明涉及硅基光电集成、量子密钥分发芯片、片上波导校准、热应力补偿和光电封装技术领域，尤其涉及一种面向\textbf{DV-QKD 与 CV-QKD 芯片化设备}的封装与自校准技术，可用于手机、手表、便携终端、小型网关或模块化量子加密终端。
+
+本发明重点解决硅光 QKD 芯片在小体积终端中面临的以下工程问题：
+\begin{itemize}[noitemsep]
+    \item 手机 SoC 发热、充电发热和环境温升带来的相位漂移、波长漂移和器件失配；
+    \item 便携终端跌落、振动、弯曲和装配残余应力带来的偏振失稳与耦合偏移；
+    \item 微型封装空间下，片上量子态调制、监测和校准功能难以同时实现；
+    \item 量子态不能被高功率参考光长期污染，因而校准必须与密钥业务兼容。
+\end{itemize}
+
+\section{现有技术的技术方案}
+
+\subsection{现有技术概况}
+
+截至\textbf{2026年3月26日}，与芯片级 QKD 相关的现有技术主要包括以下几类：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{芯片化量子发射/接收器件类}：重点解决激光、调制器、衰减器、干涉器和探测器的集成化；
+    \item \textbf{量子协议验证类}：重点展示基于硅光芯片实现 BB84、时间编码、偏振编码或 CV-QKD 的可行性；
+    \item \textbf{通用光子芯片校准类}：重点解决微环、相移器、可编程 PIC 的温漂和工艺偏差校准；
+    \item \textbf{反馈稳定类}：通过片外或简化片上反馈提高器件稳定性，但通常未面向 QKD 的低功率量子态业务特性做专门设计。
+\end{enumerate}
+
+与本申请最接近的公开专利/论文包括：
+\begin{itemize}[noitemsep]
+    \item \textbf{EP3269077B1}：Chip-based quantum key distribution；
+    \item \textbf{US20160352515A1}：Apparatus and methods for quantum key distribution；
+    \item \textbf{US20230393335A1}：Photonic integrated circuit design for plug-and-play measurement device independent-quantum key distribution；
+    \item \textbf{CN116243503A}：硅光子微环波长反馈控制系统及控制方法；
+    \item \textbf{Nature Communications 2017} 的 Chip-based quantum key distribution；
+    \item \textbf{Nature Photonics 2019} 的集成硅光 CV-QKD 芯片；
+    \item \textbf{Optics Express 2019} 的稳定硅光 QKD 收发器反馈方案；
+    \item \textbf{Nature Photonics 2022} 的自校准可编程光子集成电路。
+\end{itemize}
+
+\subsection{现有技术常见实现方式}
+
+现有芯片级 QKD 系统通常将量子调制器、衰减器、干涉器和部分监测器件集成在硅光芯片上，再辅以片外温控、偏置调节、参考时钟和算法补偿。其常见模式是：
+\begin{enumerate}[label=(\arabic*)]
+    \item 用外部控制板按固定周期扫描器件偏置；
+    \item 通过独立的参考链路或实验室环境对芯片进行温控；
+    \item 当性能漂移明显时，由系统级重新校准恢复工作点。
+\end{enumerate}
+
+该类方案在实验室平台上可用，但难以直接迁移到手机、手表等空间受限且温度变化快速的消费电子场景。
+
+\section{现有技术的缺点及本申请提案要解决的技术问题}
+
+现有技术主要存在以下问题：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{温漂与应力漂移耦合难分离}。许多方案只能观察到最终误差，无法区分由温度还是应力引起的漂移。
+    \item \textbf{校准与量子业务相互干扰}。如果使用高功率参考光连续校准，容易污染量子态探测窗口。
+    \item \textbf{反馈回路过慢}。片外算法+片外控制板的闭环不适合终端设备的快速热扰动。
+    \item \textbf{封装设计未与校准结构协同}。仅有校准算法但没有低应力封装结构时，漂移源本身仍然过大。
+    \item \textbf{适配性不足}。很多稳定化手段仅适用于某一协议或某一芯片拓扑，难以推广到 DV-QKD 与 CV-QKD 复用平台。
+\end{enumerate}
+
+因此，本申请要解决的核心技术问题是：
+\begin{quote}
+如何在微型硅光 QKD 芯片中，通过\textbf{片上参考波导结构、温度/应力联合传感、静默时隙校准和封装-电路协同反馈}，在手机发热、振动和环境扰动下仍稳定制备和检测量子态。
+\end{quote}
+
+\section{本申请提案的技术方案的详细阐述}
+
+\subsection{总体方案}
+
+本发明提出一种面向微型化 QKD 终端的硅基光电集成封装与自校准方案。该方案由以下几部分构成：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{量子主光路}：用于量子态制备、调制、衰减、干涉或检测；
+    \item \textbf{参考光路/参考波导}：与主光路在几何布局和热环境上尽量共模，但在业务时隙与光功率上可控隔离；
+    \item \textbf{温度与应力感知单元}：包括微环温度计、热敏电阻、应变桥、应力释放梁或等效结构；
+    \item \textbf{反馈执行单元}：包括加热器阵列、偏置驱动 DAC、可调衰减器、电相位调节器和本地控制 ASIC；
+    \item \textbf{封装协同结构}：包括对称固定点、低热膨胀系数基座、柔性粘接区和应力释放槽。
+\end{enumerate}
+
+\subsection{差分参考波导结构}
+
+本发明优选采用\textbf{主光路-参考光路差分布局}：
+\begin{itemize}[noitemsep]
+    \item 参考光路与量子主光路在版图上相邻布设，使其经历尽可能相同的热梯度和机械应力；
+    \item 参考光路可由一条旁路波导、参考微环、参考 MZI 或虚拟干涉臂构成；
+    \item 参考光路在校准时隙内注入参考信号，在密钥业务时隙内降低或关闭参考功率，避免污染量子探测窗口；
+    \item 通过比较主光路与参考光路的相位、损耗或波长漂移，实现共模扰动抑制。
+\end{itemize}
+
+\subsection{温度-应力解耦模型}
+
+本发明把芯片扰动抽象为状态向量：
+\[
+\mathbf{x}_k =
+\begin{bmatrix}
+\Delta T_k \\
+\Delta \sigma_k \\
+\Delta \phi_k \\
+\Delta A_k
+\end{bmatrix},
+\]
+其中 $\Delta T_k$ 表示温度偏移，$\Delta \sigma_k$ 表示机械应力偏移，$\Delta \phi_k$ 表示相位误差，$\Delta A_k$ 表示幅度或消光比误差。
+
+系统根据片上传感器和参考波导观测值建立状态更新关系：
+\[
+\mathbf{x}_{k+1} = \mathbf{F}\mathbf{x}_k + \mathbf{G}\mathbf{u}_k + \mathbf{w}_k,
+\]
+\[
+\mathbf{y}_k = \mathbf{H}\mathbf{x}_k + \mathbf{v}_k,
+\]
+其中 $\mathbf{u}_k$ 表示加热器、电偏置和可调衰减器的控制量，$\mathbf{y}_k$ 表示监测光电二极管、参考微环和应力传感器的测量结果。
+
+通过卡尔曼滤波、查找表补偿或模型预测控制，可以将温度与应力引起的漂移分开估计，再分别补偿。
+
+\subsection{片上传感与反馈闭环实现}
+
+为满足手机、手表等终端场景下\textbf{快速热扰动、装配应力漂移与严格功耗约束}，本发明优选采用“片上传感-状态估计-快速执行器”的短闭环架构，使校准控制尽量不依赖片外实验室级设备。典型闭环组成包括：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{片上可观测量设计}：在主光路关键节点设置轻量级取样与监测结构，例如功率抽头+监测光电二极管、参考 MZI/参考微环的谐振或干涉条纹、以及用于封装应力表征的应变计/应力释放梁的电学读出；并通过主/参差分布局提高共模扰动的可观测性。
+    \item \textbf{本地估计与控制}：控制 ASIC/MCU 接收传感数据后执行状态估计（例如基于模型的滤波、查表拟合或在线辨识），输出对加热器阵列、相位调节器、IQ 偏置、可调衰减器、光开关等执行器的控制量，实现相位、消光比、干涉可见度与耦合稳定性的联合维持。
+    \item \textbf{多时间尺度闭环}：针对“秒级温漂/应力蠕变”与“毫秒级快速升温/振动冲击”采用不同更新频率；在快速扰动下优先执行\textbf{小步快速补偿}，在偏离锁定范围时再触发\textbf{深度重锁定}，避免频繁全局扫描导致业务中断。
+    \item \textbf{参考注入隔离}：参考信号优选采用\textbf{低占空比、低功率}注入，并通过时分门控（静默时隙）、波分隔离（例如不同波长的参考光+片上/封装内滤波）、以及探测窗口门控等方式降低对量子态探测的背景污染风险。
+\end{enumerate}
+
+\subsection{静默时隙校准机制}
+
+本发明提出一种适用于 QKD 的\textbf{静默时隙校准机制}。其基本思想是：在量子业务帧内嵌入短时校准窗，而非持续注入高功率参考光。
+
+典型流程包括：
+\begin{enumerate}[label=\textbf{S\arabic*.}]
+    \item 量子业务按照预设帧结构发送，其中每个超级帧包含若干量子载荷时隙和若干静默校准时隙；
+    \item 在静默校准时隙中，控制 ASIC 打开参考光路，向参考波导和选定主光路段注入低占空比校准信号；
+    \item 片上监测单元测得相位偏移、干涉条纹变化、微环谐振偏移或幅度失衡；
+    \item 控制器根据温度-应力状态估计结果，更新加热器阵列和偏置电压；
+    \item 在下一个量子业务时隙中，主光路以新的工作点运行；
+    \item 若设备检测到手机 SoC 快速升温、振动或大电流充电事件，可临时提高校准时隙密度。
+\end{enumerate}
+
+该机制使校准和密钥业务能够共存，同时避免连续参考光对单光子探测的背景污染。
+
+\subsection{封装协同设计}
+
+本发明的封装结构不是被动外壳，而是校准体系的一部分。优选实施例中：
+\begin{enumerate}[label=(\arabic*)]
+    \item 芯片通过对称焊盘或对称粘接区固定在低热膨胀基座上，降低应力不均；
+    \item 在芯片周围设置应力释放槽或柔性连接梁，降低外壳形变对核心光路区的影响；
+    \item 把热源器件、量子主光路和参考波导按热隔离与热耦合需求进行分区布局；
+    \item 控制 ASIC 与光子芯片近距共封装，缩短反馈链路延迟，并降低片外连线引入的噪声与时延不确定性；
+    \item \textbf{光学 I/O 与对准保持}：根据终端形态选择边耦合（芯片端面+V 槽/光纤阵列）、光栅耦合（配合微透镜/透明盖板）或聚合物波导过渡；封装结构提供应力释放与应变隔离，使耦合效率对跌落、弯折与温度循环更不敏感；
+    \item \textbf{密封与可靠性}：优选采用盖板/腔体密封以降低湿热与颗粒污染对耦合面与器件漂移的影响，并在封装材料、灌封胶与热界面材料（TIM）的选型上兼顾低 CTE、低吸湿与长期蠕变特性，从源头减小应力漂移。
+\end{enumerate}
+
+\subsection{终端场景约束与工程化接口}
+
+面向手机、手表等消费电子终端，本发明在工程化上优选满足以下约束并提供相应接口设计：
+\begin{itemize}[noitemsep]
+    \item \textbf{体积与功耗约束}：将校准所需的传感、估计与执行尽量片上/近端实现，避免依赖体积较大的外置温控与光学台架；校准策略采用静默时隙与事件触发，降低平均参考注入与执行器能耗。
+    \item \textbf{快速启停与业务连续性}：终端存在频繁唤醒/休眠、充电与高负载发热等工况，闭环应支持快速重锁定，并在必要时以降级模式维持可用密钥率而非直接中断。
+    \item \textbf{系统集成接口}：模组可通过标准化数字接口（例如 I\textsuperscript{2}C/SPI/高速串行）与主控连接，输出温度/应力/锁定状态与告警信息，并接收终端侧事件（充电/射频高功率/跌落检测）用于调整校准时隙密度与控制律参数。
+\end{itemize}
+
+\subsection{适用协议}
+
+本发明可同时适用于：
+\begin{itemize}[noitemsep]
+    \item \textbf{DV-QKD}：如偏振编码、时间编码、相位编码 BB84 等，重点补偿相位偏差、消光比漂移和偏振相关误差；
+    \item \textbf{CV-QKD}：重点补偿 IQ 调制失衡、相位参考漂移、局部振荡相关稳定性问题；
+    \item \textbf{MDI-QKD 或集成接收端}：重点保持干涉匹配和耦合一致性。
+\end{itemize}
+
+\subsection{优选实施例}
+
+\textbf{实施例1（手机终端）}：在一个手机终端实施例中，QKD 芯片与控制 ASIC 共同封装于 15 mm 级模组内。由于应用处理器与射频前端工作，芯片附近温度在几秒内快速变化。系统检测到温升后：
+\begin{enumerate}[label=(\arabic*)]
+    \item 微环温度计报告谐振中心偏移；
+    \item 参考 MZI 报告相位差异常；
+    \item 应力传感单元报告封装弯曲引起的应变变化；
+    \item 本地控制 ASIC 在随后两个静默校准时隙内完成参数识别；
+    \item 加热器阵列与相位调制器偏置被同时修正；
+    \item 下一量子业务窗口恢复到目标误码率与干涉可见度范围。
+\end{enumerate}
+
+\textbf{实施例2（智能手表/可穿戴）}：在可穿戴实施例中，终端空间更紧凑且易受弯折与振动影响。封装优选采用更高柔顺度的应力释放结构，并提高应力传感权重；校准策略优选降低参考信号占空比并在检测到运动状态变化时自适应增加静默校准密度，从而在低功耗条件下维持干涉稳定性。
+
+\textbf{实施例3（小型网关/加密钥匙）}：在网关或加密钥匙实施例中，可获得更稳定的供电与散热条件。系统可选择更低频率的静默校准并将部分深度重锁定步骤安排在业务低谷期，以提高平均密钥产率；封装可优选采用更高气密性的腔体封装以提升长期漂移一致性。
+
+\subsection{本发明的有益效果}
+
+与现有技术相比，本发明至少具有以下有益效果：
+\begin{enumerate}[label=(\arabic*)]
+    \item 通过片上差分参考结构提高对温漂和应力漂移的可观测性；
+    \item 通过静默时隙校准减少参考光对量子业务的污染；
+    \item 通过封装-电路协同设计降低漂移源并缩短反馈延迟；
+    \item 提高芯片级 QKD 在便携终端场景下的稳定性和可商用性；
+    \item 兼容 DV-QKD 与 CV-QKD，多协议复用价值高。
+\end{enumerate}
+
+\section{本申请建议重点保护的内容}
+
+\subsection{校准控制状态机与触发逻辑}
+
+为提高正式申请文本的可实施性，建议将校准控制过程明确抽象为以下状态机：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{业务运行状态}：量子主光路处于正常发射或正常接收模式；
+    \item \textbf{静默校准状态}：在超级帧的校准时隙中打开参考光路并执行状态观测；
+    \item \textbf{快速补偿状态}：检测到快速温升、振动或偏置飘移时，仅调整加热器和偏置，不改动封装级参数；
+    \item \textbf{深度重锁定状态}：当器件脱离锁定范围时，执行扩展扫描与重锁定；
+    \item \textbf{降级保护状态}：在扰动过大且暂无法恢复时，降低密钥业务速率或临时切换至更稳健工作模式。
+\end{enumerate}
+
+建议同步明确以下触发逻辑：
+\begin{enumerate}[label=(\arabic*)]
+    \item 当参考波导与主光路之间的差分相位偏移超过阈值 $\phi_{\max}$ 时，触发快速补偿；
+    \item 当微环谐振漂移或应力传感输出连续超过阈值 $M$ 个采样周期时，触发深度重锁定；
+    \item 当单次静默校准即可恢复目标工作点时，不执行全局扫描，以减少业务中断；
+    \item 当设备处于充电、通话、视频拍摄或跌落后恢复阶段时，临时提高校准时隙密度。
+\end{enumerate}
+
+建议重点保护以下技术点：
+\begin{enumerate}[label=(\arabic*)]
+    \item 主光路与参考光路的差分共模布局结构；
+    \item 温度/应力联合传感并解耦估计的反馈控制方法；
+    \item 在 QKD 帧结构中嵌入静默校准时隙的业务-校准共存机制；
+    \item 控制 ASIC、加热器阵列与封装结构的协同设计；
+    \item 面向手机、手表等微型终端的低应力封装结构。
+\end{enumerate}
+
+建议正式申请时至少形成以下独立权利要求类型：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{芯片封装结构权利要求}：限定主光路、参考波导、传感器与应力释放结构之间的位置关系；
+    \item \textbf{校准控制方法权利要求}：限定静默时隙校准、状态估计和反馈更新流程；
+    \item \textbf{模组装置权利要求}：限定光子芯片、控制 ASIC、传感器和执行器的共封装结构；
+    \item \textbf{程序或介质权利要求}：覆盖终端内运行的校准控制软件逻辑。
+\end{enumerate}
+
+\section{附图建议}
+
+建议在正式申请中至少配置以下附图：
+\begin{enumerate}[label=(\arabic*)]
+    \item 微型 QKD 模组总体结构图：展示光子芯片、控制 ASIC 和封装基座；
+    \item 主光路-参考光路差分布局图：展示共模热环境和参考校准结构；
+    \item 温度与应力联合观测框图：展示传感、状态估计与反馈执行器之间的关系；
+    \item 超级帧时序图：展示量子业务时隙与静默校准时隙的编排；
+    \item 低应力封装剖面图：展示柔性粘接区、应力释放槽和热源隔离区。
+\end{enumerate}
+
+\section{可替代实施方式}
+
+在不偏离本发明核心思想的前提下，可选实施方式包括但不限于：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{参考结构变体}：参考光路可以是参考微环、参考 MZI、参考谐振腔、旁路波导，或通过可编程开关矩阵选择的虚拟参考通道；也可设置多条参考路径分别对相位漂移与耦合漂移进行观测。
+    \item \textbf{参考隔离变体}：除静默时隙外，参考信号还可采用不同波长/不同调制格式标记，并通过片上滤波器、耦合器与探测门控实现隔离；亦可在接收端对探测窗口进行时序门控以进一步降低串扰。
+    \item \textbf{传感器变体}：温度感知可由微环温度计、热敏电阻或 PN 结温度计实现；应力感知可由压阻式应变计、金属应变片、光纤/波导布拉格光栅或等效结构实现；亦可利用封装内 IMU/跌落检测信息作为外部扰动先验输入。
+    \item \textbf{控制算法变体}：控制可采用 PID/LQG/模型预测控制、卡尔曼滤波+查找表补偿、在线辨识或数据驱动回归；权利要求撰写中优选以“状态估计与反馈更新流程”抽象限定，避免对单一算法形式过窄限定。
+    \item \textbf{封装与互连变体}：可采用倒装焊、引线键合、硅中介层（interposer）或晶圆级封装；基座材料可为玻璃、陶瓷或低 CTE 复合材料；通过柔性互连与应力隔离结构降低 PCB 形变对芯片的传递。
+    \item \textbf{光学耦合变体}：可采用边耦合光纤阵列、光栅耦合配合微透镜、或与聚合物波导/玻璃波导的过渡耦合；也可通过封装内对准基准与限位结构提高装配一致性与长期对准保持。
+    \item \textbf{集成形态变体}：激光器与探测器可片上集成、混合集成或片外耦合；控制 ASIC 可与光子芯片共封装或以近端子板方式连接，均不影响本发明“短闭环、自校准、封装协同”的核心特征。
+    \item \textbf{帧结构变体}：静默校准时隙可按固定周期插入，也可按漂移估计量事件触发插入；可在不同业务负载下动态调整校准时隙占比，以平衡密钥产率与稳定性。
+\end{enumerate}
+
+\section{结论}
+
+本发明针对硅光 QKD 商业化所必经的“微型化封装 + 稳定校准”难题，提出了可直接面向终端设备落地的系统方案。其创新点在于把\textbf{片上参考结构、温应力联合感知、静默时隙校准以及封装反馈协同}整合为统一架构，为未来消费电子内置硬件级量子加密芯片提供关键底层专利支撑。
+
+\end{document}

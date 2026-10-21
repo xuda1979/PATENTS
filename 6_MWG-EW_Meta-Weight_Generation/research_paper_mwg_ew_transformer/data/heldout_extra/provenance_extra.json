@@ -1,0 +1,44 @@
+{
+  "seed": 20260526,
+  "purpose": "extra held-out family coverage; separate from the main manifest",
+  "suites": [
+    {
+      "name": "wikitext103_validation_extra",
+      "family": "general_language_modeling",
+      "dataset": "Salesforce/wikitext",
+      "config": "wikitext-103-raw-v1",
+      "split": "validation",
+      "selected_items": 260,
+      "characters": 171078,
+      "path": "data/heldout_extra/wikitext103_validation_extra.txt"
+    },
+    {
+      "name": "hellaswag_validation_extra",
+      "family": "commonsense_reasoning",
+      "dataset": "Rowan/hellaswag",
+      "config": null,
+      "split": "validation",
+      "selected_items": 260,
+      "characters": 97066,
+      "path": "data/heldout_extra/hellaswag_validation_extra.txt"
+    }
+  ],
+  "failures": [
+    {
+      "name": "daily_dialog_validation_extra",
+      "family": "multi_turn_dialogue",
+      "dataset": "daily_dialog",
+      "config": null,
+      "split": "validation",
+      "error": "not prepared in local cached fallback"
+    },
+    {
+      "name": "qasper_validation_extra",
+      "family": "long_context",
+      "dataset": "allenai/qasper",
+      "config": null,
+      "split": "validation",
+      "error": "not prepared in local cached fallback"
+    }
+  ]
+}

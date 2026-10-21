@@ -1,0 +1,36 @@
+\documentclass[12pt]{article}
+\usepackage[UTF8]{ctex}
+\usepackage[paperwidth=18cm,paperheight=13cm,margin=0.3cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\pagestyle{empty}
+\begin{document}
+\begin{center}
+\begin{tikzpicture}[
+  blk/.style={draw,thick,rounded corners=2pt,align=center,font=\small,minimum width=7.6cm,minimum height=1.05cm,inner sep=4pt},
+  dec/.style={draw,thick,diamond,aspect=2.6,align=center,font=\small,inner sep=1pt},
+  lbl/.style={font=\footnotesize},
+  arr/.style={-{Stealth[length=2.5mm]},thick},
+  node distance=0.55cm]
+
+\node[blk] (s1) {S201：稳定子基旋转，归一化为 $\prod_i Z_i$ 形式};
+\node[blk,below=of s1] (s2) {S202：目标模式初始化校验（热占据 $\bar n < n_{\mathrm{th}}$）};
+\node[blk,below=of s2] (s3) {S203：分段条件位移 + 载波旋转复合脉冲，\\几何相位合成奇偶条件位移（并行写入多模式）};
+\node[blk,below=of s3] (s4) {S204：非目标模式相空间回路闭合验证};
+\node[dec,below=of s4] (d1) {写入异常?};
+\node[blk,below=0.7cm of d1] (s5) {S205：共享读出离子逐模边带读出，\\指针态 $\to$ 综合征比特};
+\node[blk,below=of s5] (s6) {S206：模式再冷却/复位，综合征送入译码器};
+
+\node[blk,minimum width=3.2cm,minimum height=1.0cm,right=1.4cm of d1] (er) {标记擦除\\触发重测};
+
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4) -- (d1);
+\draw[arr] (d1) -- node[lbl,left]{否} (s5);
+\draw[arr] (d1) -- node[lbl,above]{是} (er);
+\draw[arr] (er.north) |- ($(s2.east)+(0,0)$);
+\draw[arr] (s5) -- (s6);
+\end{tikzpicture}
+\end{center}
+\end{document}

@@ -1,0 +1,42 @@
+{
+  "source_manifest": "data/heldout/manifest.json",
+  "out_dir": "data/heldout/router_global_splits",
+  "seed": 17,
+  "eval_fraction": 0.5,
+  "stable_hash_split": true,
+  "train_total": 357,
+  "train_unique_total": 357,
+  "eval_total": 357,
+  "eval_unique_total": 357,
+  "train_eval_overlap_unique": 0,
+  "suites": [
+    {
+      "name": "gsm8k_test",
+      "train_texts": "data/heldout/router_global_splits/gsm8k_test/router_train.txt",
+      "eval_texts": "data/heldout/router_global_splits/gsm8k_test/router_eval.txt",
+      "source_texts": "data/heldout/gsm8k_test.txt",
+      "train_count": 130,
+      "eval_count": 130,
+      "source_unique_count": 260
+    },
+    {
+      "name": "mbpp_test",
+      "train_texts": "data/heldout/router_global_splits/mbpp_test/router_train.txt",
+      "eval_texts": "data/heldout/router_global_splits/mbpp_test/router_eval.txt",
+      "source_texts": "data/heldout/mbpp_test.txt",
+      "train_count": 97,
+      "eval_count": 97,
+      "source_unique_count": 194
+    },
+    {
+      "name": "alpaca_cleaned_train_tail",
+      "train_texts": "data/heldout/router_global_splits/alpaca_cleaned_train_tail/router_train.txt",
+      "eval_texts": "data/heldout/router_global_splits/alpaca_cleaned_train_tail/router_eval.txt",
+      "source_texts": "data/heldout/alpaca_cleaned_train_tail.txt",
+      "train_count": 130,
+      "eval_count": 130,
+      "source_unique_count": 260
+    }
+  ],
+  "claim_boundary": "global leakage-clean suite-aware split for router robustness tests; not an independent broad-family benchmark expansion"
+}

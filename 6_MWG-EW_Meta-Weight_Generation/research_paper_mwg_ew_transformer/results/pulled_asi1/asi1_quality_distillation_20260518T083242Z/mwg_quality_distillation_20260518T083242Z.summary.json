@@ -1,0 +1,14 @@
+{
+  "created_at": "20260518T083242Z",
+  "env": {"world_size": 8, "device_type": "npu", "environment": "ASI1"},
+  "teacher": "Qwen2.5-1.5B-Instruct layer 0 FFN",
+  "config": {"ranks": [64, 128], "steps": 16, "eval_batches": 4, "dtype": "float32"},
+  "results": {
+    "static_svd_r64": {"rank": 64, "relative_mse": 0.989094, "cosine": 0.133395, "descriptor_mib": 7.688, "traffic_reduction_x": 20.488},
+    "persistent_low_rank_r64": {"rank": 64, "relative_mse": 0.966727, "cosine": 0.225573, "parameter_mib": 9.096, "descriptor_mib": 7.688, "traffic_reduction_x": 20.488},
+    "mwg_ephemeral_r64": {"rank": 64, "relative_mse": 0.966702, "cosine": 0.225632, "parameter_mib": 9.096, "descriptor_mib": 7.688, "traffic_reduction_x": 20.488},
+    "static_svd_r128": {"rank": 128, "relative_mse": 0.971749, "cosine": 0.187598, "descriptor_mib": 15.375, "traffic_reduction_x": 10.244},
+    "persistent_low_rank_r128": {"rank": 128, "relative_mse": 0.942873, "cosine": 0.257047, "parameter_mib": 17.066, "descriptor_mib": 15.375, "traffic_reduction_x": 10.244},
+    "mwg_ephemeral_r128": {"rank": 128, "relative_mse": 0.942804, "cosine": 0.257052, "parameter_mib": 17.066, "descriptor_mib": 15.375, "traffic_reduction_x": 10.244}
+  }
+}

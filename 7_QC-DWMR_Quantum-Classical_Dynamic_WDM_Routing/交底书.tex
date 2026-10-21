@@ -1,0 +1,349 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8,heading=true]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{enumitem,hyperref,fancyhdr,xcolor,setspace}
+\usepackage{ragged2e}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\ctexset{
+    section = {
+        name = {,、},
+        number = \chinese{section},
+        format = {\Large\bfseries\raggedright}
+    }
+}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+\setlength{\emergencystretch}{3em}
+\hfuzz=20pt
+\sloppy
+\hypersetup{hidelinks}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{发明专利技术交底书}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+\begin{center}
+    {\Large\heiti 中国移动专利申请} \\[1em]
+    {\Huge\heiti 技术交底书} \\[1em]
+\end{center}
+
+\noindent
+{\setstretch{1.15}
+\begin{tabular}{|L{2.8cm}|L{11.8cm}|}
+\hline
+公司编号 &  \\
+\hline
+发明名称 & 量子-经典异构光纤网络的动态波分复用与路由控制方法 \\
+\hline
+申报单位 & 研究院 \\
+\hline
+申报类型 & 发明 \\
+\hline
+发明人 & 待补充 \\
+\hline
+技术联系人 & 待补充 \\
+\hline
+注意事项 & 1．技术联系人应为深入了解本申请提案技术方案的技术人员。 \\
+         & 2．请按照集团公司提供的本技术交底书模板逐项填写。 \\
+\hline
+\end{tabular}
+}
+
+\vspace{1cm}
+
+\section{发明名称}
+
+量子-经典异构光纤网络的动态波分复用与路由控制方法
+
+\textit{英文名称：Dynamic Wavelength-Division Multiplexing and Routing Control Method for Quantum-Classical Heterogeneous Fiber Networks}
+
+\section{技术领域}
+
+本发明涉及量子保密通信、光传送网、波分复用、软件定义网络控制以及量子网络资源编排技术领域，尤其涉及一种在同一根光纤中同时承载量子信号与经典高速业务信号时，对量子信道实施\textbf{动态波长选择、动态路由、发射时间窗协调以及纠错配置联动控制}的方法与系统。
+
+更具体地，本发明适用于以下场景：
+\begin{itemize}[noitemsep]
+    \item 运营商城域或广域量子密钥分发（QKD）网络与现网 DWDM/OTN/ROADM 系统共纤部署；
+    \item 量子信号与 100G/400G/800G 经典业务混传时的拉曼散射、串扰、滤波余量和链路裕度治理；
+    \item SDN 控制器、OTN 网管、量子密钥管理系统以及量子收发模块的跨层联动调度；
+    \item 面向量子安全专线、政企保密专网、数据中心互联和干线量子保密通信的工程落地。
+\end{itemize}
+
+本发明的保护对象不仅是算法本身，还包括部署于 ROADM 节点、量子收发一体机、波长选择开关、边缘控制器和集中编排器中的控制流程、设备协同机制及实现架构。
+
+\section{现有技术的技术方案}
+
+\subsection{现有技术检索与归纳}
+
+截至\textbf{2026年3月26日}，量子信号与经典信号共纤传输的公开技术大体分为以下三类：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{静态波长规划类}：在网络设计阶段预留固定量子波长、固定保护带和固定路由，典型思路是将量子信道长期放置在远离高功率经典业务的波段，通过经验规则降低拉曼噪声。
+    \item \textbf{单层资源分配类}：仅在路由层或波长层进行离线规划，例如 QKD over WDM 网络中的静态 RWTA（Routing, Wavelength and Time-slot Assignment），但通常假设噪声模型慢变，缺少运行期闭环。
+    \item \textbf{器件隔离增强类}：通过滤波器、窄门控探测器、时间滤波或专用光学器件抑制噪声，但未把链路实时观测、波长迁移、时间窗迁移和纠错参数调节统一到同一控制平面。
+\end{enumerate}
+
+与本申请最接近的公开方案包括：
+\begin{itemize}[noitemsep]
+    \item \textbf{US7826749B2}：公开了面向多用户 WDM 网络的量子密钥分发与波长路由思路；
+    \item \textbf{US8050566B2}：公开了在 WDM 链路上传送 QKD 信号的方法；
+    \item \textbf{CN115913527B}：公开了经典光与量子光协同传输时的纤芯与波长分配方法；
+    \item \textbf{US20210119787A1}：公开了在无源光网络中进行量子密钥分发与管理的方案。
+\end{itemize}
+
+上述公开方案的共同特点是：强调\textbf{共纤可行性}、\textbf{波长选择}或\textbf{网络接入方式}，但尚未形成面向现网动态业务波动的\textbf{实时感知 + 跨层决策 + 在线重构}闭环。
+
+\subsection{现有技术的主要实施方式}
+
+现有工程实践通常采用如下方法：
+\begin{enumerate}[label=(\arabic*)]
+    \item 预先将量子信道安置在 C/L 波段边缘或特定空闲波长；
+    \item 为量子信道与经典信道设置固定保护带宽；
+    \item 对 ROADM 路由进行静态规划，避免量子信道跨越高负荷链路；
+    \item 依赖探测器窄门宽、滤波器和固定误码门限进行容错；
+    \item 当 QBER 上升或密钥率下降时，由运维人员离线调整波长或改配链路。
+\end{enumerate}
+
+该类方案在实验室或小规模示范网中可工作，但在运营商城域环、骨干网或多业务共享场景下存在明显不足。
+
+\section{现有技术的缺点及本申请提案要解决的技术问题}
+
+现有技术至少存在以下六类问题：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{拉曼噪声强、且随业务负荷动态波动}。经典信道功率变化、业务上下线和波长重配置会导致量子通道受噪水平非平稳变化，静态规划容易失效。
+    \item \textbf{仅看波长、不看时域}。很多方案只做固定波长隔离，没有利用经典流量的突发性和空闲间隙去为量子发射创造低噪声时间窗。
+    \item \textbf{仅看物理层、不看纠错与协议层}。即便物理信道未切换，只要噪声分布变动，也应同步调整探测门宽、诱骗态比例、EC 码率或重传门限。
+    \item \textbf{路由与波长分配割裂}。传统控制器把量子链路当成普通低速业务，不会根据量子误码、保真度或安全密钥率进行路径重选。
+    \item \textbf{现网兼容性差}。如果必须新铺暗光纤，则部署成本高，难以形成大规模商用。
+    \item \textbf{缺少可审计、可预测的闭环控制模型}。多数系统没有把“可测噪声、可预测密钥率、可执行重配置”三者串起来。
+\end{enumerate}
+
+因此，本申请要解决的核心技术问题是：
+\begin{quote}
+在不重新铺设专属暗光纤的前提下，如何在量子信号与经典信号共纤传输的异构光网络中，实时感知跨波长、跨时隙、跨链路的噪声环境，并对量子信道的\textbf{路由、波长、发射时间窗和纠错配置}进行联合优化，从而持续维持较低 QBER 与较高密钥率。
+\end{quote}
+
+\section{本申请提案的技术方案的详细阐述}
+
+\subsection{总体方案}
+
+本发明提出一种面向量子-经典异构光纤网络的动态波分复用与路由控制方法。系统由\textbf{链路感知层、预测建模层、联合决策层和执行闭环层}组成：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{链路感知层}：采集每段光纤、每个波长、每个时间窗内的经典功率、ASE 噪声、拉曼散射估计、QBER、单光子计数率、暗计数率、探测器饱和度和密钥率；
+    \item \textbf{预测建模层}：建立“链路段-波长-时间窗”三维噪声张量，预测候选路径与候选波长的量子传输质量；
+    \item \textbf{联合决策层}：在路由、波长、发射窗口、门控参数、纠错码率等维度上进行联合选优；
+    \item \textbf{执行闭环层}：通过 SDN/网管接口驱动 WSS、ROADM、OTN 板卡、量子收发模块和纠错模块完成在线重构。
+\end{enumerate}
+
+在一个可工程落地的实施方式中，本发明引入\textbf{量子控制器/编排器}作为跨层“总控”，并与现网控制面形成松耦合闭环：量子控制器通过南向接口获取 ROADM/OTN 的光谱占用、光功率、告警与重构状态，同时通过量子设备接口获取 QKD 收发端的 QBER、计数率与密钥率；在北向侧，量子控制器向量子密钥管理系统（KMS）或业务编排系统输出可用密钥率、业务降级状态和迁移计划，从而形成“可测---可算---可控---可审计”的闭环。
+
+\subsection{关键数据模型}
+
+设量子业务请求为 $q_i$，候选路径集合为 $\mathcal{P}_i$，候选量子波长集合为 $\Lambda_i$，离散时间窗集合为 $\mathcal{T}$。对每一条候选路径 $p \in \mathcal{P}_i$、每一候选波长 $\lambda \in \Lambda_i$ 与时间窗 $t \in \mathcal{T}$，系统计算综合风险指标：
+\[
+\Gamma(p,\lambda,t)=\alpha N_{\mathrm{raman}}(p,\lambda,t)
++\beta N_{\mathrm{ase}}(p,\lambda,t)
++\gamma C_{\mathrm{xtalk}}(p,\lambda,t)
++\delta L_{\mathrm{margin}}(p,\lambda,t),
+\]
+其中：
+\begin{itemize}[noitemsep]
+    \item $N_{\mathrm{raman}}$ 表示由经典业务诱发的拉曼散射风险；
+    \item $N_{\mathrm{ase}}$ 表示放大器与滤波器引入的 ASE 噪声项；
+    \item $C_{\mathrm{xtalk}}$ 表示串扰与泄露项；
+    \item $L_{\mathrm{margin}}$ 表示量子链路预算裕量的反向表征项；
+    \item $\alpha,\beta,\gamma,\delta$ 为可配置权重。
+\end{itemize}
+
+进一步地，系统计算候选决策的效用函数：
+\[
+U(p,\lambda,t,e,g)=\mu R_{\mathrm{sec}}-\nu QBER-\rho C_{\mathrm{reconf}}-\sigma P_{\mathrm{impact}},
+\]
+其中 $e$ 表示纠错配置，$g$ 表示探测门控参数，$R_{\mathrm{sec}}$ 表示预测安全密钥率，$C_{\mathrm{reconf}}$ 表示网络重构代价，$P_{\mathrm{impact}}$ 表示对现有经典业务的扰动成本。
+
+在一个优选实施方式中，离散时间窗 $t$ 可以表示为一个发射侧与接收侧一致的时间区间 $[t_k, t_k+\Delta t]$，系统在每个时间窗内统计经典业务占用与功率谱密度，形成占用张量 $O(p,\lambda,t)$；并基于 $O(p,\lambda,t)$ 与历史噪声样本，估计量子链路噪声光子数与误码率，进而预测 $QBER(p,\lambda,t,g,e)$ 与 $R_{\mathrm{sec}}(p,\lambda,t,g,e)$。为避免“只换波长不管协议层”的不完整控制，$e$ 与 $g$ 作为与 $p,\lambda,t$ 同级的决策变量参与求解。
+
+系统从满足约束条件的候选集里选择效用最大的组合：
+\[
+(p^\star,\lambda^\star,t^\star,e^\star,g^\star)
+=\arg\max U(p,\lambda,t,e,g).
+\]
+
+\subsection{联合控制流程}
+
+本发明的一个典型执行流程包括：
+\begin{enumerate}[label=\textbf{S\arabic*.}]
+    \item 量子控制器周期性获取各链路段的经典信道功率谱、业务占用图、波长使用状态和量子测量指标；
+    \item 基于链路段级观测信息，构建候选量子波长在各时间窗上的噪声热力图；
+    \item 当检测到当前量子业务的预测 QBER 将超过门限，或者预测密钥率将低于 SLA 下限时，触发在线重规划；
+    \item 联合求解候选路由、候选量子波长、发射时间窗、门控宽度、诱骗态比例和纠错码率；
+    \item 按“\textbf{先轻后重}”原则执行重配置：若新方案仅需协议层调节，则优先切换时间窗、门控与纠错参数；若仍无法满足门限，再通过 SDN/ROADM 指令完成波长迁移或路径迁移；
+    \item 在迁移窗口期内，系统保持旧配置与新配置的短时重叠保护，避免量子会话中断；
+    \item 重构完成后，持续比较实测指标与预测值，对模型权重进行自适应修正。
+\end{enumerate}
+
+\subsection{动态波长/时隙/纠错联合控制逻辑（分层优先级与回滚）}
+
+为兼顾现网可用性与控制稳定性，本发明优选采用分层联合控制逻辑，将可执行动作按对现网影响从小到大划分为三类，并配置回滚与滞回策略：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{L1（协议层轻量动作）}：调整发射时间窗（插空/错峰）、探测门控宽度与门控相位、诱骗态比例、纠错码率与块长等，不触发光层重构；其目标是在最小扰动条件下把 $QBER$ 拉回门限以内。
+    \item \textbf{L2（光层中量动作）}：在不改变端到端拓扑的前提下执行量子波长迁移（同路由不同 $\lambda$），并配合滤波/保护带策略与协议层参数同步切换；其目标是在经典业务波长拥塞或局部功率抬升时快速避开高噪波段。
+    \item \textbf{L3（路由级重构动作）}：执行路径迁移（不同 $p$），必要时联合波长迁移；其目标是在链路段级噪声长期恶化、设备告警或物理故障时保障量子业务连续性。
+\end{enumerate}
+
+为避免频繁切换导致的系统震荡，优选设置\textbf{最小驻留时间}与\textbf{切换滞回}：仅当预测劣化趋势持续 $K$ 个采样周期且效用增益超过阈值 $\eta$ 时，才允许从 L1 升级到 L2/L3。若执行后实测指标在 $M$ 个采样周期内未改善（或出现 ROADM/WSS 重构失败告警），则触发\textbf{回滚}：恢复到上一稳定配置，并将当前候选动作标记为短期禁用，避免反复尝试。
+
+\subsection{本发明的核心创新点}
+
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{噪声感知不是单点感知，而是链路段-波长-时间窗三级感知}。相比仅监测端到端 QBER，本方案可以定位哪一段链路、哪一组经典波长和哪一类时段正在恶化量子链路。
+    \item \textbf{决策变量不止是波长，还包括路由、时间窗、门控和纠错配置}。这使得系统即便在波长资源有限时，也可通过时间窗错避和纠错联动维持业务。
+    \item \textbf{量子与经典业务双边约束联合建模}。本发明并不简单地“牺牲经典业务保护量子”，而是在经典业务 SLA、光功率预算、ROADM 规则和量子密钥率之间求解折中最优。
+    \item \textbf{支持在线重配置与平滑迁移}。在量子业务不中断或轻微抖动条件下完成量子波长迁移、链路迁移和参数迁移。
+    \item \textbf{具备与现网 SDN/OTN 控制面兼容的工程接口}。可通过 NETCONF、OpenConfig、厂商网管北向接口或定制量子控制 API 实现。
+\end{enumerate}
+
+\subsection{系统组成}
+
+一个典型系统可包括以下功能模块：
+\begin{itemize}[noitemsep]
+    \item \textbf{经典噪声遥测模块}：采集各 WDM 信道光功率、波长占用、放大器增益、告警事件；
+    \item \textbf{量子链路测量模块}：采集探测计数、QBER、探测门宽、误码类型分布、密钥率；
+    \item \textbf{噪声数字孪生引擎}：根据历史与实时数据拟合噪声演化；
+    \item \textbf{联合优化引擎}：执行路由-波长-时间窗-纠错联合求解；
+    \item \textbf{重配置编排器}：驱动光层、设备层和协议层参数切换；
+    \item \textbf{策略审计模块}：输出每次调度的依据、影响范围和结果评价。
+\end{itemize}
+
+为便于专利撰写时对系统权利要求进行功能模块限定，优选将上述模块与其输入/输出及接口对象明确化，例如：
+\renewcommand{\arraystretch}{1.2}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{|L{3.2cm}|X|L{3.2cm}|}
+\hline
+\textbf{模块} & \textbf{主要输入/输出（示例）} & \textbf{对接对象/接口（示例）} \\
+\hline
+经典噪声遥测模块 & 输入：ROADM/OTN 的功率谱、端口功率、放大器状态、告警；输出：链路段-波长-时间窗的经典噪声特征向量 & OTN/ROADM 网管北向、NETCONF/\allowbreak gNMI/\allowbreak SNMP、告警流 \\
+\hline
+量子链路测量模块 & 输入：探测计数、暗计数、门控状态、同步状态；输出：$QBER$、计数率、饱和度、$R_{\mathrm{sec}}$ & QKD 设备控制/遥测 API、KMS 统计接口 \\
+\hline
+噪声数字孪生引擎 & 输入：历史遥测、实时遥测、配置变更记录；输出：噪声张量与预测指标 $\widehat{QBER}$、$\widehat{R_{\mathrm{sec}}}$ & 数据湖/时序库、模型服务接口 \\
+\hline
+联合优化引擎 & 输入：候选路径/波长/时间窗集合与约束；输出：$(p^\star,\lambda^\star,t^\star,e^\star,g^\star)$ 与备选集合 & 编排器内部接口、策略下发接口 \\
+\hline
+重配置编排器 & 输入：重构计划与执行窗口；输出：设备下发指令、执行回执、回滚指令 & SDN 控制器、ROADM/\allowbreak WSS、OTN 交叉、QKD 参数下发 \\
+\hline
+策略审计模块 & 输入：决策过程、阈值、影响评估；输出：可审计记录与报表 & 运维审计系统、日志系统 \\
+\hline
+\end{tabularx}
+\normalsize
+\setlength{\tabcolsep}{6pt}
+
+\subsection{优选实施例}
+
+在一个城域环网实施例中，8 个 ROADM 节点承载 80 个经典 DWDM 信道和 2 个量子信道。控制器检测到晚高峰时某一路段 400G 业务增开导致 C 波段相邻经典信道功率上升，并使当前量子波长的预测拉曼噪声越限。系统执行如下联动：
+\begin{enumerate}[label=(\arabic*)]
+    \item 将量子业务由当前波长迁移至另一候选波长；
+    \item 同时将量子发射时间窗从连续模式切换为与经典业务空闲区对齐的脉冲窗口模式；
+    \item 将纠错模块切换至更强的 LDPC 配置，并缩短单光子探测门宽；
+    \item 若原路径上仍不满足门限，则再切换至次优物理路径。
+\end{enumerate}
+
+通过上述组合动作，量子业务无需独占暗光纤即可恢复到目标密钥率区间。
+
+\subsection{异常工况与容错处理}
+
+在现网部署中，为保证“可用”优先于“最优”，本发明优选提供针对异常工况的保护策略与容错流程，典型包括：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{遥测缺失或数据异常}：当经典功率谱、ROADM 占用图或量子测量指标出现缺测、突变且与历史统计不一致时，系统进入保守模式：冻结光层重构，仅允许执行 L1 协议层轻量动作，并提高切换触发门限，同时记录异常并请求人工复核或触发二次采样。
+    \item \textbf{设备重构失败}：当 ROADM/WSS 执行波长迁移失败或返回不一致回执时，重配置编排器触发回滚，恢复上一稳定配置；若回滚仍失败，则将量子业务标记为“降级运行”，仅保持最小可用密钥率并上报告警。
+    \item \textbf{短时噪声尖峰}：当预测模型判定为短时尖峰（持续时间小于阈值）时，不触发 L2/L3 光层动作，仅通过时间窗错避、门控收窄与纠错增强进行快速抑制，以避免频繁迁移。
+    \item \textbf{探测器饱和/后脉冲风险}：当计数率或饱和度达到阈值时，优先缩短门控宽度、降低发射占空比或调整诱骗态配置，并在必要时切换至更低噪波长/路径，避免探测器进入不可恢复状态。
+    \item \textbf{链路故障或维护}：当链路段发生断纤、放大器掉电或计划维护告警时，系统直接跳过 L1/L2，快速执行 L3 路由级重构，并在业务恢复后重新学习噪声模型。
+    \item \textbf{控制震荡}：当检测到短周期内多次切换且收益不显著时，启用冷却时间与候选动作禁用列表，强制延长驻留时间，避免“抖动式重构”。
+\end{enumerate}
+
+\subsection{本发明带来的有益效果}
+
+与现有技术相比，本发明至少具有以下效果：
+\begin{enumerate}[label=(\arabic*)]
+    \item 显著提高量子信号与经典信号共纤传输的可用性，降低对暗光纤的依赖；
+    \item 提高量子链路在业务波动条件下的稳定性和保真度；
+    \item 将静态规划升级为在线闭环控制，减少人工运维介入；
+    \item 在不大幅影响经典业务的情况下提升量子业务的持续可服务性；
+    \item 支持“先协议层、后光层、再路由”的分层联合控制，在资源紧张或告警场景下仍可维持最低可用密钥率；
+    \item 通过新旧配置重叠保护与回滚机制降低重构失败带来的业务中断风险，提高工程可落地性；
+    \item 输出可审计的策略依据与影响评估，便于运营商运维、合规审计与跨厂家互通验证；
+    \item 具有明确的运营商部署价值，可直接服务于城域/干线量子保密通信网建设。
+\end{enumerate}
+
+\section{本申请建议重点保护的内容}
+
+\subsection{关键约束条件与切换判据}
+
+为避免将本发明写成泛泛的“动态调度”概念，建议在正式申请中把以下约束与触发条件明确为可执行判据：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{量子业务质量约束}：当前或预测的量子误码率满足 $QBER \leq QBER_{\max}$，且预测安全密钥率满足 $R_{\mathrm{sec}} \geq R_{\min}$；
+    \item \textbf{现网扰动约束}：任一次波长迁移、路径迁移或门控参数调整导致的经典业务扰动代价满足 $P_{\mathrm{impact}} \leq P_{\max}$；
+    \item \textbf{重构时延约束}：动态重配置完成时延满足 $\Delta t_{\mathrm{reconf}} \leq T_{\mathrm{guard}}$，其中 $T_{\mathrm{guard}}$ 为量子会话可容忍保护窗口；
+    \item \textbf{切换滞回约束}：在当前配置优于备选配置的增益未超过阈值 $\eta$ 时，不触发切换，以避免频繁震荡；
+    \item \textbf{保护带与波段约束}：量子信道与相邻高功率经典信道之间保持最小保护带宽，或在保护带不足时强制进入时间窗规避模式和增强纠错模式；
+    \item \textbf{最小驻留时间约束}：每次波长迁移或路径迁移后，至少驻留 $T_{\min}$ 时间或 $N_{\min}$ 个采样周期后才允许再次触发同级光层重构，以避免控制震荡；
+    \item \textbf{模型可信度约束}：当预测模型置信度低于阈值（例如遥测缺失、拟合残差异常）时，限制为协议层轻量动作或采用保守阈值，避免由错误预测引发大范围重构；
+    \item \textbf{可回滚约束}：每次重构必须在执行前生成可回滚的上一稳定配置快照；若执行失败或效果不达标，在 $T_{\mathrm{guard}}$ 内触发回滚并记录审计信息。
+\end{enumerate}
+
+在一个优选实施方式中，系统只有在“预测劣化趋势持续 $K$ 个采样周期且超过门限”的情况下才触发光层迁移；若仅出现短时尖峰噪声，则优先通过调整发射时间窗、探测门控和纠错配置完成轻量级修正。该设计有利于在现网中兼顾稳定性与灵敏性。
+
+建议将以下内容作为核心权利要求布局方向：
+\begin{enumerate}[label=(\arabic*)]
+    \item 基于链路段-波长-时间窗三维噪声感知的量子信道质量评估方法；
+    \item 路由、量子波长、时间窗、探测门控和纠错配置的联合优化方法；
+    \item 量子业务在线迁移时的新旧配置重叠保护机制；
+    \item 面向 ROADM/OTN/QKD 设备协同的控制平面架构；
+    \item 基于业务扰动代价和密钥率收益联合求解的调度目标函数。
+\end{enumerate}
+
+进一步地，建议正式申请时至少形成以下四类独立权利要求：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{方法权利要求}：限定实时噪声感知、联合求解、在线重构和重叠保护流程；
+    \item \textbf{系统权利要求}：限定经典噪声遥测模块、量子链路测量模块、联合优化引擎和重配置编排器之间的协同关系；
+    \item \textbf{设备权利要求}：限定部署于 ROADM 节点、量子收发模块或控制器中的执行装置；
+    \item \textbf{存储介质或程序产品权利要求}：覆盖控制逻辑的软件实现。
+\end{enumerate}
+
+\section{附图建议}
+
+建议在后续正式申请文件中至少配置以下附图：
+\begin{enumerate}[label=(\arabic*)]
+    \item 系统总体架构图：展示量子控制器、ROADM、OTN 网管、QKD 收发模块和遥测接口的关系；
+    \item 链路段-波长-时间窗噪声热力图示意图：展示本发明三维感知模型；
+    \item 联合优化流程图：展示从遥测采集、预测建模到动态重构的执行步骤；
+    \item 新旧配置重叠保护时序图：展示波长迁移或路径迁移时的平滑切换窗口；
+    \item 城域环网实施例示意图：展示经典业务增开导致量子业务迁移的实例。
+\end{enumerate}
+
+\section{可替代实施方式}
+
+本发明不限于上述优选实施例，可替代实施方式包括但不限于：
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{求解器替代}：联合优化引擎可采用启发式算法、整数规划、分解协调、强化学习或数字孪生驱动的预测控制实现；也可采用“离线生成候选集 + 在线快速选择”的两阶段方式降低时延。
+    \item \textbf{感知源替代}：经典噪声遥测可来自 OTN/ROADM 遥测、光谱分析仪（OSA）采样或端口功率计；量子测量指标可来自收发一体机或集中式密钥管理系统统计。
+    \item \textbf{控制面替代}：可采用集中式量子控制器，也可在多域场景采用分布式边缘控制器，通过一致性协议同步关键状态与切换窗口。
+    \item \textbf{资源维度扩展}：在多芯光纤、多纤并行或多路径承载场景中，可把“纤芯/纤对选择”作为额外决策变量，与波长与时间窗联动求解。
+    \item \textbf{协同治理扩展}：在允许条件下，可把经典业务的发射功率整形、放大器增益配置或保护带策略纳入协同控制，以进一步降低拉曼噪声。
+    \item \textbf{协议适配}：量子协议可为 BB84、诱骗态 BB84、DPS-QKD、CV-QKD 或其他协议；经典网络可为 DWDM、OTN、PON 或城域以太承载网；时间窗控制可以是发射端静默插空、收端门控自适应或两者联合。
+\end{enumerate}
+
+\section{结论}
+
+本发明围绕量子信号与经典信号共纤部署这一产业刚需，提出了可直接面向运营商现网的动态波分复用与路由控制方案。其技术实质在于把\textbf{噪声感知、波长调度、路径调度、时间窗调度与纠错调度}统一起来，从而把“实验室可共纤”推进为“现网可商用”的工程能力，具有明确的新颖性价值、产业应用价值与专利布局价值。
+
+\end{document}

@@ -1,0 +1,84 @@
+\section{Evidence Status and Open Validation}
+\label{sec:results}
+
+Table~\ref{tab:evidencemap} (Appendix~\ref{app:artifacts}) summarizes the
+full evidence map. Here we state the status of each claim category.
+
+\paragraph{Measured.}
+\begin{enumerate}
+  \item \emph{Four-arm lifetime benchmark} (Section~\ref{sec:systems},
+    Table~\ref{tab:fourarmmeasured}): dense, persistent-low-rank,
+    materialized-generated, and fused-no-store arms on Ascend~910B2.
+    The shipped fused arm runs at median $0.823$\,ms versus $0.851$\,ms for
+    the same-run materialized arm ($3.2\%$ faster) with no core write-back.
+    The persistent-low-rank arm remains $3.3\times$ faster than both
+    ($0.247$\,ms) at this geometry, with nearly identical persistent
+    storage ($13.5$ vs.\ $15.7$\,MiB including the controller); the gap is
+    the per-call cost of generating and applying the conditioned core,
+    which arms 2 and 4 trade directly---conditioning quality against
+    call latency---with no capacity difference.  Arm 2 is therefore the
+    honest latency floor for any low-rank arm, and the fused arm's claim
+    is narrower: matching the materialized arm while never storing the
+    core.
+  \item \emph{DDP-synchronized training step} (Appendix~\ref{app:histtables},
+    Tables~\ref{tab:ddptrain}~and~\ref{tab:ddptrainopt}): a real
+    \texttt{DistributedDataParallel} step on 4$\times$Ascend~910B2 at 8B-scale
+    geometry runs $2.87\times$--$3.17\times$ faster than dense with gradient
+    all-reduce in the timed region, and $3.37\times$--$4.14\times$ faster with
+    the elementwise AdamW update added; the update does not cancel---dense
+    pays $8.97$\,ms to update $3dm$ parameters against $1.0$--$1.3$\,ms for
+    the low-rank arm's $r(d{+}m)$ parameters.  This is a low-rank
+    parameter-count effect on the training side (the core is recomputed in
+    backward, not stored); it is distinct from the inference-scoped
+    no-store contract.
+  \item \emph{Causal multi-seed FFN-layer reconstruction} (Appendix~\ref{app:artifacts},
+    Table~\ref{tab:causalquality-app}): four disjoint hash-bound seeds at
+    r384, r401, and r512, all rows from one coherent run family. The
+    generated diagonal core reaches same-rank parity
+    with the trained persistent control at every rank
+    (rel.-MSE $0.449$ vs.\ $0.450$ at r384; $0.440$ vs.\ $0.439$ at r401;
+    $0.382$ vs.\ $0.383$ at r512). At the near-equal-budget pair
+    (persistent r401 at 48.2~MiB vs.\ causal r384 at 48.1~MiB) the
+    persistent factor is better by $+1.95\%$ relative MSE---the honest
+    equal-budget penalty for the generated arm at this scale.
+    Static SVD is markedly worse at every rank ($0.837$ vs.\ $0.450$ at
+    r384). A shuffled-context control (Table~\ref{tab:shuffled}) shows that
+    context-conditioning contributes only ${\sim}0.05\%$ of MSE
+    ($-0.00021$ paired at r384, not detectable at r512); most of the
+    benefit comes from the trainable per-token correction itself. A
+    rank-512 control (Table~\ref{tab:rank512control}) extends the result:
+    same-rank parity persists at r512, while a persistent r512 factor
+    beats the causal r384 core by $14.6\%$ relative MSE---capacity, not
+    generation, dominates quality.
+  \item \emph{Training-lifecycle footprint} (Appendix~\ref{app:artifacts},
+    Table~\ref{tab:lifecycle}): recompute-in-backward reduces the
+    saved-for-backward activation footprint by $24.5\times$--$71.8\times$
+    at exact gradient equality, confirming that ephemeral generation does
+    not perturb learning dynamics at the FFN level. A depth-scaling
+    measurement (Table~\ref{tab:lifecycle-depth}) confirms the per-layer
+    reduction is depth-independent up to a stack of $N{=}16$ layers.
+\end{enumerate}
+
+\paragraph{Open.}
+The following remain unmeasured or unimplemented:
+\begin{enumerate}
+  \item \emph{Branch-skipping dispatch}---whole-call routing with a causal
+    router and calibrated tail-risk certification
+    (Section~\ref{sec:analysis}) is unimplemented. The historical
+    \texttt{torch.where} prototype evaluates both branches, so routed
+    savings remain unrealized.
+  \item \emph{End-to-end inference}---full-model prefill, cached
+    single-token decode, and continuous batching with measured off-chip
+    bandwidth counters.  (The beyond-L2 epilogue bottleneck itself is now
+    resolved at the kernel level: the measured v4 multi-core kernel is
+    bit-identical to v1 and up to $3.03\times$ faster at $T{=}4096$,
+    Section~\ref{sec:systems}.)
+  \item \emph{Fused-kernel training}---the kernel's own training path
+    (retained context, in-op generator recomputation, synchronized optimizer
+    step); the no-store contract stays inference-only.
+\end{enumerate}
+
+The historical single-process conditioning ablation
+(Table~\ref{tab:lifetimeablation}, Appendix~\ref{app:histtables}) is
+retained as design exploration only; its non-causal controller and
+overlapping evaluation invalidate any quality or routing interpretation.

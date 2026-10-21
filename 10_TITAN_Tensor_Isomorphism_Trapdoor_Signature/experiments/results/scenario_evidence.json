@@ -1,0 +1,139 @@
+{
+  "source_summary": "/Users/daxu/PATENTS/10_TITAN_Tensor_Isomorphism_Trapdoor_Signature/experiments/results/summary.json",
+  "note": "Policy experiment executed locally with Python standard library. Signature metrics are imported from the repository's existing real benchmark summary.json.",
+  "scenarios": [
+    {
+      "scenario": "量子计算网络节点准入",
+      "mapped_scheme": "titan-n8-r16",
+      "structured_payload_bytes": {
+        "min": 292,
+        "max": 295,
+        "mean": 293.5
+      },
+      "policy_experiment": {
+        "valid_accept_count": 38,
+        "valid_total": 50,
+        "invalid_reject_count": 50,
+        "invalid_total": 50,
+        "invalid_reason": "domain_mismatch"
+      },
+      "signature_experiment_from_existing_real_benchmark": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_mean_ms": 1.808,
+        "verify_p95_ms": 2.674,
+        "verify_throughput_sig_s": 553.097,
+        "pk_bytes": 512,
+        "sig_bytes": 3104
+      },
+      "sample_valid_payload": {
+        "scenario": "quantum_network_node_admission",
+        "certificate_digest": "0eff0eb1226da21ee5043c51295079853e45aebca203d310ac32db877ec1cd1b",
+        "node_id": "qnode-0000",
+        "node_role": "scheduler",
+        "scheduling_domain": "domain-a",
+        "session_timestamp": 1710000000,
+        "handshake_nonce": "a8f5132cc64d5b484e02bbd9278204ad"
+      },
+      "sample_invalid_payload": {
+        "scenario": "quantum_network_node_admission",
+        "certificate_digest": "0eff0eb1226da21ee5043c51295079853e45aebca203d310ac32db877ec1cd1b",
+        "node_id": "qnode-0000",
+        "node_role": "scheduler",
+        "scheduling_domain": "domain-z",
+        "session_timestamp": 1710000000,
+        "handshake_nonce": "a8f5132cc64d5b484e02bbd9278204ad"
+      }
+    },
+    {
+      "scenario": "AI加速设备固件升级",
+      "mapped_scheme": "titan-n10-r32",
+      "structured_payload_bytes": {
+        "min": 232,
+        "max": 232,
+        "mean": 232
+      },
+      "policy_experiment": {
+        "valid_accept_count": 50,
+        "valid_total": 50,
+        "invalid_reject_count": 50,
+        "invalid_total": 50,
+        "invalid_reason": "rollback_counter_too_small"
+      },
+      "signature_experiment_from_existing_real_benchmark": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_mean_ms": 4.136,
+        "verify_p95_ms": 5.343,
+        "verify_throughput_sig_s": 241.779,
+        "pk_bytes": 1000,
+        "sig_bytes": 9632
+      },
+      "sample_valid_payload": {
+        "scenario": "ai_accelerator_firmware_upgrade",
+        "device_model": "CM-A100",
+        "firmware_version": "1.2.0",
+        "image_digest": "d4160463830ac3fc8337e9bcefdf87cecc6ca75dd961669e66a461417ab3207b",
+        "rollback_counter": 5,
+        "release_timestamp": 1711000000
+      },
+      "sample_invalid_payload": {
+        "scenario": "ai_accelerator_firmware_upgrade",
+        "device_model": "CM-A100",
+        "firmware_version": "1.2.0",
+        "image_digest": "d4160463830ac3fc8337e9bcefdf87cecc6ca75dd961669e66a461417ab3207b",
+        "rollback_counter": 3,
+        "release_timestamp": 1711000000
+      }
+    },
+    {
+      "scenario": "模型发布完整性校验",
+      "mapped_scheme": "titan-n12-r32",
+      "structured_payload_bytes": {
+        "min": 331,
+        "max": 331,
+        "mean": 331
+      },
+      "policy_experiment": {
+        "valid_accept_count": 50,
+        "valid_total": 50,
+        "invalid_reject_count": 50,
+        "invalid_total": 50,
+        "invalid_reason": "dependency_digest_mismatch"
+      },
+      "signature_experiment_from_existing_real_benchmark": {
+        "verify_success_count": 50,
+        "verify_total": 50,
+        "tampered_msg_reject_count": 50,
+        "tampered_sig_reject_count": 50,
+        "verify_mean_ms": 4.806,
+        "verify_p95_ms": 6.271,
+        "verify_throughput_sig_s": 208.073,
+        "pk_bytes": 1728,
+        "sig_bytes": 13856
+      },
+      "sample_valid_payload": {
+        "scenario": "model_release_integrity",
+        "model_id": "cm-llm-0000",
+        "weight_digest": "a2efc2892f230e9204cef100b24b231a40f96551dea98f4c6ad4f4826697cf1a",
+        "framework_version": "PyTorch-2.3.1",
+        "target_accelerator": "Ascend-910B",
+        "dependency_digest": "aab4f97ac34cf93fa65e5cc8df4890631a5357dab91b7dfa6152cbcfdd534272",
+        "release_tag": "2026.04.01"
+      },
+      "sample_invalid_payload": {
+        "scenario": "model_release_integrity",
+        "model_id": "cm-llm-0000",
+        "weight_digest": "a2efc2892f230e9204cef100b24b231a40f96551dea98f4c6ad4f4826697cf1a",
+        "framework_version": "PyTorch-2.3.1",
+        "target_accelerator": "Ascend-910B",
+        "dependency_digest": "deadbeef",
+        "release_tag": "2026.04.01"
+      }
+    }
+  ]
+}

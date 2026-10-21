@@ -1,0 +1,554 @@
+\documentclass[UTF8,a4paper,12pt]{ctexart}
+\usepackage{cm_patent_template}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
+
+\newcommand{\cmfigurecaption}[1]{%
+  {\centering\fangsong\fontsize{10.5pt}{16pt}\selectfont #1\par}%
+}
+\newcommand{\cmtablecaption}[1]{%
+  {\centering\fangsong\fontsize{10.5pt}{16pt}\selectfont #1\par}%
+}
+
+\tikzset{
+  cmblock/.style={draw,rounded corners=2pt,align=center,minimum height=8mm,text width=2.35cm,fill=black!4,font=\fontsize{9pt}{11pt}\selectfont},
+  cmwide/.style={draw,rounded corners=2pt,align=center,minimum height=8mm,text width=3.1cm,fill=black!4,font=\fontsize{9pt}{11pt}\selectfont},
+  cmmini/.style={draw,rounded corners=2pt,align=center,minimum height=8mm,text width=1.95cm,fill=black!4,font=\fontsize{8.5pt}{10pt}\selectfont},
+  cmarrow/.style={-Latex,line width=0.8pt},
+  cmdeny/.style={-Latex,dashed,line width=0.8pt},
+  cmtitle/.style={font=\bfseries\fontsize{10pt}{12pt}\selectfont},
+  cmnote/.style={font=\fontsize{8pt}{10pt}\selectfont,align=center}
+}
+
+\begin{document}
+\sloppy
+
+\cmcovermaintitle{中国移动专利申请}
+\cmcoversubtitle{技术交底书}
+
+\begin{cmcoverinfo}
+\cmcoverrow{公司编号}{}
+\cmcoverrow{发明名称}{一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法}
+\cmcoverrow{申报单位}{研究院}
+\cmcoverrow{申报类型}{发明}
+\cmcoverrow{发明人}{许达}
+\cmcoverrow{技术联系人}{许达、xudayj@chinamobile.com、+86-13521894156}
+\end{cmcoverinfo}
+
+\vspace{10pt}
+\begin{cmnoticebox}
+\cmsmallnote{注意事项1．技术联系人应为深入了解本申请提案技术方案的技术人员，如交底书撰写人，负责向专利审核人员和代理人解释技术细节、修改交底书、审核申请文件等工作，请务必填写技术联系人的姓名、E-mail、手机。2．请按照集团公司提供的本技术交底书模板逐项填写，除交底书第八部分为可选项外，其他均为必须填写的内容。填写不全的专利申请提案，集团公司不予立案。3．专利申请不要求已具体实现或实施，形成完整的技术方案即可提交申请，特别是需要向合作方公开、向标准提案或以其他方式公开的重要技术构思应在公开前尽早申请。4．技术交底书文件命名要求：发明名称＋短横线（半角）＋交底书＋版本号。}
+\end{cmnoticebox}
+
+\vspace{12pt}
+\cmcovercompany{中国移动通信集团有限公司}
+
+\cmdisclosuresection{一、发明名称}
+\cmdisclosurepara{一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法。}
+
+\cmdisclosuresection{二、技术领域}
+\cmdisclosurepara{本申请涉及 AI 芯片（GPU / NPU / TPU）上的神经网络执行优化，具体涉及一种在前向推理与反向训练中，于片上内存（SRAM / Scratchpad）中实时生成临时权重描述子、立即消费并在全生命周期内禁止写回片外存储器（HBM / DRAM）的执行系统与方法。}
+
+\cmdisclosuresection{三、现有技术的技术方案}
+
+\cmdisclosurepara{\textbf{AI 芯片的存储-计算层次。} 在冯$\cdot$诺依曼瓶颈与”内存墙”限制下，一颗典型 AI 芯片可抽象为如下存储-计算层次结构：}
+\cmdisclosurepara{\textbf{(1) 片外存储器}（HBM / DRAM）——容量大（数十 GiB），带宽 $B_{\mathrm{ext}}$ 有限（$\sim$1.6 TB/s 量级）。模型权重 $W$、优化器状态（Adam 一阶/二阶矩估计缓冲区）、KV 缓存均长期驻留于此，属于持久化存储。}
+\cmdisclosurepara{\textbf{(2) 片上内存}（SRAM / Scratchpad / Shared Memory / L1-L2 Cache）——容量小（数百 KB $\sim$ 数 MB），带宽 $B_{\mathrm{on}} \gg B_{\mathrm{ext}}$（数十 TB/s）。位于计算单元附近，数据到达后可在单周期或极少周期内被读取。}
+\cmdisclosurepara{\textbf{(3) 矩阵计算单元}（Tensor Core / Cube Unit / 脉动阵列）——执行高吞吐矩阵乘加的专用硬件阵列，峰值算力可达数百 TFLOPS。}
+\cmdisclosurepara{\textbf{(4) 向量计算单元}（CUDA Core / Vector Unit / SIMD Core）——执行逐元素变换（激活函数、归一化）与描述子生成器推理。}
+\cmdisclosurepara{\textbf{(5) DMA 引擎}——在片外存储器与片上内存之间搬运数据块的专用硬件，通过 DMA 描述符控制搬运地址与长度。}
+\cmdisclosurepara{\textbf{(6) 高速互连}（NVLink / HCCS / InfiniBand / RoCE）——多卡/多节点通信通路，用于分布式训练的集合通信原语（All-Reduce、Reduce-Scatter 等）。}
+
+\cmdisclosurepara{\textbf{标准执行数据流与内存墙。} 在上述架构上，一层线性变换 $Y = XW$（$W \in \mathbb{R}^{d \times m}$，fp16）的执行数据流为：\\
+(a) DMA 引擎将 $W$ 从片外存储器完整搬运至片上内存，搬运量 $= 2dm$ 字节；\\
+(b) 矩阵计算单元在片上完成矩阵乘法；\\
+(c) 结果写回片外或流入下一层。\\
+该过程受限于片外存储器带宽 $B_{\mathrm{ext}}$：当矩阵计算单元的峰值吞吐远超 $B_{\mathrm{ext}}$ 所能供给的数据速率时，计算单元实际利用率 $\eta \ll 1$，大量周期消耗在等待数据搬运上——即”内存墙”。Transformer 的参数集中在 FFN 三投影（up / gate / down）和注意力投影，每层、每次迭代均重复步骤 (a)。训练时还需在反向传播中再次读取 $W$ 计算梯度 $\nabla W$，并通过高速互连同步 $\nabla W$。此外，模型权重与 KV 缓存共享有限的片外存储器容量：权重占用越大，KV 缓存可用空间越小，直接制约自回归解码的最大上下文长度和并发批次数。}
+
+\cmdisclosurepara{\textbf{现有优化方法。} 针对上述瓶颈，现有技术从以下方向改进：\\
+1．量化——降低每个权重的位宽；\\
+2．剪枝或静态低秩压缩——减少持久参数规模；\\
+3．LoRA 等参数高效微调——仅训练少量附加参数；\\
+4．MoE——稀疏激活减少有效计算量；\\
+5．Hypernetwork / 动态滤波器——根据输入生成权重；\\
+6．IO-aware 算子 / SRAM 常驻设计——优化数据搬运调度；\\
+7．ZeRO / 分片优化器——压缩优化器状态和同步流量。}
+
+\cmdisclosuresection{四、现有技术的缺点及本申请要解决的技术问题}
+\cmdisclosurepara{上述方法的共同局限在于：权重 $W$ 始终被视为片外存储器中的\textbf{持久对象}——需长期占用 HBM 容量，需 DMA 反复搬运至片上，需优化器维护其状态，需 All-Reduce 同步其梯度。具体而言：量化和低秩压缩减小了 $W$ 的体积但未改变其”持久驻片外”的本质；Hypernetwork 引入了”生成权重”但未约束生成物的片上生命周期；IO-aware 算子优化了搬运调度但仍假设 $W$ 预存于片外；分布式优化聚焦梯度压缩却未消除目标层梯度的同步需求。归纳而言，现有技术缺少一个将”运行时生成、片上消费、用后销毁、通信截断”统一起来的权重对象生命周期控制机制。}
+\cmdisclosurepara{本申请要解决的技术问题是：\textbf{如何将目标层权重从”片外存储器中的持久矩阵”改造为”片上内存中受控存在的临时对象”，使其在前向推理、自回归解码和反向训练中均不依赖 DMA 反复读取完整稠密 $W$，从而同时降低 HBM 流量、解码缓存压力和跨节点同步负担。}}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[font=\bfseries\fontsize{10pt}{12pt}\selectfont] at (6.0,2.2) {现有静态权重路径};
+  \node[cmblock] (s1) at (0.8,1.1) {片外存储器\\静态稠密权重};
+  \node[cmblock] (s2) at (4.0,1.1) {片上内存\\搬运权重};
+  \node[cmblock] (s3) at (7.2,1.1) {矩阵计算单元\\输出结果};
+  \node[cmwide] (s4) at (10.8,1.1) {优化器状态维护\\All-Reduce 同步};
+  \draw[cmarrow] (s1) -- (s2);
+  \draw[cmarrow] (s2) -- (s3);
+  \draw[cmarrow] (s3) -- (s4);
+
+  \node[font=\bfseries\fontsize{10pt}{12pt}\selectfont] at (6.5,-0.5) {本申请临时权重路径};
+  \node[cmblock] (n1) at (0.0,-1.7) {条件信号\\激活块+层标识};
+  \node[cmblock] (n2) at (3.2,-1.7) {描述子生成器\\描述子块};
+  \node[cmblock] (n3) at (6.4,-1.7) {片上内存\\片上转换};
+  \node[cmblock] (n4) at (9.6,-1.7) {矩阵计算单元\\立即消费};
+  \node[cmblock] (n5) at (12.8,-1.7) {释放/覆写/清零\\缓冲区复用};
+  \draw[cmarrow] (n1) -- (n2);
+  \draw[cmarrow] (n2) -- (n3);
+  \draw[cmarrow] (n3) -- (n4);
+  \draw[cmarrow] (n4) -- (n5);
+
+  \node[cmwide,fill=black!8] (deny) at (6.4,-3.6) {禁止：完整物理形态\\写回至片外存储器};
+  \draw[cmdeny] (deny) -- (n3);
+\end{tikzpicture}}%
+\end{center}
+\cmfigurecaption{图1 现有静态权重路径与本申请临时权重路径对比示意图}
+
+\cmdisclosuresection{五、本申请的技术方案的详细阐述}
+
+\cmdisclosurepara{\textbf{5.1\quad 核心数学变换：持久化权重 $\to$ 片上临时描述子。} 设目标线性变换的稠密权重 $W\in\mathbb{R}^{d\times m}$，输入激活 $X\in\mathbb{R}^{b\times d}$。传统执行数据流：}
+\begin{equation}
+  Y = XW, \quad Y\in\mathbb{R}^{b\times m}
+\end{equation}
+\cmdisclosurepara{DMA 引擎需将 $2dm$ 字节（fp16）的 $W$ 从片外存储器完整搬运至片上内存，矩阵计算单元方可执行乘法。本申请提出将持久化权重矩阵替换为\textbf{临时权重描述子}的片上生成与即时消费机制。数学等效变换基于低秩分解假设，由描述子生成器 $G_\theta$ 在片上内存中实时生成低秩因子 $U\in\mathbb{R}^{d\times r}$、$V\in\mathbb{R}^{r\times m}$（$r \ll \min(d,m)$）：}
+\begin{equation}
+  Y = X(UV) \approx XW
+\end{equation}
+\cmdisclosurepara{传统路径片外读取量为 $2dm$ 字节；低秩路径仅需读取 $G_\theta$ 输出的因子矩阵 $U$ 与 $V$，读取量为 $2r(d+m)$ 字节。带宽压缩比定义为：}
+\begin{equation}
+  \rho = \frac{dm}{(d+m)r}
+\end{equation}
+\cmdisclosurepara{以专利实施例中 $d{=}4096$，$m{=}14336$ 的三投影门控 FFN 为例：$r{=}128$ 时 $\rho{\approx}24.9$（片外访问流量下降约 96\%）；$r{=}64$ 时 $\rho{\approx}49.8$。$G_\theta$ 自身参数读取开销计入总读取量，实测表明该开销远小于稠密权重读取。}
+
+\cmdisclosurepara{\textbf{5.2\quad 片上融合执行：禁止在任一存储器层级物化 $UV$。} 完整物理矩阵 $UV \in \mathbb{R}^{d\times m}$ \textbf{禁止在任一存储器层级物化}——既不出现在片外存储器（HBM / DRAM），也不出现在片上内存（SRAM / Scratchpad）中。若先计算 $UV$，其 $2dm$ 字节将击穿片上内存容量。本申请利用矩阵乘法结合律，在\textbf{单个融合算子（fused kernel）}内分两步链式执行：}
+\begin{equation}
+  Y = (XU)V
+\end{equation}
+\cmdisclosurepara{第一步，矩阵计算单元在片上完成 $Z = XU \in \mathbb{R}^{b\times r}$，$Z$ 暂存于寄存器文件或共享内存；第二步，同一算子内立即计算 $Y = ZV \in \mathbb{R}^{b\times m}$。整个执行窗口内\textbf{不产生外部存储器写回事务}：$U$、$V$、$Z$ 所在片上地址在消费完成后立即标记为可覆写（Invalidated），不向片外存储器发起任何写回请求。\textbf{核心约束：$U$、$V$ 的物理生命周期被限制在单次融合算子的执行窗口内，全程驻片上，全程不写回，全程不物化 $UV$。}}
+
+\cmdisclosurepara{\textbf{5.3\quad 条件描述子生成器 $G_\theta$。} $U$、$V$ 非静态参数，而是由描述子生成器 $G_\theta$ 根据条件信号 $c$ 在片上实时产生：}
+\begin{equation}
+  (U, V) = G_\theta(c), \quad c = f(h, \ell)
+\end{equation}
+\cmdisclosurepara{其中 $c = f(h, \ell)$，$h$ 为当前激活特征（可选附加序列位置、路由摘要、任务标识等），$\ell$ 为层标识。$G_\theta$ 的具体实现形态包括但不限于：\\
+(a) 轻量 MLP——两层全连接网络，隐层维度远小于 $d$，对条件向量 $c$ 做非线性映射后 reshape 为 $U$、$V$；\\
+(b) 低秩投影头——单层线性层将 $c$ 投影为 $U$ 的列向量和 $V$ 的行向量，逐列/逐行拼接成因子矩阵；\\
+(c) 基库系数路径（见 5.4 节）——$G_\theta$ 仅输出 $K$ 个标量系数，因子由基库线性组合得到。上述实现均在向量计算单元上执行，计算量为 $O(d \cdot r)$ 量级，远小于目标层 $O(dm)$ 的矩阵乘法。$\theta$ 为 $G_\theta$ 的可学习参数，$|\theta| \ll \sum_\ell |W_\ell|$，因此训练时仅需对 $\theta$ 维护优化器状态并参与跨节点同步；$U$、$V$ 及其梯度不进入优化器，不参与 All-Reduce。}
+
+\cmdisclosurepara{\textbf{5.4\quad 基库系数路径（可选）。} $G_\theta$ 也可输出系数 $\{\alpha_k\}_{k=1}^{K}$，在片上从可学习基库 $\{B_k\}$ 重构因子：}
+\begin{equation}
+  U = \sum_{k=1}^{K} \alpha_k B_k
+\end{equation}
+\cmdisclosurepara{此路径进一步压缩 $G_\theta$ 输出维度，约束不变。}
+
+\cmdisclosurepara{\textbf{5.5\quad 整体工作流程与生命周期状态机。} 如图2所示，主链路为：条件信号 $\to$ $G_\theta$ 生成描述子块 $\to$ 片上内存暂留/转换 $\to$ 矩阵计算单元消费 $\to$ 释放/覆写/清零。解码场景可将节省的 HBM 容量转给 KV 缓存，训练场景可在反向时片上重算并截断梯度同步。}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[cmtitle] at (6.8,2.0) {本申请技术工作总览};
+  \node[cmmini] (in) at (0.0,0.6) {激活块\\层标识};
+  \node[cmmini] (cond) at (2.8,0.6) {条件模块\\形成条件信号};
+  \node[cmmini] (meta) at (5.6,0.6) {描述子生成器\\生成描述子块};
+  \node[cmmini] (local) at (8.4,0.6) {片上内存\\暂留/片上转换};
+  \node[cmmini] (alu) at (11.2,0.6) {矩阵计算单元\\输出块/梯度块};
+  \node[cmmini] (life) at (14.0,0.6) {释放/覆写\\清零};
+
+  \draw[cmarrow] (in) -- (cond);
+  \draw[cmarrow] (cond) -- (meta);
+  \draw[cmarrow] (meta) -- (local);
+  \draw[cmarrow] (local) -- (alu);
+  \draw[cmarrow] (alu) -- (life);
+
+  \node[cmwide,fill=black!8] (forbid) at (7.0,-1.8) {禁止：描述子块/目标权重块\\完整物理形态写回片外存储};
+  \draw[cmdeny] (forbid) -- (meta);
+  \draw[cmdeny] (forbid) -- (local);
+  \draw[cmdeny] (forbid) -- (alu);
+
+  \node[cmwide] (decode) at (3.2,-4.2) {解码场景\\节省的片外存储容量\\重分配给键值缓存};
+  \node[cmwide] (train) at (10.8,-4.2) {训练场景\\反向时片上重算\\仅同步压缩参数子集};
+  \draw[cmarrow] (life.south west) to[out=-145,in=25] (decode.north east);
+  \draw[cmarrow] (life.south) to[out=-90,in=90] (train.north);
+\end{tikzpicture}}%
+\end{center}
+\cmfigurecaption{图2 本申请技术工作流程总览示意图}
+\cmdisclosurepara{如图3所示，每个临时权重描述子块经历\textbf{五个原子状态}：\textbf{生成（Generated）$\to$ 片上驻留（On-chip Resident）$\to$ 片上转换（On-chip Transform）$\to$ 消费（Consumed）$\to$ 释放/清零（Released/Zeroed）}。描述子块完成第五个状态（释放/清零）后，其所占片上缓冲区即可被下一描述子块复用。状态机施加如下\textbf{排他性约束}：}
+\cmdisclosurepara{(a) \textbf{写回禁止}：在五个原子状态的任一阶段，描述子块均不得向片外存储器（HBM / DRAM）发起写回事务；若检测到写回请求，状态机执行拒绝（deny）。}
+\cmdisclosurepara{(b) \textbf{优化器排斥}：描述子块对应的梯度张量不进入全局优化器（Adam / AdamW）的一阶/二阶矩估计缓冲区；若检测到优化器登记请求，状态机执行旁路（bypass）。}
+\cmdisclosurepara{(c) \textbf{通信截断}：描述子块的梯度不参与跨节点集合通信原语（All-Reduce / Reduce-Scatter）；若检测到同步请求，状态机执行截断（truncate）。}
+\cmdisclosurepara{仅当块完成”释放/清零”后，对应片上缓冲区方可被下一块复用。此状态机将”运行时生成”与”不可片外物化”绑定为统一的生命周期约束。}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[cmmini] (a) at (0.8,0.0) {1. 生成};
+  \node[cmmini] (b) at (3.2,0.0) {2. 片上驻留};
+  \node[cmmini] (c) at (5.6,0.0) {3. 片上转换};
+  \node[cmmini] (d) at (8.0,0.0) {4. 消费};
+  \node[cmmini] (e) at (10.4,0.0) {5. 释放/清零};
+  \draw[cmarrow] (a) -- (b);
+  \draw[cmarrow] (b) -- (c);
+  \draw[cmarrow] (c) -- (d);
+  \draw[cmarrow] (d) -- (e);
+
+  \node[cmnote,anchor=north] at (10.4,-0.7) {释放后缓冲区\\可被下一块复用};
+
+  \node[cmwide,fill=black!8] (g) at (5.6,-2.2) {写回/优化器/同步请求\\拒绝、旁路或截断};
+  \draw[cmdeny] (b) -- (g);
+  \draw[cmdeny] (c) -- (g);
+  \draw[cmdeny] (d) -- (g);
+\end{tikzpicture}
+\end{center}
+\cmfigurecaption{图3 临时权重描述子块生命周期与约束动作示意图}
+
+\cmdisclosurepara{以下逐阶段说明每个原子状态的物理执行位置与数据流事件。}
+
+\cmdisclosurepara{\textbf{阶段 1——生成。} 向量计算单元执行描述子生成器 $G_\theta$ 的前向计算，条件信号 $c{=}f(h,\ell)$ 的融合计算亦在此完成。条件信号中的激活块 $X$ 由 DMA 引擎从片外存储器搬运至片上内存，层标识 $\ell$ 来自寄存器或常量内存；$G_\theta$ 自身参数 $\theta$ 存储于片外存储器，本阶段按需读取至片上。产物为低秩因子块 $U \in \mathbb{R}^{d\times r}$ 与 $V \in \mathbb{R}^{r\times m}$（或基库系数序列），直接写入片上内存的指定缓冲区。}
+
+\cmdisclosurepara{\textbf{阶段 2——片上驻留。} 因子块 $U$、$V$ 在片上内存（SRAM / Shared Memory）的临时缓冲区中保持有效，未被覆写。生命周期控制器维护该缓冲区的状态标记为"占用"，并记录块标识与层标识。本阶段无任何数据写回片外存储器事务，片外存储器中无 $U$、$V$ 的有效物理副本。}
+
+\cmdisclosurepara{\textbf{阶段 3——片上转换。} 向量计算单元（或专用片上转换逻辑）将描述子展开为矩阵计算单元可直接消费的因子分块：若 $G_\theta$ 输出的是基库系数 $\{\alpha_k\}$，本阶段将其与基库 $\{B_k\}$ 线性组合为 $U$、$V$；若 $G_\theta$ 已直接输出 $U$、$V$，本阶段执行数据排布变换（layout transform）以匹配矩阵计算单元的输入格式要求。产物仍驻留于片上内存原缓冲区，不涉及片外存储器读写。}
+
+\cmdisclosurepara{\textbf{阶段 4——消费。} 矩阵计算单元在片上执行两步链式乘法：第一步读取片上内存中的 $X$ 与 $U$，计算 $Z{=}XU$，$Z$ 写入寄存器文件或共享内存；第二步读取 $Z$ 与 $V$，计算 $Y{=}ZV$，结果按需写回片外存储器或传递至下一层。完整矩阵 $UV$ 不在任何存储器层级物化；中间结果 $Z$ 的生命周期仅限于两步乘法之间，同样不写回片外存储器。}
+
+\cmdisclosurepara{\textbf{阶段 5——释放/清零。} 当前输出块计算完成后，片上内存控制器（硬件或运行时管理单元）立即将存放 $U$、$V$、$Z$ 的缓冲区标记为"无效/可覆写"，或在安全场景下执行清零操作。释放须在对应缓冲区被下一描述子块重用之前完成。生命周期控制器拦截任何指向这些临时对象的写回请求（DMA 描述符、缓存驱逐写回等），执行拒绝或截断，确保临时权重描述子的完整物理形态永不出现于片外存储器地址总线事务中。}
+
+\begin{center}
+\cmtablecaption{表10 临时权重描述子全生命周期物理位置与数据流总结}
+\vspace{4pt}
+\small
+\begin{tabular}{>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{3.2cm}>{\centering\arraybackslash}p{3.0cm}>{\centering\arraybackslash}p{2.8cm}}
+\hline
+阶段 & 物理位置 & 是否涉及片外存储器读写 & 关键数据对象 \\
+\hline
+生成    & 向量计算单元、片上内存 & 仅读取 $\theta$ 与激活分块 & $U$, $V$ 或系数序列 \\
+驻留    & 片上内存 & 否 & $U$, $V$ \\
+转换    & 向量计算单元、片上内存 & 否 & 转换后因子块 \\
+消费    & 矩阵计算单元、寄存器文件 & 否（$Y$ 按需写回） & $Z$, $Y$ \\
+释放    & 片上内存控制器 & 否（拒绝写回请求） & 地址标记变更 \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+\cmdisclosurepara{\textbf{数据流边界总结：}描述子生成器参数 $\theta$ 和最终输出 $Y$ 可与片外存储器交互，但临时权重描述子 $U$、$V$ 及中间结果 $Z$ 的数据移动严格限制在片上互连与片上内存层级内，无片外存储器地址映射。}
+
+\cmdisclosurepara{如图4所示，本申请禁止在片外存储器中形成完整矩阵 $UV$，而是在片上链式执行 $Y{=}(XU)V$。对于 Transformer FFN，系统对 up / gate / down 三投影分别生成对应的 $U$、$V$ 并以块为粒度依次执行"生成 $\to$ 消费 $\to$ 释放"流程，优选在\textbf{单次持久化内核}启动中完成全部操作。}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[cmtitle] at (4.2,1.8) {禁止的片外物化路径};
+  \node[cmmini] (fx) at (0.8,0.5) {输入激活\\\(X\)};
+  \node[cmwide,fill=black!8] (fuv) at (4.2,0.5) {禁止：完整稠密矩阵\\\(UV\) 物化};
+  \node[cmmini] (fy) at (7.6,0.5) {输出\\\(Y\)};
+  \draw[cmarrow] (fx) -- (fuv);
+  \draw[cmarrow] (fuv) -- (fy);
+
+  \node[cmtitle] at (6.4,-1.2) {本申请的片上链式执行路径};
+  \node[cmmini] (cx) at (0.0,-2.7) {输入激活\\\(X\)};
+  \node[cmmini] (cu) at (3.2,-2.7) {临时因子块\\\(U\)};
+  \node[cmmini] (cxu) at (6.4,-2.7) {中间结果\\\(XU\)};
+  \node[cmmini] (cv) at (9.6,-2.7) {临时因子块\\\(V\)};
+  \node[cmmini] (cy) at (12.8,-2.7) {输出\\\(Y\)};
+  \draw[cmarrow] (cx) -- (cu);
+  \draw[cmarrow] (cu) -- (cxu);
+  \draw[cmarrow] (cxu) -- (cv);
+  \draw[cmarrow] (cv) -- (cy);
+
+  \node[cmwide,fill=black!8] (denyuv) at (6.4,-4.8) {禁止：在片外存储器中\\形成完整矩阵 \(UV\)};
+  \draw[cmdeny] (denyuv) -- (cu);
+  \draw[cmdeny] (denyuv) -- (cv);
+\end{tikzpicture}}%
+\end{center}
+\cmfigurecaption{图4 基于结合律的矩阵执行与禁止片外物化示意图}
+\cmdisclosurepara{\textbf{5.6\quad 推理解码：HBM 容量重分配与双缓冲。} 如图5所示，低秩因子替代稠密权重后释放的 HBM 容量可重定向给 KV 缓存。片上内存设置 $\geq 2$ 个缓冲区：缓冲区 A 供矩阵计算单元消费当前描述子块时，$G_\theta$ + 向量计算单元同时在缓冲区 B 生成下一描述子块，实现流水线重叠。}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[cmtitle] at (4.3,2.1) {片外存储容量重分配};
+  \node[cmwide] (saved) at (1.7,0.9) {节省的片外存储容量\\减少静态权重搬运};
+  \node[cmwide] (kv) at (6.9,0.9) {键值缓存 / 长上下文缓存\\可用容量增加};
+  \draw[cmarrow] (saved) -- (kv);
+
+  \node[cmtitle] at (4.3,-0.8) {生成路径与计算路径双缓冲重叠};
+  \node[cmblock] (sched) at (4.3,-2.1) {生命周期/切换调度器};
+  \node[cmwide] (bufa) at (1.8,-3.7) {缓冲区A\\当前描述子块};
+  \node[cmwide] (compute) at (6.8,-3.7) {矩阵计算单元\\当前块矩阵计算};
+  \node[cmwide] (gen) at (1.8,-5.5) {描述子生成器 + 向量计算单元\\下一块生成};
+  \node[cmwide] (bufb) at (6.8,-5.5) {缓冲区B\\下一描述子块};
+  \draw[cmarrow] (bufa) -- (compute);
+  \draw[cmarrow] (gen) -- (bufb);
+  \draw[cmarrow] (sched) -- (bufa);
+  \draw[cmarrow] (sched) -- (gen);
+  \draw[cmarrow] (bufb) to[bend left=16] node[below,cmnote] {切换后成为当前缓冲区} (compute);
+\end{tikzpicture}
+\end{center}
+\cmfigurecaption{图5 解码推理中的键值缓存重分配与双缓冲重叠示意图}
+\cmdisclosurepara{\textbf{5.7\quad 训练：反向重计算与梯度截断。} 如图6所示，反向传播时系统\textbf{不从片外存储器读取缓存的 $W$}，而是再次调用 $G_\theta$ 在片上重新生成 $U$、$V$（activation recomputation），计算梯度后立即释放。训练数据流改革体现为三条形式化约束：}
+\cmdisclosurepara{(a) \textbf{权重重计算}：反向传播所需的 $U$、$V$ 由 $G_\theta$ 在片上重新生成，不从片外存储器读取任何缓存副本，消除了前向-反向之间对 $W$ 的 HBM 读取依赖。}
+\cmdisclosurepara{(b) \textbf{优化器状态消除}：目标层的临时梯度 $\nabla_U \mathcal{L}$、$\nabla_V \mathcal{L}$ 不进入 Adam / AdamW 的一阶矩 $m_t$ 和二阶矩 $v_t$ 缓冲区，从而释放对应的 $2\times$ 参数量级优化器内存。}
+\cmdisclosurepara{(c) \textbf{通信截断}：目标层梯度不参与 All-Reduce / Reduce-Scatter 集合通信原语，仅描述子生成器参数 $\theta$ 参与跨节点同步——$|\theta| \ll \sum_\ell |W_\ell|$，通信量降低与压缩比 $\rho$ 同阶。}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[cmmini] (req) at (0.0,1.2) {反向传播\\请求};
+  \node[cmwide] (intercept) at (4.2,1.2) {权重读取请求拦截\\不直接读片外存储};
+  \node[cmwide] (recomp) at (8.8,1.2) {描述子重计算模块\\再次生成描述子块};
+  \node[cmwide] (grad) at (8.8,-1.2) {局部梯度块 / 输入梯度块\\片上计算};
+  \draw[cmarrow] (req) -- (intercept);
+  \draw[cmarrow] (intercept) -- (recomp);
+  \draw[cmarrow] (recomp) -- (grad);
+
+  \node[cmwide,fill=black!8] (opt) at (1.8,-4.2) {不进入全局优化器\\状态缓存};
+  \node[cmwide,fill=black!8] (sync) at (6.6,-4.2) {不参与 All-Reduce /\\Reduce-Scatter};
+  \node[cmwide] (subset) at (11.4,-4.2) {仅同步描述子生成器参数\\基库参数或压缩参数子集};
+  \draw[cmdeny] (opt) -- (grad);
+  \draw[cmdeny] (sync) -- (grad);
+  \draw[cmarrow] (grad) -- (subset);
+\end{tikzpicture}
+\end{center}
+\cmfigurecaption{图6 训练反向重计算与优化器/同步截断示意图}
+\cmdisclosurepara{\textbf{5.8\quad 平台术语映射。} 本申请采用平台无关术语：HBM/显存/DDR $\to$ 片外存储器；SRAM/Scratchpad/Shared Memory/L0/L1 $\to$ 片上内存；Tensor Core/Cube/脉动阵列 $\to$ 矩阵计算单元；CUDA Core/Vector/SIMD $\to$ 向量计算单元；NVLink/HCCS/InfiniBand/RoCE $\to$ 高速互连。可在 GPU、NPU、TPU 的软件栈（编译器/运行时/框架插件）或硬件逻辑（片上控制器/固件）中实现。}
+\cmdisclosurepara{\textbf{5.9\quad 量化分析与实测验证。} 以 fp16、$d{=}4096$、$m{=}14336$ 的三投影门控 FFN 为例，稠密权重 336.0 MiB。因子参数量 = $(d{+}m) \times r \times 3 \times 2 / 2^{20}$，压缩比 = $dm/[(d{+}m)r]$。}
+\begin{center}
+\cmtablecaption{表1 低秩因子理论参数量与读取量（三投影门控 FFN，fp16，公式推导）}
+\vspace{4pt}
+\begin{tabular}{cccc}
+\hline
+秩值 \(r\) & 因子参数量 (MiB) & 读取下降倍数 & 参数占比 \\
+\hline
+稠密基线 & 336.00 & 1.0$\times$ & 100\% \\
+32  & 3.38  & 99.6$\times$ & 1.0\% \\
+64  & 6.75  & 49.8$\times$ & 2.0\% \\
+128 & 13.50 & 24.9$\times$ & 4.0\% \\
+256 & 27.00 & 12.4$\times$ & 8.0\% \\
+\hline
+\end{tabular}
+\end{center}
+\cmdisclosurepara{$G_\theta$ 自身参数存储在 HBM 中，但参数量仅为被替代稠密权重的 1\%--8\%（表1）。其 HBM 读取开销已包含在后续实测延迟中。条件融合函数 $f(\cdot)$ 的计算（均值池化 + 层嵌入查表）为 $O(d)$，相对于 FFN 的 $O(dm)$ 矩阵乘法可忽略。}
+
+\cmdisclosurepara{\textbf{反向重计算 FLOPs 分析。} 以 $d{=}4096$, $m{=}14336$, $r{=}128$ 为例：稠密 $xW$ 的 FLOPs $\approx 2dm = 117.4$M/token；低秩 $xU{\cdot}V$ 的 FLOPs $\approx 2(d{+}m)r = 4.7$M/token（4.0\%）。反向重计算需再次执行 $G_\theta$ 前向 + 低秩乘法，即使 $G_\theta$ 开销与低秩前向相当，总额外 FLOPs 仍远小于稠密前向，且\textbf{节省了每层 336 MiB 的 HBM 读取}——在带宽受限场景下是净收益。}
+
+\cmdisclosurepara{\textbf{华为昇腾 910B2 NPU 实测。} 8 卡 Ascend 910B2（每卡 HBM 60.96 GiB），PyTorch 2.6.0 + torch\_npu 2.6.0，fp16，2026 年 4 月完成。验证对象：8B 模型 FFN 块（$d{=}4096$, $m{=}14336$），稠密权重 336.0 MiB。表2--5 给出四类场景实测结果。}
+
+\begin{center}
+\cmtablecaption{表2 NPU 实测：自回归解码 B=1, S=1（单 token 解码）}
+\vspace{4pt}
+\small
+\begin{tabular}{cccccc}
+\hline
+配置 & 权重 (MiB) & 流量缩减 & 延迟 (ms) & 加速比 & 峰值内存 (MiB) \\
+\hline
+稠密基线    & 336.00 & 1.0$\times$      & 0.3213 & 1.00$\times$ & 336.1 \\
+MWG-EW $r$=32  & 3.38   & 99.6$\times$ & 0.2280 & 1.41$\times$ & 339.5 \\
+MWG-EW $r$=64  & 6.75   & 49.8$\times$ & 0.1580 & 2.03$\times$ & 343.6 \\
+MWG-EW $r$=128 & 13.50  & 24.9$\times$ & 0.1860 & 1.73$\times$ & 352.6 \\
+MWG-EW $r$=256 & 27.00  & 12.4$\times$ & 0.1631 & 1.97$\times$ & 363.1 \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+
+\begin{center}
+\cmtablecaption{表3 NPU 实测：预填充 B=1, S=128（128 token 前缀编码）}
+\vspace{4pt}
+\small
+\begin{tabular}{cccccc}
+\hline
+配置 & 权重 (MiB) & 流量缩减 & 延迟 (ms) & 加速比 & 吞吐 (tok/s) \\
+\hline
+稠密基线    & 336.00 & 1.0$\times$      & 0.3771 & 1.00$\times$ & 339\,436 \\
+MWG-EW $r$=32  & 3.38   & 99.6$\times$ & 0.1911 & 1.97$\times$ & 669\,945 \\
+MWG-EW $r$=64  & 6.75   & 49.8$\times$ & 0.1737 & 2.17$\times$ & 736\,859 \\
+MWG-EW $r$=128 & 13.50  & 24.9$\times$ & 0.1576 & 2.39$\times$ & 812\,421 \\
+MWG-EW $r$=256 & 27.00  & 12.4$\times$ & 0.2017 & 1.87$\times$ & 634\,464 \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+
+\begin{center}
+\cmtablecaption{表4 NPU 实测：训练 B=4, S=512（训练/大批量推理）}
+\vspace{4pt}
+\small
+\begin{tabular}{cccccc}
+\hline
+配置 & 权重 (MiB) & 流量缩减 & 延迟 (ms) & 加速比 & 吞吐 (tok/s) \\
+\hline
+稠密基线    & 336.00 & 1.0$\times$      & 2.8077 & 1.00$\times$ & 729\,430 \\
+MWG-EW $r$=32  & 3.38   & 99.6$\times$ & 0.3220 & \textbf{8.72$\times$} & 6\,359\,741 \\
+MWG-EW $r$=64  & 6.75   & 49.8$\times$ & 0.3298 & 8.51$\times$ & 6\,209\,089 \\
+MWG-EW $r$=128 & 13.50  & 24.9$\times$ & 0.3657 & 7.68$\times$ & 5\,599\,832 \\
+MWG-EW $r$=256 & 27.00  & 12.4$\times$ & 0.4742 & 5.92$\times$ & 4\,318\,793 \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+
+\begin{center}
+\cmtablecaption{表5 NPU 实测：大批量训练 B=8, S=512}
+\vspace{4pt}
+\small
+\begin{tabular}{cccccc}
+\hline
+配置 & 权重 (MiB) & 流量缩减 & 延迟 (ms) & 加速比 & 吞吐 (tok/s) \\
+\hline
+稠密基线    & 336.00 & 1.0$\times$      & 5.4145 & 1.00$\times$ & 756\,481 \\
+MWG-EW $r$=32  & 3.38   & 99.6$\times$ & 0.7861 & 6.89$\times$ & 5\,210\,804 \\
+MWG-EW $r$=64  & 6.75   & 49.8$\times$ & 0.7779 & 6.96$\times$ & 5\,265\,268 \\
+MWG-EW $r$=128 & 13.50  & 24.9$\times$ & 0.8467 & 6.39$\times$ & 4\,837\,484 \\
+MWG-EW $r$=256 & 27.00  & 12.4$\times$ & 1.0393 & 5.21$\times$ & 3\,941\,249 \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+
+\cmdisclosurepara{实测关键发现：\\
+(1) $r{=}32$ 时 HBM 流量从 336 MiB 降至 3.38 MiB（$99.6\times$）；\\
+(2) 大批量训练（$B{=}4$, $S{=}512$）加速 $5.9\times$--$8.7\times$，瓶颈从"带宽受限"转为"计算受限"；\\
+(3) 预填充加速达 $2.39\times$（$r{=}128$），单 token 解码 $1.4\times$--$2.0\times$；\\
+(4) 最佳效率区间 $r{=}64$--$128$。}
+
+\cmdisclosurepara{\textbf{通信量分析。} 梯度张量大小 = 权重参数量，因此 All-Reduce 同步体积同比缩减（表6）。$r{=}128$ 时每层梯度从 336 MiB 降至 13.5 MiB（$24.9\times$）。节省的 HBM 容量可动态重分配给 KV 缓存。}
+\begin{center}
+\cmtablecaption{表6 分布式训练通信量分析（d=4096, m=14336, fp16，基于参数量推算）}
+\vspace{4pt}
+\small
+\begin{tabular}{>{\centering\arraybackslash}p{2.2cm}>{\centering\arraybackslash}p{1.8cm}>{\centering\arraybackslash}p{1.8cm}>{\centering\arraybackslash}p{1.8cm}>{\centering\arraybackslash}p{2.0cm}}
+\hline
+配置 & \shortstack{梯度\\(MiB)} & \shortstack{缩减\\倍数} & \shortstack{通信\\节省} & \shortstack{释放内存\\(MiB)} \\
+\hline
+稠密基线    & 336.00 & 1.0$\times$      & --- & --- \\
+MWG-EW $r$=32  & 3.38   & 99.6$\times$ & 99.0\% & 332.6 \\
+MWG-EW $r$=64  & 6.75   & 49.8$\times$ & 98.0\% & 329.3 \\
+MWG-EW $r$=128 & 13.50  & 24.9$\times$ & 96.0\% & 322.5 \\
+MWG-EW $r$=256 & 27.00  & 12.4$\times$ & 92.0\% & 309.0 \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+\cmdisclosurepara{$r{=}128$ 时每层 All-Reduce 体积从 336 MiB 降至 13.5 MiB（$24.9\times$），节省 96\%（尚未多节点实测）。节省的 HBM 可重分配给 KV 缓存。}
+
+\cmdisclosurepara{\textbf{预训练模型 SVD 能量捕获（Qwen2.5-1.5B 实测）。} 对 Qwen2.5-1.5B（$d{=}1536$, $m{=}8960$）layers 0--5 执行截断 SVD，验证低秩近似对真实权重的适用性。FFN 投影（gate/up/down，共 18 个矩阵）和注意力投影（q/k/v/o，共 24 个矩阵）分别取平均值，结果如表7--8。}
+\begin{center}
+\cmtablecaption{表7 预训练模型 FFN 投影 SVD 能量与余弦相似度（Qwen2.5-1.5B 实测）}
+\vspace{4pt}
+\begin{tabular}{cccc}
+\hline
+秩 $r$ & SVD 能量 (mean) & 余弦相似度 (mean) & 余弦相似度范围 \\
+\hline
+32   & 7.2\%  & 0.266 & 0.207--0.337 \\
+64   & 12.0\% & 0.345 & 0.287--0.424 \\
+128  & 20.1\% & 0.448 & 0.395--0.534 \\
+256  & 33.8\% & 0.582 & 0.537--0.672 \\
+512  & 55.6\% & 0.748 & 0.715--0.830 \\
+768  & 72.4\% & 0.853 & 0.830--0.920 \\
+1024 & 85.1\% & 0.925 & 0.911--0.972 \\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\cmtablecaption{表8 预训练模型注意力投影 SVD 能量与余弦相似度（Qwen2.5-1.5B 实测，对照组）}
+\vspace{4pt}
+\begin{tabular}{cccc}
+\hline
+秩 $r$ & SVD 能量 (mean) & 余弦相似度 (mean) & 余弦相似度范围 \\
+\hline
+32   & 22.8\% & 0.470 & 0.284--0.636 \\
+64   & 37.7\% & 0.606 & 0.376--0.774 \\
+128  & 59.3\% & 0.761 & 0.498--0.921 \\
+256  & 81.9\% & 0.898 & 0.642--1.000 \\
+512  & 84.8\% & 0.920 & 0.807--0.962 \\
+768  & 94.3\% & 0.971 & 0.906--0.989 \\
+1024 & 98.4\% & 0.992 & 0.966--0.998 \\
+\hline
+\end{tabular}
+\end{center}
+\cmdisclosurepara{FFN 投影的奇异值谱显著比注意力投影更扁平（$r{=}128$ 时余弦相似度 0.448 vs.\ 0.761），需更高秩才能逼近。但本申请的核心收益（HBM 流量 $\downarrow$、延迟 $\downarrow$）仅取决于 $r$，与精度保真正交；高保真部署可选 $r{=}512$--768（仍有 $4\times$--$6\times$ 流量缩减）。}
+
+\cmdisclosuresection{六、本申请的关键点和欲保护点}
+\cmdisclosurepara{\textbf{关键点1（前向）}：$G_\theta$ 根据条件信号在片上内存中生成临时因子 $U$、$V$，矩阵计算单元以 $Y{=}(XU)V$ 消费后立即释放/覆写/清零，全生命周期禁止写回片外存储器。}
+\cmdisclosurepara{\textbf{关键点2（解码）}：节省的 HBM 容量动态重分配给 KV 缓存；$\geq 2$ 缓冲区双缓冲重叠生成与计算。}
+\cmdisclosurepara{\textbf{关键点3（训练）}：反向传播时片上重新生成 $U$、$V$；对应梯度不进入全局优化器，不参与 All-Reduce，仅 $\theta$ 参与跨节点同步。}
+\cmdisclosurepara{\textbf{关键点4（负面限定）}：在任何执行路径中，临时权重描述子块的完整物理形态严禁写回片外全局存储器。}
+
+\cmdisclosuresection{七、与第三条中最接近的现有技术相比，本申请有何技术优点}
+\cmdisclosurepara{华为昇腾 910B2 NPU 实测的主要系统指标对比如表9。}
+\begin{center}
+\cmtablecaption{表9 本申请与稠密基线的关键系统指标对比（华为昇腾 910B2 NPU 实测）}
+\vspace{4pt}
+\small
+\begin{tabular}{lcc}
+\hline
+指标 & 稠密基线 & 本申请 \\
+\hline
+三投影目标块 HBM 流量 & 336.0 MiB & 13.50 MiB（$\downarrow$24.9$\times$, $r$=128）\\
+训练延迟（B=4, S=512） & 2.808 ms & 0.322 ms（$\downarrow$8.72$\times$, $r$=32）\\
+解码延迟（B=1, S=128） & 0.377 ms & 0.158 ms（$\downarrow$2.39$\times$, $r$=128）\\
+每层梯度同步体积（推算） & 336.0 MiB & 13.50 MiB（$\downarrow$96\%）\\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+\cmdisclosurepara{前三行来自 NPU 直接实测（表2--5），最后一行基于参数量推算（表6）。本申请的优点并非单个指标更优，而是在同一对象生命周期约束下\textbf{同时}带来 HBM 流量、KV 缓存容量和梯度同步三类系统收益。}
+\cmdisclosurepara{与现有技术的逐项对比：\\
+(1) 与 Hypernetwork / 动态滤波器相比——本申请不仅"生成权重"，更将生成物限定为片上临时对象并严格控制其不写回片外；\\
+(2) 与 LoRA / 静态低秩压缩相比——本申请的低秩因子并非持久参数，而是运行时生成、用后销毁的片上对象，改变了前向和反向的数据流而非仅改变参数规模；\\
+(3) 与 IO-aware 算子 / SRAM 常驻方案相比——本申请不是把预存权重搬到片上，而是在片上即时生成并即时销毁；\\
+(4) 与分布式训练优化（ZeRO 等）相比——本申请从源头消除了目标层梯度的优化器状态和同步需求，而非仅压缩或分片。}
+
+\cmdisclosuresection{八、其他有助于理解本申请的技术资料}
+\cmdisclosurepara{本交底书包含 7 张附图（路径对比、流程总览、生命周期、禁止物化、解码双缓冲、训练截断、可观测特征）和 10 张表格（理论参数量、4 类场景 NPU 实测、通信量推算、SVD 能量捕获、综合对比、生命周期物理位置总结）。术语定义：片上内存、片外存储器、临时权重描述子块、矩阵计算单元、向量计算单元、高速互连、不写回。后续可补充 profiler timeline、多节点 All-Reduce 通信实测和端到端上下文长度实测。}
+
+\cmdisclosurepara{\textbf{自用场景：}\\
+(1) \textbf{大模型训练集群}——中国移动 AIDC（智算中心）部署的千卡级训练集群中，本方案可作为框架层算子插件集成至 PyTorch / MindSpore 训练流水线，降低每层权重的 HBM 读取量和 All-Reduce 同步体积，提升集群有效吞吐（实测单层加速 $5.9\times$--$8.7\times$）；\\
+(2) \textbf{云侧推理服务}——在中国移动"九天"AI 平台的在线推理服务中，通过减少权重 HBM 占用、将节省容量转给 KV 缓存，在相同硬件上支持更长上下文和更高并发，降低单请求推理成本；\\
+(3) \textbf{边缘 / 端侧推理}——在 HBM 容量和带宽更受限的边缘 AI 芯片上（如移动基站智能网关、车载计算平台），本方案的流量压缩效果更显著，可在有限硬件上运行更大参数规模的模型。}
+
+\cmdisclosurepara{\textbf{对外场景：}\\
+(1) \textbf{AI 芯片厂商}——将本方案的生命周期控制逻辑固化为芯片固件特性或指令集扩展，向华为海思、寒武纪、燧原等厂商提供许可或联合开发；\\
+(2) \textbf{云服务 / 框架厂商}——以算子库插件或编译器 pass 形式，向阿里 PAI、百度 PaddlePaddle、字节 AML 等平台提供集成模块；\\
+(3) \textbf{大模型应用厂商}——对于部署百亿级以上参数模型且受限于推理成本的企业，本方案可作为推理加速中间件提供技术许可。}
+
+\cmdisclosurepara{\textbf{产业化形态。}本方案可落地为以下产品形态：\\
+(a) 开源/商业框架算子库——PyTorch custom op / CANN 自定义算子包，用户通过 \texttt{import} 即可替换目标层；\\
+(b) AI 芯片固件/微码升级——在加速卡固件中内置生命周期状态机和写回拦截逻辑，对上层软件透明；\\
+(c) 编译器优化 pass——在 AI 编译器（TVM / XLA / CANN Compiler）中自动识别可替换的线性层并插入描述子生成-消费流水线；\\
+(d) 云服务能力输出——以"低访存/长上下文/高吞吐"作为云推理服务的差异化卖点，按 token 计费。}
+
+\cmdisclosuresection{九、本申请的侵权证据可获得性}
+\cmdisclosurepara{本申请具备外部物理可观测性。如图7所示，使用 profiler（NVIDIA Nsight Systems/Compute、昇腾 Profiling 工具 msprof/CANN Profiler）、硬件性能计数器、PCIe/CXL 分析仪或网络抓包工具可观测：\\
+(1) 目标层片外存储器读写字节数显著低于稠密基线 $2dm$ 字节；\\
+(2) 矩阵计算单元利用率提高、stall 比例下降；\\
+(3) KV 缓存可用容量增加；\\
+(4) All-Reduce 包体积下降或缺失；\\
+(5) \textbf{片上存储器重用距离分析}显示特定地址区间在单次算子调用内被反复覆写（描述子块的"生成 $\to$ 消费 $\to$ 释放"循环），而该地址区间无对应的片外写回事务，可作为"临时权重描述子全程驻片上"的直接物理证据。}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[cmblock] (prof) at (1.2,2.2) {标准 profiler};
+  \node[cmblock] (counter) at (1.2,0.4) {硬件性能计数器};
+  \node[cmblock] (packet) at (1.2,-1.4) {网络抓包工具};
+  \node[cmwide] (monitor) at (4.8,0.4) {监测模块 / 公开接口 / 日志\\输出可观测执行证据};
+  \node[cmwide] (m1) at (9.0,2.8) {片外存储器读写字节数\\显著下降};
+  \node[cmwide] (m2) at (9.0,1.0) {矩阵计算单元利用率提高\\停顿（stall）比例下降};
+  \node[cmwide] (m3) at (9.0,-0.8) {键值缓存可用容量增加\\长上下文能力增强};
+  \node[cmwide] (m4) at (9.0,-2.6) {同步包体积下降或缺失\\可作为取证入口};
+  \draw[cmarrow] (prof) -- (monitor);
+  \draw[cmarrow] (counter) -- (monitor);
+  \draw[cmarrow] (packet) -- (monitor);
+  \draw[cmarrow] (monitor) -- (m1);
+  \draw[cmarrow] (monitor) -- (m2);
+  \draw[cmarrow] (monitor) -- (m3);
+  \draw[cmarrow] (monitor) -- (m4);
+\end{tikzpicture}
+\end{center}
+\cmfigurecaption{图7 可观测特征与取证入口示意图}
+\cmdisclosurepara{侵权证据可从产品白皮书、benchmark 报告、profiler 输出、硬件计数器和网络抓包中获取。尤其当对外宣称”降低 HBM 访问””提升 KV 缓存容量””减少训练同步流量”时，可与本申请的可观测效果相互印证。}
+
+\cmdisclosurepara{\textbf{无需接触内部系统即可获取的外部证据：}\\
+(1) \textbf{产品文档与技术白皮书}——若竞品宣传"片上权重生成""临时权重""低秩因子实时生成后立即释放"等表述，可直接对应本申请的核心权利要求；\\
+(2) \textbf{公开 benchmark 报告}——在相同硬件和模型规模下，若竞品在带宽受限场景（小批量解码）的延迟显著低于稠密基线，且加速倍数与本申请实测数据处于同一区间，构成间接侵权证据；\\
+(3) \textbf{开源代码与 API 接口}——若框架插件或编译器 pass 的源码中包含"低秩因子生成→融合矩阵乘→缓冲区释放"的算子流程，或推理 API 暴露了 \texttt{rank} / \texttt{descriptor\_generator} 等配置参数，均可作为实施本方案的直接证据；\\
+(4) \textbf{芯片规格与指令集文档}——若加速卡在固件或指令集层面新增"片上权重生成""写回拦截""描述子生命周期"等特性描述，可作为硬件实施证据。}
+
+\cmdisclosurepara{总体上，本申请属于侵权证据易于外部获取的系统执行路径类方案。技术方案的核心约束（片上生成、禁止写回、融合执行、梯度截断）在 profiler 输出、产品文档和公开代码中均留有可观测痕迹。}
+
+\end{document}

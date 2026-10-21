@@ -1,0 +1,167 @@
+{
+  "schema": "mwg-training-lifecycle-v1",
+  "device": "Ascend910B2",
+  "configs": [
+    {
+      "d": 1536,
+      "m": 8960,
+      "r": 384,
+      "B": 2,
+      "S": 64,
+      "reduction_x": 57.36,
+      "saved_mat_mib": 86.04,
+      "saved_rec_mib": 1.5,
+      "grad_maxdiff": 0.0,
+      "rows": [
+        {
+          "seed": 2026,
+          "saved_activ_bytes": 90222592,
+          "saved_activ_bytes_recompute": 1572864,
+          "peak_alloc_mat": 439909376,
+          "peak_alloc_rec": 449577984,
+          "grad_maxdiff": 0.0,
+          "s": 2.9
+        },
+        {
+          "seed": 2027,
+          "saved_activ_bytes": 90222592,
+          "saved_activ_bytes_recompute": 1572864,
+          "peak_alloc_mat": 440698368,
+          "peak_alloc_rec": 451807232,
+          "grad_maxdiff": 0.0,
+          "s": 1.2
+        },
+        {
+          "seed": 2028,
+          "saved_activ_bytes": 90222592,
+          "saved_activ_bytes_recompute": 1572864,
+          "peak_alloc_mat": 440701952,
+          "peak_alloc_rec": 449843200,
+          "grad_maxdiff": 0.0,
+          "s": 1.2
+        }
+      ]
+    },
+    {
+      "d": 1536,
+      "m": 8960,
+      "r": 384,
+      "B": 4,
+      "S": 128,
+      "reduction_x": 24.5,
+      "saved_mat_mib": 146.98,
+      "saved_rec_mib": 6.0,
+      "grad_maxdiff": 0.0,
+      "rows": [
+        {
+          "seed": 2026,
+          "saved_activ_bytes": 154120192,
+          "saved_activ_bytes_recompute": 6291456,
+          "peak_alloc_mat": 511278080,
+          "peak_alloc_rec": 510068224,
+          "grad_maxdiff": 0.0,
+          "s": 1.2
+        },
+        {
+          "seed": 2027,
+          "saved_activ_bytes": 154120192,
+          "saved_activ_bytes_recompute": 6291456,
+          "peak_alloc_mat": 512066560,
+          "peak_alloc_rec": 510200832,
+          "grad_maxdiff": 0.0,
+          "s": 1.2
+        },
+        {
+          "seed": 2028,
+          "saved_activ_bytes": 154120192,
+          "saved_activ_bytes_recompute": 6291456,
+          "peak_alloc_mat": 512329216,
+          "peak_alloc_rec": 510592000,
+          "grad_maxdiff": 0.0,
+          "s": 1.2
+        }
+      ]
+    },
+    {
+      "d": 1536,
+      "m": 8960,
+      "r": 512,
+      "B": 2,
+      "S": 64,
+      "reduction_x": 71.84,
+      "saved_mat_mib": 107.76,
+      "saved_rec_mib": 1.5,
+      "grad_maxdiff": 0.0,
+      "rows": [
+        {
+          "seed": 2026,
+          "saved_activ_bytes": 112997888,
+          "saved_activ_bytes_recompute": 1572864,
+          "peak_alloc_mat": 563041280,
+          "peak_alloc_rec": 577201152,
+          "grad_maxdiff": 0.0,
+          "s": 1.5
+        },
+        {
+          "seed": 2027,
+          "saved_activ_bytes": 112997888,
+          "saved_activ_bytes_recompute": 1572864,
+          "peak_alloc_mat": 564350464,
+          "peak_alloc_rec": 577986560,
+          "grad_maxdiff": 0.0,
+          "s": 1.5
+        },
+        {
+          "seed": 2028,
+          "saved_activ_bytes": 112997888,
+          "saved_activ_bytes_recompute": 1572864,
+          "peak_alloc_mat": 564350464,
+          "peak_alloc_rec": 577986560,
+          "grad_maxdiff": 0.0,
+          "s": 1.5
+        }
+      ]
+    },
+    {
+      "d": 2048,
+      "m": 11008,
+      "r": 384,
+      "B": 2,
+      "S": 64,
+      "reduction_x": 53.85,
+      "saved_mat_mib": 107.7,
+      "saved_rec_mib": 2.0,
+      "grad_maxdiff": 0.0,
+      "rows": [
+        {
+          "seed": 2026,
+          "saved_activ_bytes": 112933376,
+          "saved_activ_bytes_recompute": 2097152,
+          "peak_alloc_mat": 547234816,
+          "peak_alloc_rec": 559295488,
+          "grad_maxdiff": 0.0,
+          "s": 1.5
+        },
+        {
+          "seed": 2027,
+          "saved_activ_bytes": 112933376,
+          "saved_activ_bytes_recompute": 2097152,
+          "peak_alloc_mat": 547234816,
+          "peak_alloc_rec": 559295488,
+          "grad_maxdiff": 0.0,
+          "s": 1.4
+        },
+        {
+          "seed": 2028,
+          "saved_activ_bytes": 112933376,
+          "saved_activ_bytes_recompute": 2097152,
+          "peak_alloc_mat": 547234816,
+          "peak_alloc_rec": 559295488,
+          "grad_maxdiff": 0.0,
+          "s": 1.4
+        }
+      ]
+    }
+  ],
+  "summary": {}
+}

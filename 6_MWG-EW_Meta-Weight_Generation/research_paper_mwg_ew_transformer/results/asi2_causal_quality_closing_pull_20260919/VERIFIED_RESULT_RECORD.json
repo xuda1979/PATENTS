@@ -1,0 +1,48 @@
+{
+  "run_id": "asi2_causal_quality_closing_20260919T065234Z",
+  "run_date": "2026-09-19",
+  "completed": true,
+  "description": "Fresh re-verification of the r401 closing test on ASI2. Confirms same-rank parity at both r384 and r401.",
+  "seeds": [
+    2026,
+    2027,
+    2028
+  ],
+  "students": [
+    "mwg_token_diag_core_r384",
+    "mwg_token_diag_core_r401",
+    "persistent_low_rank_r384",
+    "persistent_low_rank_r401",
+    "persistent_low_rank_r512",
+    "static_svd_r384",
+    "static_svd_r401",
+    "static_svd_r512"
+  ],
+  "r401_parity_check": {
+    "2026": {
+      "generated": 0.436112,
+      "persistent": 0.435813,
+      "gap_pct": 0.07
+    },
+    "2027": {
+      "generated": 0.435629,
+      "persistent": 0.435277,
+      "gap_pct": 0.08
+    },
+    "2028": {
+      "generated": 0.43685,
+      "persistent": 0.436463,
+      "gap_pct": 0.09
+    }
+  },
+  "verdict": "r401 parity confirmed: generated vs persistent gap 0.07-0.09% across 3 seeds. Same-rank parity at both r384 and r401. The ~2.3% parameter-matched gap closes at matched rank.",
+  "paper_claims_verified": [
+    "Generated diagonal core r384: rel_mse ~0.446, cosine ~0.746 (matches paper 0.446\u00b10.001)",
+    "Generated diagonal core r401: rel_mse ~0.436, cosine ~0.753 (matches paper 0.436\u00b10.001)",
+    "Persistent low rank r384: rel_mse ~0.446, cosine ~0.746 (matches paper 0.446\u00b10.001)",
+    "Persistent low rank r401: rel_mse ~0.436, cosine ~0.753 (matches paper 0.436\u00b10.001)",
+    "Static SVD r384: rel_mse ~0.834 (matches paper 0.834\u00b10.001)",
+    "r401 gap closes at matched rank (0.07-0.09% vs prior 2.3%)"
+  ],
+  "note": "This fresh run (Sep 19, 2026) re-verifies the original closing test (Sep 6, 2026, run_id asi2_causal_quality_closing_20260906T135350Z). All numbers are consistent."
+}

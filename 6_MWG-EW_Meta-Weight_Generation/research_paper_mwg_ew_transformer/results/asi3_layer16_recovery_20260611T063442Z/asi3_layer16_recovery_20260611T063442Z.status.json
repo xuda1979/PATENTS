@@ -1,0 +1,13 @@
+{
+  "run_id": "asi3_layer16_recovery_20260611T063442Z",
+  "state": "done",
+  "updated_at": "2026-06-11T06:38:18Z",
+  "outdir": "results/asi3_layer16_recovery_20260611T063442Z/layer16",
+  "result_json": [
+    "results/asi3_layer16_recovery_20260611T063442Z/layer16/mwg_quality_distillation_20260611T063555Z.json"
+  ],
+  "checkpoints": [
+    "results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384.pt",
+    "results/asi3_layer16_recovery_20260611T063442Z/layer16/checkpoints/mwg_expert_residual_r384_belle_lmce_cal_1200.pt"
+  ]
+}

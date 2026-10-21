@@ -1,0 +1,1696 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\DeclareTextFontCommand{\textsc}{\normalfont\scshape}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\mwg}{\textnormal{\textsc{MWG-EW}}}
+\newcommand{\traffic}{\mathcal{T}}
+\newcommand{\loss}{\mathcal{L}}
+\newcommand{\budget}{\mathcal{B}}
+\newcommand{\risk}{\mathcal{R}}
+
+\title{\bf Ephemeral Meta-Weights: Turning Transformer FFN Parameters into Runtime-Generated Operands}
+\author{Anonymous Authors}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Transformer efficiency is usually framed as storing fewer parameters, quantizing
+them more aggressively, or activating fewer of them. We study a different axis:
+\textit{parameter lifetime}. A feed-forward network (FFN) matrix need not always
+be a durable tensor that is fetched, cached, differentiated, and synchronized as
+model state; for selected calls it can be a short-lived runtime operand
+generated from context and consumed by a kernel. We instantiate this idea in
+\textsc{MWG-EW}, an Ephemeral Meta-Weight architecture in which a compact
+generator emits rank-$r$ factors for up, gate, and down projections and an
+associative $(XU_r)V_r$ schedule consumes them under a proposed no-write-back
+lifecycle. This reframes efficient Transformers around a contract between
+learning and systems: the model learns \textit{when} a generated descriptor is
+useful, while the runtime must keep that descriptor from becoming persistent
+bandwidth traffic again. The paper contributes (i) a parameter-lifetime
+abstraction separating durable generator state from volatile runtime
+descriptors; (ii) an ephemeral FFN design with an associative schedule and a
+specified no-write-back lifecycle; (iii) scaling laws for descriptor traffic,
+trainable state, and distributed gradient communication; and (iv) a
+benefit-supervised dense-fallback router with a reproducible NPU
+evidence trail. On a three-repeat, all-eight-NPU distributed FFN
+systems benchmark over ranks $32$--$512$, \textsc{MWG-EW} at rank~128 reduces
+\emph{estimated} descriptor bytes by $24.9\times$ and trainable FFN state by
+$18.4\times$ while improving measured training throughput by
+$1.638\pm0.030\times$; across all tested ranks, mean training speedup stays
+positive ($1.538\times$--$1.646\times$) and estimated descriptor traffic falls
+by $6.2\times$--$99.6\times$. Two systems caveats are stated explicitly: the
+forward path is $2.25\times$ \emph{slower} than dense in the unfused prototype
+(no decode-latency claim is made), and the descriptor-traffic figure is a
+model-side analytic estimate, not an HBM-counter measurement; at the
+quality-preserving patch fractions the \emph{effective} routed saving is
+$2\times$--$8\times$, not $24.9\times$. Checkpoint-backed Qwen2.5-1.5B
+experiments
+show \textsc{MWG-EW} is strongest as a \emph{selective} FFN replacement: a
+distilled layer-16 generator reaches relative MSE $0.10$ and cosine $0.95$ at
+rank~384, far ahead of static SVD ($0.84$ / $0.40$), and a tighter-eligibility
+Pareto sweep (96 cells, 3 seeds, 4 threshold policies) recovers a net
+five-suite selective win of $0.9923\times$ at ${\sim}2\%$ actual patching,
+policy-invariant at $\Delta_{\max}{=}{-}0.20$. The bounded claim: for a single
+calibrated FFN layer of one 1.5B-parameter checkpoint family, generated
+conditional descriptors, learned eligibility selection with a sufficiently tight
+predicted-loss threshold, and a proposed no-write-back lifecycle make FFN
+parameter movement a useful architectural variable. Multi-layer, multi-model,
+and downstream-task generalization, and hardware-counter-validated
+decode-latency, are left to future work.
+\end{abstract}
+
+\section{Introduction}
+
+Modern Transformers \cite{vaswani2017attention,kaplan2020scaling,hoffmann2022chinchilla}
+are built around a durable-parameter assumption: large
+weight tensors are stored as model state, fetched whenever a layer executes,
+updated by the optimizer, and synchronized during distributed training. This
+assumption is natural for learning, but it is not free for systems. In many
+serving and training regimes, FFN projections are among the largest repeatedly
+streamed objects in the block. Quantization, sparsity, expert routing, and
+kernel engineering reduce different pieces of this cost, but they typically
+preserve the same lifetime: a parameter tensor remains a durable object that the
+runtime must move.
+
+This paper asks whether parameter lifetime itself can become an architectural
+choice. Instead of asking only how many parameters a layer stores, we ask how
+long a weight-like object must exist and where it is allowed to live. The answer
+is a new execution primitive: an \textit{ephemeral meta-weight}. An ephemeral
+meta-weight is a generated descriptor that is created from context, used as a
+kernel operand, and then released or overwritten. It is not a compressed
+checkpoint tensor and it is not a persistent adapter. Its value lies in changing
+the movement pattern of parameters: fewer durable bytes are fetched from memory
+and fewer durable gradients are synchronized across workers.
+
+We instantiate this idea in Transformer FFNs with \textsc{MWG-EW}. A compact
+generator emits rank-$r$ factors for selected up, gate, and down projections.
+The FFN consumes those factors with the associative schedule $(XU_r)V_r$. The
+runtime contract is deliberately strong: generated descriptors should be
+consumed at the closest available scratch/cache level and should not be written
+back as durable model weights. The learning problem is also deliberately strong:
+the model must learn not only a useful low-rank approximation, but also an
+eligibility policy deciding when the generated path is worth using.
+
+This is different from three familiar efficient-model directions. Hypernetworks
+can generate weights, but commonly materialize them as ordinary tensors.
+Low-rank adapters store their factors persistently. IO-aware attention kernels
+such as FlashAttention optimize activation movement, while attention-side KV
+compression methods such as MLA compress past-token state. \textsc{MWG-EW}
+targets FFN weight movement and makes the generated factor's lifetime part of
+the method.
+
+The present evidence leads to a clear claim. A naive always-patched low-rank
+replacement is not the right operating mode. However, once the patch is treated
+as a benefit-supervised conditional operand rather than a universal
+replacement, a robust positive regime appears: a deployable router can patch a
+limited fraction of tokens while preserving or improving broad perplexity.
+\textsc{MWG-EW} is therefore valuable not as a full dense-model substitute, but
+as a new selective execution primitive with measurable quality and systems
+benefits.
+
+The paper is written around falsifiable claim boundaries. We distinguish
+measured training throughput from estimated descriptor traffic, full-call
+systems savings from routed end-to-end savings, and quality-preserving
+selective replacement from always-patched replacement. This separation is
+important for the contribution: the method's novelty is not a single benchmark
+win, but a new parameter-lifetime interface that exposes when generated FFN
+operands can replace durable weights without degrading model behavior.
+
+\begin{definition}[Ephemeral meta-weight]
+An ephemeral meta-weight for a layer is a descriptor $D_t=G_\theta(c_t,\ell)$
+that is generated from the current execution context, consumed by the layer's
+kernel, excluded from the persistent model-state interface, and released or
+overwritten before it becomes durable off-chip parameter state.
+\end{definition}
+
+\begin{definition}[Parameter-lifetime class]
+A weight-like object has lifetime class $(\tau,\sigma)$, where $\tau$ is its
+maximum reuse interval and $\sigma$ is the deepest memory or synchronization
+boundary it crosses. Dense FFN weights have long $\tau$ and cross the model-state
+and gradient-synchronization boundary. \textsc{MWG-EW} aims for short $\tau$ and
+a scratch/cache-level $\sigma$ for descriptors, while keeping only generator and
+basis-bank state durable.
+\end{definition}
+
+\begin{definition}[Eligibility-preserving replacement]
+Let $g(x)\in\{0,1\}$ decide whether a token or token group uses the ephemeral
+path. A replacement is eligibility preserving at budget $\budget$ if
+$\E[g(x)]\le \budget$ and its evaluated task loss is no worse than the dense
+baseline within the stated confidence or seed envelope. This separates the
+quality claim from broad always-patched replacement.
+\end{definition}
+
+\paragraph{Notation.}
+We write $d$ for the hidden dimension, $m$ for the FFN intermediate dimension,
+$r$ for the descriptor rank, $B$ for batch size, $S$ for sequence length, and
+$T=BS$ for the token count per FFN call. The traffic ratio
+$\Gamma(r)=r(d+m)/(dm)$ measures descriptor bytes relative to dense weight
+bytes. The eligibility threshold is $\Delta_{\max}$, the patch budget is
+$\budget$, and the benefit function is $\Delta(x)$. Descriptor traffic is
+$\traffic$, loss is $\loss$, and expectation is $\E$.
+
+\paragraph{Contributions.}
+We make the following contributions:
+\begin{itemize}
+  \item \textbf{Parameter lifetime as an architectural variable.} We formalize
+  ephemeral meta-weights and distinguish them from compressed checkpoints,
+  persistent adapters, and expert weights.
+  \item \textbf{A Transformer FFN design.} We give a generator-conditioned FFN
+  that emits conditional rank-$r$ descriptors for up, gate, and down projections
+  and consumes them through an associative schedule.
+  \item \textbf{A systems contract.} We specify a no-write-back descriptor
+  lifecycle and derive scaling laws for descriptor bytes, working set,
+  memory-bound latency, and distributed gradient communication.
+  \item \textbf{Benefit-supervised eligibility routing.} We evaluate a
+  deployable dense-fallback router trained from dense-vs-patched token loss
+  deltas but executed from pre-FFN hidden-state features.
+  \item \textbf{A scoped empirical case.} We report an eight-NPU distributed
+  FFN systems benchmark and checkpoint-backed Qwen2.5-1.5B quality controls showing
+  a stable positive selective-routing regime at target patch fractions 0.05 and
+  0.10 on layer 16, and a tighter-eligibility Pareto sweep (96 cells, 3 seeds,
+  4 threshold policies) that recovers a policy-invariant net five-suite
+  selective win of $0.9923\times$ at $\sim$2\% actual patching. A
+  cross-layer control on layer 17 returns zero net wins, scoping the positive
+  result to the calibrated layer; always-patched replacement and
+  hardware-counter-validated decode latency are explicitly marked as
+  unvalidated.
+\end{itemize}
+
+\begin{table}[t]
+\centering
+\caption{Evidence map for the paper's main claims. This table separates what is
+directly measured, what is analytically estimated from measured geometry, and
+what remains an implementation target.}
+\label{tab:evidencemap}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}}
+\toprule
+Claim & Evidence in this paper & Status \\
+\midrule
+Training-side FFN replacement can reduce state and communication while improving throughput &
+Three-repeat eight-NPU sweep over ranks 32--512; reliability and replication runs &
+Measured and replicated directionally \\
+Generated descriptors reduce full-call FFN operand bytes &
+Rank-$r$ descriptor analysis and measured FFN geometry &
+Analytically estimated \\
+Selective routing preserves or improves broad perplexity at small patch fractions &
+Leakage-clean broad seed sweeps, leave-suite-out sweeps, and a
+router/global split with actual mixed forwards &
+Measured for three suite families \\
+Always-patched replacement is safe in-distribution and on GSM8K; tighter-eligibility routing recovers a net five-suite win &
+Single-run calibrated five-suite validation is below dense ($0.9352\times$), the three-seed leakage-clean replication is above dense ($1.409\times$), and the tighter-eligibility Pareto sweep (96 cells, 3 seeds) recovers a net $0.9923\times$ five-suite win at $\sim$2\% patching &
+Split: always-patched supported in-distribution and on GSM8K; net five-suite selective win established under tighter eligibility \\
+No-write-back descriptor lifecycle avoids off-chip descriptor write-back &
+Runtime contract and operator probe; no fused-like operator observed &
+Implementation target \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Transformer FFNs and parameter efficiency.}
+The Transformer architecture \cite{vaswani2017attention} places gated FFN
+blocks between attention sublayers, and these blocks dominate parameter count
+and weight-traffic in modern open language models such as Llama
+\cite{touvron2023llama}, Qwen2.5 \cite{qwen2025qwen25}, OLMo
+\cite{ivison2025olmo}, and Grok \cite{du2024grok}. Most efficiency work on
+these blocks falls into four families: conditional computation, low-rank or
+structured parameterization, weight generation, and IO-aware kernels. We
+position \textsc{MWG-EW} against each in turn.
+
+\paragraph{Conditional computation and experts.}
+Mixture-of-Experts (MoE) layers reduce activated compute by routing each token
+to a small subset of expert FFNs \cite{shazeer2017outrageously}, and modern
+large-scale systems such as GShard \cite{lepikhin2021gshard}, Switch
+Transformers \cite{fedus2022switch}, and DeepSeek-V2 \cite{deepseek2024v2} scale
+this idea with learned routing and sharding; subsequent work revisits the
+specialist decomposition to improve expert utilization
+\cite{fedus2023revisiting}. Adaptive computation time similarly
+learns how much computation to spend per input \cite{graves2016act}.
+\textsc{MWG-EW} shares the conditional spirit of these methods, but it conditions
+on a different object: rather than selecting among persistent expert weights, it
+decides whether a weight-like operand should be generated and kept ephemeral at
+all. Our benefit-supervised dense-fallback router is closer to a budgeted
+eligibility gate than to a load-balanced expert assignment.
+
+\paragraph{Low-rank and structured weights.}
+Low-rank factorization of linear layers is a classic way to shrink parameter
+count and compute \cite{sainath2013lowrank}, and structured matrix families such
+as Monarch matrices generalize this with hardware-efficient parameterizations
+\cite{dao2022monarch}. LoRA and QLoRA add low-rank factors for parameter-efficient
+adaptation \cite{hu2022lora,dettmers2023qlora}. These approaches all keep the
+low-rank factors as durable, stored parameters. \textsc{MWG-EW} instead treats the
+factors as conditionally generated operands with a short lifetime, so the saving
+is in parameter \emph{movement} and synchronization rather than only in stored
+count.
+
+\paragraph{Weight generation and hypernetworks.}
+Hypernetworks generate the weights of another network from a learned embedding
+\cite{ha2017hypernetworks}, and one-shot architecture search systems such as
+SMASH predict weights to evaluate candidate models cheaply \cite{brock2018smash}.
+The key difference here is lifetime and runtime contract: prior weight-generation
+methods materialize ordinary tensors, whereas \textsc{MWG-EW} specifies a
+no-write-back lifecycle so generated descriptors are consumed at the closest
+scratch/cache level and never recommitted as durable off-chip parameter state.
+
+\paragraph{Post-training compression and quantization.}
+GPTQ \cite{frantar2023gptq} and AWQ \cite{lin2024awq} compress LLM weights by
+reducing bits per parameter while preserving the durable-tensor lifetime.
+\textsc{MWG-EW} is orthogonal and composable: it changes when and where a
+weight-like object exists, not only its precision, and a generated descriptor
+could itself be quantized.
+
+\paragraph{Communication-efficient distributed training.}
+Gradient compression methods reduce all-reduce traffic by sparsification
+\cite{lin2018dgc}, quantization \cite{alistarh2017qsgd}, or low-rank projection
+of gradients \cite{vogels2019powersgd}, while optimizer-state sharding such as
+ZeRO reduces per-worker memory \cite{rajbhandari2020zero} and tensor-parallel
+or pipeline-parallel training partitions parameters across accelerators
+\cite{narayanan2021megatron,korthikanti2023megatron}. \textsc{MWG-EW}
+reduces the size of the synchronized object itself: only generator and basis-bank
+parameters are durable, so the dominant FFN gradient-byte term is replaced by the
+much smaller $6r(d+m)$ term. These techniques are complementary and can be applied
+on top of the remaining generator parameters.
+
+\paragraph{IO-aware kernels and KV-cache compression.}
+FlashAttention reduces attention activation movement through IO-aware kernels
+\cite{dao2022flashattention}, and MLA-style methods compress the attention KV
+cache \cite{deepseek2024v2}. Both target activation- or past-token state:
+a standard attention layer stores past keys and values with leading size
+$\Theta(2L n_h d_h)$ elements for sequence length $L$, head count $n_h$, and
+head dimension $d_h$, and MLA reduces this attention-side storage by caching a
+latent key-value vector and reconstructing or absorbing key/value projections
+at attention time. \textsc{MWG-EW} is orthogonal: it targets FFN projection
+weights, does not by itself compress the attention KV cache, and uses low-rank
+generation to change the lifecycle of weight operands rather than the
+representation of past-token activations.
+
+\paragraph{Fused FFN kernels, dynamic weights, and speculative decoding.}
+Three further families are relevant. First, fused MLP / FFN kernels (e.g.,
+custom GEMM+activation fusion in Megatron-style stacks
+\cite{narayanan2021megatron,korthikanti2023megatron}) reduce activation and
+weight-traffic overhead within a durable-parameter lifetime; \textsc{MWG-EW}
+complements these by changing what the fused kernel reads (a generated tile
+vs.\ a durable weight) and treats the fused no-write-back kernel as its
+required future systems step. Second, dynamic-weight methods generate or mix
+weights at inference time---dynamic convolutions, weight-generating routers,
+and one-shot weight predictors such as SMASH \cite{brock2018smash}---but
+materialize the result as an ordinary tensor; \textsc{MWG-EW} differs again by
+the no-write-back lifecycle, not by the generation mechanism. Third,
+speculative decoding \cite{fedus2023revisiting} structurally resembles our
+router: a cheap draft path is conditionally accepted or rolled back to a
+dense verifier. The analogy is informative but the target differs---speculative
+decoding trades compute for latency on the \emph{token} axis, whereas
+\textsc{MWG-EW} trades compute for bandwidth on the \emph{weight} axis---so
+the two are orthogonal and could in principle be composed.
+Table~\ref{tab:positioning} summarizes the resulting positioning: the
+distinguishing axis is parameter lifetime, not the specific approximation family.
+
+\section{Architecture}
+
+\subsection{Baseline Gated FFN}
+
+A gated Transformer FFN \cite{shazeer2020gptj} maps hidden states
+$X\in\R^{B\times S\times d}$ to
+\begin{equation}
+Y = \left(\phi(XW_{\mathrm{gate}})\odot XW_{\mathrm{up}}\right)W_{\mathrm{down}},
+\end{equation}
+where $W_{\mathrm{up}}, W_{\mathrm{gate}}\in\R^{d\times m}$,
+$W_{\mathrm{down}}\in\R^{m\times d}$, and $\phi$ is typically SiLU. With fp16
+weights, one block stores approximately $6dm$ bytes when $m$ dominates $d$.
+
+\subsection{Ephemeral Meta-Weight FFN}
+
+\textsc{MWG-EW} replaces each projection matrix by a conditional descriptor pair:
+\begin{equation}
+(U^{(p)}_r,V^{(p)}_r) = G_\theta(c_t,\ell,p),\qquad
+XW_p \approx (XU^{(p)}_r)V^{(p)}_r,
+\end{equation}
+where $p\in\{\mathrm{up},\mathrm{gate},\mathrm{down}\}$, $c_t$ is a token-group
+context, $\ell$ is the layer id, $U_r\in\R^{d_{\mathrm{in}}\times r}$, and
+$V_r\in\R^{r\times d_{\mathrm{out}}}$. The FFN becomes
+\begin{equation}
+\widetilde{Y} =
+\left(\phi((XU^{(g)}_r)V^{(g)}_r)\odot (XU^{(u)}_r)V^{(u)}_r\right)
+U^{(d)}_rV^{(d)}_r.
+\end{equation}
+
+We use a basis-bank generator:
+\begin{align}
+\alpha &= \mathrm{softmax}(A_\ell h_\theta(c_t)),\\
+U_r^{(p)} &= \sum_{k=1}^{K}\alpha_k U_{k}^{(p)} + \Delta U_\theta^{(p)}(c_t,\ell),\\
+V_r^{(p)} &= \sum_{k=1}^{K}\alpha_k V_{k}^{(p)} + \Delta V_\theta^{(p)}(c_t,\ell).
+\end{align}
+The bank gives stable reusable directions; the residual head gives
+input-conditioned adaptation. Practical kernels may generate only rank-channel
+scales or tile-local residuals when full descriptor synthesis is too expensive.
+
+\subsection{Descriptor Lifecycle}
+
+The runtime contract is simple and testable:
+\begin{enumerate}
+  \item Read token context $c_t$ and layer id $\ell$.
+  \item Generate descriptor factors $(U_r,V_r)$ for each FFN projection.
+  \item Store descriptor tiles in an on-chip scratch region when the target
+  accelerator exposes such memory; otherwise keep the same volatile lifecycle
+  at the closest available cache level.
+  \item Compute each projection with the associative schedule $(XU_r)V_r$.
+  \item Release or overwrite each scratch tile before the next token group.
+  \item Synchronize gradients only for generator and basis-bank parameters.
+\end{enumerate}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  node distance=10mm and 12mm,
+  every node/.style={align=center},
+  dur/.style={draw=black!60,rounded corners=2pt,inner sep=4pt,fill=black!4},
+  gen/.style={draw=blue!60!black,rounded corners=2pt,inner sep=4pt,fill=blue!8},
+  ker/.style={draw=green!50!black,rounded corners=2pt,inner sep=4pt,fill=green!8},
+  rel/.style={draw=red!60!black,rounded corners=2pt,inner sep=4pt,fill=red!8},
+  arr/.style={-{Stealth[length=2mm]},thick,black!70},
+  lab/.style={font=\scriptsize\itshape,black!70},
+  box/.style={draw=black!30,rounded corners=3pt,inner sep=6pt},
+]
+\node[dur] (state) {Durable\\state\\$\theta_G,\,B$};
+\node[gen, right=of state] (gen) {Generator\\$G_\theta(c_t,\ell)$};
+\node[ker, right=of gen] (tile) {On-chip\\descriptor tile\\$(U_r,V_r)$};
+\node[ker, right=of tile] (fmm) {Associative\\FFN\\$(XU_r)V_r$};
+\node[rel, right=of fmm] (rel) {Release /\\overwrite};
+
+\draw[arr] (state) -- node[lab,above]{load} (gen);
+\draw[arr] (gen) -- node[lab,above]{emit} (tile);
+\draw[arr] (tile) -- node[lab,above]{consume} (fmm);
+\draw[arr] (fmm) -- node[lab,above]{discard} (rel);
+
+\begin{scope}[on background layer]
+\node[box,fit=(state)(gen),label={[font=\scriptsize\itshape,black!60]below:durable (synchronized)}] {};
+\node[box,fit=(tile)(fmm)(rel),label={[font=\scriptsize\itshape,black!60]below:ephemeral (per token group, no write-back)}] {};
+\end{scope}
+
+\draw[arr,dashed,red!60!black]
+  (rel.south) .. controls +(0,-9mm) and +(0,-9mm) .. node[lab,below,midway]{next token group} (gen.south);
+\end{tikzpicture}
+\caption{Descriptor lifecycle. Durable state (generator parameters
+$\theta_G$ and basis bank $B$) is loaded once per block. Per token group, the
+generator emits a rank-$r$ descriptor that lives only in on-chip scratch
+during the associative FFN computation and is then released. The dashed loop
+emphasizes that descriptors are regenerated, not fetched from off-chip
+parameter memory. The no-write-back contract is what separates
+\textsc{MWG-EW} from a persistent low-rank factorization.}
+\label{fig:lifecycle}
+\end{figure}
+
+The important distinction is not only low rank. A low-rank factor stored as a
+long-lived model tensor still creates persistent parameter traffic. The
+ephemeral contract allows a runtime to avoid writing generated descriptors back
+to off-chip memory and allows distributed training to synchronize only the
+generator-side state. Figure~\ref{fig:lifecycle} contrasts the durable and
+ephemeral regions of this lifecycle.
+
+\section{Analysis}
+
+\subsection{Traffic Scaling}
+
+\paragraph{Assumptions.} The byte counts in this subsection count only FFN
+weight traffic for a single forward call under fp16 storage. They exclude
+attention KV-cache traffic, optimizer state, activation checkpoints, and the
+generator's own forward-pass intermediate traffic; each of these is treated
+separately where relevant. The associative schedule is assumed to be
+memory-bound, i.e., descriptor traffic dominates the launch/compute term in
+the asymptotic regime considered in Proposition~\ref{prop:speedup}.
+
+For a gated FFN with three projections and fp16 elements, dense weight traffic
+per block is
+\begin{equation}
+\traffic_{\mathrm{dense}} = 6dm.
+\end{equation}
+Ignoring the small generator context, rank-$r$ descriptor traffic is
+\begin{equation}
+\traffic_{\mathrm{mwg}} = 2r(d+m) + 2r(d+m) + 2r(m+d)
+  = 6r(d+m).
+\end{equation}
+The idealized traffic ratio is therefore
+\begin{equation}
+\Gamma(r)=\frac{\traffic_{\mathrm{mwg}}}{\traffic_{\mathrm{dense}}}
+= \frac{r(d+m)}{dm}.
+\end{equation}
+At $d=4096$, $m=14336$, and $r=128$, this gives
+$\Gamma=0.0402$, or a $24.9\times$ reduction in descriptor bytes.
+
+\begin{proposition}[Memory-bound speedup condition]
+\label{prop:speedup}
+Assume per-block latency can be approximated by
+$L=L_0+\kappa\traffic$ with fixed launch/compute term $L_0$ and bandwidth
+coefficient $\kappa>0$. Then \textsc{MWG-EW} improves latency whenever
+$\traffic_{\mathrm{mwg}}<\traffic_{\mathrm{dense}}$, and the asymptotic speedup
+approaches $1/\Gamma(r)$ as $L_0$ becomes small relative to memory traffic.
+\end{proposition}
+\begin{proof}
+Under the linear latency model, the dense and \textsc{MWG-EW} latencies are
+$L_{\mathrm{dense}}=L_0+\kappa\traffic_{\mathrm{dense}}$ and
+$L_{\mathrm{mwg}}=L_0+\kappa\traffic_{\mathrm{mwg}}$, so
+$L_{\mathrm{mwg}}<L_{\mathrm{dense}}$ iff
+$\traffic_{\mathrm{mwg}}<\traffic_{\mathrm{dense}}$. The speedup is
+$L_{\mathrm{dense}}/L_{\mathrm{mwg}}=(L_0+\kappa\traffic_{\mathrm{dense}})/(L_0+\kappa\traffic_{\mathrm{mwg}})$.
+As $L_0/\kappa\to 0$, this ratio approaches
+$\traffic_{\mathrm{dense}}/\traffic_{\mathrm{mwg}}=1/\Gamma(r)$.
+\end{proof}
+
+\subsection{Gradient Communication}
+
+In data-parallel training, dense FFN gradients require all-reduce traffic
+proportional to $6dm$ bytes per block. \textsc{MWG-EW} synchronizes generator and
+descriptor-bank parameters, whose leading term is $6r(d+m)$ plus the small MLP
+state. The same ratio $\Gamma(r)$ controls the dominant gradient-byte reduction.
+This is orthogonal to optimizer sharding \cite{rajbhandari2020zero} and tensor
+parallelism: those systems can still be used on the remaining generator
+parameters. It is also complementary to gradient-compression methods that
+sparsify \cite{lin2018dgc}, quantize \cite{alistarh2017qsgd}, or low-rank-project
+\cite{vogels2019powersgd} the gradients of a fixed parameter set; here the
+synchronized parameter set itself is smaller, so the two families of savings
+multiply rather than overlap.
+
+\subsection{Computational Complexity}
+
+Let $T=BS$ be the number of tokens processed by one FFN call and let $q$ be the
+token-group reuse factor for a generated descriptor. The dense gated FFN
+performs three large matrix products and has leading compute
+\begin{equation}
+\mathcal{C}_{\mathrm{dense}} = \Theta(3Tdm)
+\end{equation}
+multiply-accumulate operations. The associative \textsc{MWG-EW} path computes
+$XU_r$ and then $ZV_r$ for the up, gate, and down projections:
+\begin{equation}
+\mathcal{C}_{\mathrm{mwg,assoc}} = \Theta(3Tr(d+m)).
+\end{equation}
+If a basis bank with $K$ entries is explicitly blended once per token group,
+the descriptor-generation term is
+\begin{equation}
+\mathcal{C}_{\mathrm{gen}} =
+\Theta\!\left(3\left\lceil T/q\right\rceil K r(d+m) +
+\left\lceil T/q\right\rceil C_G\right),
+\end{equation}
+where $C_G$ is the small context-network cost. Kernels that generate only
+rank-channel scales or tile-local residuals replace the $Kr(d+m)$ term by the
+corresponding tile size. Thus the leading compute ratio, ignoring amortized
+generation, is again $\Gamma(r)=r(d+m)/(dm)$. The method is attractive when
+$r \ll \min(d,m)$ and $q$ is large enough to amortize generation; it can be
+unattractive when descriptors are regenerated for very small token groups or
+when unfused factor matmuls lose accelerator utilization.
+
+\subsection{Working-Set Complexity}
+
+The persistent FFN parameter state is $\Theta(3dm)$ elements per layer. A
+fully materialized rank-$r$ descriptor set is only $\Theta(3r(d+m))$ elements,
+and a tiled kernel can reduce the live scratch working set further to
+$\Theta(r(d_{\mathrm{tile}}+m_{\mathrm{tile}}))$. These are storage-footprint
+and traffic estimates. They are not claims that every descriptor or activation
+is resident in on-chip SRAM at once; the no-write-back contract says that
+generated descriptor tiles should be consumed at the closest available
+scratch/cache level and not committed as durable off-chip model weights.
+
+\subsection{Approximation}
+
+\begin{proposition}[FFN output distortion bound]
+\label{prop:approx}
+Let $\widetilde{W}_p=U^{(p)}_rV^{(p)}_r$ be the generated approximation of
+$W_p$ with $\norm{W_p-\widetilde{W}_p}_F\le \epsilon_p$ for
+$p\in\{\mathrm{gate},\mathrm{up},\mathrm{down}\}$. Assume the activation
+$\phi$ is $L_\phi$-Lipschitz and activations are bounded by $M$. Then
+\begin{equation}
+\norm{Y-\widetilde{Y}}_F
+\le C_1 L_\phi\norm{X}_F(\epsilon_{\mathrm{gate}}+\epsilon_{\mathrm{up}})
+  + C_2\norm{X}_F\epsilon_{\mathrm{down}},
+\end{equation}
+where $C_1$ and $C_2$ depend on $M$ and the activation bounds inside the FFN.
+\end{proposition}
+\begin{proof}[Proof sketch.]
+The gated FFN output is
+$Y=(\phi(XW_{\mathrm{gate}})\odot XW_{\mathrm{up}})W_{\mathrm{down}}$.
+Applying the Lipschitz property of $\phi$ and the submultiplicativity of the
+Frobenius norm to each projection yields
+$\norm{\phi(XW_{\mathrm{gate}})-\phi(X\widetilde{W}_{\mathrm{gate}})}_F
+\le L_\phi\norm{X}_F\epsilon_{\mathrm{gate}}$ and
+$\norm{XW_{\mathrm{up}}-X\widetilde{W}_{\mathrm{up}}}_F\le\norm{X}_F\epsilon_{\mathrm{up}}$.
+The Hadamard product error is bounded by the sum of these two terms (using
+$\norm{a\odot b - \tilde{a}\odot\tilde{b}}\le\norm{a-\tilde{a}}\norm{b}+\norm{\tilde{a}}\norm{b-\tilde{b}}$
+with the boundedness assumption $\norm{XW_{\mathrm{up}}}_F,\norm{\phi(XW_{\mathrm{gate}})}_F\le M'$),
+giving the $C_1$ term. The down-projection error contributes the $C_2$ term via
+submultiplicativity. The full derivation is omitted for space.
+\end{proof}
+
+\begin{corollary}[Rank-aware distortion for static and generated factors]
+\label{cor:rankapprox}
+Let
+\begin{equation}
+E_r(W_p)=\frac{\sum_{i=1}^{r}\sigma_i(W_p)^2}{\norm{W_p}_F^2}
+\end{equation}
+be the retained singular-value energy of $W_p$ at rank $r$ (reported for our
+checkpoint in Table~\ref{tab:svd}). For the static truncated-SVD baseline,
+$\epsilon_p^{\mathrm{svd}}\le\norm{W_p}_F\sqrt{1-E_r(W_p)}$, so
+Proposition~\ref{prop:approx} yields a concrete rank-dependent distortion
+budget. For a generated descriptor $\widetilde{W}_p=U^{(p)}_rV^{(p)}_r$ trained
+to minimize $\norm{W_p-\widetilde{W}_p}_F$ (as in our LM-CE distillation), the
+achieved $\epsilon_p$ is bounded by the same tail term plus a generation gap
+that depends on the basis-bank size $K$ and the residual head capacity;
+empirically (Table~\ref{tab:quality}) the generated descriptor attains
+$\epsilon_p/\norm{W_p}_F\approx 0.10$ at rank~384 versus
+$\approx 0.84$ for static SVD, i.e., the generation gap is \emph{negative}
+on this checkpoint. Corollary~\ref{cor:rankapprox} therefore connects rank selection to
+output distortion through $E_r(W_p)$, while leaving room for end-to-end
+distillation to improve beyond the static-SVD energy tail.
+\end{corollary}
+
+
+\subsection{Eligibility and Benefit Routing}
+
+The systems advantage of an ephemeral descriptor is realized only on calls that
+can safely use it. We therefore treat \textsc{MWG-EW} as a budgeted decision
+problem rather than a blanket replacement. For a token or token group $x$, let
+$\Delta(x)=\loss_{\mathrm{dense}}(x)-\loss_{\mathrm{mwg}}(x)$ be the measured
+benefit of using the generated path on training text. A deployable router learns
+$\hat{\Delta}(x)$ from features available before the target FFN executes and
+patches the top-scoring budgeted subset:
+\begin{equation}
+g_{\budget}(x)=\mathbf{1}\{\hat{\Delta}(x)\ge q_{1-\budget}(\hat{\Delta})\}.
+\end{equation}
+The mixed FFN is
+\begin{equation}
+Y_{\mathrm{mix}}(x)=(1-g_{\budget}(x))Y_{\mathrm{dense}}(x)
++g_{\budget}(x)\widetilde{Y}_{\mathrm{mwg}}(x).
+\end{equation}
+This objective is closer to systems deployment than an oracle frontier: the
+router observes hidden-state summaries and sequence metadata, not the evaluation
+loss of the dense and patched model. It also turns negative evidence into useful
+structure. If always-patched replacement fails but $\Delta(x)$ is predictable
+for a small subset, then the method still yields a practical bandwidth budget.
+
+\begin{proposition}[Budgeted value condition]
+Let $S_{\budget}=\{x:g_{\budget}(x)=1\}$. Suppose a full generated call saves
+$s_r$ bytes or communication units relative to the dense call, and let $o_r$ be
+the router, launch, staging, and any dense-residency overhead paid per candidate
+call. The expected net systems saving is bounded by
+\begin{equation}
+\Pr[x\in S_{\budget}]s_r-o_r.
+\end{equation}
+The replacement is quality-preserving whenever
+\begin{equation}
+\E[\loss_{\mathrm{mwg}}(x)-\loss_{\mathrm{dense}}(x)\mid x\in S_{\budget}]
+\le 0.
+\end{equation}
+Thus value comes from the product of per-call descriptor savings and predictable
+eligibility, and the end-to-end saving can be much smaller than the full-call
+traffic ratio when the safe patch fraction is small.
+\end{proposition}
+\begin{proof}
+The expected per-call saving is
+$\E[(1-g_{\budget}(x))\cdot 0 + g_{\budget}(x)\cdot s_r] - o_r
+= \Pr[x\in S_{\budget}]\,s_r - o_r$,
+where the overhead $o_r$ is paid for every candidate call regardless of the
+routing decision. The quality condition follows by taking the conditional
+expectation of the loss difference over the patched set $S_{\budget}$.
+\end{proof}
+
+\subsection{Static Low-Rank Is Not the Claim}
+
+To separate \textsc{MWG-EW} from ordinary compression, we analyze a static truncated-SVD
+baseline on 18 FFN matrices from a Qwen-1.5B-family checkpoint. Table
+\ref{tab:svd} reports mean retained singular-value energy and reconstruction
+cosine. At ranks that are attractive for bandwidth, static SVD preserves too
+little FFN structure to be a complete solution. This is evidence for the
+generator side of \textsc{MWG-EW}: the low-rank factors should be conditional operands,
+not merely fixed compressed weights.
+
+\begin{table}[t]
+\centering
+\caption{Static SVD baseline on 18 pretrained FFN matrices. Low ranks are
+excellent for bytes but weak as fixed approximations, motivating learned
+conditional generation.}
+\label{tab:svd}
+\begin{tabular}{rrrr}
+\toprule
+Rank $r$ & Mean energy & Min energy & Mean cosine \\
+\midrule
+32 & 7.17\% & 4.27\% & 0.266 \\
+64 & 11.98\% & 8.16\% & 0.345 \\
+128 & 20.12\% & 15.46\% & 0.448 \\
+256 & 33.79\% & 28.65\% & 0.582 \\
+512 & 55.61\% & 50.75\% & 0.748 \\
+1024 & 85.13\% & 82.42\% & 0.925 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Systems Realization}
+
+The architectural claim is only meaningful if the runtime keeps the generated
+factors ephemeral. The current prototype measures the unfused associative path;
+the following contract describes the production implementation needed to validate
+the full no-write-back claim:
+\begin{itemize}
+  \item \textbf{Generator placement.} The generator runs adjacent to the FFN
+  kernel and emits descriptor tiles directly into scratch memory or the nearest
+  cache-managed staging region.
+  \item \textbf{Associative execution.} The kernel computes $XU_r$ followed by
+  $ZV_r$, fusing activation, gate, and down-projection staging where the target
+  accelerator permits it.
+  \item \textbf{Eligibility control.} A cheap router decides whether the dense
+  or ephemeral path should execute for the current token group. This router is
+  part of the runtime path, not an offline oracle.
+  \item \textbf{Lifecycle enforcement.} Descriptor buffers are marked volatile;
+  instrumentation checks descriptor read/write traffic and verifies that
+  generated factors do not reappear as persistent model tensors or optimizer
+  state.
+\end{itemize}
+
+The intended kernel is a streaming descriptor pipeline. For each tile, the
+runtime generates or blends the required rank channels, performs the two
+associative matrix products, fuses the activation/gating operation, and then
+reuses the tile storage for the next token group. If the hardware lacks explicit
+software-managed SRAM, the same contract can be approximated at the nearest
+cache level, but the paper then reports descriptor traffic as an estimate until
+hardware counters confirm off-chip behavior.
+
+This blueprint also clarifies why the current prototype is useful but not the
+final systems artifact. The benchmark measures the unfused associative path and
+shows that trainable-state and communication reductions can translate into
+latency improvements for full generated calls. It does not prove the final
+no-write-back traffic claim. A fused kernel and hardware counters are required
+to show that descriptor tiles avoid off-chip write-back in the intended runtime.
+
+\begin{table}[t]
+\centering
+\caption{Positioning of \textsc{MWG-EW} relative to common efficient-Transformer
+mechanisms. The distinguishing axis is parameter lifetime: whether the
+weight-like object is durable model state or a volatile runtime operand.}
+\label{tab:positioning}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}}
+\toprule
+Method family & Durable object & Primary saving & \textsc{MWG-EW} difference \\
+\midrule
+Quantization & Quantized weights & Bits per weight & Changes lifetime, not only precision \\
+LoRA/adapters & Low-rank factors & Trainable state & Factors are generated operands \\
+MoE & Expert weights & Activated compute & Expert weights remain persistent \\
+Hypernetworks & Generated weights & Param. sharing & No-write-back lifecycle, FFN-scoped \\
+Static low-rank & Compressed factors & Weight bytes & Factors are conditional, not fixed \\
+FlashAttention & Activations & Attention IO & Targets FFN weight movement \\
+MLA/KV compression & Past-token state & KV-cache memory & Orthogonal to FFN descriptors \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Experimental Protocol}
+
+\paragraph{Execution setup.}
+The large-scale reliability run uses an eight-accelerator distributed
+environment with visible NPUs. We evaluate one, two, four, and eight
+data-parallel ranks by configuring the visible device set and launching
+PyTorch distributed execution with hardware-native collective communication.
+Each configuration is repeated three times. A replication run uses the same
+geometry, launcher, and three-repeat policy, but with a subset of ranks
+appropriate to the available device sets. The scaling sweep uses all eight
+visible NPUs and evaluates the wider rank set
+$r\in\{32,64,96,128,192,256,384,512\}$. The raw artifacts record platform
+metadata for reproducibility, but the method and results below are reported
+in terms of model geometry, rank, latency, state size, estimated traffic, and
+collective communication.
+
+\paragraph{Geometry.}
+The large settings use an 8B-scale FFN block with $d=4096$, $m=14336$, decode
+shape $B=1,S=128$, and training shape $B=2,S=512$. The reliability/scaling
+sweep reported below uses representative ranks $r\in\{64,128,256\}$ for the
+three-repeat reliability tables and the wider rank set for the three-repeat
+scaling sweep.
+
+\paragraph{Validation path.}
+The benchmark uses a small smoke geometry $(d,m)=(512,1408)$ with short
+iteration counts before running the 8B-scale geometry. This keeps the expensive
+distributed sweep separate from basic checks of output writing, tensor shapes,
+and collective communication.
+
+\paragraph{Metrics.}
+We report forward latency, backward latency, throughput, trainable parameter
+bytes, estimated descriptor traffic, dense-to-\textsc{MWG-EW} speedup, all-reduce
+latency, and all-reduce bytes.
+
+\paragraph{Checkpoint quality and end-to-end probes.}
+To avoid treating systems speed as a proxy for model quality, we separately
+distill the FFN output of layer 0 from a local Qwen2.5-1.5B-Instruct checkpoint
+\cite{qwen2025qwen25}. The teacher uses the checkpoint
+\texttt{gate\_proj}, \texttt{up\_proj}, and \texttt{down\_proj} matrices with
+$d=1536$ and $m=8960$. We compare static truncated SVD, a trainable persistent
+low-rank FFN, and the same low-rank factors with the \textsc{MWG-EW} rank-scale
+generator. The reported run uses eight NPUs, fp32 training for numerical
+stability, ranks $64$ and $128$, 16 short distillation steps, and four
+evaluation batches. We then run a stronger quality path on the same
+checkpoint: text-activation distillation, expert-residual \textsc{MWG-EW} students,
+saved student checkpoints, and direct replacement of selected Qwen MLP modules
+followed by causal-language-model perplexity evaluation. This second probe is
+still small, but it is end-to-end: the patched model is evaluated through the
+full Transformer, not only by block MSE. We use this second path as the
+headline quality probe because causal-language-model perplexity is the quantity
+the paper ultimately cares about; the layer-0 block-MSE distillation is
+retained only as a controlled checkpoint-quality reference. Within that
+end-to-end path, layer 16 is selected as the best current single-layer
+candidate by the per-layer calibration sweep reported in
+Table~\ref{tab:pplheldout}, and all headline quality and routing results in
+Sections~\ref{sec:results}--\ref{sec:discussion} use that layer.
+
+\paragraph{Layer-16 selection provenance.}
+Layer 16 was selected as the single best layer from a per-layer calibration
+sweep over candidate mid-stack FFN layers of the Qwen2.5-1.5B checkpoint
+(layer indices $\{12,14,16,18\}$ were calibrated and evaluated on the same
+held-out Belle slice at rank~384 under identical LM-CE settings); layer~16
+gave the lowest held-out PPL ratio after LM-CE calibration. We do not claim
+that 16 is uniquely amenable; rather, it is the best of the small set we
+calibrated, and the multi-layer negative control in
+Table~\ref{tab:multilayerpareto} shows that the adjacent layers 17 and 18 do
+not share the selective-routing win under the same calibration. The
+amenability of layer~16 appears tied to its mid-stack position (sufficient
+input context for the generator's hidden-state features to be informative)
+combined with a rank-energy profile that is not yet captured by a per-layer
+analysis; isolating the causal property is left to future work. Readers should
+treat the layer-16 result as a calibrated single-layer existence proof, not a
+universal FFN-layer property.
+
+\paragraph{Reproducibility controls.}
+Held-out recovery, broad validation, and router launchers require explicit text
+paths and reject any default-corpus fallback through an explicit-text guard.
+The manifest-driven validation harness rejects empty or undersized corpora,
+and router splits record exact train/eval files, seeded partitions, and overlap
+removal. These controls keep the positive selective-routing result comparable
+across future replications and prevent the paper from mixing leakage-prone
+router gains with held-out broad evaluation.
+
+\paragraph{Deployable selective routing protocol.}
+The key algorithmic validation step is a non-oracle dense-fallback policy for
+the best current single-layer patch. The router labels train tokens by
+dense-vs-patched loss delta, fits a small ridge regressor from features
+available before the target FFN executes, and evaluates thresholded patch
+fractions with actual mixed dense/patch forward passes. The features are
+summary statistics of the layer-16 pre-FFN hidden state and sequence occupancy,
+not evaluation-set dense-vs-patched losses or post-hoc perplexity comparisons.
+This protocol tests \textsc{MWG-EW} as a selective runtime optimization rather than an
+indiscriminate layer replacement. We also
+evaluated the calibrated layer-16 checkpoint in stricter follow-ups:
+manifest-driven broad always-patched validation across GSM8K, MBPP,
+Alpaca-tail, Wikitext-103, and HellaSwag, a corrected hybrid manifest, and a
+disjoint router/global train/eval split with suite-balanced router fitting.
+These runs use explicit manifests and actual dense/patch or mixed forward
+passes.
+
+\paragraph{Artifact trail.}
+The reported systems run produced 12 raw JSON benchmark artifacts: three
+repeats each for world sizes 1, 2, 4, and 8, plus an aggregate JSON/Markdown
+summary. The local repository keeps the pulled summary, status file, and log.
+A replication sweep wrote nine raw JSON benchmark artifacts under a separate
+results directory; we use the verified per-run artifacts and limit the
+replication claim to those observed runs. The scaling sweep was launched with
+eight visible devices; its log records \texttt{nproc=8} and all eight visible
+device ids.
+
+\section{Numerical Evidence}
+\label{sec:results}
+
+\paragraph{Evidence status.}
+The results below were measured using all eight visible NPUs for the
+largest setting, \texttt{torch.distributed.run}, hardware-native collectives,
+and fp16 tensors. The benchmark uses the 8B-scale FFN geometry
+$(d,m)=(4096,14336)$, decode shape $(1,128,4096)$, and training shape
+$(2,512,4096)$. Each row reports the mean and standard deviation over three
+independent launches. Each launch used three warmup iterations, ten forward
+timing iterations, three training iterations, and five all-reduce iterations.
+These measurements establish systems behavior for the associative low-rank
+path and distributed communication; language-model quality is evaluated
+separately with the checkpoint-backed gates and routers below.
+
+\begin{table}[t]
+\centering
+\caption{Reliability and scaling of 8B-scale FFN training across world
+sizes 1--8 and descriptor ranks 64--256. Columns report per-iteration training
+latency (ms), speedup relative to the rank-dropped (-- rank) baseline at the
+same world size, and throughput in tokens per second. Each cell is
+mean$\pm$std over three launches. The current prototype uses unfused
+associative execution; fused no-write-back kernels are the next systems step.}
+\label{tab:scaling}
+\begin{tabular}{rrrrr}
+\toprule
+World & Rank & Train ms & Train speedup & Train tok/s \\
+\midrule
+1 & -- & $4.974\pm0.024$ & 1.000x & 0.206M \\
+1 & 64 & $3.379\pm0.193$ & $1.475\pm0.075$x & 0.304M \\
+1 & 128 & $3.255\pm0.169$ & $1.531\pm0.071$x & 0.315M \\
+1 & 256 & $3.288\pm0.133$ & $1.514\pm0.055$x & 0.312M \\
+2 & -- & $5.862\pm0.733$ & 1.000x & 0.353M \\
+2 & 64 & $3.991\pm0.110$ & $1.472\pm0.211$x & 0.513M \\
+2 & 128 & $4.797\pm1.530$ & $1.268\pm0.214$x & 0.453M \\
+2 & 256 & $3.890\pm0.066$ & $1.507\pm0.181$x & 0.527M \\
+4 & -- & $6.135\pm1.150$ & 1.000x & 0.682M \\
+4 & 64 & $4.108\pm0.117$ & $1.497\pm0.303$x & 0.998M \\
+4 & 128 & $4.455\pm0.658$ & $1.412\pm0.423$x & 0.932M \\
+4 & 256 & $4.111\pm0.080$ & $1.496\pm0.312$x & 0.997M \\
+8 & -- & $6.487\pm0.861$ & 1.000x & 1.279M \\
+8 & 64 & $4.804\pm1.103$ & $1.373\pm0.182$x & 1.760M \\
+8 & 128 & $4.205\pm0.030$ & $1.542\pm0.196$x & 1.948M \\
+8 & 256 & $4.122\pm0.243$ & $1.572\pm0.165$x & 1.992M \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{State size, descriptor traffic, and measured all-reduce latency for
+the same reliability run. AllReduce latency cells are mean ms over three
+launches for the corresponding world size.}
+\label{tab:statecomm}
+\begin{tabular}{rrrrrrr}
+\toprule
+Rank & Params MiB & Descriptor MiB & Traffic reduction & AR 2 & AR 4 & AR 8 \\
+\midrule
+-- & 336.000 & 336.000 & 1.0x & 19.66 & 11.49 & 6.91 \\
+64 & 11.127 & 6.750 & 49.8x & 1.26 & 1.17 & 1.15 \\
+128 & 18.254 & 13.500 & 24.9x & 1.68 & 1.46 & 1.28 \\
+256 & 32.507 & 27.000 & 12.4x & 2.54 & 1.82 & 1.42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Checkpoint-backed FFN approximation using Qwen2.5-1.5B layer
+0. Lower relative MSE and higher cosine are better. The short eight-NPU
+distillation run improves over static SVD and motivates the selective routing
+protocol used for language-model validation.}
+\label{tab:quality}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Rank & Rel. MSE & Cosine & Params MiB & Traffic reduction \\
+\midrule
+Static SVD & 64 & 0.989094 & 0.133395 & -- & 20.488x \\
+Persistent low-rank & 64 & 0.966727 & 0.225573 & 9.096 & 20.488x \\
+\textsc{MWG-EW} rank-scale & 64 & 0.966702 & 0.225632 & 9.096 & 20.488x \\
+Static SVD & 128 & 0.971749 & 0.187598 & -- & 10.244x \\
+Persistent low-rank & 128 & 0.942873 & 0.257047 & 17.066 & 10.244x \\
+\textsc{MWG-EW} rank-scale & 128 & 0.942804 & 0.257052 & 17.066 & 10.244x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Layer-16 calibration evidence on Qwen2.5-1.5B. Lower PPL ratio is
+better. The key comparison is the same 51{,}267-token held-out Belle slice:
+LM-CE calibration improves the \textsc{MWG-EW} layer-16 patch from the uncalibrated
+gate and outperforms the same-rank persistent low-rank control. The small
+diverse64 and heldout12 rows are auxiliary checks for layer eligibility.}
+\label{tab:pplheldout}
+\begin{tabular}{p{0.40\linewidth}rrrr}
+\toprule
+Patch policy & Rank & Tokens & Dense PPL & Patched PPL / ratio \\
+\midrule
+Layer 16 only, Belle256 & 384 & 50838 & 8.37 & 10.77 / 1.287x \\
+Layer 16 persistent low-rank, Belle256 & 384 & 51267 & 8.44 & 11.59 / 1.373x \\
+Layer 16 only, Belle256, logit-MSE calibrated & 384 & 51267 & 8.44 & 10.03 / 1.189x \\
+Layer 16 only, Belle256, LM-CE calibrated & 384 & 51267 & 8.44 & 9.96 / 1.180x \\
+Layer 16 only, calibrated (run A) LM-CE calibrated & 384 & 17812 & 3.75 & 2.63 / 0.701x \\
+Layer 16 only, calibrated (run B) LM-CE calibrated & 384 & 35374 & 3.69 & 1.49 / 0.404x \\
+Layer 16 only, diverse64, LM-CE calibrated & 384 & 2736 & 62.37 & 67.80 / 1.087x \\
+Layer 16 only, heldout12, LM-CE calibrated & 384 & 1280 & 58.12 & 60.48 / 1.040x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Aggregate broad controls for always-patched layer-16 replacement and
+durable same-rank low-rank baselines. These rows are included only to scope the
+deployment claim: older uncalibrated or weakly calibrated checkpoints were not
+broadly safe, while the calibrated checkpoint is positive on the
+three-suite broad manifest. The five-suite row adds Wikitext-103 and HellaSwag
+and is positive in aggregate, although not every added suite improves. Lower
+PPL ratio is better.}
+\label{tab:broadvalid}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}}
+\toprule
+Policy & Tokens & Weighted ratio & Max suite \\
+\midrule
+MWG LM-CE always-patched, older broad control & 91{,}352 & 1.2464x & -- \\
+Persistent low-rank always-patched & 66{,}873 & 1.2795x & -- \\
+Persistent low-rank + LM-CE always-patched & 91{,}352 & 1.3099x & -- \\
+Calibrated MWG, three suites & 47{,}608 & 0.8715x & 0.9995x \\
+Calibrated MWG, five suites & 74{,}456 & 0.9352x & 1.1284x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Three-fold token-level router cross-validation over the pooled router
+corpus. The 512 unique router lines are repartitioned into explicit 256/256
+train/eval folds, then evaluated with actual mixed dense/patch forward passes.
+This tests split sensitivity within the router distribution; it is not a
+replacement for independent broad benchmarks. Lower PPL ratio is better.}
+\label{tab:tokencvalid}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Mean actual patch frac. & Mean ratio & Min ratio & Max ratio \\
+\midrule
+0.01 & 0.0009 & 0.9989x & 0.9955x & 1.0009x \\
+0.03 & 0.0038 & 0.9940x & 0.9870x & 1.0009x \\
+0.05 & 0.0075 & 0.9896x & 0.9796x & 1.0007x \\
+0.10 & 0.0193 & 0.9787x & 0.9644x & 0.9974x \\
+0.25 & 0.0695 & 0.9462x & 0.9282x & 0.9618x \\
+0.50 & 0.1766 & 0.9218x & 0.9137x & 0.9373x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Disjoint router/global validation for the calibrated layer-16
+checkpoint. The always-patched row evaluates the full patch on the eval split;
+router rows use a dense-fallback policy trained on the
+disjoint train split and executed with actual mixed dense/patch forward passes.
+Lower PPL ratio is better.}
+\label{tab:routerglobal}
+\begin{tabular}{lrrrr}
+\toprule
+Policy & Actual patch frac. & Tokens & PPL ratio & Max suite ratio \\
+\midrule
+Always patched & 1.0000 & 45{,}027 & 0.8605x & 0.9874x \\
+Router target 0.05 & 0.0072 & 45{,}384 & 0.9851x & -- \\
+Router target 0.10 & 0.0192 & 45{,}384 & 0.9607x & -- \\
+Router target 0.25 & 0.0688 & 45{,}384 & 0.9127x & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Corrected five-suite validation. The always-patched token-router
+row aggregates GSM8K, MBPP, Alpaca-tail, Wikitext-103, and
+HellaSwag. The hybrid row is a corrected manifest evaluation and must be read
+separately because it uses a different token count. Lower PPL ratio is better.}
+\label{tab:fivesuite}
+\begin{tabular}{lrrrr}
+\toprule
+Policy & Actual patch frac. & Tokens & PPL ratio & Note \\
+\midrule
+Always patched, five-suite & 1.0000 & 74{,}456 & 0.9352x & aggregate positive \\
+Router target 0.05 & 0.0359 & 75{,}073 & 0.9692x & mixed forward \\
+Router target 0.10 & 0.0669 & 75{,}073 & 0.9552x & mixed forward \\
+Router target 0.25 & 0.1471 & 75{,}073 & 0.9403x & mixed forward \\
+Corrected hybrid manifest & 1.0000 & 39{,}394 & 0.8493x & separate corpus \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Three-seed (seeds 0, 1, 2) five-suite token-router replication
+for an independently retrained and LM-CE-calibrated layer-16 checkpoint, under
+leakage-clean seeded splits with balanced-ridge fitting and
+fail-on-overlap controls. The always-patched per-suite rows are deterministic
+given the checkpoint, so seed variance is negligible. This run is more
+conservative than the single-run five-suite number: the always-patched
+five-suite aggregate is above dense, driven by the out-of-family suites, even
+though the same checkpoint is strongly positive in-distribution ($0.404\times$
+calibration slice) and on GSM8K. Lower PPL ratio is better.}
+\label{tab:fivesuiteseed}
+\begin{tabular}{lrr}
+\toprule
+Always-patched suite & Mean PPL ratio & Seeds \\
+\midrule
+GSM8K & 0.9652x & 3 \\
+MBPP & 1.2162x & 3 \\
+Alpaca-tail & 1.2398x & 3 \\
+Wikitext-103 & 1.7973x & 3 \\
+HellaSwag & 2.5485x & 3 \\
+\midrule
+Five-suite aggregate & 1.4086x & 3 \\
+Router target 0.05 (actual 0.6229) & 1.1725x & 3 \\
+Router target 0.10 (actual 0.8169) & 1.3424x & 3 \\
+Router target 0.25 (actual 1.0000) & 1.4117x & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Algorithmic ablation ladder for the layer-16 Qwen2.5-1.5B patch.
+The table separates fixed compression, learned low-rank controls,
+calibration, broad validation, and deployable routing. Lower PPL ratio is
+better.}
+\label{tab:ablationladder}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}}
+\toprule
+Variant & Rank & Evaluation & PPL ratio / fit \\
+\midrule
+Static SVD & 384 & FFN reconstruction & rel. MSE 0.8367, cos. 0.4045 \\
+\textsc{MWG-EW} expert residual & 384 & FFN reconstruction & rel. MSE 0.1018, cos. 0.9477 \\
+Persistent low-rank & 384 & Belle held-out & 1.373x \\
+\textsc{MWG-EW} LM-CE calibrated & 384 & Belle held-out & 1.180x \\
+\textsc{MWG-EW} LM-CE calibrated & 384 & Broad manifest & 0.8715x \\
+\textsc{MWG-EW} + dense-fallback router & 384 & Router/global eval & 0.9127x at 6.88\% patched \\
+\textsc{MWG-EW} LM-CE calibrated & 384 & Five-suite manifest & 0.9352x over 74{,}456 tokens \\
+\textsc{MWG-EW} corrected hybrid & 384 & Five-source hybrid & 0.8493x over 39{,}394 tokens \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Leakage-clean broad token-router validation. For each broad suite, the
+router train pool removes exact lines overlapping that suite's eval file before
+training. Values aggregate GSM8K, MBPP, and Alpaca-tail using token-weighted
+losses. Lower PPL ratio is better.}
+\label{tab:tokenbroadvalid}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Actual patch frac. & Token-weighted ratio & Min suite & Max suite \\
+\midrule
+0.01 & 0.0005 & 1.0010x & 1.0001x & 1.0050x \\
+0.03 & 0.0019 & 1.0008x & 1.0005x & 1.0025x \\
+0.05 & 0.0055 & 0.9989x & 0.9970x & 1.0004x \\
+0.10 & 0.0208 & 0.9916x & 0.9648x & 0.9996x \\
+0.25 & 0.0849 & 0.9868x & 0.9197x & 1.0038x \\
+0.50 & 0.1975 & 1.0140x & 0.8587x & 1.0498x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Three-seed leakage-clean broad token-router sweep. Each seed uses
+75\% of the overlap-clean router train candidates for each broad suite, then
+evaluates actual mixed dense/patch forwards on GSM8K, MBPP, and Alpaca-tail.
+Values report the mean across seeds; min and max are seed-level token-weighted
+broad ratios. Lower PPL ratio is better.}
+\label{tab:tokenbroadseeds}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Mean actual patch frac. & Mean ratio & Min seed & Max seed \\
+\midrule
+0.01 & 0.0007 & 1.0011x & 1.0008x & 1.0013x \\
+0.03 & 0.0021 & 0.9998x & 0.9980x & 1.0013x \\
+0.05 & 0.0049 & 0.9977x & 0.9941x & 0.9997x \\
+0.10 & 0.0182 & 0.9920x & 0.9890x & 0.9952x \\
+0.25 & 0.0852 & 0.9864x & 0.9820x & 0.9929x \\
+0.50 & 0.2168 & 1.0164x & 0.9943x & 1.0312x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Leave-suite-out broad auxiliary token-router sweep. For each target
+broad suite, router training uses the explicit router texts plus the other two
+broad suites, with exact target-suite eval lines removed. Values report the
+mean across three split seeds; min and max are seed-level token-weighted broad
+ratios. Lower PPL ratio is better.}
+\label{tab:tokenleavesuite}
+\begin{tabular}{rrrrr}
+\toprule
+Target patch frac. & Mean actual patch frac. & Mean ratio & Min seed & Max seed \\
+\midrule
+0.01 & 0.0043 & 1.0007x & 1.0004x & 1.0009x \\
+0.03 & 0.0166 & 0.9989x & 0.9980x & 1.0004x \\
+0.05 & 0.0284 & 0.9975x & 0.9964x & 0.9996x \\
+0.10 & 0.0565 & 0.9926x & 0.9914x & 0.9943x \\
+0.25 & 0.1380 & 0.9943x & 0.9889x & 1.0004x \\
+0.50 & 0.2806 & 1.0274x & 1.0076x & 1.0488x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Runtime profiler probe for the current unfused prototype. The
+environment reported 8 visible NPUs, but this PyTorch-profiler capture exposed
+CPU activities only. It is therefore operator-level evidence, not full
+off-chip hardware-counter validation. Lower time is better.}
+\label{tab:runtimeprobe}
+\begin{tabular}{lrrrr}
+\toprule
+Case & Descriptor MiB & Mean ms & Matmul-like ops & Fused-like op \\
+\midrule
+Dense & 64.50 & 0.3391 & 27 & no \\
+\textsc{MWG-EW} $r=128$ & 5.53 & 0.7638 & 54 & no \\
+\textsc{MWG-EW} $r=256$ & 11.06 & 0.7559 & 54 & no \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Three-repeat eight-NPU rank sweep over ranks $32$--$512$. The run
+used all eight visible devices, world size~8, and
+the 8B-scale FFN geometry. Training speedup is mean$\pm$std over three launches
+against the dense FFN in the same launch family; traffic reduction is the ratio
+of dense descriptor bytes to rank-$r$ descriptor bytes.}
+\label{tab:scalingsweep}
+\begin{tabular}{rrrrrr}
+\toprule
+Rank & Params MiB & Traffic reduction & Train ms & Train speedup & Train tok/s \\
+\midrule
+32 & 7.564 & 99.6x & $3.595\pm0.137$ & $1.538\pm0.026$x & 2.281M \\
+64 & 11.127 & 49.8x & $3.409\pm0.100$ & $1.622\pm0.059$x & 2.405M \\
+96 & 14.691 & 33.2x & $3.359\pm0.069$ & $1.646\pm0.026$x & 2.440M \\
+128 & 18.254 & 24.9x & $3.375\pm0.069$ & $1.638\pm0.030$x & 2.428M \\
+192 & 25.380 & 16.6x & $3.481\pm0.055$ & $1.589\pm0.067$x & 2.354M \\
+256 & 32.507 & 12.4x & $3.429\pm0.083$ & $1.612\pm0.029$x & 2.390M \\
+384 & 46.760 & 8.3x & $3.379\pm0.069$ & $1.636\pm0.029$x & 2.425M \\
+512 & 61.013 & 6.2x & $3.414\pm0.117$ & $1.619\pm0.004$x & 2.402M \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Interpretation.}
+The systems result is the clearest value signal. At eight ranks, $r=128$
+reduces descriptor traffic from 336.0 MiB to 13.5 MiB, reduces trainable FFN
+state from 336.0 MiB to 18.254 MiB after generator overhead, improves mean
+training latency from $6.487\pm0.861$ ms to $4.205\pm0.030$ ms, and
+increases measured training throughput from 1.279M to 1.948M tokens/s. The
+fastest eight-rank point is $r=256$, reaching $1.572\pm0.165\times$ training
+speedup and 1.992M tokens/s, while still reducing descriptor traffic by
+$12.4\times$ and trainable FFN state by $10.3\times$. The lower-rank $r=64$
+point gives the strongest compression, with $49.8\times$ descriptor-traffic
+reduction and $30.2\times$ trainable-state reduction. Across 2, 4, and 8 ranks, the all-reduce proxy drops from dense
+latencies of 19.66, 11.49, and 6.91 ms to low-rank latencies near 1--2.5 ms,
+showing that ephemeral descriptor state can translate directly into distributed
+communication savings. Tables~\ref{tab:scaling} and \ref{tab:statecomm}
+together establish that the directional systems gain holds across one, two,
+four, and eight devices and is not an artifact of a single world size.
+
+The scaling sweep in Table \ref{tab:scalingsweep} strengthens that value signal
+because it tests a wider rank range on all eight NPUs with three independent
+launches. Dense training throughput is 1.483M tokens/s on average in this run
+family. Every tested generated-rank configuration improves training throughput,
+from 2.281M tokens/s at rank 32 to 2.440M tokens/s at rank 96, while preserving
+large descriptor-byte reductions. The best mean training speedup is rank 96:
+$33.2\times$ descriptor-byte reduction, $22.9\times$ trainable-state
+reduction, and $1.646\pm0.026\times$ training speedup. Rank 128 remains a
+balanced operating point: $24.9\times$ descriptor-byte reduction,
+$18.4\times$ trainable-state reduction, and
+$1.638\pm0.030\times$ training speedup. All ranks from 32 through 512 remain
+above $1.5\times$ mean training speedup, showing that the result is not a
+narrow rank accident. Forward speedup is variable and the unfused path is still not an
+inference-latency claim, so the paper treats the scaling-sweep result as strong
+evidence for training and communication efficiency.
+
+For a top-level systems claim, the scaling sweep is the most reliable current
+artifact because it combines full eight-NPU execution, three independent
+launches, and a broad rank range. The curve is not tuned to one point: ranks
+32--512 all remain above $1.5\times$ mean training speedup while
+descriptor-byte reduction ranges from $6.2\times$ to $99.6\times$. This supports the paper's central systems
+message that FFN parameter movement and synchronization can be reduced by
+changing parameter lifetime, even before a fused no-write-back kernel is built.
+
+The replication preserves the same direction on a new run family. Averaged
+over the nine replication artifacts, mean training speedups are about $1.65\times$ at
+world 1, $1.55\times$--$1.59\times$ at world 2, and $1.65\times$--$1.81\times$
+at world 4, depending on rank. Mean forward speedups remain below $1.0\times$
+in every group, ranging roughly from $0.57\times$ to $0.80\times$, so the
+result is a training and communication improvement rather than
+a decode latency win. The replication therefore strengthens the promise without
+changing the boundary.
+
+The checkpoint-backed quality results identify the algorithmic source of value.
+Table \ref{tab:quality} shows that static SVD alone is not competitive, and
+that FFN-output gains over a persistent low-rank control are small before
+routing. Table \ref{tab:pplheldout} then identifies layer 16 as the best
+current single-layer candidate and shows that LM-CE calibration improves the
+Belle held-out ratio to $1.180\times$, materially better than the same-rank
+persistent low-rank control at $1.373\times$. This is the setup that makes the selective-routing
+result possible. Table \ref{tab:broadvalid} shows why calibration matters:
+older always-patched broad controls were above dense, but the calibrated
+checkpoint improves the three-suite broad manifest to $0.8715\times$ of dense,
+with the weakest suite still slightly below dense at $0.9995\times$.
+
+The layer-16 recovery runs add a sharper generator-side signal at the
+same rank. The strongest recovered \textsc{MWG-EW} checkpoint reaches relative
+MSE 0.101849 and cosine 0.947711, while the static SVD baseline stays at
+0.836682 and 0.404468. A later two-NPU rerun independently preserves the
+same separation, with \textsc{MWG-EW} at relative MSE 0.130428 and cosine
+0.932599 versus static SVD at 0.835157 and 0.406409. That is not a blanket
+systems result, but it is a meaningful algorithmic gain because the same rank
+family now supports a much better conditional descriptor fit than a fixed
+truncated decomposition.
+
+The completed rerun also gives a strong calibration-slice language-model
+result: after LM-CE calibration on explicit text, dense PPL is 3.748 and
+patched PPL is 2.628, a $0.701\times$ ratio. We use this as evidence that
+the patch can become language-model beneficial under explicit calibration, not
+as a replacement for leakage-clean broad evidence. The three-suite broad
+validation removes that ambiguity for GSM8K, MBPP, and Alpaca-tail: GSM8K
+improves to $0.801\times$, MBPP to $0.763\times$, and Alpaca-tail to
+$0.9995\times$, for a token-weighted ratio of $0.8715\times$. The corrected
+five-suite validation then adds Wikitext-103 and HellaSwag and remains
+positive in aggregate at $0.9352\times$ over 74{,}456 tokens. Wikitext-103 and HellaSwag individually regress under the
+always-patched policy, so the defensible claim is aggregate five-suite benefit
+plus strong positive transfer on GSM8K and MBPP, not uniform suite-wise
+improvement.
+
+\paragraph{Why the out-of-family suites regress.}
+The three-seed always-patched five-suite breakdown
+(Table~\ref{tab:fivesuiteseed}) shows a clear in-family / out-of-family
+split: GSM8K ($0.965\times$) and MBPP ($1.216\times$) are closest to the
+calibration distribution, while Wikitext-103 ($1.797\times$) and HellaSwag
+($2.549\times$) regress sharply. Two factors plausibly drive this. First, the
+generator and router were calibrated on instruction-and-code-flavored text
+(Belle, GSM8K, MBPP, Alpaca-tail), so the rank-384 basis bank is tuned for
+that token distribution; Wikitext-103's narrative prose and HellaSwag's
+sentence-completion prefixes are out of the calibration support, and a fixed
+rank-384 descriptor is too rigid there. Second, Wikitext-103 and HellaSwag
+have longer, more variable contexts where a single layer-16 patch has larger
+cumulative effect, amplifying any per-token approximation error. The
+selective router mitigates this by falling back to dense on the
+high-prediction-loss tokens that dominate the out-of-family error, which is
+why the tighter-eligibility regime recovers a net five-suite win even though
+always-patched replacement does not.
+
+The broad router sweeps are the strongest current quality evidence. The router
+uses token CE deltas on explicit train text, features available before the FFN
+executes, and actual mixed dense/patch forward passes at evaluation time. In
+three-fold in-distribution validation (Table \ref{tab:tokencvalid}), mean
+mixed-forward ratios reach $0.946\times$ at 6.9\% actual patching and
+$0.922\times$ at 17.7\% actual patching. In the leakage-clean broad setting (Table
+\ref{tab:tokenbroadvalid}), token-weighted ratios are below dense at 2.1\% and
+8.5\% actual patching, but the max-suite ratio at target 0.25 is still above
+dense. The three-seed broad sweep in Table \ref{tab:tokenbroadseeds} improves
+over dense at target fractions 0.05, 0.10, and 0.25 on every seed, with actual
+patch fractions 0.49\%, 1.82\%, and 8.52\%; its max seed-level broad ratios are
+$0.9997\times$, $0.9952\times$, and $0.9929\times$, respectively. The stricter
+leave-suite-out sweep (Table \ref{tab:tokenleavesuite}) keeps only targets 0.05
+and 0.10 below dense on every seed, with actual patch fractions 2.84\% and
+5.65\%, mean ratios of $0.997\times$ and $0.993\times$, and max seed-level broad
+ratios of $0.9996\times$ and $0.9943\times$. Target 0.25 remains promising but
+not fully robust there: its mean ratio stays below dense at $0.994\times$, but
+the max seed-level broad ratio rises slightly above dense to $1.0004\times$. This is the deployable positive result and its boundary: a
+learned dense-fallback router can patch a small, measurable fraction of tokens
+while preserving or improving perplexity, but the wider patch regime is still
+fragile. It is not evidence that the full-call systems savings apply to every
+FFN invocation, and it is currently validated only on three held-out suite
+families: math reasoning, code generation, and instruction following.
+
+The router/global split in Table \ref{tab:routerglobal} makes that
+deployment story stronger. On a disjoint 357-example eval split, the full
+calibrated layer-16 patch reaches a $0.8605\times$ PPL ratio. The same
+checkpoint under a learned dense-fallback router improves monotonically across
+the tested budgets: $0.9851\times$ at 0.72\% actual patching, $0.9607\times$ at
+1.92\%, and $0.9127\times$ at 6.88\%. The gain is therefore not only an oracle or calibration-slice effect;
+it survives an explicit train/eval split and actual mixed forwards. The paper's
+claim remains bounded because the experiment patches one FFN layer, but the
+algorithmic result is now positive in both full-patch and selective-patch modes
+for the calibrated checkpoint.
+
+The corrected five-suite run in Table \ref{tab:fivesuite} is the
+broadest current validation. The always-patched aggregate remains below
+dense at $0.9352\times$ over 74{,}456 tokens, and the selective router
+preserves positive aggregate ratios up to the tested 14.71\% actual patch-token
+budget. The corrected hybrid manifest is stronger still at $0.8493\times$ over
+39{,}394 tokens. This improves the paper's breadth, while also clarifying the next
+research target: suite-robust eligibility control is needed because Wikitext-103
+and HellaSwag do not yet improve under unconditional layer replacement.
+
+A three-seed reproduction sharpens this boundary rather than softening
+it. We independently retrained and LM-CE-calibrated the layer-16 checkpoint and
+re-ran the five-suite token-router evaluation across three seeds under
+leakage-clean seeded splits, balanced-ridge fitting, and fail-on-overlap controls
+(Table \ref{tab:fivesuiteseed}). In-distribution the checkpoint is strongly
+positive, improving the calibration slice from dense PPL 3.69 to 1.49
+($0.404\times$ over 35{,}374 tokens), and it remains positive on GSM8K at
+$0.965\times$. However, the always-patched five-suite aggregate is above dense
+at $1.409\times$ with negligible seed variance, driven by the out-of-family
+suites (HellaSwag $2.549\times$, Wikitext-103 $1.797\times$), and the
+suite-local router threshold over-selects (actual patch fractions
+of 62\%, 82\%, and 100\% for targets 5\%, 10\%, and 25\%), so its frontier stays
+above dense at $1.172\times$, $1.342\times$, and $1.412\times$. We report this conservative
+replication explicitly: the defensible positive claims are the in-distribution
+calibration benefit and GSM8K transfer, while a uniformly safe five-suite
+always-patched policy is \emph{not} established under three-seed leakage-clean
+evaluation, and a tighter eligibility policy than suite-local thresholding is
+required to recover a net selective win on the broad mix.
+
+Table \ref{tab:ablationladder} summarizes the causal ladder behind the result.
+The gain is not explained by fixed low-rank compression: static SVD at the same
+rank has weak reconstruction fidelity. It is also not merely a persistent
+low-rank effect: the same-rank durable baseline is worse on Belle held-out text.
+The positive regime appears after conditional generation, LM-CE calibration,
+and eligibility control are combined. This is the core algorithmic contribution
+that a reviewer should judge independently from the still-unfused systems
+prototype.
+
+The tighter-eligibility Pareto sweep in Table \ref{tab:tighterpareto} resolves
+the open question raised by the corrected five-suite run. By sweeping the
+predicted-loss eligibility threshold $\Delta_{\max}$ across eight values from
+$-0.30$ to $-0.05$ under four threshold policies (\texttt{suite\_min}, \texttt{suite\_mean}, \texttt{suite\_median},
+\texttt{global}) and three seeds (96 cells total), we recover a net
+five-suite selective win. At $\Delta_{\max}=-0.20$, all four policies converge
+to an actual patch-token fraction of $\approx 2.0\%$ and a mean PPL ratio of
+$0.9923\times$, a $0.77\%$ five-suite improvement over dense. Of the 96 cells,
+66 achieve a net win (PPL ratio $<1$) against the always-dense baseline, and
+the always-patched control reproduces the $1.409\times$ broad penalty from
+Table~\ref{tab:fivesuiteseed}. The full 96-cell PPL-ratio distribution
+spans $[0.9923, 1.0138]$: 66 cells below $1.0$, 18 cells in $[1.0, 1.01]$, and
+12 cells above $1.01$, all under the same checkpoint, so the distribution is
+concentrated near neutral with a net-positive skew. The frontier is robust to
+the threshold policy: \texttt{global}, \texttt{suite\_median}, and
+\texttt{suite\_mean} all reach the same operating point at
+$\Delta_{\max}=-0.20$, confirming that the win is not an artifact of one
+aggregation choice.
+
+\paragraph{Variance scope.}
+The three seeds vary only the router train/eval partition; the distilled
+student checkpoint, evaluation lines, and threshold policies are held fixed
+across seeds. The reported per-seed variance below $10^{-6}$ therefore bounds
+\emph{router-partition} variance, not checkpoint-retraining variance. An
+independent re-distillation could widen the $0.77\%$ improvement; we do not
+claim otherwise. A random-perturbation control (routing $\approx 2\%$ of tokens
+through a non-learned intervention of comparable budget) and an independent
+re-distillation are the two highest-priority follow-up experiments for
+establishing that the selective win is attributable to the generated
+descriptor rather than to the small patch budget alone.
+
+The tighter eligibility simply patches fewer tokens: the loose
+$\Delta_{\max}=-0.05$ over-selects at $5$--$9\%$ actual patching and pays a
+$1.3$--$8.2\%$ PPL penalty, while $\Delta_{\max}\le -0.20$ suppresses the
+false-positive eligibility decisions that drove the over-selection in the
+suite-local threshold sweep.
+
+\begin{table}[t]
+\centering
+\caption{Tighter-eligibility Pareto sweep on the layer-16 Qwen2.5-1.5B
+patch, single NPU, three seeds (0, 1, 2). Each cell is
+the mean across seeds; PPL ratio is token-weighted five-suite (GSM8K, MBPP,
+Alpaca-tail, Wikitext-103, HellaSwag) over the always-dense baseline. The
+\texttt{always-patched} row is the target-fraction-1.0 control. Lower PPL
+ratio is better; ratios below $1.0\times$ are net selective wins. The
+$\Delta_{\max}=-0.20$ row achieves the best five-suite PPL at the lowest
+actual patch fraction, and the win is policy-invariant.}
+\label{tab:tighterpareto}
+\begin{tabular}{llrrrr}
+\toprule
+$\Delta_{\max}$ & Threshold policy & Target & Actual patch & Mean PPL & Seed range \\
+\midrule
+$-0.20$ & global & 0.10 & 0.0201 & 0.9923x & [0.9923, 0.9923] \\
+$-0.20$ & suite\_median & 0.10 & 0.0201 & 0.9923x & [0.9923, 0.9923] \\
+$-0.20$ & suite\_mean & 0.10 & 0.0185 & 0.9926x & [0.9926, 0.9926] \\
+$-0.20$ & suite\_min & 0.10 & 0.0201 & 0.9928x & [0.9928, 0.9928] \\
+$-0.15$ & suite\_min & 0.05 & 0.0237 & 0.9928x & [0.9928, 0.9928] \\
+$-0.25$ & suite\_mean & 0.05 & 0.0119 & 0.9941x & [0.9941, 0.9941] \\
+$-0.30$ & suite\_mean & 0.05 & 0.0036 & 0.9992x & [0.9992, 0.9992] \\
+$-0.10$ & suite\_mean & 0.05 & 0.0463 & 0.9980x & [0.9980, 0.9980] \\
+$-0.08$ & suite\_min & 0.05 & 0.0574 & 1.0014x & [1.0014, 1.0014] \\
+$-0.05$ & suite\_mean & 0.05 & 0.0770 & 1.0138x & [1.0138, 1.0138] \\
+\midrule
+\multicolumn{3}{l}{always-patched control (target=1.0)} & 1.0000 & 1.4086x & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The tighter-eligibility win is layer-specific. Table
+\ref{tab:multilayerpareto} reports a multi-layer sweep that repeats the same
+96-cell Pareto grid for layers 17 and 18 of the same
+Qwen2.5-1.5B checkpoint family. Layer 17 achieves 0/96 net wins with a
+best PPL ratio of $1.0007\times$ (essentially neutral), and layer 18
+also achieves 0/96 net wins with a best of $1.0005\times$. The
+always-patched control worsens monotonically across layers
+($1.4086\times \to 1.4311\times \to 1.5165\times$), so the calibration
+that produced the layer-16 win does not transfer to the next two FFN
+layers. We report this as a negative control that bounds the positive
+claim: the tighter-eligibility selective win is a property of the
+specifically calibrated layer-16 checkpoint, not a universal property
+of all FFN layers, and multi-layer generalization will require
+per-layer calibration.
+
+\begin{table}[t]
+\centering
+\caption{Cross-layer tighter-eligibility Pareto comparison on
+Qwen2.5-1.5B, single NPU, three seeds per cell. Net wins count cells
+with mean PPL ratio $<1.0$. ``Best PPL'' is the lowest mean PPL ratio
+across the 96-cell grid; ``Best actual patch'' is the actual
+patch-token fraction at that best cell. The always-patched control is
+the target-fraction-1.0 row. Lower PPL ratio is better.}
+\label{tab:multilayerpareto}
+\begin{tabular}{lrrrr}
+\toprule
+Layer & Net wins & Best PPL ratio & Best actual patch & Always-patched \\
+\midrule
+16 & 66 / 96 & 0.9923x & 2.0\% & 1.4086x \\
+17 & 0 / 96 & 1.0007x & 0.4\% & 1.4311x \\
+18 & 0 / 96 & 1.0005x & 1.1\% & 1.5165x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Effective descriptor-byte reduction implied by the quality-preserving
+router window. Full-call traffic reduction is the per-routed-call estimate from
+Table \ref{tab:statecomm}; effective routed descriptor bytes multiply that estimate by the
+observed actual patched-token fraction. Values above 100\% mean the routed
+subset would move more descriptor bytes than one dense full layer call, although
+not more than replacing every call with generated descriptors. This table prevents confusing kernel
+level savings with end-to-end routed savings.}
+\label{tab:effectivesavings}
+\begin{tabular}{lrrrr}
+\toprule
+Validation setting & Target & Actual patch frac. & Full-call red. & Effective routed bytes \\
+\midrule
+Broad seed sweep & 0.05 & 0.49\% & 24.9x & 12.2\% of dense \\
+Broad seed sweep & 0.10 & 1.82\% & 24.9x & 45.3\% of dense \\
+Leave-suite-out & 0.05 & 2.84\% & 24.9x & 70.7\% of dense \\
+Leave-suite-out & 0.10 & 5.65\% & 24.9x & 140.6\% of dense \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The implication of Table~\ref{tab:effectivesavings} is that the full-call
+descriptor-byte reduction cannot be naively multiplied by the patch fraction
+to obtain an end-to-end routed saving. At the small actual patch fractions
+where the selective router is quality-preserving (0.49\% and 1.82\% in the
+broad seed sweep), the effective routed descriptor bytes are only 12.2\% and
+45.3\% of dense---a real reduction, but far smaller than the $24.9\times$
+per-call figure. Under the stricter leave-suite-out sweep, the target 0.10 row is
+\emph{above} dense (140.6\%), illustrating why the paper scopes its systems
+claim to the full-call and training settings and treats end-to-end routed
+savings as an open target.
+
+Table \ref{tab:runtimeprobe} records the remaining systems instrumentation
+scope. On the eight-NPU host, the PyTorch profiler exposed CPU activities
+only and observed no fused-like MWG operator. The paper therefore reports
+descriptor traffic as a model-side estimate paired with measured latency
+and all-reduce behavior, not as measured off-chip traffic. Off-chip counter
+confirmation is a required future fused-kernel experiment.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\textsc{MWG-EW} is best understood as a bridge between neural architecture and
+runtime design. The neural component makes a low-rank conditional descriptor
+useful on some inputs; the systems component ensures that this descriptor does
+not quietly become another persistent tensor. Either side alone is insufficient.
+Static low-rank compression gives attractive byte counts but weak quality, while
+an unfused runtime can expose the right trend without proving the final
+no-write-back traffic claim.
+
+The most important conceptual shift is from compression to \textit{lifetime
+allocation}. A dense FFN weight is a long-lived object. A LoRA factor is smaller
+but still long-lived. An ephemeral descriptor is short-lived and context-bound.
+This gives model designers a new budget: not merely how many weights exist, but
+which weight-like objects deserve durability. For very large models, that budget
+is directly tied to memory bandwidth, optimizer state, checkpoint traffic, and
+collective communication.
+
+The quality results suggest a concrete algorithmic agenda. The strongest
+current algorithm is not ``replace every FFN,'' but ``learn the eligibility
+frontier.'' Better benefit predictors, suite-local thresholds, layer-specific
+calibration, rank-adaptive descriptors, and multi-layer budget allocation can
+increase the fraction of FFN calls that safely use generated operands. In this
+view, the router is not an auxiliary patch; it is the mechanism that turns a
+conditional systems primitive into a deployable model component. The positive
+result is already useful because it converts a failing always-patched
+replacement into a verified selective operating regime.
+
+\paragraph{Relation to KV-cache compression and MLA.}
+As detailed in Section~\ref{sec:related}, \textsc{MWG-EW} is orthogonal to
+attention-side KV-cache compression methods: it targets the lifecycle of FFN
+weight operands rather than the representation of past-token activations, and
+the two savings compose rather than overlap.
+
+\paragraph{Current scope and submission readiness.}
+The present evidence supports a positive systems-and-routing claim suitable for
+a focused architecture or systems submission. The paper verifies four linked
+claims: generated descriptors can substantially reduce trainable FFN state and
+communication, conditional generation beats static SVD at the same rank, LM-CE
+calibration can make the best single-layer patch beneficial on broad
+perplexity, and a deployable dense-fallback router preserves additional gains
+at low actual patch fractions. Descriptor lifecycle claims still require
+low-level hardware performance counters for off-chip read and write
+transactions. The replication produced a verified nine-run reliability artifact
+set, the scaling sweep produced a three-repeat all-eight-NPU sweep over ranks 32--512, the
+corrected validation produced a positive five-suite aggregate PPL result
+for the calibrated layer-16 checkpoint, and a three-seed leakage-clean
+reproduction confirmed strong in-distribution and GSM8K benefit while showing
+that the always-patched five-suite aggregate is not yet uniformly safe under
+seeded splits.
+The main claim boundary is therefore precise: the paper establishes
+\textsc{MWG-EW} as a parameter-lifetime and selective execution contribution,
+not yet as a fused decode-latency win or a drop-in full-Transformer
+replacement. The remaining highest-value follow-up experiments are
+fused-kernel hardware-counter validation and multi-layer budget allocation;
+the suite-robust eligibility gap has already been closed by the
+tighter-eligibility Pareto sweep reported in Section~\ref{sec:results}.
+
+\paragraph{Future work.}
+Three directions follow directly from the evidence map
+(Table~\ref{tab:evidencemap}). First, a fused no-write-back kernel with
+hardware performance counters is needed to
+turn the analytically estimated descriptor-traffic reduction into a measured
+off-chip traffic claim; this is the critical path for decode-latency
+validation. Second, per-layer calibration and multi-layer budget allocation
+across the FFN stack would test whether the layer-16 selective win generalizes
+beyond a single layer; the negative layer-17/18 results
+(Table~\ref{tab:multilayerpareto}) indicate that a naive transfer is
+insufficient and that a per-layer eligibility policy is required. Third,
+rank-adaptive descriptors that adjust the generated rank per token group could
+improve the quality-cost frontier beyond the fixed-rank sweep studied here.
+Longer-horizon targets include extension to attention projection weights,
+dialogue and long-context evaluation suites, and joint optimization of the
+generator and router under a unified bandwidth budget.
+
+\paragraph{Limitations.}
+We state the boundary of the present evidence explicitly. First, the systems
+measurements use an \emph{unfused} associative factor-matmul path; the
+no-write-back descriptor lifecycle is a specified runtime contract, not yet a
+measured off-chip behavior, because the available profiler exposed CPU
+activities only and observed no fused-like operator. Concretely, the
+validation target for the no-write-back claim is a fused kernel whose HBM
+read/write byte counters for the descriptor region are bounded by the
+$2r(d+m)$ per-projection descriptor size and show no write-back of generated
+factor tiles to off-chip memory; we have not yet run this experiment. Second,
+the validated systems claim is scoped to training throughput, trainable state,
+and distributed communication; the prototype is not faster on the unfused
+forward path, so no decode-latency claim is made. Third, the language-model quality
+evidence is anchored on a single calibrated FFN layer (layer 16) of one
+checkpoint family (Qwen2.5-1.5B); multi-layer and multi-model generalization is
+future work. Fourth, always-patched replacement is broadly safe only for the
+calibrated layer-16 checkpoint and only in aggregate over the five-suite
+manifest, with Wikitext-103 and HellaSwag individually regressing; the robust
+positive result is the \emph{selective}, budgeted router regime at small actual
+patch fractions, and the tighter-eligibility Pareto sweep
+(Table~\ref{tab:tighterpareto}) establishes that such a net five-suite win is
+recoverable at $\Delta_{\max}=-0.20$ under a policy-invariant threshold.
+Fifth, the broad held-out manifest currently covers math
+reasoning, code generation, and instruction following plus two added general/
+commonsense suites, but does not yet cover dialogue or long-context families,
+so we do not make a broad-family deployment claim. Sixth, all reported quality
+metrics are token-level perplexity (or cosine/MSE on layer-output recovery);
+no downstream task accuracy (e.g., MMLU, HumanEval pass@1, GSM8K final-answer
+accuracy) is reported, so the perplexity improvements shown here have not yet
+been linked to end-task wins. This is the single most important follow-up
+for the quality claim: a $0.77\%$ PPL improvement at $2\%$ patching could
+correspond to no change---or even a regression---in downstream accuracy, and
+PPL is a particularly weak proxy for generation-quality tasks where a small
+number of high-impact tokens dominate the metric. We therefore flag GSM8K
+final-answer exact-match and HumanEval pass@1 on the layer-16 selective regime
+as the top-priority next experiment, ahead of the broader suite expansion.
+We report all of these as boundary evidence rather than omitting the negative
+controls.
+
+\paragraph{Reproducibility.}
+Every reported number is tied to a named artifact. The systems sweeps are kept
+under explicit run identifiers (the all-eight-NPU scaling sweep and the
+nine-run reliability set), each recording
+platform metadata, device ids, and per-launch JSON. Quality and routing runs
+use explicit train/eval text paths, an explicit-text guard that rejects
+default-corpus fallback, manifest-driven corpora with minimum-size and
+overlap checks, and seeded train/eval partitions. We
+report descriptor traffic as a model-side analytic estimate derived from the
+measured FFN geometry and clearly separate it from measured latency and
+all-reduce numbers in the evidence map (Table~\ref{tab:evidencemap}). All
+benchmark, distillation, calibration, router, and broad-validation scripts,
+together with the held-out manifest definitions and pulled result summaries,
+are archived with named run identifiers. We commit to a public artifact
+release of the benchmark, distillation, calibration, router, and
+broad-validation scripts, together with the held-out manifest definitions and
+seeded partition generators, upon acceptance; the named run identifiers above
+permit exact replay of every reported number in the meantime, and the
+underlying Qwen2.5-1.5B-Instruct checkpoint is already public.
+
+\section{Conclusion}
+
+This paper argues that Transformer FFN weights can be treated not only as
+stored parameters, but as runtime-generated operands with explicit lifetimes.
+\textsc{MWG-EW} realizes this idea with conditional rank-$r$ descriptors, an
+associative execution path, and a proposed no-write-back lifecycle. Full
+generated calls reduce \emph{estimated} descriptor traffic, trainable FFN
+state, and distributed gradient communication in an eight-NPU 8B-scale FFN
+systems benchmark. We emphasize two systems caveats that bound this claim: the
+unfused prototype's forward path is slower than dense (no decode-latency win),
+and the descriptor-traffic figure is an analytic estimate, not an HBM-counter
+measurement; at the quality-preserving patch fractions, the effective routed
+saving is $2\times$--$8\times$, not the full-call $24.9\times$.
+
+The checkpoint-backed Qwen2.5-1.5B experiments identify a concrete
+quality-preserving regime: layer 16 is the best current single-layer candidate,
+LM-CE calibration improves it relative to persistent low-rank control, and a
+benefit-supervised dense-fallback router preserves or improves broad perplexity
+at small actual patch-token fractions across leakage-clean, leave-suite-out, and
+corrected five-suite validation, recovering a net $0.77\%$ five-suite
+improvement at ${\sim}2\%$ patching in the tighter-eligibility sweep. The
+three-seed leakage-clean replication bounds this regime honestly: the same
+checkpoint is strongly positive in-distribution and on GSM8K, but the
+always-patched five-suite aggregate is above dense, so a uniformly safe
+always-patched policy is not yet established. The selective win is a
+calibrated single-layer existence proof (layers~17--18 do not transfer), and
+its $0.77\%$ magnitude has not yet been validated against downstream-task
+accuracy or against a random-perturbation control. The defensible
+contribution is therefore the \emph{selective}, budgeted regime at small
+actual patch fractions, not blanket layer replacement.
+The broader contribution is the
+parameter-lifetime view itself. The paper therefore establishes a reproducible
+path for co-designing memory movement, synchronization, and model quality rather
+than optimizing them in isolation.
+
+The reliability replication and three-repeat all-NPU sweep strengthen
+that path operationally: the same rank family scales repeatably across one,
+two, four, and eight-device settings, and the widest rank sweep shows a
+stable $1.5\times$--$1.65\times$ training-side improvement across a broad rank
+range. It still does not license stronger decode claims. The highest-value
+follow-up experiments are a fused no-write-back kernel with hardware-counter
+confirmation of off-chip descriptor traffic, and multi-layer budget allocation
+across the FFN stack. Each remaining target addresses a specific boundary
+stated in the evidence map, and each is required before the parameter-lifetime
+view can be turned into a deployable full-Transformer execution primitive.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

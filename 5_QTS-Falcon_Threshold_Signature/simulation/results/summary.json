@@ -1,0 +1,189 @@
+{
+  "schemes": [
+    {
+      "scheme": "Standard Falcon-512",
+      "trials": 4000,
+      "signature_size": {
+        "mean": 666.238,
+        "std": 11.858,
+        "min": 641,
+        "max": 698
+      },
+      "online_latency": {
+        "mean_ms": 8.7,
+        "std_ms": 1.191,
+        "p50_ms": 8.724,
+        "p95_ms": 10.645,
+        "p99_ms": 11.388,
+        "ci95_ms": [
+          8.663,
+          8.736
+        ]
+      },
+      "offline_latency": {
+        "mean_ms": 0.0,
+        "std_ms": 0.0
+      },
+      "verification": {
+        "mean_ms": 1.297,
+        "p95_ms": 1.6
+      },
+      "attempts": {
+        "mean": 1,
+        "p95": 1.0,
+        "max": 1
+      },
+      "communication_rounds": 1,
+      "data_kb": 1.2,
+      "throughput_sig_s": 117.265
+    },
+    {
+      "scheme": "Threshold Falcon (10,15)",
+      "trials": 4000,
+      "signature_size": {
+        "mean": 666.306,
+        "std": 12.136,
+        "min": 641,
+        "max": 698
+      },
+      "online_latency": {
+        "mean_ms": 34.434,
+        "std_ms": 22.923,
+        "p50_ms": 22.361,
+        "p95_ms": 81.328,
+        "p99_ms": 124.527,
+        "ci95_ms": [
+          33.724,
+          35.145
+        ]
+      },
+      "offline_latency": {
+        "mean_ms": 112.847,
+        "std_ms": 14.906
+      },
+      "verification": {
+        "mean_ms": 1.354,
+        "p95_ms": 1.687
+      },
+      "attempts": {
+        "mean": 1.71,
+        "p95": 4.0,
+        "max": 10
+      },
+      "communication_rounds": 6,
+      "data_kb": 134.2,
+      "throughput_sig_s": 37.983
+    },
+    {
+      "scheme": "Threshold Falcon (3,5)",
+      "trials": 4000,
+      "signature_size": {
+        "mean": 666.504,
+        "std": 12.05,
+        "min": 641,
+        "max": 698
+      },
+      "online_latency": {
+        "mean_ms": 14.941,
+        "std_ms": 8.376,
+        "p50_ms": 11.154,
+        "p95_ms": 32.571,
+        "p99_ms": 45.412,
+        "ci95_ms": [
+          14.681,
+          15.2
+        ]
+      },
+      "offline_latency": {
+        "mean_ms": 51.929,
+        "std_ms": 6.976
+      },
+      "verification": {
+        "mean_ms": 1.354,
+        "p95_ms": 1.677
+      },
+      "attempts": {
+        "mean": 1.419,
+        "p95": 3.0,
+        "max": 9
+      },
+      "communication_rounds": 6,
+      "data_kb": 31.5,
+      "throughput_sig_s": 80.506
+    },
+    {
+      "scheme": "Threshold Falcon (5,7)",
+      "trials": 4000,
+      "signature_size": {
+        "mean": 666.474,
+        "std": 12.112,
+        "min": 641,
+        "max": 698
+      },
+      "online_latency": {
+        "mean_ms": 20.01,
+        "std_ms": 12.022,
+        "p50_ms": 14.188,
+        "p95_ms": 43.603,
+        "p99_ms": 62.785,
+        "ci95_ms": [
+          19.637,
+          20.382
+        ]
+      },
+      "offline_latency": {
+        "mean_ms": 69.306,
+        "std_ms": 9.922
+      },
+      "verification": {
+        "mean_ms": 1.345,
+        "p95_ms": 1.682
+      },
+      "attempts": {
+        "mean": 1.521,
+        "p95": 3.0,
+        "max": 11
+      },
+      "communication_rounds": 6,
+      "data_kb": 42.3,
+      "throughput_sig_s": 61.969
+    },
+    {
+      "scheme": "Threshold Falcon (7,11)",
+      "trials": 4000,
+      "signature_size": {
+        "mean": 666.538,
+        "std": 11.951,
+        "min": 641,
+        "max": 698
+      },
+      "online_latency": {
+        "mean_ms": 25.783,
+        "std_ms": 15.455,
+        "p50_ms": 17.735,
+        "p95_ms": 57.416,
+        "p99_ms": 83.536,
+        "ci95_ms": [
+          25.304,
+          26.262
+        ]
+      },
+      "offline_latency": {
+        "mean_ms": 88.237,
+        "std_ms": 12.291
+      },
+      "verification": {
+        "mean_ms": 1.348,
+        "p95_ms": 1.681
+      },
+      "attempts": {
+        "mean": 1.573,
+        "p95": 3.0,
+        "max": 8
+      },
+      "communication_rounds": 6,
+      "data_kb": 78.5,
+      "throughput_sig_s": 48.726
+    }
+  ]
+}
