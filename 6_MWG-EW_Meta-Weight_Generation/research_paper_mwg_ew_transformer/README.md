@@ -1,135 +1,57 @@
-# MWG-EW Transformer Research Paper
+# MWG-EW Transformer research
 
-This folder is the research-paper workspace for MWG-EW as a neural network
-algorithm and infrastructure paper. It intentionally avoids patent-application
-language and frames the contribution as a Transformer FFN replacement that
-reduces weight bandwidth and distributed gradient communication.
+The current manuscript is **Ephemeral Low-Rank Cores for Transformer FFNs: Representation Limits, Memory Accounting, and Controlled Evaluation**, revised October 22, 2026.
 
-## Layout
+Sole author: **Da Xu**, China Mobile Research Institute, xudayj@chinamobile.com.
 
-- `paper/main.tex` - clean full paper draft (reconciled with measured
-  four-arm result; 27 pp, 0 warnings).
-- `paper/refs.bib` - bibliography for the draft.
-- `paper/main_iclr2027.tex` + `paper/iclr_parts/` - ICLR 2027 submission port
-  (9-pg main + appendix; deadline Sep 25 2026).
-- `paper/tmlr/` - self-contained TMLR (top ML journal) submission package:
-  `main_tmlr.tex` (23 pp clean build), official `tmlr.sty`/`tmlr.bst`,
-  `refs.bib`, and the three measured figures. Build: `cd paper/tmlr && pdflatex
-  main_tmlr && bibtex main_tmlr && pdflatex main_tmlr && pdflatex main_tmlr`.
-- `experiments/mwg_transformer_ASI3_benchmark.py` - distributed NPU benchmark
-  with ASI2 presets for the current training lane.
-- `experiments/mwg_quality_distillation.py` - checkpoint-backed FFN quality and
-  low-rank distillation probe.
-- `scripts/launch_ASI2_reliability_scaling_detached.sh` - current ASI2 systems
-  replication launcher.
-- `scripts/run_asi1_quality_distillation.sh` - ASI1 quality/distillation
-  launcher for Qwen2.5-1.5B FFN weights.
-- `archive/started_drafts/` - earlier paper starts moved out of the repo root.
-- `results/` - local copies of pulled ASI3 results.
+## Current manuscript
 
-## Current ASI2 Target
+- `paper/main.tex` and `paper/journal_content.tex`: canonical author-review manuscript.
+- `paper/main.pdf`: compiled author-review PDF.
+- `paper/tmlr/main_tmlr.tex` and `main_tmlr.pdf`: TMLR-style **preprint**, generated from the same content.
+- `paper/journal_refs.bib`: active bibliography; other bibliography/ICLR parts are historical and unused by these builds.
+- `paper/REVIEW_20261022.md`: review findings, corrections, verification, and remaining publication gates.
 
-The current training policy is ASI2 only for new MWG-EW Transformer
-experiments. Historical ASI1/ASI3 results may be cited as completed evidence
-but should not be resumed for new training launches.
+`paper/main_iclr2027.tex` is now a compatibility alias to the canonical manuscript; it is not an ICLR submission. Earlier drafts and run records are retained for provenance. The current manuscript supersedes earlier claims of publication readiness.
 
-The ASI2 project root is:
+## What the revision establishes
 
-`/vllm-workspace/mwg-ew-transformer-research`
+The paper derives a fixed-output-subspace error floor, a frozen-projection constant-core baseline, and a matched-schedule descriptor-transfer bound. The accounting code now separates scratch cardinality from global transfers. Archived quality and timing values are recomputed without claiming that hashes establish execution provenance. The v4 kernel's failed repeated-call test remains failed.
 
-The strongest current systems artifact is
-`ASI3_reliability_scaling_20260518T072507Z`: 1/2/4/8 NPU scaling, three repeats
-per setting, 8B FFN geometry, and ranks `64,128,256`.
+New CPU checks exercise the actual `LowRankFFN(token_diag_core)` implementation. Checkpointing retained 13× fewer unique nonparameter storage bytes in nine small synthetic cases, with exact output and gradient agreement. This is software evidence, not peak-memory, accelerator-speed, or trained-model-quality evidence.
 
-The checkpoint quality artifact is
-`mwg_quality_distillation_20260518T083242Z`: Qwen2.5-1.5B layer-0 FFN,
-eight NPUs, fp32, ranks `64,128`, static SVD vs persistent low-rank vs MWG
-rank-scale generator.
+## Rebuild and verify
 
-## Typical Workflow
-
-From this folder:
+Python dependencies: NumPy, Matplotlib, pytest, and PyTorch (CPU is sufficient). LaTeX needs pdfLaTeX, BibTeX, PGF/TikZ, natbib, and the included TMLR style files. Recorded versions are in `results/journal_revision_20261022/`.
 
 ```bash
-bash scripts/push_ASI2_code_to_s3.sh
-../scripts/asi2_shell.sh "cd /vllm-workspace/mwg-ew-transformer-research && bash scripts/ASI2_sync_code_from_s3.sh && bash scripts/launch_ASI2_reliability_scaling_detached.sh"
+python scripts/audit_journal_evidence.py --tables
+python scripts/verify_journal_analysis.py
+python experiments/measure_journal_lifecycle.py --output /tmp/mwg-lifecycle-check.json
+python -m pytest -q tests/test_journal_accounting.py tests/test_journal_evidence.py tests/test_journal_lifecycle.py tests/test_mwg_regime_map.py tests/test_token_diag_core.py
+bash scripts/build_journal.sh
 ```
 
-For a local smoke test:
+`PYTHON_BIN` selects the Python used by the build. `MWG_BUILD_ROOT` selects its temporary LaTeX directory. Regenerating the CPU experiment into `/tmp` preserves the committed historical measurement record.
 
 ```bash
-python3 experiments/mwg_transformer_ASI3_benchmark.py --preset tiny --outdir /tmp/mwg-ew-smoke
+python scripts/audit_journal_evidence.py --require-submission-ready
 ```
 
-For a two-process CPU smoke of the opt-in integrated gradient-synchronization
-measurement (forward + loss + backward + DDP synchronization, without an
-optimizer step):
+This command intentionally exits 2 while the documented empirical gates remain unresolved. A successful audit execution is distinct from submission readiness.
 
-```bash
-python3 -m torch.distributed.run --nproc_per_node=2 \
-  --master_addr=127.0.0.1 --master_port=29577 \
-  experiments/mwg_transformer_ASI3_benchmark.py \
-  --preset tiny --measure-integrated-sync --outdir /tmp/mwg-ew-ddp-smoke
-```
+## Evidence and scope
 
-For a remote-sized ASI2 smoke test before the full all-NPU run:
+- `results/journal_revision_20261022/evidence_audit.json`: recomputed archive values, hashes, failed gates, and limitations.
+- `results/journal_revision_20261022/analysis_checks.json`: 50 synthetic algebra checks.
+- `results/journal_revision_20261022/lifecycle_cpu.json`: nine new actual-module software measurements.
+- `scripts/audit_journal_evidence.py`: standard-library archive audit and current table generation.
+- `experiments/mwg_regime_map.py`: version-2 partial global-transfer accounting; old version-1 totals are not directly comparable.
 
-```bash
-python3 experiments/mwg_transformer_ASI3_benchmark.py --preset ASI2_smoke --env-label ASI2 --outdir results
-```
+Original canonical quality run reports, trained checkpoints, and complete data manifests are absent from this checkout. The v1 kernel's full timing reports are also absent locally. The revised paper does not claim independent reproduction of these accelerator measurements.
 
-The ASI2 launcher writes JSON and Markdown summaries under remote
-`/vllm-workspace/mwg-ew-transformer-research/results/`.
+## Remaining research
 
-The latest ASI1 pulled systems summary is under
-`results/pulled_asi1/ASI3_reliability_scaling_20260518T072507Z/`.
+The critical requirement is a quality–latency comparison from the same causal trained model and runtime, including persistent/constant-core/quantized controls, resolved v4 stability, same-run materialized-versus-fused measurements, and independently verified held-out model quality. See the review and submission guide for precise acceptance gates.
 
-## Broad Held-Out Validation
-
-Use `experiments/mwg_broad_eval_manifest.py` for leakage-resistant validation
-across multiple explicit corpora. It never falls back to `DEFAULT_TEXTS`; each
-suite in the manifest must name a real held-out text source with enough text to
-pass `--min-texts` and `--min-chars`.
-
-Prepare corpus files with:
-
-```bash
-python3 experiments/prepare_heldout_corpora.py --outdir data/heldout --allow-partial
-```
-
-This writes `data/heldout/manifest.json`, `router_train.txt`,
-`router_eval.txt`, and `provenance.json`. The provenance file records successful
-dataset splits and any unavailable sources.
-
-Remote ASI3 launcher:
-
-```bash
-MANIFEST=/vllm-workspace/mwg-ew-transformer-research/data/heldout/manifest.json \
-PATCH=/vllm-workspace/mwg-ew-transformer-research/results/.../mwg_expert_residual_r384_belle_lmce_cal_1200.pt \
-bash scripts/launch_asi3_broad_validation_detached.sh
-```
-
-The manifest shape is shown in `results/broad_eval_manifest.example.json`.
-
-## Deployable Router Validation
-
-Use `experiments/mwg_router_gate_eval.py` to test the next algorithmic step:
-a deployable dense-fallback policy for a single patched FFN layer. The router
-is trained on one explicit text split using labels from dense-vs-patched loss
-deltas, but at evaluation time it routes only from pre-FFN hidden-state summary
-features. This makes it a candidate runtime policy rather than the oracle
-frontier reported by `experiments/mwg_hybrid_gate_eval.py`.
-
-Remote ASI3 launcher:
-
-```bash
-TRAIN_TEXTS=/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_train.txt \
-EVAL_TEXTS=/vllm-workspace/mwg-ew-transformer-research/data/heldout/router_eval.txt \
-PATCH=/vllm-workspace/mwg-ew-transformer-research/results/.../mwg_expert_residual_r384_belle_lmce_cal_1200.pt \
-bash scripts/launch_asi3_router_validation_detached.sh
-```
-
-Do not cite router results unless `TRAIN_TEXTS` and `EVAL_TEXTS` are disjoint
-real held-out files. The JSON report includes always-dense, always-patched,
-deployable routed, and oracle-frontier rows so the paper can separate achievable
-policy quality from the best-case upper bound.
+Remote recovery is currently blocked in this session: the shell wrapper delegates to an absent Mac-local script, and neither rclone nor its relay configuration is available. Runtime guidance also conflicts: the parent `CLAUDE.md` and operations skill say ASI2, while `TOOLS.md` says ASI3. Restore the approved access path and resolve the target environment before launching new training. This revision launched no remote jobs.

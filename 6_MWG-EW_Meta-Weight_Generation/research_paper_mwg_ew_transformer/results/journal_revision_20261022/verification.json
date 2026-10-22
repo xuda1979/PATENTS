@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-22T02:23:30.280058+00:00",
+  "baseline_commit": "7a061973314f8779746ac5b58d4929ba432e8c7a",
+  "branch": "codex/mwg-journal-review-20261022",
+  "scope": "Local revision and software verification; no new accelerator run or journal submission",
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8",
+    "pytest": "9.1.1",
+    "torch": "2.14.1+cpu",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+    "pdflatex": "pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)"
+  },
+  "checks": [
+    {
+      "command": "python -m pytest -q tests/test_journal_accounting.py tests/test_journal_evidence.py tests/test_journal_lifecycle.py tests/test_mwg_regime_map.py tests/test_token_diag_core.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "tests_passed": 29,
+      "elapsed_seconds": 10.52
+    },
+    {
+      "command": "python scripts/verify_journal_analysis.py",
+      "result": "PASS",
+      "fixtures": 50,
+      "evidence": "results/journal_revision_20261022/analysis_checks.json"
+    },
+    {
+      "command": "python experiments/measure_journal_lifecycle.py --output results/journal_revision_20261022/lifecycle_cpu.json",
+      "result": "PASS",
+      "fixtures": 9,
+      "source_hashes_match_packaged_files": true,
+      "evidence": "results/journal_revision_20261022/lifecycle_cpu.json"
+    },
+    {
+      "command": "bash scripts/build_journal.sh",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "python scripts/audit_journal_evidence.py --out /tmp/mwg-submission-gate.json --require-submission-ready",
+      "exit_code": 2,
+      "result": "EXPECTED_BLOCK",
+      "archive_recomputation": "PASS",
+      "v4_stability": "FAIL",
+      "submission_ready": false
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "pdfs": [
+    {
+      "format": "article",
+      "path": "paper/main.pdf",
+      "pages": 14,
+      "sha256": "2841838fd9fc27efcc6e651f562585e5032e26966b5aff32d41622483c40e77e",
+      "layout_review": "PASS; every page inspected; final changed pages reinspected",
+      "undefined_references": false,
+      "overfull_boxes": false,
+      "author_metadata": "PASS"
+    },
+    {
+      "format": "tmlr",
+      "path": "paper/tmlr/main_tmlr.pdf",
+      "pages": 13,
+      "sha256": "f8847b77b0a8fd959cb51ed48cb4b3e2a72b6184354d857f625c8eb3731ec5b7",
+      "layout_review": "PASS; every page inspected; final changed pages reinspected",
+      "undefined_references": false,
+      "overfull_boxes": false,
+      "author_metadata": "PASS"
+    }
+  ],
+  "independent_review": {
+    "verifier": "theory_review",
+    "verdict": "PASS for mathematics, numeric consistency and scoped software claims",
+    "scope": [
+      "100 independent accounting configurations",
+      "six adversarial kernel-record mutations rejected",
+      "algebra and actual-module lifecycle cross-check",
+      "prose/table corrections and row/column notation verified"
+    ],
+    "not_certified": [
+      "original experiment execution",
+      "trained-model quality",
+      "accelerator correctness or speedup",
+      "journal acceptance"
+    ]
+  },
+  "remote_recovery": {
+    "delegated_mac_shell_wrapper_available": false,
+    "rclone_available": false,
+    "rclone_relay_configuration_available": false,
+    "remote_artifact_existence": "UNKNOWN",
+    "environment_policy": "CONFLICT: CLAUDE/operations skill ASI2; TOOLS.md ASI3",
+    "remote_actions": []
+  },
+  "submission_ready": false,
+  "blocking_gaps": [
+    "canonical quality raw reports/checkpoints/split manifests incomplete",
+    "v4 stability gate fails; no matched v4/materialized complete-FFN comparison",
+    "no verified quality/latency Pareto curve from same causal model and runtime"
+  ],
+  "stored_latex_logs": "Final compiler logs; trailing whitespace normalized for repository hygiene."
+}
