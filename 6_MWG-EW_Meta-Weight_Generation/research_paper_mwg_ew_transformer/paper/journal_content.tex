@@ -1,0 +1,723 @@
+
+\begin{abstract}
+Input-conditioned low-rank modulation combines compact persistent factors with
+a generated diagonal core. Its representational, storage, and execution effects
+must be distinguished to establish an efficiency benefit. We study this
+separation for gated Transformer feed-forward networks (FFNs). We derive an
+output-subspace error floor that no controller can overcome while the final
+factor remains fixed, an activation-weighted constant-core control, and a
+matched-schedule bound on removable descriptor transfers. These results give
+falsifiable tests of when dynamic modulation and descriptor fusion are useful.
+We then reanalyze archived accelerator records and perform fresh software
+verification. In four recorded training-seed summaries for a Qwen2.5-1.5B FFN,
+the generated model improves relative reconstruction MSE only marginally at
+matched rank and is 1.95\% worse at the closest reported parameter budget.
+Original execution reports and checkpoints for that family are unavailable,
+so these are auditable archive calculations rather than independently
+reproduced quality measurements. A same-run archived kernel summary reports
+0.8234 versus 0.8509 ms for fused and materialized execution at 128 tokens,
+but persistent low rank takes 0.2719 ms. A later multicore variant fails its
+recorded repeated-call stability gate. Fresh CPU tests of the actual causal
+FFN reduce forward-retained nonparameter tensor storage by $13\times$ under
+checkpointing, with identical outputs and gradients in nine small synthetic
+fixtures. The evidence supports precise mechanism and limitation statements;
+it does not yet establish a full-model quality--latency advantage.
+\end{abstract}
+
+\section{Introduction}
+Transformer feed-forward networks contain large parameter matrices and several
+intermediate activations. Reducing one of these objects can change arithmetic,
+parameter capacity, memory transfers, and kernel launch overhead simultaneously.
+A speedup observed after a low-rank replacement therefore does not identify
+which change caused it. This distinction matters for conditional weight
+generation: a compact controller may add expressivity, while computing and
+materializing its outputs can cost more than the transfers that fusion removes.
+
+We examine \mwg, a causal, token-conditioned diagonal modulation of persistent
+low-rank FFN factors. For a row vector $x$, one projection is
+\begin{equation}
+ p(x)=\bigl((xU)\odot z(x)\bigr)V,
+ \quad U\in\R^{d_{\rm in}\times r},\quad V\in\R^{r\times d_{\rm out}}.
+ \label{eq:projection}
+\end{equation}
+The algebra is closely related to feature modulation and hypernetworks.
+The systems question is whether the generated descriptor $z$ should be stored
+as a global tensor or consumed immediately where it is formed. We call the
+latter a \emph{descriptor no-store contract}. The factors, controller parameters,
+and output activations retain their own lifetimes; the contract concerns only
+the named descriptor and a declared implementation boundary.
+
+Three contributions organize this study. First, we derive representation and
+control results that separate changing rank from changing conditional
+coefficients: an output-subspace obstruction and an optimal constant-core
+projection control. Second, we give a memory-interface-specific accounting
+that separates parameter storage, generated cardinality, scheduled global
+transfers, and physical DRAM traffic. Third, we evaluate the resulting claims
+against a reproducible archive audit and new CPU software checks. Negative
+comparisons and failed validation gates are retained because they determine
+which deployment conclusions the evidence can support.
+
+The most useful empirical conclusion is conditional. Generated modulation can
+approximately match a trained same-rank reconstruction baseline in the available
+summaries, but the strongest same-budget comparison favors the persistent
+baseline. Eliminating an explicit descriptor tensor is feasible at the source
+level; it does not imply that the complete FFN runs faster. Both conclusions
+are consistent with the analysis and motivate a smaller set of decisive
+experiments than a broad collection of disconnected speed and quality claims.
+
+\section{Relationship to Prior Work}
+\paragraph{Conditional parameters and feature modulation.}
+HyperNetworks generate another network's parameters \citep{ha2017hypernetworks}.
+FiLM applies conditional feature-wise affine transformations
+\citep{perez2018film}; Eq.~\eqref{eq:projection} is multiplicative modulation in
+a rank-space representation. Learned static activation scales also appear in
+$(\mathrm{IA})^3$ \citep{liu2022ia3}. A static diagonal scale can be absorbed
+into a factor, whereas a token-conditioned scale generally cannot. LoRA
+\citep{hu2022lora} is a low-rank update to a retained base matrix, while the
+studied FFN replaces each dense projection by factors. These distinctions
+preclude treating the present algebra as an unprecedented form of generation.
+
+The recent Ouroboros preprint uses a hidden-state controller to modulate
+SVD-initialized low-rank bases within recursive Transformers
+\citep{jaber2026ouroboros}. It is especially close algebraic prior art.
+Our scope is the lifetime and controlled assessment of FFN descriptors,
+including the limits imposed by a fixed output subspace. We make no claim of
+priority over input-conditioned diagonal modulation.
+
+\paragraph{I/O-aware execution and recomputation.}
+FlashAttention analyzes and reduces transfers between memory levels
+\citep{dao2022flashattention}. FlashMHF combines dynamically weighted FFN
+subnetworks with online SRAM computation \citep{zhang2025flashmhf}; it is a
+relevant future systems and model-quality comparator. Activation checkpointing
+trades retained tensors for recomputation \citep{chen2016checkpoint}, and
+Checkmate optimizes rematerialization schedules \citep{jain2020checkmate}.
+Our CPU checkpoint experiment applies this established technique to the actual
+MWG module. It verifies compatibility and instrumentation rather than proposing
+a new checkpointing algorithm.
+
+\paragraph{Compression and fair comparison.}
+Quantization methods such as GPTQ and AWQ reduce the representation cost of
+weights \citep{frantar2023gptq,lin2024awq}. They remain important deployment
+baselines. Rank reduction, quantization, modulation, and fusion should be
+compared at matched task quality and reported budgets. The archived experiments
+here do not support numerical superiority over those methods. The output
+rank bound uses the classical Eckart--Young--Mirsky approximation result
+\citep{eckart1936approximation,mirsky1960norm}.
+
+\begin{table}[t]
+\centering\small
+\caption{Which mechanism a controlled contrast can identify.}
+\label{tab:contrast-design}
+\begin{tabular}{p{.22\linewidth}p{.34\linewidth}p{.34\linewidth}}
+\toprule
+Question & Matched contrast & Required invariant \\
+\midrule
+Does rank reduction help? & Dense versus trained persistent factors & Task metric, data and optimization budget \\
+Does conditioning help? & Dynamic versus constant-core/static control & Parameter or compute budget; causal evaluation \\
+Does descriptor fusion help? & Same dynamic model, materialized versus fused & Checkpoint, inputs, output tolerance and timing boundary \\
+Does recomputation help? & Eager versus checkpointed same module & Parameters, input, loss and all gradients \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Model and Execution Contract}
+\subsection{Causal gated FFN}
+Let $d$ be the model width and $m$ the FFN intermediate width. The dense
+reference, using row-vector conventions, is
+\begin{equation}
+ f(x)=\bigl[\operatorname{SiLU}(xW_g)\odot(xW_u)\bigr]W_d,
+ \quad W_g,W_u\in\R^{d\times m},\quad W_d\in\R^{m\times d}.
+\end{equation}
+In the factorized model, each $W_p$ is replaced by Eq.~\eqref{eq:projection}.
+For token state $x_{b,t}$ the controller produces all three rank vectors:
+\begin{align}
+ h_{b,t}&=\operatorname{SiLU}(x_{b,t}A+a_0),\\
+ (z_u,z_g,z_d)_{b,t}&=\mathbf 1+\alpha\tanh(h_{b,t}C+c_0),\label{eq:controller}\\
+ \widetilde f(x)&=p_d\bigl(\operatorname{SiLU}(p_g(x))\odot p_u(x);z_d(x)\bigr).
+ \label{eq:ffn}
+\end{align}
+Here $A\in\R^{d\times h}$ and $C\in\R^{h\times3r}$; all factors and
+controller parameters are trainable persistent state. The down-projection
+core is generated from the original pre-FFN state $x$, while its projection
+input is the gated intermediate. The controller has
+\begin{equation}
+ P_G=(d+1)h+(h+1)3r\label{eq:controller-count}
+\end{equation}
+parameters, including biases. For equal fp32 factor/controller precision, total
+parameter bytes are $4[3r(d+m)+P_G]$. Optimizer states and saved activations
+are separate quantities.
+
+The implemented causal mode uses a distinct core for each token ($q=1$).
+It reads no future hidden states and pools no companion examples. If a future
+implementation shares a core across $q>1$ tokens, both group boundaries and
+its context must be determined from information available by the first token's
+pre-FFN state. Pooling the complete group's teacher-forced states would violate
+this condition. A batch of $B$ examples of length $S$ has
+\begin{equation}
+ n=B\lceil S/q\rceil,\qquad 1\le q\le S,\label{eq:groups}
+\end{equation}
+groups under batch-isolated grouping. Cached decoding has $S=q=1$ and $n=B$;
+we do not label a 128-token call as single-token autoregressive decoding.
+
+\subsection{The actual fusion boundary}
+The custom Ascend operator receives rank activations $a=xU$, controller hidden
+states $h$, and the controller head's parameters. It forms the head affine
+result, applies the bounded transform in Eq.~\eqref{eq:controller}, and
+multiplies $a$ by the resulting scale. The descriptor is not returned as an
+explicit global tensor. The operator \emph{does} write $a\odot z$ to global
+memory, and the $U$ and $V$ GEMMs run outside it. Consequently, neither the
+entire projection nor the entire FFN is scratch-resident.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[>=Latex,node distance=10mm,
+ box/.style={draw,rounded corners,align=center,font=\small,minimum height=10mm}]
+\node[box] (input) {$x$\\pre-FFN state};
+\node[box,right=of input] (a) {$a=xU$\\GEMM};
+\node[box,right=of a,fill=blue!5] (fuse) {$z=1+\alpha\tanh(hC+c_0)$\\$a'=a\odot z$};
+\node[box,right=of fuse] (out) {$y=a'V$\\GEMM};
+\node[box,below=14mm of a] (h) {$h=\operatorname{SiLU}(xA+a_0)$};
+\draw[->] (input)--(a);
+\draw[->] (a)--node[above,font=\scriptsize]{global $a$}(fuse);
+\draw[->] (fuse)--node[above,font=\scriptsize]{global $a'$}(out);
+\draw[->] (input.south)|-(h.west);
+\draw[->] (h.east)-|node[pos=.2,below,font=\scriptsize]{global $h$}(fuse.south);
+\node[above=3mm of fuse,font=\small] {custom operator};
+\end{tikzpicture}
+\caption{Implemented boundary for one projection. Only the descriptor $z$ is
+consumed without an explicit global descriptor tensor. Source-level absence
+of a descriptor store does not prove absence of compiler or runtime spills.}
+\label{fig:boundary}
+\end{figure}
+
+We distinguish three verification levels. A source audit checks that $z$ is not
+returned, aliased, or explicitly stored. A compiled-kernel inspection checks
+workspace and spill behavior for the exact binary. A device-counter comparison
+measures transfers under a declared workload and cache state. The first does
+not imply the other two. Binary hashes bind inspected code to an artifact;
+they do not prove that a reported remote run actually used it.
+
+During training, autograd may retain controller intermediates and descriptors.
+The inference no-store contract therefore does not automatically extend to
+backward. Deterministic rematerialization is one possible training strategy;
+Section~\ref{sec:cpu} tests software checkpointing, not the custom kernel's
+backward implementation.
+
+\section{Representation Limits and a Stronger Control}
+\subsection{Fixed output-subspace obstruction}
+A conditional core changes coefficients in fixed rank directions. In one
+projection, the effective matrices belong to the linear span of the $r$
+outer products formed by columns of $U$ and rows of $V$; the span has dimension
+at most $r$. The input-output mapping may still be nonlinear because $z$
+depends on $x$. The final output restriction is stronger and independent of
+the controller's complexity.
+
+\begin{theorem}[Output-subspace obstruction]\label{thm:subspace}
+Let $V_d\in\R^{r\times d}$ be the fixed final factor in Eq.~\eqref{eq:ffn},
+let $\mathcal S$ be its row space, and let $P_{\mathcal S}$ be the orthogonal
+projector onto $\mathcal S$. Stack $N$ target FFN outputs into $Y\in\R^{N\times d}$
+and corresponding model outputs into $\widehat Y$. Then, for any controller,
+\begin{equation}
+ \norm{Y-\widehat Y}_F^2
+ =\norm{Y(I-P_{\mathcal S})}_F^2
+  +\norm{YP_{\mathcal S}-\widehat Y}_F^2
+ \ge\norm{Y(I-P_{\mathcal S})}_F^2.\label{eq:subspace-floor}
+\end{equation}
+If the final factor is optimized subject to rank at most $r$, every candidate
+still satisfies
+\begin{equation}
+ \norm{Y-\widehat Y}_F^2\ge\sum_{j>r}\sigma_j(Y)^2.\label{eq:rank-floor}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Every output row is a coefficient row multiplied by $V_d$, so
+$\widehat YP_{\mathcal S}=\widehat Y$. The two terms in the decomposition
+$Y-\widehat Y=Y(I-P_{\mathcal S})+(YP_{\mathcal S}-\widehat Y)$ have orthogonal
+row components, giving the Pythagorean identity. Also
+$\rank(\widehat Y)\le r$; the best rank-$r$ approximation of $Y$ has squared
+Frobenius error equal to its singular-value tail
+\citep{eckart1936approximation,mirsky1960norm}.
+\end{proof}
+
+The theorem is a structural consequence of classical low-rank approximation,
+not a new general approximation theorem. It explains a concrete limitation:
+context-dependent coefficients cannot recover target components orthogonal to
+the final persistent factor. The lower bound is evaluated on \emph{uncentered}
+target outputs. For residual-block outputs, subtract the unchanged skip
+connection before applying it. An arbitrary coefficient matrix can attain the
+best projection onto a fixed subspace, but the restricted FFN/controller need
+not attain it. The theorem does not say that controllers are useless within
+that subspace, nor that all layers of a residual Transformer share one subspace.
+
+A useful future diagnostic reports three quantities on fixed evaluation
+activations: actual reconstruction error, the fixed-factor floor in
+Eq.~\eqref{eq:subspace-floor}, and the best rank-$r$ output floor in
+Eq.~\eqref{eq:rank-floor}. Their gaps distinguish coefficient approximation,
+subspace selection, and unavoidable rank loss. These real-model floors cannot
+be recovered from scalar MSE summaries alone and are not reported as measured
+here.
+
+\subsection{An activation-weighted constant-core baseline}
+A shuffled context control changes the input to the controller and may change
+the optimization process. It does not by itself show whether a learned dynamic
+core can be replaced by an efficient constant. A sharper projection-level
+control fits a constant using training/calibration activations only.
+
+\begin{proposition}[Optimal frozen-projection constant]\label{prop:constant}
+For fixed row-vector projection inputs $a=xU$, fixed $V$, and frozen dynamic
+outputs $z(x)$, write $z(x)$ and $c$ as column vectors in this proposition.
+Define $Q(x)=\diag(a)VV^\top\diag(a)$,
+$H=\E[Q(x)]$, and $b=\E[Q(x)z(x)]$. Assume the needed second moments are finite.
+The constants minimizing
+\begin{equation}
+ R(c)=\E\bigl[\norm{(a\odot(z(x)-c)^\top)V}_2^2\bigr]\label{eq:constant-risk}
+\end{equation}
+solve $Hc=b$. A minimum-norm solution is $c^*=H^\dagger b$; all other
+solutions add a vector in $\ker(H)$.
+\end{proposition}
+\begin{proof}
+$Q$ is positive semidefinite and
+$R(c)=\E[z^\top Qz]-2c^\top b+c^\top Hc$.
+If $v\in\ker(H)$ then $\E[v^\top Qv]=0$, so $Qv=0$ almost surely and
+$v^\top b=0$. Thus $b$ belongs to the range of $H$, the normal equations
+are consistent, and completing the quadratic gives the stated minimizers.
+\end{proof}
+
+The empirical version replaces expectations by calibration averages; its
+constant folds into $U\diag(c^*)$. An ordinary mean of $z$ ignores the
+activation and output metric $Q$. This is a diagnostic application of weighted
+least squares, with no claim of novelty for the normal equations. Its optimum
+is calibration-local, with no automatic held-out guarantee. In the three-stage
+FFN, replacing earlier cores changes later inputs, so separately fitted
+projection controls require a new full-FFN and full-model evaluation. No
+constant-core quality improvement is inferred from the present archive.
+
+\subsection{Sensitivity and invariances}
+Let $A=\phi(XW_g)$, $B=XW_u$, and tildes denote approximations fixed within
+one group. If $\phi$ is $L_\phi$-Lipschitz,
+$\norm{W_p-\widetilde W_p}_F\le\delta_p$,
+$\norm{B}_{\max}\le M_u$, and $\norm{\widetilde A}_{\max}\le M_g$, then
+\begin{align}
+ \norm{Y-\widetilde Y}_F
+ &\le \norm{W_d}_2\norm{X}_2(M_uL_\phi\delta_g+M_g\delta_u)
+   +\norm{\widetilde A\odot\widetilde B}_2\delta_d.\label{eq:sensitivity}
+\end{align}
+To verify it, use $C-\widetilde C=(A-\widetilde A)\odot B+
+\widetilde A\odot(B-\widetilde B)$ and
+$Y-\widetilde Y=(C-\widetilde C)W_d+
+\widetilde C(W_d-\widetilde W_d)$, then apply submultiplicativity.
+Token-conditioned matrices permit pointwise bounds followed by aggregation;
+a fixed-matrix SVD optimum alone does not establish conditional learnability.
+
+Two paired rank scales are redundant since $s\odot s'$ is a single scale.
+Removing them does not make the complete factorization identifiable. For
+invertible diagonal $D$, $U\mapsto UD$ and $V\mapsto D^{-1}V$ preserve
+Eq.~\eqref{eq:projection} because diagonal matrices commute. All storage
+comparisons count actual parameters rather than counting equivalent
+parameterizations as distinct capabilities.
+
+\section{Memory Accounting at a Declared Interface}
+\subsection{Four quantities that must remain separate}
+Dense parameter cardinality is $P_D=3dm$, and persistent factor cardinality
+is $P_F=3r(d+m)$. A call generates $D_z=3nr$ diagonal scalars. These are
+counts of objects; adding them does not produce a lower bound on DRAM traffic.
+For example, a warm cache can suppress DRAM reads of persistent factors, while
+multiple tiles can load the same factor repeatedly.
+
+Let $b_w,b_G,b_z$ be bytes per factor, controller parameter, and descriptor
+scalar. Parameter storage is $b_wP_F+b_GP_G$. Let $L_{\rm common}$ denote
+transfers across one declared global-memory interface that are shared by two
+implementations. It includes persistent-factor loads, controller loads,
+source activations, scaled rank activations, and outputs according to the
+actual schedule. It is not interchangeable with parameter storage. Physical
+DRAM bytes require device counters and depend on caching and writeback.
+
+\begin{proposition}[Removable final-descriptor transfers]\label{prop:bytes}
+Suppose two schedules are identical except that one writes and reloads each
+of the $3nr$ final descriptor scalars exactly once while the other consumes
+those values locally. With $C_z=3nrb_z$,
+\begin{equation}
+ L_{\rm mat}=L_{\rm common}+2C_z,\qquad
+ L_{\rm fused}=L_{\rm common}.\label{eq:bytes}
+\end{equation}
+If the common schedule includes one full cold read of every factor,
+$L_{\rm common}\ge3r(d+m)b_w>0$, and therefore
+\begin{equation}
+ \frac{L_{\rm mat}}{L_{\rm fused}}
+ \le1+\frac{2n b_z}{(d+m)b_w}.\label{eq:byte-ceiling}
+\end{equation}
+\end{proposition}
+\begin{proof}
+The only differing transfers are a store and load of $C_z$ bytes each.
+Divide $L_{\rm common}+2C_z$ by $L_{\rm common}$ and substitute its lower bound.
+\end{proof}
+
+This is a scheduled-byte statement, not a physical-HBM or latency bound.
+Different tiling, cache reuse, launch counts, controller-logit temporaries, casts,
+or arithmetic violate the matched-schedule premise. In particular, an eager
+materialized implementation may store more intermediates than the final
+$z$; a fused implementation can remove those too. The bound isolates only the
+final-descriptor round trip. It prevents attributing all improvements from
+an unrelated multi-operation rewrite to one missing tensor.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.86\linewidth]{\paperroot/figs/journal_bytes.pdf}
+\caption{Analytic upper ratio in Eq.~\eqref{eq:byte-ceiling}, assuming equal
+factor/descriptor widths and one cold full-factor read. This is not measured
+speedup. For $d+m=18432$, the ceilings are $1.01389$ at $n=128$ and
+$1.44444$ at $n=4096$. Rank cancels in this isolated model.}
+\label{fig:bytes}
+\end{figure}
+
+The corrected regime-map implementation reports scratch cardinality separately.
+Its partial no-store global ledger is
+$e_Fb_wP_F+e_Gb_GP_G+c_xBSd\,b_x$; materialization adds $2C_z$.
+Common output and other activation transfers are not included, so these partial
+totals must not be presented as whole-FFN traffic. The implemented ledger uses
+$b_z=b_w$; Eq.~\eqref{eq:byte-ceiling} allows distinct widths. Version~2
+explicitly changes the previous mixed-interface totals.
+
+\subsection{Full-factor generation and reuse}
+Generating all factor pairs per group emits $3nr(d+m)$ scalars instead of
+$3nr$. Relative to the dense parameter cardinality, the one-copy ratio is
+$n\gamma$, where $\gamma=r(d+m)/(dm)$. For positive integer dimensions and
+$0<\gamma<1$, let $n_{\max}=\lceil1/\gamma\rceil-1$ and
+$g_{\max}=\lfloor n_{\max}/B\rfloor$. Strict cardinality reduction is possible
+exactly when $g_{\max}\ge1$, and then it requires
+\begin{equation}
+ q\ge\left\lceil S/g_{\max}\right\rceil.\label{eq:fullfactor}
+\end{equation}
+Indeed, $B\lceil S/q\rceil\gamma<1$ is equivalent to
+$\lceil S/q\rceil\le g_{\max}$. At $(d,m,r,B,S)=(4096,14336,128,1,1024)$
+this gives $q\ge43$; at $(1536,8960,384,1,1024)$ it gives $q\ge342$.
+These are optimistic generation-volume thresholds, not traffic or quality
+claims. The causal grouping restriction still applies.
+
+\subsection{Training and routing}
+Under dense synchronous data parallelism, communicating gradients for fewer
+persistent parameters can reduce communication volume. The generated values
+are functions of controller parameters and are not independent optimizer
+parameters. This explains a low-rank communication saving regardless of
+whether descriptors are materialized during inference.
+
+A runtime router saves work only when it dispatches the selected branch before
+that branch's weights and kernels are consumed. Computing both branches and
+then selecting with \texttt{torch.where} provides output selection without the
+claimed branch-skipping savings. A quality threshold selected on evaluation
+data also gives an optimistic policy estimate. A future router evaluation must
+use separate training, calibration, and final evaluation data, fixed routing
+rules, and whole-call transfer measurements. This paper makes no population
+tail-risk guarantee or operational router claim.
+
+\section{Evidence Protocol and Provenance}
+The empirical questions are: (Q1) does conditioning improve reconstruction at a
+matched budget; (Q2) does fusion improve the same conditional computation;
+(Q3) can software rematerialization preserve the computation and gradients;
+and (Q4) do quality and efficiency hold simultaneously in a complete model?
+Table~\ref{tab:evidence} makes the available evidence explicit.
+
+\begin{table}[t]
+\centering\small
+\caption{Evidence classes after the October 22, 2026 audit.}
+\label{tab:evidence}
+\begin{tabular}{p{.25\linewidth}p{.32\linewidth}p{.33\linewidth}}
+\toprule
+Evidence & Available artifacts & Supported scope \\
+\midrule
+Qwen FFN quality & Four per-seed summaries and duplicate aggregate record & Arithmetic and within-archive contrasts; original run provenance incomplete \\
+Four-arm v1 timing & One same-run summary per geometry & Recorded medians; no local per-iteration uncertainty \\
+Multicore v4 & Timing/equivalence records plus failed stability record & Exploratory timings; reliable speedup claim blocked \\
+DDP optimizer timing & Three complete JSON run reports & Short kernel-execution timings; numerical health unknown \\
+CPU checkpointing & New source, nine cases, hashes and tests & Actual-module saved-storage and gradient verification \\
+Algebra checks & New script and 50 seeded fixtures & Numerical consistency of identities; no model-quality evidence \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Archive integrity.}
+The canonical quality family is
+\texttt{asi2\_rank512\_control\_20260922T080042Z}. Its two local files have
+SHA-256 hashes recorded in the audit. Their per-seed records agree exactly.
+Hash matching establishes integrity of those files, not independent proof of
+execution. The canonical directory lacks original per-seed execution reports,
+trained checkpoints, and complete immutable data manifests. Several alternative
+closing-run report fragments cannot be parsed as complete JSON and are excluded.
+The revision preserves historical artifacts and records these limitations.
+
+\paragraph{Quality protocol reported by the archive.}
+The target is the layer-16 FFN of Qwen2.5-1.5B-Instruct, with $d=1536,m=8960$,
+fp32, ranks 384, 401, and 512, 5000 steps, learning rate $2\times10^{-4}$,
+batch size one, and 128 evaluation batches. Training seeds are 2026--2029.
+Factor seed 4242 and activation seed 1729 are shared. Consequently these are
+four training-seed records from shared data preparation, not four independently
+disjoint datasets. The record names separate train/test text files and a
+near-duplicate filter threshold 0.82; the available archive does not establish
+the exact realized splits or checkpoint identity.
+
+The evaluator reports relative MSE as total squared reconstruction error divided
+by target squared magnitude for equal-sized evaluation batches. In notation,
+$\mathrm{RelMSE}=\norm{\widehat Y-Y}_F^2/\norm{Y}_F^2$ for a nonzero target.
+It measures FFN output reconstruction, not language-model perplexity or task
+accuracy. All within-rank contrasts use matching seed labels from one family.
+The shown intervals are $\overline\Delta\pm t_{.975,3}s_\Delta/\sqrt4$,
+with $t_{.975,3}=3.1824463$. They are unadjusted descriptive intervals under an
+independent normal paired-run model, whose adequacy cannot be established with
+four archived summaries. No preregistered equivalence margin, population
+claim, or multiple-comparison significance claim is made.
+
+\section{Controlled Results}
+\subsection{Rank, capacity, and conditioning}
+Table~\ref{tab:quality} recomputes every value from the same four seed records.
+Parameter storage is reconstructed using Eq.~\eqref{eq:controller-count} and
+the code-default hidden width $h=192$; this assumption is explicit because the
+canonical record omits the resolved width. It is not a measurement of peak
+memory. A fixed additive 2 MiB controller approximation is inaccurate across
+ranks and is not used.
+
+\begin{table}[t]
+\centering\small
+\caption{Archived layer reconstruction: mean $\pm$ sample standard deviation
+across four training-seed records. Lower MSE is better. Storage includes
+factors and, when applicable, the controller under the stated $h=192$
+assumption. All rows are recomputed summaries, not newly executed training.}
+\label{tab:quality}
+\input{\paperroot/generated_tables/journal_quality_rows.tex}
+\end{table}
+
+At rank 384 the generated-minus-persistent difference is $-0.0007545$;
+its descriptive interval excludes zero (Table~\ref{tab:paired}). This numerical
+finding does not establish a meaningful task-quality improvement. The
+matched-rank generated-minus-shuffled differences are approximately $-0.000208$
+and $-0.000196$ at ranks 384 and 401, about $0.05\%$ of the control MSE.
+At rank 512 the difference is approximately $+0.000025$ with an interval spanning zero.
+Shuffling is therefore consistent with little observed dependence on the
+correct token context in these summaries. It does not prove that the learned
+controller is constant, or predict its behavior on other distributions.
+
+\begin{table}[t]
+\centering\small
+\caption{Paired generated-minus-control MSE contrasts. Negative values favor
+the generated arm. Intervals are descriptive and unadjusted; four records do
+not certify equivalence, generalization, or independence.}
+\label{tab:paired}
+\input{\paperroot/generated_tables/journal_contrast_rows.tex}
+\end{table}
+
+The closest parameter-budget comparison has generated rank 384 at 48.099 MiB
+and persistent rank 401 at 48.167 MiB. Their mean relative MSE values are
+0.448878 and 0.440310: the generated arm has a 1.95\% relative penalty.
+These are near-matched rather than exactly equal budgets. Increasing persistent
+rank to 512 further reduces MSE, but that comparison consumes a larger budget
+and cannot isolate conditioning. Figure~\ref{fig:quality} keeps that capacity
+cost visible. The observed pattern motivates the constant-core control and
+output-subspace diagnostics; neither has yet been measured on these trained
+checkpoints.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.86\linewidth]{\paperroot/figs/journal_quality.pdf}
+\caption{Recomputed archive MSE versus reconstructed parameter storage.
+Error bars are across-seed sample standard deviations, not corpus-level
+confidence intervals. Lines join observed rank settings only and do not imply
+measured interpolation. Persistent low rank is a competitive capacity control.}
+\label{fig:quality}
+\end{figure}
+
+\subsection{Fusion versus materialization}
+Table~\ref{tab:v1} uses only same-run pairs in the shipped v1 summary.
+The probe has $(d,m,r,h)=(4096,14336,128,128)$, $B=1,S=128$, fp16,
+$\alpha=0.05$, and seed 1234 on Ascend 910B2. The described protocol uses
+30 warmup launches, 200 timed iterations, and five repeats with synchronized
+host timing. The dense matrices in this harness are exact products of the shared factors;
+this is an execution control, not an independently trained full-rank checkpoint.
+The dynamic arms use the same factors and controller, but their outputs need
+not match the unmodulated persistent arm. Those original full reports are
+designated remote in the summary;
+local per-iteration traces are unavailable. Thus the table reports recorded
+medians without newly asserted statistical uncertainty or cache-residency claims.
+
+\begin{table}[t]
+\centering\small
+\caption{Same-run archived v1 timings in milliseconds. The final column is
+fused latency divided by materialized latency. The probe includes host-side
+caching of tiling/workspace and the fp16 controller-weight image.}
+\label{tab:v1}
+\begin{tabular}{rrrrrr}
+\toprule
+Tokens & Dense & Persistent & Materialized & Fused v1 & Fused/materialized \\
+\midrule
+128 & 0.4611 & 0.2719 & 0.8509 & 0.8234 & 0.96768 \\
+4096 & -- & -- & 1.3932 & 2.6821 & 1.92514 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At the probe, fusion reduces recorded latency by 3.23\% relative to
+materialization, while it remains $3.03\times$ slower than persistent low rank.
+At $T=4096$ it is $1.93\times$ slower than materialization. Both comparisons
+matter: the first isolates an implementation difference in a generated model;
+the second asks whether that model is efficient against the practical static
+baseline. No measured quality-matched deployment improvement follows.
+
+The v4 multicore record contains exploratory v1/v4 timing ratios of
+1.13, 1.38, 1.70, 2.14, and 3.03 for $T=128,512,1024,2048,4096$.
+However, its 1000-call stability test ends with \texttt{pass=false} and a
+nonfinite final error. The cause is unresolved; it cannot be assigned to an
+environment transient from this record alone. The audit therefore marks the
+stability gate \textbf{FAIL} and excludes v4 from validated efficiency claims.
+There is also no matched v4-versus-materialized complete-FFN experiment.
+Multiplying ratios from different runs does not close this gap.
+
+\subsection{Optimizer-inclusive execution timings}
+Table~\ref{tab:training} recomputes three archived four-device run reports at
+$d=4096,m=14336,B=2,S=512$, fp16. The timed region includes zeroing gradients,
+forward, squared loss, backward, DDP synchronization, and AdamW update.
+There are three warmup and five timed training iterations per repeat. The
+reported statistic is the maximum across devices of each device's mean time,
+then summarized across three repeats. It is not a sample of independent
+end-to-end training runs to convergence.
+
+\begin{table}[t]
+\centering\small
+\caption{Archived optimizer-inclusive synchronized execution, mean $\pm$
+sample standard deviation across three reports. Ratios use means. These
+microbenchmarks lack recorded finite-loss/gradient/update health gates, so they
+support execution-time accounting only.}
+\label{tab:training}
+\input{\paperroot/generated_tables/journal_timing_rows.tex}
+\end{table}
+
+The dense mean is 24.5906 ms, and low-rank ratios range from 3.372 to 4.140.
+The benchmark changes parameter count and controller behavior and does not
+run the inference descriptor no-store kernel. These ratios cannot identify a
+lifetime effect. Moreover, the FP16 optimizer benchmark records no finite-loss,
+finite-gradient, or finite-parameter gate. The revision therefore does not
+interpret those timings as healthy training, convergence acceleration, or a
+quality-preserving replacement of an 8B-parameter language model. The phrase
+``8B-scale geometry'' refers only to matrix dimensions.
+
+\subsection{Fresh CPU rematerialization verification}\label{sec:cpu}
+To provide complete local evidence for one narrower claim, we executed the
+actual \texttt{LowRankFFN} with \texttt{token\_diag\_core}, comparing ordinary
+autograd with non-reentrant PyTorch checkpointing. Fixtures use synthetic
+random inputs and randomly initialized factors, $d=32,m=64,r=8,h=16$,
+$B=2,S=16$, fp32, and $\alpha=0.2$. Residual stacks
+$x\mapsto x+\widetilde f(x)$ have depths 1, 2, and 4; seeds are 2026--2028.
+Each arm begins from an identical deep copy. Conditioning response and
+controller gradients are required to be nonzero.
+
+Saved-tensor hooks count unique underlying nonparameter storages retained by
+the FFN forward. Aliases of parameters are excluded; shared storage is counted
+once. Caller-owned inputs and full storage underlying saved views are included.
+Loss-function saved tensors are outside the measured region. This quantity is
+not allocator peak memory, total training memory, or hardware traffic.
+
+\begin{table}[t]
+\centering\small
+\caption{New CPU software measurements, three seeds per depth. Exact byte
+counts were identical across these seeds. Output, loss, input-gradient and
+all parameter-gradient maximum absolute differences were zero in all nine
+cases. The controller was active and all checked tensors were finite.}
+\label{tab:cpu}
+\begin{tabular}{rrrrr}
+\toprule
+Depth & Eager saved bytes & Checkpoint saved bytes & Ratio & Cases \\
+\midrule
+1 & 53,248 & 4,096 & 13.0 & 3 \\
+2 & 106,496 & 8,192 & 13.0 & 3 \\
+4 & 212,992 & 16,384 & 13.0 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Python 3.12.14 and PyTorch 2.14.1+cpu were used with one CPU thread. The raw
+JSON records exact source hashes, initial-state hashes, per-case tensor checks,
+and the measurement boundary. Tests reject missing or nonfinite gradients
+and verify parameter-alias exclusion. Table~\ref{tab:cpu} supports software
+rematerialization for these fixtures. It supplies no evidence about NPU
+checkpoint speed, peak memory, or trained-model quality. The previously quoted
+24.5--71.8-fold memory headline is not carried forward because the available
+legacy evidence does not establish an instrumented actual-MWG measurement.
+
+\subsection{Algebra checks}
+Fifty seeded float64 NumPy fixtures verify the output-subspace identity and
+compare the constant-core normal equations with an independently constructed
+least-squares system. Maximum rowspace residual is $1.42\times10^{-14}$;
+maximum relative orthogonal-decomposition residual is $8.88\times10^{-16}$;
+constant-core coefficients agree within $3.67\times10^{-15}$. The fitted
+constant has no greater calibration loss than the unweighted mean core in
+these fixtures. These are checks of the derivations, explicitly separated
+from real-model experiments and from the proofs themselves.
+
+\section{Limitations and Decisive Follow-Up Experiments}
+The theoretical analysis is general within its stated architecture and
+scheduling assumptions. The available quality evidence is narrow and has
+incomplete execution provenance. The accelerator evidence comes from one device
+family, with small repeat counts and different configurations for quality and
+systems probes. The new CPU experiment establishes a local software property.
+These pieces do not establish Q4, a simultaneous full-model quality--latency
+benefit.
+
+A decisive next study should freeze a trained causal checkpoint, its tokenizer,
+dataset splits, and evaluation harness; then measure both quality and runtime
+for that same artifact. The primary quality comparison should include trained
+persistent low rank at exact or explicitly near-matched parameter and compute
+budgets, a calibrated constant-core control, and relevant quantized baselines.
+Held-out perplexity and task metrics must accompany FFN reconstruction. Rank
+floors require stored evaluation activations and target outputs; a controller
+claim should explain the reducible error above those floors.
+
+For execution, the generated/materialized and generated/fused arms must share
+checkpoint, input, precision, warmup, cache policy, and complete-FFN timing
+boundaries. Alternate paired launches, report timing distributions, and verify
+against an independent high-precision reference before and after extended
+execution. Gate all timing claims on finite outputs, gradients where relevant,
+healthy repeated calls, and supported shapes/devices. Record device counters
+and distinguish logical transfers from DRAM measurements. Test true cached
+decode ($S=1$), prefill, varying batch sizes, and the serving stack if a serving
+claim is made. The current failed v4 stability check must be resolved before
+that variant can enter an efficiency comparison.
+
+Finally, choose quality margins, primary workloads, repeat counts, and stopping
+rules before collecting the next comparison. A successful result requires both
+acceptable held-out quality and an observed efficiency gain on the same
+implementation. If constant-core or persistent-factor controls dominate, the
+correct conclusion is a limitation of dynamic modulation in that regime.
+The mechanism and negative evidence remain useful, but they should not be
+renamed as an established deployment advantage.
+
+\section{Conclusion}
+Ephemeral diagonal cores expose a narrow and testable execution choice within
+a familiar conditional low-rank model. Their fixed final factor imposes an
+output-subspace floor, and eliminating a descriptor tensor removes only the
+transfers associated with that tensor under a matched schedule. The archive
+shows modest same-rank reconstruction differences, a near-budget disadvantage,
+and no validated complete-model efficiency gain. New actual-module CPU checks
+establish a reproducible rematerialization property with exact gradient
+agreement. These results identify what is supported and which joint experiment
+would determine whether the approach is useful in deployment.
+
+\section*{Reproducibility and artifact availability}
+The canonical manuscript, audit script, algebra checks, CPU lifecycle test,
+and archived source records are in the accompanying research directory.
+\texttt{scripts/build\_journal.sh} rebuilds the audit-derived tables, figures,
+and author-review PDFs. The audit JSON contains exact input hashes and an
+explicit false submission-readiness flag for the unresolved empirical gates.
+\texttt{paper/REVIEW\_20261022.md} maps each review finding to its correction or
+remaining requirement. Data and checkpoint availability limitations are stated
+in the evidence protocol, rather than treating a file hash as execution proof.
+
+\section*{AI assistance disclosure}
+Generative AI tools assisted technical review, mathematical derivations,
+implementation, verification, analysis, and manuscript revision. Newly executed
+synthetic fixtures are labeled as such; archived accelerator records were
+reanalyzed without claiming new device execution. The author is responsible for
+reviewing the arguments, artifacts, and disclosures before any submission.
+
+\section*{Broader impact}
+The intended application is more efficient neural-network execution. Energy
+savings, production cost reductions, and improved model capabilities have not
+been measured here. Incomplete numerical checks or overstated performance
+claims could mislead deployment decisions, which motivates explicit evidence
+boundaries and preservation of failed gates.

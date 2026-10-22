@@ -1,0 +1,34 @@
+{
+  "objective": "Review and improve MWG-EW paper toward a top-journal submission with sole author Da Xu; preserve evidence limits",
+  "baseline_commit": "7a061973314f8779746ac5b58d4929ba432e8c7a",
+  "hypothesis": "Separating representation and descriptor-lifetime effects plus independently auditable evidence yields technically sound claims",
+  "acceptance": [
+    "sole authorship correct",
+    "proofs and numeric claims independently checked",
+    "new measurements labeled and reproducible",
+    "both PDFs compile and render cleanly",
+    "GitHub reviewable revision"
+  ],
+  "publication_acceptance": "UNKNOWN; no guarantee and no submission authorized",
+  "constraints": [
+    "preserve raw archives",
+    "no invented experiments",
+    "no remote accelerator spending",
+    "no new remote training; resolve conflicting ASI2/ASI3 target guidance before future launch"
+  ],
+  "frozen_data": "existing canonical quality summaries remain unchanged; new synthetic fixtures have separate manifests",
+  "stop_conditions": [
+    "missing remote provenance remains explicit",
+    "failed device gates cannot be promoted"
+  ],
+  "allowed": [
+    "local source edits",
+    "bounded CPU checks",
+    "push branch and open review PR implied by repository revision"
+  ],
+  "not_authorized": [
+    "journal submission",
+    "production deployment",
+    "destructive source/checkpoint changes"
+  ]
+}

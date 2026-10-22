@@ -1,0 +1,80 @@
+[
+  {
+    "task_id": "T001",
+    "owner": "root",
+    "objective": "Canonical manuscript and attribution",
+    "status": "done",
+    "risk_tier": "R2",
+    "dependencies": [],
+    "write_scope": [],
+    "acceptance": [
+      "truthful scoped claims and recorded evidence"
+    ],
+    "updated_at": "2026-10-22T02:11:46.314402+00:00"
+  },
+  {
+    "task_id": "T002",
+    "owner": "evidence_audit",
+    "objective": "Independent numeric/provenance audit",
+    "status": "done",
+    "risk_tier": "R2",
+    "dependencies": [],
+    "write_scope": [],
+    "acceptance": [
+      "truthful scoped claims and recorded evidence"
+    ],
+    "updated_at": "2026-10-22T02:11:46.314402+00:00"
+  },
+  {
+    "task_id": "T003",
+    "owner": "theory_review",
+    "objective": "Theory and prior-art review",
+    "status": "done",
+    "risk_tier": "R2",
+    "dependencies": [],
+    "write_scope": [],
+    "acceptance": [
+      "truthful scoped claims and recorded evidence"
+    ],
+    "updated_at": "2026-10-22T02:11:46.314402+00:00"
+  },
+  {
+    "task_id": "T004",
+    "owner": "evidence_audit",
+    "objective": "Actual-module CPU lifecycle verification",
+    "status": "done",
+    "risk_tier": "R2",
+    "dependencies": [],
+    "write_scope": [],
+    "acceptance": [
+      "truthful scoped claims and recorded evidence"
+    ],
+    "updated_at": "2026-10-22T02:11:46.314402+00:00"
+  },
+  {
+    "task_id": "T005",
+    "owner": "theory_review",
+    "objective": "Independent code and math verification",
+    "status": "done",
+    "risk_tier": "R2",
+    "dependencies": [],
+    "write_scope": [],
+    "acceptance": [
+      "truthful scoped claims and recorded evidence"
+    ],
+    "updated_at": "2026-10-22T02:11:46.314402+00:00"
+  },
+  {
+    "task_id": "T006",
+    "owner": "root",
+    "objective": "Rendered PDF review, artifact manifest and GitHub PR",
+    "status": "running",
+    "risk_tier": "R2",
+    "dependencies": [],
+    "write_scope": [],
+    "acceptance": [
+      "truthful scoped claims and recorded evidence"
+    ],
+    "updated_at": "2026-10-22T02:11:46.314402+00:00"
+  }
+]

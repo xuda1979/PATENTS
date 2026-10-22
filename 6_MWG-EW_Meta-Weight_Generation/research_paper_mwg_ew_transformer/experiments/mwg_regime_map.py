@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-FORMAT_VERSION = 1
+FORMAT_VERSION = 2
 VALID_WORKLOADS = ("prefill", "decode", "training")
 DTYPE_BYTES = {"fp16": 2, "bf16": 2, "fp32": 4}
 
@@ -184,14 +184,16 @@ def compute_row(case: WorkloadCase, config: AccountingConfig) -> dict[str, Any]:
     core_reload_bytes = core_bytes
 
     diagonal_base_bytes = factor_bytes + core_bytes
-    diagonal_no_store_bytes = scheduled_factor_bytes + scheduled_controller_bytes + source_bytes + core_bytes
+    # Generated scratch values are cardinality, not global-memory transfers.
+    # This is a partial global ledger: common activation transfers are omitted.
+    diagonal_no_store_bytes = scheduled_factor_bytes + scheduled_controller_bytes + source_bytes
     diagonal_materialized_bytes = diagonal_no_store_bytes + core_store_bytes + core_reload_bytes
 
     factor_descriptor_elements = full_factor_elements(config.d, config.m, config.rank, groups)
     factor_descriptor_bytes = factor_descriptor_elements * config.factor_element_bytes
     factor_store_bytes = factor_descriptor_bytes
     factor_reload_bytes = factor_descriptor_bytes
-    full_factor_no_store_bytes = scheduled_controller_bytes + source_bytes + factor_descriptor_bytes
+    full_factor_no_store_bytes = scheduled_controller_bytes + source_bytes
     full_factor_materialized_bytes = full_factor_no_store_bytes + factor_store_bytes + factor_reload_bytes
 
     q_min = full_factor_q_min(config.d, config.m, config.rank, case.batch, case.seq)
@@ -249,6 +251,8 @@ def compute_row(case: WorkloadCase, config: AccountingConfig) -> dict[str, Any]:
         "full_factor_q_min_strict_base_saving": q_min,
         "full_factor_current_q_strict_base_saving": factor_descriptor_bytes < dense_bytes,
         "physical_hbm_counter_measurement": False,
+        "scheduled_ledger_scope": "partial_global_transfers_excluding_common_activations",
+        "diagonal_core_removable_global_bytes": 2 * core_bytes,
     }
 
 
@@ -309,6 +313,11 @@ def build_payload(rows: list[dict[str, Any]], args: argparse.Namespace | None = 
             "The default controller is Linear(d,h)-SiLU-Linear(h,3r). Full-factor scheduled rows use "
             "the same explicitly reported controller traffic as a proxy overhead; their base ratio is "
             "the controller-independent feasibility boundary."
+        ),
+        "format_v2_correction": (
+            "Generated scratch cardinality is excluded from scheduled global bytes. "
+            "Base logical payload fields retain their cardinality-only meaning; "
+            "common activation transfers remain uncounted. Do not compare v1 and v2 totals."
         ),
         "config": vars(args) if args is not None else {},
         "rows": rows,
