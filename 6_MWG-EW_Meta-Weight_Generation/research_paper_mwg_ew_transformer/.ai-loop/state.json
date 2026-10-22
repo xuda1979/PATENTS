@@ -1,14 +1,14 @@
 {
   "active_task_ids": [
-    "T-0006"
+    "T-0007"
   ],
   "current_experiment_id": null,
-  "last_event_id": "EV-0003",
+  "last_event_id": "EV-0004",
   "mode": "standard",
   "objective": "Review and improve MWG-EW paper toward a top-journal submission with sole author Da Xu; preserve evidence limits",
-  "phase": "verification",
+  "phase": "paused",
   "project_id": "P-20261022-879e79",
   "risk_tier": "R2",
   "schema_version": 1,
-  "updated_at": "2026-10-22T02:24:23.142738+00:00"
+  "updated_at": "2026-10-22T02:30:54.782770+00:00"
 }
