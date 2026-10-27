@@ -79,12 +79,12 @@ def test_component_ledger_and_mixed_dtype_bytes() -> None:
     assert row["source_state_bytes"] == 160
     assert row["diagonal_core_generated_elements"] == 36
     assert row["diagonal_core_generated_bytes"] == 72
-    assert row["diagonal_core_scheduled_no_store_bytes"] == 784
-    assert row["diagonal_core_scheduled_materialized_bytes"] == 928
+    assert row["diagonal_core_scheduled_no_store_bytes"] == 712
+    assert row["diagonal_core_scheduled_materialized_bytes"] == 856
     assert row["full_factor_generated_elements"] == 864
     assert row["full_factor_generated_bytes"] == 1728
-    assert row["full_factor_scheduled_no_store_bytes"] == 2152
-    assert row["full_factor_scheduled_materialized_bytes"] == 5608
+    assert row["full_factor_scheduled_no_store_bytes"] == 424
+    assert row["full_factor_scheduled_materialized_bytes"] == 3880
     assert row["physical_hbm_counter_measurement"] is False
 
 
