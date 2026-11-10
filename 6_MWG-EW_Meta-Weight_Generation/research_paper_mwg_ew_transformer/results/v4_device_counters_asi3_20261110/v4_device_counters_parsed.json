@@ -1,0 +1,311 @@
+{
+ "schema_version": 1,
+ "run": "v4 device-counter profiling on ASI3, 2026-11-10T17:16Z",
+ "units": {
+  "bw": "GB/s per CANN metric_summary convention",
+  "time": "us",
+  "hit_rate": "fraction"
+ },
+ "pairs": {
+  "probe_T128_v1": {
+   "geometry": "probe_T128",
+   "kernels": {
+    "ephemeral_core_apply_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 1506624.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.18106621077782786,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.49107702666189856,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9995327199999999,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.14421168714761734,
+    "v4_median": 0.13076256960630417,
+    "speedup_v1_over_v4": 1.1028514320405705,
+    "max_abs_diff": 0.0
+   }
+  },
+  "probe_T128_v4": {
+   "geometry": "probe_T128",
+   "kernels": {
+    "ephemeral_core_apply_v4_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 1325876.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.152620952072614,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.33391896672907995,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9991243800000003,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.14421168714761734,
+    "v4_median": 0.13076256960630417,
+    "speedup_v1_over_v4": 1.1028514320405705,
+    "max_abs_diff": 0.0
+   }
+  },
+  "large_T512_v1": {
+   "geometry": "large_T512",
+   "kernels": {
+    "ephemeral_core_apply_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 4985010.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.14770246802086578,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.5649295160449226,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9998704399999998,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.17848890274763107,
+    "v4_median": 0.12371186167001724,
+    "speedup_v1_over_v4": 1.4427792156561619,
+    "max_abs_diff": NaN
+   }
+  },
+  "large_T512_v4": {
+   "geometry": "large_T512",
+   "kernels": {
+    "ephemeral_core_apply_v4_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 6872386.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.10887483464224929,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.25762322339129157,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9998001000000003,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.17848890274763107,
+    "v4_median": 0.12371186167001724,
+    "speedup_v1_over_v4": 1.4427792156561619,
+    "max_abs_diff": NaN
+   }
+  },
+  "large_T1024_v1": {
+   "geometry": "large_T1024",
+   "kernels": {
+    "ephemeral_core_apply_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 9620709.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.1409260696598661,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.5804754334698712,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9999338799999989,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.23051872849464417,
+    "v4_median": 0.13548381626605988,
+    "speedup_v1_over_v4": 1.7014484448973375,
+    "max_abs_diff": 0.0
+   }
+  },
+  "large_T1024_v4": {
+   "geometry": "large_T1024",
+   "kernels": {
+    "ephemeral_core_apply_v4_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 9773542.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.11011258362162377,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.32386318401855435,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.999884020000001,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.23051872849464417,
+    "v4_median": 0.13548381626605988,
+    "speedup_v1_over_v4": 1.7014484448973375,
+    "max_abs_diff": 0.0
+   }
+  },
+  "large_T2048_v1": {
+   "geometry": "large_T2048",
+   "kernels": {
+    "ephemeral_core_apply_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 18874299.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.13842936535363784,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.5892293364144835,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9999671000000008,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.3374536335468292,
+    "v4_median": 0.15336424112319946,
+    "speedup_v1_over_v4": 2.200341038272073,
+    "max_abs_diff": 0.0
+   }
+  },
+  "large_T2048_v4": {
+   "geometry": "large_T2048",
+   "kernels": {
+    "ephemeral_core_apply_v4_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 15524025.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.11326067049988872,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.3835868170618674,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9999370000000006,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.3374536335468292,
+    "v4_median": 0.15336424112319946,
+    "speedup_v1_over_v4": 2.200341038272073,
+    "max_abs_diff": 0.0
+   }
+  },
+  "large_T4096_v1": {
+   "geometry": "large_T4096",
+   "kernels": {
+    "ephemeral_core_apply_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 37387455.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.13656335033911873,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.5936399141489228,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9999840200000001,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.5376628413796425,
+    "v4_median": 0.18093258142471313,
+    "speedup_v1_over_v4": 2.971619799739421,
+    "max_abs_diff": NaN
+   }
+  },
+  "large_T4096_v4": {
+   "geometry": "large_T4096",
+   "kernels": {
+    "ephemeral_core_apply_v4_kernel": {
+     "occurrences": 50,
+     "aic_total_time_us": 0.0,
+     "aic_total_cycles": 27084686.0,
+     "aiv_total_time_us": 0.0,
+     "aiv_total_cycles": 0.0,
+     "aic_main_mem_read_bw_mean": 0.1135614380460805,
+     "aic_main_mem_read_bw_n": 50,
+     "aic_main_mem_write_bw_mean": 0.4258352131234661,
+     "aic_main_mem_write_bw_n": 50,
+     "aiv_main_mem_read_bw_mean": null,
+     "aiv_main_mem_read_bw_n": 0,
+     "aiv_main_mem_write_bw_mean": null,
+     "aiv_main_mem_write_bw_n": 0,
+     "l2_hit_rates_mean": 0.9999669999999997,
+     "l2_hit_rates_n": 50,
+     "l2_victim_rates_mean": 0.0,
+     "l2_victim_rates_n": 50
+    }
+   },
+   "host_timing_ms": {
+    "v1_median": 0.5376628413796425,
+    "v4_median": 0.18093258142471313,
+    "speedup_v1_over_v4": 2.971619799739421,
+    "max_abs_diff": NaN
+   }
+  }
+ }
+}
