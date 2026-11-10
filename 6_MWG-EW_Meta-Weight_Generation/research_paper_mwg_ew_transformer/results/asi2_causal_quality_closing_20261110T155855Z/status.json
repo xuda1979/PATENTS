@@ -1,0 +1,57 @@
+{
+  "artifact_manifest": "/vllm-workspace/mwg-ew-transformer-research/results/asi2_causal_quality_closing_20261110T155855Z/artifact_manifest.json",
+  "created_at": "2026-11-10T15:59:19Z",
+  "detail": "all seeds complete",
+  "history": [
+    {
+      "at": "2026-11-10T15:59:19Z",
+      "detail": "worker launched",
+      "stage": "detached",
+      "state": "running"
+    },
+    {
+      "at": "2026-11-10T15:59:19Z",
+      "detail": "validating ASI2 causal quality inputs",
+      "stage": "preflight",
+      "state": "running"
+    },
+    {
+      "at": "2026-11-10T15:59:40Z",
+      "detail": "training canonical and matched persistent controls",
+      "stage": "seed_2026",
+      "state": "running"
+    },
+    {
+      "at": "2026-11-10T16:06:37Z",
+      "detail": "training canonical and matched persistent controls",
+      "stage": "seed_2027",
+      "state": "running"
+    },
+    {
+      "at": "2026-11-10T16:11:35Z",
+      "detail": "training canonical and matched persistent controls",
+      "stage": "seed_2028",
+      "state": "running"
+    },
+    {
+      "at": "2026-11-10T16:15:24Z",
+      "detail": "training canonical and matched persistent controls",
+      "stage": "seed_2029",
+      "state": "running"
+    },
+    {
+      "at": "2026-11-10T16:19:35Z",
+      "detail": "all seeds complete",
+      "stage": "complete",
+      "state": "completed"
+    }
+  ],
+  "log": "/vllm-workspace/mwg-ew-transformer-research/logs/asi2_causal_quality_closing_20261110T155855Z.log",
+  "pid": 32921,
+  "run_dir": "/vllm-workspace/mwg-ew-transformer-research/results/asi2_causal_quality_closing_20261110T155855Z",
+  "run_id": "asi2_causal_quality_closing_20261110T155855Z",
+  "schema_version": 1,
+  "stage": "complete",
+  "state": "completed",
+  "updated_at": "2026-11-10T16:19:35Z"
+}
