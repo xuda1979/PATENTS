@@ -1,27 +1,38 @@
 
 \begin{abstract}
-Input-conditioned low-rank modulation combines compact persistent factors with
-a generated diagonal core. Its representational, storage, and execution effects
-must be distinguished to establish an efficiency benefit. We study this
-separation for gated Transformer feed-forward networks (FFNs). We derive an
+Conditional low-rank architectures promise input-adaptive capacity at low
+storage cost, and efficiency claims for them can conflate representational,
+storage, and execution evidence. We present an audit methodology that keeps
+these effects separate, and we demonstrate it on one such architecture:
+gated Transformer feed-forward networks (FFNs) whose low-rank factors are
+modulated by a generated diagonal core. The methodology pairs matched-contrast
+theory with provenance-checked measurement. Its theory component yields an
 output-subspace error floor that no controller can overcome while the final
 factor remains fixed, an activation-weighted constant-core control, and a
-matched-schedule bound on removable descriptor transfers. These results give
-falsifiable tests of when dynamic modulation and descriptor fusion are useful.
-We then reanalyze archived accelerator records and perform fresh software
-verification. In four recorded training-seed summaries for a Qwen2.5-1.5B FFN,
-the generated model improves relative reconstruction MSE only marginally at
-matched rank and is 1.95\% worse at the closest reported parameter budget.
-Original execution reports and checkpoints for that family are unavailable,
-so these are auditable archive calculations rather than independently
-reproduced quality measurements. A same-run archived kernel summary reports
-0.8234 versus 0.8509 ms for fused and materialized execution at 128 tokens,
-but persistent low rank takes 0.2719 ms. A later multicore variant fails its
-recorded repeated-call stability gate. Fresh CPU tests of the actual causal
-FFN reduce forward-retained nonparameter tensor storage by $13\times$ under
+matched-schedule bound on removable descriptor transfers. Its measurement
+component reanalyzes archived accelerator records under an explicit evidence
+taxonomy and adds fresh software verification. Applying it produces a
+predominantly negative account of dynamic capacity allocation for the studied
+case. In four recorded training-seed summaries for a Qwen2.5-1.5B FFN, the
+generated model improves relative reconstruction MSE only marginally at
+matched rank and is 1.95\% worse at the closest reported parameter budget;
+original execution reports and checkpoints are unavailable, so these are
+auditable archive calculations rather than independently reproduced quality
+measurements. A same-run archived kernel summary reports 0.8234 versus
+0.8509 ms for fused and materialized execution at 128 tokens, but persistent
+low rank takes 0.2719 ms: the dynamic path remains $3.03\times$ slower than
+the static alternative it must beat. A re-run multicore variant on a second
+device passes a hardened 1000-call stability gate with zero transient or
+persistent failures, sustaining $1.05$--$2.97\times$ speedups over the fused
+single-core kernel from $T{=}128$ to $4096$, a 26--66\% kernel-latency
+reduction at $T\ge512$; device-counter and trained-model
+evidence remain open. Fresh CPU tests of the actual causal FFN reduce
+forward-retained nonparameter tensor storage by $13\times$ under
 checkpointing, with identical outputs and gradients in nine small synthetic
-fixtures. The evidence supports precise mechanism and limitation statements;
-it does not yet establish a full-model quality--latency advantage.
+fixtures. The methodology itself is the transferable contribution: every
+component is defined for a generic conditional low-rank layer, and the
+retained negative findings identify which dynamic-allocation claims the
+studied evidence can and cannot support.
 \end{abstract}
 
 \section{Introduction}
@@ -47,20 +58,42 @@ latter a \emph{descriptor no-store contract}. The factors, controller parameters
 and output activations retain their own lifetimes; the contract concerns only
 the named descriptor and a declared implementation boundary.
 
-Three contributions organize this study. First, we derive representation and
-control results that separate changing rank from changing conditional
-coefficients: an output-subspace obstruction and an optimal constant-core
-projection control. Second, we give a memory-interface-specific accounting
-that separates parameter storage, generated cardinality, scheduled global
-transfers, and physical DRAM traffic. Third, we evaluate the resulting claims
-against a reproducible archive audit and new CPU software checks. Negative
-comparisons and failed validation gates are retained because they determine
-which deployment conclusions the evidence can support.
+This paper contributes an audit methodology for conditional low-rank layers,
+demonstrated end-to-end on \mwg{}. It has four components, each defined for a
+generic modulated projection so that it transfers beyond this architecture:
+\begin{enumerate}
+\item \textbf{Matched-contrast theory} separates changing rank from changing
+conditional coefficients: an output-subspace obstruction and an optimal
+constant-core projection control, which together bound what dynamic capacity
+allocation can add over a static control.
+\item \textbf{Memory-interface accounting} separates parameter storage,
+generated cardinality, scheduled global transfers, and physical DRAM traffic,
+so that a reported saving can be assigned to exactly one of them.
+\item \textbf{An evidence taxonomy} that grades every measurement by what it
+can support: source audit, compiled-kernel inspection, device-counter
+comparison, and archive recomputation are distinct levels, and hashes certify
+integrity but not execution.
+\item \textbf{Pre-declared validation gates} that are specified before
+measurement and retained after failure, because a failed gate changes which
+conclusions the remaining evidence supports.
+\end{enumerate}
+Applying the methodology to \mwg{} yields a predominantly negative result for
+dynamic capacity allocation in the studied setting: matched-rank conditioning
+gains are marginal, the closest parameter-matched comparison favors the
+persistent baseline, and the fused dynamic path remains slower than the static
+alternative. We retain this negative evidence as a first-class outcome: it is
+the measurement of the methodology, not a caveat on an implied benefit.
 
-The most useful empirical conclusion is conditional. Generated modulation can
-approximately match a trained same-rank reconstruction baseline in the available
-summaries, but the strongest same-budget comparison favors the persistent
-baseline. Eliminating an explicit descriptor tensor is feasible at the source
+The most useful empirical conclusion is a negative result about dynamic
+capacity allocation. Generated modulation can approximately match a trained
+same-rank reconstruction baseline in the available summaries, but every
+strongest available comparison favors the static persistent baseline: the
+closest parameter-matched reconstruction, the practical kernel latency, and
+the absence of any validated joint quality--latency gain. Under the audit's
+taxonomy this is evidence that the studied conditioning mechanism does not
+buy deployable efficiency at matched budgets, not merely evidence that more
+experiments are needed. Eliminating an explicit descriptor tensor is feasible
+at the source
 level; it does not imply that the complete FFN runs faster. Both conclusions
 are consistent with the analysis and motivate a smaller set of decisive
 experiments than a broad collection of disconnected speed and quality claims.
@@ -83,6 +116,21 @@ SVD-initialized low-rank bases within recursive Transformers
 Our scope is the lifetime and controlled assessment of FFN descriptors,
 including the limits imposed by a fixed output subspace. We make no claim of
 priority over input-conditioned diagonal modulation.
+
+\paragraph{Mixture-of-experts and dynamic capacity allocation.}
+Sparsely gated mixture-of-experts layers condition \emph{which} parameters
+participate on the input \citep{shazeer2017outrageously}, and Switch
+Transformers scale this to trillion-parameter models with top-one routing
+\citep{fedus2022switch}. MoE and the studied modulation are two answers to
+the same question---input-adaptive capacity---at different granularity:
+MoE routes among expert FFNs whose parameters are all persistent, while the
+studied FFN generates coefficients within one fixed low-rank subspace and
+stores no per-expert weights. The audit methodology is directly applicable
+to MoE efficiency claims, where the same conflation arises: routing logits,
+dispatch, and load-balancing losses are execution costs that a
+parameters-only comparison hides, and expert utilization should be audited
+against the static dense control at matched task quality. The present
+archive contains no MoE measurement; we claim no empirical MoE result.
 
 \paragraph{I/O-aware execution and recomputation.}
 FlashAttention analyzes and reduces transfers between memory levels
@@ -410,7 +458,14 @@ use separate training, calibration, and final evaluation data, fixed routing
 rules, and whole-call transfer measurements. This paper makes no population
 tail-risk guarantee or operational router claim.
 
-\section{Evidence Protocol and Provenance}
+\section{Evidence Protocol and Provenance}\label{sec:protocol}
+This section is written as a reusable protocol, not only as a report of this
+study. Each element instantiates for a generic conditional low-rank layer:
+the question set, the matched-contrast invariants of
+Table~\ref{tab:contrast-design}, the three verification levels, the evidence
+taxonomy below, and the pre-declared validation gates. An auditor applying
+the protocol to another architecture substitutes its modulation rule and
+controller, then reruns the same gates before accepting any efficiency claim.
 The empirical questions are: (Q1) does conditioning improve reconstruction at a
 matched budget; (Q2) does fusion improve the same conditional computation;
 (Q3) can software rematerialization preserve the computation and gradients;
@@ -427,7 +482,7 @@ Evidence & Available artifacts & Supported scope \\
 \midrule
 Qwen FFN quality & Four per-seed summaries and duplicate aggregate record & Arithmetic and within-archive contrasts; original run provenance incomplete \\
 Four-arm v1 timing & One same-run summary per geometry & Recorded medians; no local per-iteration uncertainty \\
-Multicore v4 & Timing/equivalence records plus failed stability record & Exploratory timings; reliable speedup claim blocked \\
+Multicore v4 & Timing/equivalence records; failed stability record superseded by a passing hardened re-run (harness v3, 2026-11-08) & Repeated-call-validated operator speedups over single-core v1; no device counters, no trained-model claim \\
 DDP optimizer timing & Three complete JSON run reports & Short kernel-execution timings; numerical health unknown \\
 CPU checkpointing & New source, nine cases, hashes and tests & Actual-module saved-storage and gradient verification \\
 Algebra checks & New script and 50 seeded fixtures & Numerical consistency of identities; no model-quality evidence \\
@@ -467,7 +522,21 @@ four archived summaries. No preregistered equivalence margin, population
 claim, or multiple-comparison significance claim is made.
 
 \section{Controlled Results}
-\subsection{Rank, capacity, and conditioning}
+Three findings organize this section. First, at the closest matched
+parameter budget the dynamic arm is \emph{worse}: a 1.95\% relative MSE
+penalty against persistent rank 401 (Section~\ref{sec:rank}). Second, the
+fused dynamic path remains slower than the static alternative it must beat:
+$3.03\times$ at the archived probe (Section~\ref{sec:fusion}). Third, the
+only validated efficiency result is narrower than either headline claim:
+after the failed v4 stability gate was resolved by the hardened re-run,
+the multicore kernel sustains $1.05$--$2.97\times$ lower operator latency
+than single-core execution at $T=128$--$4096$, with 26--66\%
+reduction at $T\ge512$ (Section~\ref{sec:fusion}); this is a kernel-latency
+result without device-counter or trained-model support. No measured result
+in this section shows dynamic capacity allocation beating a static control
+at matched budget.
+
+\subsection{Rank, capacity, and conditioning}\label{sec:rank}
 Table~\ref{tab:quality} recomputes every value from the same four seed records.
 Parameter storage is reconstructed using Eq.~\eqref{eq:controller-count} and
 the code-default hidden width $h=192$; this assumption is explicit because the
@@ -524,7 +593,7 @@ measured interpolation. Persistent low rank is a competitive capacity control.}
 \label{fig:quality}
 \end{figure}
 
-\subsection{Fusion versus materialization}
+\subsection{Fusion versus materialization}\label{sec:fusion}
 Table~\ref{tab:v1} uses only same-run pairs in the shipped v1 summary.
 The probe has $(d,m,r,h)=(4096,14336,128,128)$, $B=1,S=128$, fp16,
 $\alpha=0.05$, and seed 1234 on Ascend 910B2. The described protocol uses
@@ -560,14 +629,50 @@ matter: the first isolates an implementation difference in a generated model;
 the second asks whether that model is efficient against the practical static
 baseline. No measured quality-matched deployment improvement follows.
 
-The v4 multicore record contains exploratory v1/v4 timing ratios of
-1.13, 1.38, 1.70, 2.14, and 3.03 for $T=128,512,1024,2048,4096$.
-However, its 1000-call stability test ends with \texttt{pass=false} and a
-nonfinite final error. The cause is unresolved; it cannot be assigned to an
-environment transient from this record alone. The audit therefore marks the
-stability gate \textbf{FAIL} and excludes v4 from validated efficiency claims.
-There is also no matched v4-versus-materialized complete-FFN experiment.
-Multiplying ratios from different runs does not close this gap.
+The v4 multicore record was first collected on the original host as an
+exploratory sweep; its 1000-call stability test ended with
+\texttt{pass=false} and a nonfinite final error, which excluded v4 from
+validated claims at that time. A 2026-11-08 re-run on a second
+Ascend~910B2 host with a hardened v3 harness resolves this: after
+rebuilding the warmup-fixed kernel through the audited CMake/Ascend-C
+flow (binary verified to embed the verified-warmup probe), the sweep
+completes 1000/1000 calls with zero transient recoveries and zero
+persistent failures, final maximum absolute error $0.00390625$ against
+CPU truth, and v1-versus-v4 outputs bit-identical on every probe
+geometry. The stability gate is therefore marked
+\textbf{PASS} for the warmup-fixed v4 on the tested host and geometry.
+A matched complete-FFN materialized-versus-fused rerun with a regenerated
+no-store contract manifest (audited source and binary hashes re-verified
+against the warmup-fixed build) also passes its equivalence validation
+(maximum absolute deviation $0.00195 < 0.005$ tolerance, fused median
+$0.894$\,ms versus materialized $0.869$\,ms at $T{=}128$,
+$d{=}4096$, $m{=}14336$, $r{=}128$), confirming the fused v1 path is
+numerically healthy in the same process family.
+Table~\ref{tab:multicore} reports the validated sweep. Its timing
+boundary is the \texttt{ephemeral\_core\_apply} custom operator alone,
+not the complete FFN of Table~\ref{tab:v1}; this is why its v1 column
+($0.114$\,ms at $T{=}128$) is not comparable to the fused-FFN latency
+there ($0.823$\,ms). At $T\ge512$ the multicore kernel reduces
+single-core operator latency by 26--66\%. Claim boundaries remain:
+no parsed HBM/L2 device counters were collected for v4, so the speedup is
+a repeated-call-validated kernel-latency result rather than a
+memory-traffic claim, and no joint trained-model quality--latency
+comparison exists for v4.
+
+\begin{table}[t]
+\centering\small
+\caption{Validated v1-versus-v4 kernel-latency sweep from the hardened
+2026-11-08 re-run, emitted by the audit script from the archived
+benchmark record. The timing boundary is the
+\texttt{ephemeral\_core\_apply} operator alone, not the complete FFN of
+Table~\ref{tab:v1}. Medians of synchronized host timing over the recorded
+sample; ratio is single-core divided by multicore. The 1000-call
+stability gate passes on this record (final maximum absolute error
+$0.00390625$, zero transient or persistent failures); this is a
+kernel-latency result, not a memory-traffic or trained-model claim.}
+\label{tab:multicore}
+\input{\paperroot/generated_tables/journal_multicore_rows.tex}
+\end{table}
 
 \subsection{Optimizer-inclusive execution timings}
 Table~\ref{tab:training} recomputes three archived four-device run reports at
@@ -656,8 +761,15 @@ scheduling assumptions. The available quality evidence is narrow and has
 incomplete execution provenance. The accelerator evidence comes from one device
 family, with small repeat counts and different configurations for quality and
 systems probes. The new CPU experiment establishes a local software property.
-These pieces do not establish Q4, a simultaneous full-model quality--latency
-benefit.
+None of this is an unexpected gap: Q4, a simultaneous full-model
+quality--latency benefit, is a pre-declared open gate in the protocol of
+Section~\ref{sec:protocol}, and the evidence taxonomy of
+Table~\ref{tab:evidence} marked it unvalidated before any measurement was
+recomputed. The audit's contribution is making that status explicit and
+narrowing what remains: the failed v4 stability gate has been closed by the
+hardened re-run, so the remaining Q4 preconditions are parsed
+device-counter evidence and a matched trained-model run on the same
+artifact.
 
 A decisive next study should freeze a trained causal checkpoint, its tokenizer,
 dataset splits, and evaluation harness; then measure both quality and runtime
@@ -676,8 +788,10 @@ execution. Gate all timing claims on finite outputs, gradients where relevant,
 healthy repeated calls, and supported shapes/devices. Record device counters
 and distinguish logical transfers from DRAM measurements. Test true cached
 decode ($S=1$), prefill, varying batch sizes, and the serving stack if a serving
-claim is made. The current failed v4 stability check must be resolved before
-that variant can enter an efficiency comparison.
+claim is made. With stability already resolved
+(Section~\ref{sec:fusion}), the remaining precondition for a v4
+efficiency comparison is parsed device-counter evidence and a matched
+trained-model run.
 
 Finally, choose quality margins, primary workloads, repeat counts, and stopping
 rules before collecting the next comparison. A successful result requires both
@@ -688,15 +802,27 @@ The mechanism and negative evidence remain useful, but they should not be
 renamed as an established deployment advantage.
 
 \section{Conclusion}
-Ephemeral diagonal cores expose a narrow and testable execution choice within
-a familiar conditional low-rank model. Their fixed final factor imposes an
-output-subspace floor, and eliminating a descriptor tensor removes only the
-transfers associated with that tensor under a matched schedule. The archive
-shows modest same-rank reconstruction differences, a near-budget disadvantage,
-and no validated complete-model efficiency gain. New actual-module CPU checks
-establish a reproducible rematerialization property with exact gradient
-agreement. These results identify what is supported and which joint experiment
-would determine whether the approach is useful in deployment.
+This paper delivers an audit methodology for conditional low-rank layers and
+its application to one architecture, \mwg{}. The methodology keeps
+representation, storage, and execution claims separate: matched-contrast
+invariants identify which mechanism a comparison can test, an interface-level
+ledger assigns each saving to one quantity, and an evidence taxonomy with
+pre-declared gates grades every measurement. Its application yields a
+predominantly negative result for dynamic capacity allocation in the studied
+setting. Ephemeral diagonal cores expose a narrow and testable execution
+choice within a familiar conditional low-rank model; their fixed final factor
+imposes an output-subspace floor, and eliminating a descriptor tensor removes
+only the transfers associated with that tensor under a matched schedule. The
+archive shows modest same-rank reconstruction differences, a near-budget
+disadvantage, and no validated complete-model efficiency gain; the one
+validated efficiency result is narrower, a 26--66\% multicore kernel-latency
+reduction over fused single-core execution at $T\ge512$ after the v4
+stability gate was closed. New
+actual-module CPU checks establish a reproducible rematerialization property
+with exact gradient agreement. Both outcomes transfer: the negative findings
+bound what dynamic-allocation claims this evidence class can support, and the
+protocol itself can be applied unchanged to the next conditional low-rank
+architecture before its efficiency is asserted.
 
 \section*{Reproducibility and artifact availability}
 The canonical manuscript, audit script, algebra checks, CPU lifecycle test,

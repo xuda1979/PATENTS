@@ -52,12 +52,12 @@
     48,
     49
   ],
-  "numpy_version": "2.3.5",
+  "numpy_version": "2.4.6",
   "passed": true,
-  "max_rowspace_residual": 1.4210854715202004e-14,
-  "max_relative_orthogonal_decomposition_residual": 8.878089734965933e-16,
+  "max_rowspace_residual": 1.5987211554602254e-14,
+  "max_relative_orthogonal_decomposition_residual": 5.326853840979562e-16,
   "max_constant_core_vs_independent_lstsq_error": 3.6637359812630166e-15,
-  "max_fit_loss_difference_vs_unweighted_mean": -6.123544890251651,
+  "max_fit_loss_difference_vs_unweighted_mean": -6.12354489025256,
   "source_sha256": "714a9460dea20c492078dfc5b367981dfa1ae81ca1e114092d00fd7605f17eaf",
   "claim_boundary": "Numerical checks of identities only; no real-model quality, generalization, or runtime evidence."
 }

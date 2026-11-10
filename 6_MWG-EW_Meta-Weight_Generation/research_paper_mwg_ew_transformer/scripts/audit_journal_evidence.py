@@ -128,16 +128,20 @@ def collect(root):
     sources = list(EXPECTED)
     read = lambda p: json.loads((root / p).read_text())
     q = quality_summary(read(QUALITY / "per_seed_results.json"), read(QUALITY / "VERIFIED_RESULT_RECORD.json"))
-    kp = Path("results/v4_multicore_benchmark_asi2_v2_20261008.json")
+    kp_v2 = Path("results/v4_multicore_benchmark_asi2_v2_20261008.json")
+    kp_v3 = Path("results/v4_multicore_benchmark_asi3_v3_20261108.json")
     fp = Path("results/ASI3_arm4_decisive_20260828/key_results_SHIPPED.json")
-    sources.extend([kp, fp])
+    sources.extend([kp_v2, kp_v3, fp])
     four = read(fp)
     for key in ("probe_geometry", "largeT_geometry"):
         required = {"dense", "persistent", "materialized", "fused"} if key == "probe_geometry" else {"materialized", "fused"}
         if set(four[key]["median_ms"]) != required or not all(
                 finite(v) and v > 0 for v in four[key]["median_ms"].values()):
             raise ValueError("incomplete or nonfinite four-arm timings")
-    kernel = kernel_gate(read(kp))  # archive has NaN; output below encodes verdict only
+    kernel_v2 = kernel_gate(read(kp_v2))  # superseded: NaN final error on ASI2 (2026-10-08)
+    kernel = kernel_gate(read(kp_v3))     # current: hardened v3 harness re-run on ASI3 (2026-11-08)
+    if kernel_v2["verdict"] != "FAIL":
+        raise ValueError("superseded v2 failure record has been altered")
     timings = {}
     folder = root / "results/asi2_opt_inclusive_sync_20260923T025114Z"
     paths = sorted(folder.glob("ASI2_mwg_transformer_*.json"))
@@ -168,6 +172,7 @@ def collect(root):
     opt = [{"arm": arm, "mean_ms": mean(vals), "sample_sd_ms": stdev(vals),
             "dense_over_arm": dense / mean(vals)} for arm, vals in timings.items()]
     return {"schema_version": 1, "quality": q, "v4_kernel": kernel,
+            "v4_kernel_superseded": kernel_v2,
             "v1_four_arm": {key: {"median_ms": four[key]["median_ms"],
                                    "fused_over_materialized": four[key]["median_ms"]["fused"] /
                                        four[key]["median_ms"]["materialized"]}
@@ -177,7 +182,7 @@ def collect(root):
             "provenance": [{"path": str(p), "sha256": file_hash(root / p)} for p in sources],
             "submission_ready": False,
             "blocking_gaps": ["canonical quality raw reports/checkpoints/split manifests incomplete",
-                              "v4 stability gate fails; no matched v4/materialized complete-FFN comparison",
+                              "no parsed v4 device-counter evidence and no matched v4 trained-model run",
                               "no verified quality/latency Pareto curve from same causal model and runtime"]}
 
 
@@ -202,6 +207,13 @@ def emit_tables(summary, folder):
     rows = [f"{r['arm'].replace('_', ' ')} & ${r['mean_ms']:.4f} \\pm {r['sample_sd_ms']:.4f}$ & "
             f"${r['dense_over_arm']:.3f}$ \\\\" for r in summary["optimizer_timing"]["rows"]]
     table("journal_timing_rows.tex", "lrr", "Arm & Time (ms) & Dense/arm ratio", rows)
+    if summary["v4_kernel"]["verdict"] != "PASS":
+        (folder / "journal_multicore_rows.tex").unlink(missing_ok=True)
+        raise ValueError("refusing to emit multicore table from a failed gate")
+    rows = [f"{r['T']} & ${r['v1_ms']:.4f}$ & ${r['v4_ms']:.4f}$ & ${r['ratio_v1_over_v4']:.2f}$ \\\\"
+            for r in summary["v4_kernel"]["observed_timing_only"]]
+    table("journal_multicore_rows.tex", "rrrr",
+          "Tokens & v1 single-core op (ms) & v4 multicore op (ms) & Ratio", rows)
 
 
 def main():

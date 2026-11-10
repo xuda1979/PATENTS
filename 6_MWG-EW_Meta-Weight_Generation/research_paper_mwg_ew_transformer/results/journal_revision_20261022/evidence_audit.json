@@ -175,6 +175,48 @@
     ]
   },
   "v4_kernel": {
+    "verdict": "PASS",
+    "eligible_for_speedup_claim": false,
+    "eligible_for_materialized_speedup_claim": false,
+    "numeric_tolerance_abs": 0.005,
+    "observed_timing_only": [
+      {
+        "T": 128,
+        "v1_ms": 0.11381354503100738,
+        "v4_ms": 0.10867421515285969,
+        "ratio_v1_over_v4": 1.0472911616699396
+      },
+      {
+        "T": 512,
+        "v1_ms": 0.15068105509271845,
+        "v4_ms": 0.11139417998492718,
+        "ratio_v1_over_v4": 1.3526833728037426
+      },
+      {
+        "T": 1024,
+        "v1_ms": 0.21383930987212807,
+        "v4_ms": 0.12410340481437741,
+        "ratio_v1_over_v4": 1.723073675472236
+      },
+      {
+        "T": 2048,
+        "v1_ms": 0.3098733551451005,
+        "v4_ms": 0.13967484497698024,
+        "ratio_v1_over_v4": 2.218533732370855
+      },
+      {
+        "T": 4096,
+        "v1_ms": 0.5159381299745291,
+        "v4_ms": 0.17349348490824923,
+        "ratio_v1_over_v4": 2.973818470747644
+      }
+    ],
+    "completed_stability_calls": 1000,
+    "finite_final_error": true,
+    "stability_pass_flag": true,
+    "reason": "archive numerical gate only; no matched materialized comparison or independently authenticated reference"
+  },
+  "v4_kernel_superseded": {
     "verdict": "FAIL",
     "eligible_for_speedup_claim": false,
     "eligible_for_materialized_speedup_claim": false,
@@ -309,6 +351,10 @@
       "sha256": "6507042c08338d7ce50bfa966bb0cd8cc18022db507486d0d6e6403abe0ec5af"
     },
     {
+      "path": "results/v4_multicore_benchmark_asi3_v3_20261108.json",
+      "sha256": "4c7f5d24f6f8594c61b46a40de1e56098628ca41bfb0162abd0428befe55d319"
+    },
+    {
       "path": "results/ASI3_arm4_decisive_20260828/key_results_SHIPPED.json",
       "sha256": "1324fb1da910b0b3c1e547298902ec2efe95a284a3c5c2f8212aab82d8435a27"
     },
@@ -328,7 +374,7 @@
   "submission_ready": false,
   "blocking_gaps": [
     "canonical quality raw reports/checkpoints/split manifests incomplete",
-    "v4 stability gate fails; no matched v4/materialized complete-FFN comparison",
+    "no parsed v4 device-counter evidence and no matched v4 trained-model run",
     "no verified quality/latency Pareto curve from same causal model and runtime"
   ]
 }

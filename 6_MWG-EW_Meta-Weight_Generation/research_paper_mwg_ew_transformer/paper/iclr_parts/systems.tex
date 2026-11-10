@@ -102,17 +102,27 @@ collision), and a \emph{double-buffered UB pipeline}
 (\texttt{BUFFER\_NUM=2}, overlapping cube and vector work within each core
 at a ${\sim}160$~KiB per-tile footprint within the 192~KiB budget).  The
 design projected ${\sim}5$--$7\times$ over v1 at $T{=}4096$; the measured
-decisive run (2026-10-08, single Ascend~910B2, hardened two-phase-ref
-harness, 30 warmup/200 iterations/5 repeats per config) confirms the
+decisive runs (2026-10-08 on ASI2, then the hardened v3 harness re-run of
+2026-11-08 on a second Ascend~910B2; 30 warmup/200 iterations/5 repeats
+per config) confirm the
 direction but not the magnitude: v4 is algebraically identical to v1
-($\max|\Delta_{v1-v4}|=0$ at every config) and $1.13\times$, $1.38\times$,
-$1.71\times$, $2.14\times$, and $3.03\times$ faster at $T{=}128$, $512$,
-$1024$, $2048$, and $4096$ respectively---clearing the ${\sim}2\times$
+($\max|\Delta_{v1-v4}|=0$ at every config) and $1.05\times$, $1.35\times$,
+$1.72\times$, $2.22\times$, and $2.97\times$ faster at $T{=}128$, $512$,
+$1024$, $2048$, and $4096$ respectively (2026-11-08 run; the earlier
+1.13/1.38/1.70/2.14/3.03 profile is retained in the audit as the
+superseded record)---clearing the ${\sim}2\times$
 viability threshold at $T\ge2048$ but falling short of the projection,
 consistent with partial L2-contention saturation from shared-$B$ reads
 (remaining risks: UB capacity would overflow at $r\ge256$ without further
-tiling, and the 1000-call stability check at $T{=}4096$ hit an
-environment-level NaN transient in its unhardened comparison path).
+tiling; the 1000-call stability check at $T{=}4096$ initially hit an
+environment-level NaN transient in its unhardened comparison path---ASI2
+diagnostics attributed it to a corrupted NPU-computed fp32 reference while
+both kernels bit-agreed---and the hardened v3 re-run of 2026-11-08 on a
+second Ascend~910B2 completed 1000/1000 calls with zero transient
+recoveries and zero persistent failures, final max-error $0.00390625$
+against CPU truth, closing the stability question for the warmup-fixed v4
+on the tested hardware; that attribution rests on the diagnostics, not on
+the second-device re-run alone).
 The no-store contract is preserved: each core computes the matmul and
 epilogue entirely in UB and writes only the final fp16 output to global
 memory.  The v4 kernel source and benchmark harness are archived in

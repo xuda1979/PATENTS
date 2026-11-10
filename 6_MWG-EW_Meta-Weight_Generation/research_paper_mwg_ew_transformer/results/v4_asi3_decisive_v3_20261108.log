@@ -1,0 +1,89 @@
+[2026-11-08T08:27:37Z] device-gate: no trainer/tenant processes detected
+[2026-11-08T08:27:37Z] verifying fixed kernel sources
+[2026-11-08T08:27:37Z] v4 source md5=701e9be098b51b13ac89409384735e2d v1 source md5=59cf1751d920f5f90851b117f7483d6c
+[2026-11-08T08:27:37Z] test harness md5=526839744b6c2916822b3a1a9387609f
+[2026-11-08T08:27:37Z] staging fixed sources into /root/work/mwg_v4_torch_ext
+[2026-11-08T08:27:37Z] staged /root/work/mwg_v4_torch_ext from fixed sources
+[2026-11-08T08:27:38Z] cmake configure
+[2026-11-08T08:27:40Z] cmake rc=0
+[2026-11-08T08:27:40Z] make
+[2026-11-08T08:29:25Z] make rc=0
+[2026-11-08T08:29:25Z] V4_SO=/root/work/mwg_v4_torch_ext/build/libcustom_ops_v4.so
+[2026-11-08T08:29:25Z] warmup-fix string count in v4 .so: 1
+[2026-11-08T08:29:25Z] settling 60s post-build
+[2026-11-08T08:30:25Z] running test_v4_multicore_v3.py
+preflight ok
+
+=== probe_T128: T=128, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.001953
+  v1 median = 0.1138 ± 0.0017 ms
+  v4 max_err = 0.001953
+  v4 median = 0.1087 ± 0.0007 ms
+  v1-vs-v4 delta = 0.000000
+  speedup = 1.047x
+
+=== large_T512: T=512, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.001953
+  v1 median = 0.1507 ± 0.0008 ms
+  v4 max_err = 0.001953
+  v4 median = 0.1114 ± 0.0076 ms
+  v1-vs-v4 delta = 0.000000
+  speedup = 1.353x
+
+=== large_T1024: T=1024, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.003906
+  v1 median = 0.2138 ± 0.0142 ms
+  v4 max_err = 0.003906
+  v4 median = 0.1241 ± 0.0006 ms
+  v1-vs-v4 delta = 0.000000
+  speedup = 1.723x
+
+=== large_T2048: T=2048, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.003906
+  v1 median = 0.3099 ± 0.0004 ms
+  v4 max_err = 0.003906
+  v4 median = 0.1397 ± 0.0008 ms
+  v1-vs-v4 delta = 0.000000
+  speedup = 2.219x
+
+=== large_T4096: T=4096, H=128, R=128, amp=0.05 ===
+  v1 max_err = 0.003906
+  v1 median = 0.5159 ± 0.0018 ms
+  v4 max_err = 0.003906
+  v4 median = 0.1735 ± 0.0031 ms
+  v1-vs-v4 delta = 0.000000
+  speedup = 2.974x
+
+=== SUMMARY ===
+Config                    v1 ms      v4 ms    Speedup
+------------------------------------------------------
+probe_T128               0.1138     0.1087     1.047x
+large_T512               0.1507     0.1114     1.353x
+large_T1024              0.2138     0.1241     1.723x
+large_T2048              0.3099     0.1397     2.219x
+large_T4096              0.5159     0.1735     2.974x
+
+=== STABILITY: 1000 sequential calls at T=4096 (v3 hardened) ===
+  completed 1000/1000 calls; clean max_err = 0.003906; transients_recovered = 0; persistent_failures = 0; final_ref_check = 0.00390625; PASS
+
+Results saved to /root/work/filestorage/mwg-ew-transformer-research/results/v4_multicore_benchmark_asi3_v3_20261108.json
+[2026-11-08T08:30:42Z] test rc=0
+[2026-11-08T08:30:42Z] running four-arm matched materialized,fused
+FUSED_BACKEND_UNAVAILABLE: invalid fused no-store contract: audited source hash does not match the manifest; compiled op library hash does not match the manifest
+[2026-11-08T08:30:55Z] four-arm rc=1
+[2026-11-08T08:30:55Z] === v4 ASI3 decisive worker v3 done ===
+[2026-11-08T10:39:37Z] device-gate: no trainer/tenant processes detected
+[2026-11-08T10:39:37Z] contract verified (source 9a55e8ab..., binary ed7c7999...)
+[2026-11-08T10:39:37Z] warmup-fix string count in v1 .so: 1
+[2026-11-08T10:39:37Z] running four-arm matched materialized,fused (contract-fixed rerun)
+{
+  "output": "/root/work/filestorage/mwg-ew-transformer-research/results/four_arm_matched_asi3_v3_20261108/four_arm_fused_run.json",
+  "arms": [
+    "materialized",
+    "fused"
+  ],
+  "arm4_execution_observed": true,
+  "no_store_claim_ready": false
+}
+[2026-11-08T10:39:52Z] four-arm rc=0
+[2026-11-08T10:39:52Z] === v4 ASI3 four-arm-only rerun done ===

@@ -2,9 +2,9 @@
 
 Sole author: Da Xu, China Mobile Research Institute, xudayj@chinamobile.com.
 
-Use `main.pdf` for the standard author-review copy or `tmlr/main_tmlr.pdf` for the TMLR preprint. Both use `journal_content.tex`, `journal_preamble.tex`, `journal_refs.bib`, the current generated tables, and the two `figs/journal_*.pdf` plots.
+Use `main.pdf` for the standard author-review copy or `tmlr/main_tmlr.pdf` for the TMLR preprint. Both use `journal_content.tex`, `journal_preamble.tex`, `journal_refs.bib`, the current generated tables, and the two `figs/journal_*.pdf` plots. The manuscript is framed as an audit methodology for conditional low-rank layers, with the negative dynamic-versus-static findings as the centerpiece results.
 
-The current version is **not certified submission-ready**. See `REVIEW_20261022.md` for the failed v4 stability gate, missing canonical quality provenance, and absent same-model quality–latency evidence. No journal submission has been made in this revision.
+The current version is **not certified submission-ready**. See `REVIEW_20261022.md` for the superseded v2 stability failure (retained in the audit as `v4_kernel_superseded`; the hardened v3 re-run of 2026-11-08 passes and is the current `v4_kernel` verdict), missing canonical quality provenance, and absent same-model quality–latency evidence. No journal submission has been made in this revision.
 
 Rebuild from the research root with `bash scripts/build_journal.sh`. Run `python scripts/audit_journal_evidence.py --require-submission-ready` to check the scientific readiness gate; it intentionally exits 2 while unresolved.
 

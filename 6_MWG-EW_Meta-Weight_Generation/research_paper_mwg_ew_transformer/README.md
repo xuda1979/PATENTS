@@ -1,6 +1,6 @@
 # MWG-EW Transformer research
 
-The current manuscript is **Ephemeral Low-Rank Cores for Transformer FFNs: Representation Limits, Memory Accounting, and Controlled Evaluation**, revised October 22, 2026.
+The current manuscript is **Auditing Conditional Low-Rank Layers: An Evidence Protocol Applied to Ephemeral FFN Cores, with Negative Results on Dynamic Capacity Allocation**, revised November 9, 2026. It presents the audit methodology for conditional low-rank layers as the primary contribution, with the negative dynamic-versus-static findings as the centerpiece results.
 
 Sole author: **Da Xu**, China Mobile Research Institute, xudayj@chinamobile.com.
 
