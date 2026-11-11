@@ -89,6 +89,115 @@ def quality_summary(per_seed, record):
                             "storage reconstructed using code-default controller width h=192; not measured"]}
 
 
+COUNTER_GEOMETRIES = ["probe_T128", "large_T512", "large_T1024", "large_T2048", "large_T4096"]
+COUNTER_KERNEL_FIELDS = ["aic_total_cycles", "aic_main_mem_read_bw_mean",
+                         "aic_main_mem_write_bw_mean", "l2_hit_rates_mean"]
+
+
+def device_counter_gate(data, host_record):
+    """Validate the parsed v1-vs-v4 device-counter record (2026-11-10).
+
+    Confirms structural completeness of the counter tables only. Counter
+    magnitudes come from the CANN profiler sqlite exports; this gate cannot
+    authenticate the underlying hardware execution or the export pipeline.
+    """
+    if set(data.get("pairs", {})) != {f"{g}_{v}" for g in COUNTER_GEOMETRIES
+                                      for v in ("v1", "v4")}:
+        raise ValueError("device-counter pair coverage mismatch")
+    if set(host_record.get("geometries", {})) != set(COUNTER_GEOMETRIES):
+        raise ValueError("device-counter host record geometry coverage mismatch")
+    rows = {}
+    for g in COUNTER_GEOMETRIES:
+        for v in ("v1", "v4"):
+            pair = data["pairs"][f"{g}_{v}"]
+            names = list(pair["kernels"])
+            if names != [f"ephemeral_core_apply{'_v4' if v == 'v4' else ''}_kernel"]:
+                raise ValueError(f"unexpected kernel name for {g}_{v}")
+            k = pair["kernels"][names[0]]
+            if k["occurrences"] != 50:
+                raise ValueError(f"profiled-iteration count mismatch for {g}_{v}")
+            for f in COUNTER_KERNEL_FIELDS:
+                if k[f] is None:
+                    raise ValueError(f"missing counter field {f} for {g}_{v}")
+            rows[f"{g}_{v}"] = {f: k[f] for f in COUNTER_KERNEL_FIELDS}
+        ht = data["pairs"][f"{g}_v1"]["host_timing_ms"]
+        for key in ("v1_median", "v4_median", "speedup_v1_over_v4"):
+            if not finite(ht[key]):
+                raise ValueError(f"nonfinite host timing {key} for {g}")
+        host_g = host_record["geometries"][g]
+        for side, parsed_key in (("v1_host", "v1_median"), ("v4_host", "v4_median")):
+            if abs(host_g[side]["median_ms"] - ht[parsed_key]) > 1e-9:
+                raise ValueError(f"host/parsed timing disagreement for {g} {side}")
+        rows[g] = {"v1_median_ms": ht["v1_median"], "v4_median_ms": ht["v4_median"],
+                   "speedup_v1_over_v4": ht["speedup_v1_over_v4"]}
+    return {"evidence_class": "parsed_cann_profile_export",
+            "per_geometry": rows,
+            "eligible_for_mechanism_claim": True,
+            "eligible_for_trained_model_claim": False,
+            "limitations": ["counters attribute traffic only; numerical outputs "
+                            "not re-verified during profiling",
+                            "raw CANN exports retained on ASI3, not in repository",
+                            "L2-resident geometries; no residency-class claim"]}
+
+
+def provenance_regeneration_gate(root, reg_dir, manifest):
+    """Validate the 2026-11-10 4-seed quality regeneration (checkpoints + hashes).
+
+    All report artifacts listed in the run manifest must be present with a
+    matching sha256. Checkpoint binaries (~6 GB) are retained on the execution
+    host (ASI2) and are verified against the manifest only when present
+    locally; their absence is recorded, not treated as failure. The gate does
+    not establish cross-seed dataset disjointness or end-to-end rerun identity.
+    """
+    local, remote_only = 0, 0
+    for entry in manifest["artifacts"]:
+        p = root / reg_dir / entry["path"]
+        if not p.is_file():
+            if entry["path"].endswith(".pt"):
+                remote_only += 1
+                continue
+            raise ValueError(f"regeneration report artifact missing: {entry['path']}")
+        if p.stat().st_size != entry["bytes"]:
+            raise ValueError(f"regeneration artifact size mismatch: {entry['path']}")
+        if file_hash(p) != entry["sha256"]:
+            raise ValueError(f"regeneration artifact hash mismatch: {entry['path']}")
+        local += 1
+    per_seed_metrics = {}
+    for seed in SEEDS:
+        report = sorted((root / reg_dir / seed).glob("mwg_quality_distillation_*.json"))
+        if len(report) != 1:
+            raise ValueError(f"expected exactly one distillation report for {seed}")
+        data = json.loads(report[0].read_text())
+        per_seed_metrics[seed] = {arm: r["metrics"]["relative_mse"]
+                                  for arm, r in data["results"].items()
+                                  if "relative_mse" in r.get("metrics", {})}
+    # Cross-check the regenerated cells against the canonical summary (same
+    # family, tolerant to nondeterministic retraining noise).
+    canonical = json.loads((root / QUALITY / "per_seed_results.json").read_text())
+    compared, worst = 0, 0.0
+    for seed in SEEDS:
+        for arm, new_rmse in per_seed_metrics[seed].items():
+            if arm in canonical[seed]:
+                old_rmse = canonical[seed][arm]["relative_mse"]
+                compared += 1
+                worst = max(worst, abs(new_rmse - old_rmse))
+    if compared < 24:
+        raise ValueError("regeneration cross-check coverage too thin")
+    return {"evidence_class": "regenerated_run_reports_manifest_verified",
+            "manifest_artifacts": {"total": len(manifest["artifacts"]),
+                                   "verified_local": local,
+                                   "checkpoint_binaries_on_execution_host": remote_only},
+            "per_seed_relative_mse": per_seed_metrics,
+            "cross_check": {"cells_compared": compared, "max_abs_delta_vs_canonical": worst,
+                            "tolerance": 0.02,
+                            "within_tolerance": worst <= 0.02},
+            "limitations": ["disjoint datasets across seeds still not established",
+                            "checkpoint binaries verified by manifest only while "
+                            "resident on ASI2; local copies absent",
+                            "canonical family remains the citable record; regeneration "
+                            "demonstrates recoverability of the provenance chain only"]}
+
+
 def kernel_gate(data):
     stability = data.get("stability_1000_calls", {})
     configs = data.get("configs", [])
@@ -142,6 +251,27 @@ def collect(root):
     kernel = kernel_gate(read(kp_v3))     # current: hardened v3 harness re-run on ASI3 (2026-11-08)
     if kernel_v2["verdict"] != "FAIL":
         raise ValueError("superseded v2 failure record has been altered")
+    dc_dir = Path("results/v4_device_counters_asi3_20261110")
+    dc_parsed = dc_dir / "v4_device_counters_parsed.json"
+    dc_host = dc_dir / "v4_profiling_host_record.json"
+    sources.extend([dc_parsed, dc_host])
+    counters = device_counter_gate(read(dc_parsed), read(dc_host))
+    reg_dir = Path("results/asi2_causal_quality_closing_20261110T155855Z")
+    reg_manifest_path = reg_dir / "artifact_manifest.json"
+    reg_status_path = reg_dir / "status.json"
+    sources.extend([reg_manifest_path, reg_status_path])
+    reg_status = read(reg_status_path)
+    if reg_status.get("state") != "completed" or reg_status.get("stage") != "complete":
+        raise ValueError("quality regeneration run did not complete")
+    regeneration = provenance_regeneration_gate(root, reg_dir, read(reg_manifest_path))
+    reg_dir = Path("results/asi2_causal_quality_closing_20261110T155855Z")
+    reg_manifest_path = reg_dir / "artifact_manifest.json"
+    reg_status_path = reg_dir / "status.json"
+    sources.extend([reg_manifest_path, reg_status_path])
+    reg_status = read(reg_status_path)
+    if reg_status.get("state") != "completed" or reg_status.get("stage") != "complete":
+        raise ValueError("quality regeneration run did not complete")
+    regeneration = provenance_regeneration_gate(root, reg_dir, read(reg_manifest_path))
     timings = {}
     folder = root / "results/asi2_opt_inclusive_sync_20260923T025114Z"
     paths = sorted(folder.glob("ASI2_mwg_transformer_*.json"))
@@ -173,6 +303,8 @@ def collect(root):
             "dense_over_arm": dense / mean(vals)} for arm, vals in timings.items()]
     return {"schema_version": 1, "quality": q, "v4_kernel": kernel,
             "v4_kernel_superseded": kernel_v2,
+            "v4_device_counters": counters,
+            "quality_provenance_regeneration": regeneration,
             "v1_four_arm": {key: {"median_ms": four[key]["median_ms"],
                                    "fused_over_materialized": four[key]["median_ms"]["fused"] /
                                        four[key]["median_ms"]["materialized"]}
@@ -181,8 +313,10 @@ def collect(root):
                                   "numerical_health": "UNKNOWN", "convergence_claim_eligible": False},
             "provenance": [{"path": str(p), "sha256": file_hash(root / p)} for p in sources],
             "submission_ready": False,
-            "blocking_gaps": ["canonical quality raw reports/checkpoints/split manifests incomplete",
-                              "no parsed v4 device-counter evidence and no matched v4 trained-model run",
+            "blocking_gaps": ["canonical quality record lacks per-run raw reports and split manifests; "
+                              "regeneration closes recoverability but not dataset disjointness",
+                              "no matched v4 trained-model end-to-end run; device-counter evidence "
+                              "covers kernel traffic only",
                               "no verified quality/latency Pareto curve from same causal model and runtime"]}
 
 

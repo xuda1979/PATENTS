@@ -25,8 +25,9 @@ the static alternative it must beat. A re-run multicore variant on a second
 device passes a hardened 1000-call stability gate with zero transient or
 persistent failures, sustaining $1.05$--$2.97\times$ speedups over the fused
 single-core kernel from $T{=}128$ to $4096$, a 26--66\% kernel-latency
-reduction at $T\ge512$; device-counter and trained-model
-evidence remain open. Fresh CPU tests of the actual causal FFN reduce
+reduction at $T\ge512$; parsed HBM/L2 device counters support a
+traffic-attribution reading of that speedup, while trained-model
+evidence remains open. Fresh CPU tests of the actual causal FFN reduce
 forward-retained nonparameter tensor storage by $13\times$ under
 checkpointing, with identical outputs and gradients in nine small synthetic
 fixtures. The methodology itself is the transferable contribution: every
@@ -480,9 +481,9 @@ Table~\ref{tab:evidence} makes the available evidence explicit.
 \toprule
 Evidence & Available artifacts & Supported scope \\
 \midrule
-Qwen FFN quality & Four per-seed summaries and duplicate aggregate record & Arithmetic and within-archive contrasts; original run provenance incomplete \\
+Qwen FFN quality & Four per-seed summaries and duplicate aggregate record; 2026-11-10 four-seed regeneration with manifest-hashed checkpoints & Arithmetic and within-archive contrasts; provenance recoverability demonstrated, dataset disjointness unestablished \\
 Four-arm v1 timing & One same-run summary per geometry & Recorded medians; no local per-iteration uncertainty \\
-Multicore v4 & Timing/equivalence records; failed stability record superseded by a passing hardened re-run (harness v3, 2026-11-08) & Repeated-call-validated operator speedups over single-core v1; no device counters, no trained-model claim \\
+Multicore v4 & Timing/equivalence records; failed stability record superseded by a passing hardened re-run (harness v3, 2026-11-08); parsed HBM/L2 counters (2026-11-10) & Repeated-call-validated operator speedups over single-core v1, corroborated by traffic-attribution counters; no trained-model claim \\
 DDP optimizer timing & Three complete JSON run reports & Short kernel-execution timings; numerical health unknown \\
 CPU checkpointing & New source, nine cases, hashes and tests & Actual-module saved-storage and gradient verification \\
 Algebra checks & New script and 50 seeded fixtures & Numerical consistency of identities; no model-quality evidence \\
@@ -532,7 +533,8 @@ after the failed v4 stability gate was resolved by the hardened re-run,
 the multicore kernel sustains $1.05$--$2.97\times$ lower operator latency
 than single-core execution at $T=128$--$4096$, with 26--66\%
 reduction at $T\ge512$ (Section~\ref{sec:fusion}); this is a kernel-latency
-result without device-counter or trained-model support. No measured result
+result, corroborated by parsed device counters for traffic attribution,
+but without trained-model support. No measured result
 in this section shows dynamic capacity allocation beating a static control
 at matched budget.
 
@@ -653,11 +655,24 @@ boundary is the \texttt{ephemeral\_core\_apply} custom operator alone,
 not the complete FFN of Table~\ref{tab:v1}; this is why its v1 column
 ($0.114$\,ms at $T{=}128$) is not comparable to the fused-FFN latency
 there ($0.823$\,ms). At $T\ge512$ the multicore kernel reduces
-single-core operator latency by 26--66\%. Claim boundaries remain:
-no parsed HBM/L2 device counters were collected for v4, so the speedup is
-a repeated-call-validated kernel-latency result rather than a
-memory-traffic claim, and no joint trained-model quality--latency
-comparison exists for v4.
+single-core operator latency by 26--66\%. A follow-up profiling run (2026-11-10,
+same device, same audited binaries; 50 profiled iterations per arm and
+geometry) parsed HBM and L2 counters from the CANN profiler exports: at
+$T\ge2048$ the multicore kernel issues lower per-task HBM write
+bandwidth ($0.38$--$0.43$ versus $0.59$\,GB/s) and fewer AIC cycles
+($15.5$M versus $18.9$M at $T{=}2048$), with both kernels
+L2-resident (hit rates $\ge0.9999$). These counters are consistent with
+the multicore epilogue restructuring and support a traffic-attribution
+reading of the speedup; they are per-task rates under profiler sampling,
+not a full traffic budget. During this profiling run the documented
+910B2 v1 transient output corruption reappeared in the one-shot
+equivalence check at $T{=}512$ and $T{=}4096$ (non-deterministic fp16
+overflow in the unmodulated reference path; the multicore kernel stayed
+finite); the canonical numerical evidence for v4 remains the 2026-11-08
+hardened record, and the counter rows are unaffected because traffic
+still moves. Claim boundaries remain: this is now a
+repeated-call-validated, counter-corroborated kernel-latency result, but
+no joint trained-model quality--latency comparison exists for v4.
 
 \begin{table}[t]
 \centering\small
@@ -757,8 +772,14 @@ from real-model experiments and from the proofs themselves.
 
 \section{Limitations and Decisive Follow-Up Experiments}
 The theoretical analysis is general within its stated architecture and
-scheduling assumptions. The available quality evidence is narrow and has
-incomplete execution provenance. The accelerator evidence comes from one device
+scheduling assumptions. The available quality evidence is narrow; its
+original per-run reports and split manifests remain absent from the
+canonical family, although a 2026-11-10 regeneration re-derived all four
+seed summaries end to end (checkpoints and per-seed reports
+manifest-hashed, regenerated relative MSE within $0.009$ of the archived
+values across all 36 shared cells), which closes provenance
+recoverability but not dataset disjointness across seeds. The
+accelerator evidence comes from one device
 family, with small repeat counts and different configurations for quality and
 systems probes. The new CPU experiment establishes a local software property.
 None of this is an unexpected gap: Q4, a simultaneous full-model
@@ -767,8 +788,9 @@ Section~\ref{sec:protocol}, and the evidence taxonomy of
 Table~\ref{tab:evidence} marked it unvalidated before any measurement was
 recomputed. The audit's contribution is making that status explicit and
 narrowing what remains: the failed v4 stability gate has been closed by the
-hardened re-run, so the remaining Q4 preconditions are parsed
-device-counter evidence and a matched trained-model run on the same
+hardened re-run, and parsed device-counter evidence (2026-11-10) now
+corroborates the multicore speedup's traffic attribution, so the
+remaining Q4 precondition is a matched trained-model run on the same
 artifact.
 
 A decisive next study should freeze a trained causal checkpoint, its tokenizer,
@@ -788,10 +810,9 @@ execution. Gate all timing claims on finite outputs, gradients where relevant,
 healthy repeated calls, and supported shapes/devices. Record device counters
 and distinguish logical transfers from DRAM measurements. Test true cached
 decode ($S=1$), prefill, varying batch sizes, and the serving stack if a serving
-claim is made. With stability already resolved
-(Section~\ref{sec:fusion}), the remaining precondition for a v4
-efficiency comparison is parsed device-counter evidence and a matched
-trained-model run.
+claim is made. With stability and device-counter attribution already
+resolved (Section~\ref{sec:fusion}), the remaining precondition for a v4
+efficiency comparison is a matched trained-model run.
 
 Finally, choose quality margins, primary workloads, repeat counts, and stopping
 rules before collecting the next comparison. A successful result requires both

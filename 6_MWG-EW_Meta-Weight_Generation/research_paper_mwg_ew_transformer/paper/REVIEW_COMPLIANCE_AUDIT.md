@@ -47,9 +47,9 @@ code/tests, revision response, and submission-readiness summary.
 
 | Package | Protocol status | Execution status |
 |---|---|---|
-| Four matched lifetime arms and device counters | Fully specified | **Pending** |
+| Four matched lifetime arms and device counters | Fully specified | **Partial**: matched two-arm (materialized/fused) v1 run validated 2026-11-08; parsed v1-vs-v4 kernel HBM/L2 counters collected 2026-11-10; four-arm lifetime device counters still pending |
 | Break-even/regime sweep with decomposed traffic ledger and plots | Fully specified after this audit | **Pending** |
-| Disjoint causal quality experiment and controls | Fully specified | **Pending** |
+| Disjoint causal quality experiment and controls | Fully specified | **Partial**: 4-seed regeneration with manifest-hashed checkpoints completed 2026-11-10 (canonical-family recoverability demonstrated); cross-seed dataset disjointness still pending |
 | Real causal whole-call branch-skipping router | Fully specified; deployable threshold no longer ranks future calls | **Pending** |
 | Training save/rematerialization lifecycle | Fully specified and inference-scoped until available | **Pending** |
 | End-to-end layer/model/training validation | Fully specified | **Pending** |
