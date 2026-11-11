@@ -1,6 +1,6 @@
 # MWG-EW Transformer research
 
-The current manuscript is **Auditing Conditional Low-Rank Layers: An Evidence Protocol Applied to Ephemeral FFN Cores, with Negative Results on Dynamic Capacity Allocation**, revised November 9, 2026. It presents the audit methodology for conditional low-rank layers as the primary contribution, with the negative dynamic-versus-static findings as the centerpiece results.
+The current manuscript is **Auditing Conditional Low-Rank Layers: An Evidence Protocol Applied to Ephemeral FFN Cores, with Negative Results on Dynamic Capacity Allocation**, revised November 11, 2026. It presents the audit methodology for conditional low-rank layers as the primary contribution, with the negative dynamic-versus-static findings as the centerpiece results.
 
 Sole author: **Da Xu**, China Mobile Research Institute, xudayj@chinamobile.com.
 
@@ -16,7 +16,7 @@ Sole author: **Da Xu**, China Mobile Research Institute, xudayj@chinamobile.com.
 
 ## What the revision establishes
 
-The paper derives a fixed-output-subspace error floor, a frozen-projection constant-core baseline, and a matched-schedule descriptor-transfer bound. The accounting code now separates scratch cardinality from global transfers. Archived quality and timing values are recomputed without claiming that hashes establish execution provenance. The v4 kernel's failed repeated-call test remains failed.
+The paper derives a fixed-output-subspace error floor, a frozen-projection constant-core baseline, and a matched-schedule descriptor-transfer bound. The accounting code now separates scratch cardinality from global transfers. Archived quality and timing values are recomputed without claiming that hashes establish execution provenance. The v4 kernel's original repeated-call failure is retained as a superseded record; the hardened v3 re-run (2026-11-08) passes 1000/1000 calls and is the current verdict, and parsed HBM/L2 device counters (2026-11-10) corroborate the multicore speedup's traffic attribution. No matched trained-model quality–latency run exists for v4.
 
 New CPU checks exercise the actual `LowRankFFN(token_diag_core)` implementation. Checkpointing retained 13× fewer unique nonparameter storage bytes in nine small synthetic cases, with exact output and gradient agreement. This is software evidence, not peak-memory, accelerator-speed, or trained-model-quality evidence.
 
