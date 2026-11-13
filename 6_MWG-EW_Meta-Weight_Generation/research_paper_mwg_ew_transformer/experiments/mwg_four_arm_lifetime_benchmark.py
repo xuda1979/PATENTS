@@ -38,8 +38,9 @@ import torch.nn as nn
 SCHEMA_VERSION = "mwg-four-arm-lifetime-v1"
 CONTRACT_SCHEMA_VERSION = 1
 FUSED_OP_QUALIFIED_NAME = "mwg::ephemeral_core_apply"
+V4_OP_QUALIFIED_NAME = "mwg::ephemeral_core_apply_v4"
 DEFAULT_ARMS = ("dense", "persistent", "materialized")
-ALL_ARMS = (*DEFAULT_ARMS, "fused")
+ALL_ARMS = (*DEFAULT_ARMS, "fused", "fused_v4")
 
 
 class FusedBackendUnavailable(RuntimeError):
@@ -183,6 +184,51 @@ def resolve_registered_fused_op() -> Callable[..., torch.Tensor]:
         raise FusedBackendUnavailable(
             f"compiled operator {FUSED_OP_QUALIFIED_NAME!r} is not registered"
         ) from exc
+
+
+def resolve_registered_v4_op() -> Callable[..., torch.Tensor]:
+    try:
+        namespace = getattr(torch.ops, "mwg")
+        packet = getattr(namespace, "ephemeral_core_apply_v4")
+        return getattr(packet, "default", packet)
+    except (AttributeError, RuntimeError) as exc:
+        raise FusedBackendUnavailable(
+            f"compiled operator {V4_OP_QUALIFIED_NAME!r} is not registered"
+        ) from exc
+
+
+def prepare_v4_backend(
+    device: torch.device,
+    op_library: str | Path,
+) -> tuple[Callable[..., torch.Tensor], dict[str, Any]]:
+    """Load the validated v4 multicore library.
+
+    Unlike the v1 fused arm there is no separate contract manifest: the v4
+    binary is the one validated by the hardened 2026-11-08 sweep, and its
+    identity is captured through the library hash recorded in the run report.
+    """
+    if device.type != "npu":
+        raise FusedBackendUnavailable(
+            "the fused_v4 multicore arm is restricted to an NPU custom op"
+        )
+    library = Path(op_library).expanduser().resolve()
+    if not library.is_file():
+        raise FusedBackendUnavailable(f"v4 op library not found: {library}")
+    try:
+        torch.ops.load_library(str(library))
+    except Exception as exc:
+        raise FusedBackendUnavailable(
+            f"failed to load compiled v4 op library: {exc}"
+        ) from exc
+    contract = {
+        "validated": True,
+        "arm4_executed": False,
+        "version": "v4_multicore",
+        "op_qualified_name": V4_OP_QUALIFIED_NAME,
+        "op_library": str(library),
+        "op_library_sha256": sha256_file(library),
+    }
+    return resolve_registered_v4_op(), contract
 
 
 def prepare_fused_backend(
@@ -640,6 +686,90 @@ class FusedNoStoreArm(GeneratedCoreBase):
         return down_rank @ self.down_v
 
 
+class FusedV4NoStoreArm(GeneratedCoreBase):
+    """Multicore (v4) variant of the no-store arm.
+
+    Same algebra and call signature as ``FusedNoStoreArm``; the only
+    difference is the compiled operator, which distributes the core
+    materialization and scaling across AICores instead of serializing on one.
+    """
+
+    def __init__(
+        self,
+        master: MasterWeights,
+        dtype: torch.dtype,
+        amplitude: float,
+        v4_op: Callable[..., torch.Tensor],
+        contract: Mapping[str, Any],
+    ):
+        super().__init__(master, dtype, amplitude)
+        self._v4_op = v4_op
+        self._v4_contract = dict(contract)
+
+    def apply(
+        self,
+        rank_activation: torch.Tensor,
+        controller_hidden: torch.Tensor,
+        weight: torch.Tensor,
+        bias: torch.Tensor,
+    ) -> torch.Tensor:
+        # The validated v4 binary requires a 2D [T, R] activation with T
+        # divisible by 64 (its binding reshapes with dim-0 fixed); flatten
+        # [B, S, R] to leading-token x feature exactly as the v1 binding does
+        # internally, then restore the original shape.
+        orig_shape = rank_activation.shape
+        act2d = rank_activation.reshape(-1, rank_activation.size(-1))
+        ctrl2d = controller_hidden.reshape(-1, controller_hidden.size(-1))
+        output2d = self._v4_op(
+            act2d,
+            ctrl2d,
+            weight,
+            bias,
+            self.amplitude,
+        )
+        if not isinstance(output2d, torch.Tensor):
+            raise RuntimeError("v4 custom op must return exactly one Tensor")
+        output = output2d.view(orig_shape)
+        if output.shape != rank_activation.shape:
+            raise RuntimeError(
+                f"v4 custom op returned shape {tuple(output.shape)}, expected "
+                f"{tuple(rank_activation.shape)}"
+            )
+        if (
+            output.dtype != rank_activation.dtype
+            or output.device != rank_activation.device
+        ):
+            raise RuntimeError(
+                "v4 custom op changed the rank activation dtype or device"
+            )
+        return output
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        controller_hidden = self.controller_hidden(x)
+        up_rank = self.apply(
+            x @ self.up_u,
+            controller_hidden,
+            self.controller_w2_up,
+            self.controller_b2_up,
+        )
+        gate_rank = self.apply(
+            x @ self.gate_u,
+            controller_hidden,
+            self.controller_w2_gate,
+            self.controller_b2_gate,
+        )
+        hidden = torch.nn.functional.silu(gate_rank @ self.gate_v) * (
+            up_rank @ self.up_v
+        )
+        down_rank = self.apply(
+            hidden @ self.down_u,
+            controller_hidden,
+            self.controller_w2_down,
+            self.controller_b2_down,
+        )
+        return down_rank @ self.down_v
+
+
 def module_state_bytes(module: nn.Module) -> int:
     tensors = list(module.parameters()) + list(module.buffers())
     return sum(tensor.numel() * tensor.element_size() for tensor in tensors)
@@ -779,6 +909,7 @@ def make_arm(
     dtype: torch.dtype,
     amplitude: float,
     fused_backend: tuple[Callable[..., torch.Tensor], Mapping[str, Any]] | None,
+    v4_backend: tuple[Callable[..., torch.Tensor], Mapping[str, Any]] | None = None,
 ) -> nn.Module:
     if name == "dense":
         return DenseArm(master, dtype)
@@ -791,6 +922,11 @@ def make_arm(
             raise FusedBackendUnavailable("fused backend was not prepared")
         op, contract = fused_backend
         return FusedNoStoreArm(master, dtype, amplitude, op, contract)
+    if name == "fused_v4":
+        if v4_backend is None:
+            raise FusedBackendUnavailable("v4 multicore backend was not prepared")
+        op, contract = v4_backend
+        return FusedV4NoStoreArm(master, dtype, amplitude, op, contract)
     raise ValueError(name)
 
 
@@ -807,6 +943,7 @@ def run_benchmark(
     manifest_path: str | Path | None = None,
     op_library: str | Path | None = None,
     registration_module: str | Path | None = None,
+    v4_op_library: str | Path | None = None,
     run_label: str = "",
     counter_metric: str = "",
     counter_pair_id: str = "",
@@ -827,13 +964,28 @@ def run_benchmark(
         )
         contract = dict(fused_backend[1])
         contract["arm4_executed"] = False
+    v4_backend = None
+    v4_contract: dict[str, Any] = {
+        "validated": False,
+        "arm4_executed": False,
+        "reason": "fused_v4 arm not selected",
+    }
+    if "fused_v4" in selected_arms:
+        if v4_op_library is None:
+            raise FusedBackendUnavailable(
+                "the fused_v4 arm requires --v4-op-library"
+            )
+        v4_backend = prepare_v4_backend(device, v4_op_library)
+        v4_contract = dict(v4_backend[1])
+        v4_contract["arm4_executed"] = False
 
     outputs: dict[str, torch.Tensor] = {}
     results: dict[str, Any] = {}
 
     # A fused-only counter pass still gets a materialized semantic reference,
     # but that reference is deleted before warmup and is never labeled an arm.
-    if "fused" in selected_arms and "materialized" not in selected_arms:
+    fused_style_arms = {"fused", "fused_v4"} & set(selected_arms)
+    if fused_style_arms and "materialized" not in selected_arms:
         reference = (
             MaterializedCoreArm(master, dtype, config.amplitude).to(device).eval()
         )
@@ -843,7 +995,14 @@ def run_benchmark(
 
     for arm_name in selected_arms:
         module = (
-            make_arm(arm_name, master, dtype, config.amplitude, fused_backend)
+            make_arm(
+                arm_name,
+                master,
+                dtype,
+                config.amplitude,
+                fused_backend,
+                v4_backend,
+            )
             .to(device)
             .eval()
         )
@@ -877,6 +1036,13 @@ def run_benchmark(
         elif arm_name == "materialized":
             result["lifetime"] = "generated_core_ordinary_global_framework_tensor"
             result["representation"] = "persistent_UV_plus_token_local_diagonal_core"
+        elif arm_name == "fused_v4":
+            result["lifetime"] = "compiled_no_store_contract_multicore"
+            result["representation"] = (
+                "same_UV_controller_and_core_semantics_as_materialized_multicore"
+            )
+            result["backend_contract"] = v4_contract
+            v4_contract["arm4_executed"] = True
         else:
             result["lifetime"] = "compiled_no_store_contract"
             result["representation"] = (
@@ -903,6 +1069,19 @@ def run_benchmark(
                 "compiled fused op failed materialized-core equivalence: "
                 + json.dumps(validations["materialized_vs_fused"], sort_keys=True)
             )
+    if "fused_v4" in outputs and fused_reference is not None:
+        validations["materialized_vs_fused_v4"] = error_metrics(
+            outputs["fused_v4"], fused_reference, rtol, atol
+        )
+        if not validations["materialized_vs_fused_v4"]["passed"]:
+            raise RuntimeError(
+                "compiled v4 op failed materialized-core equivalence: "
+                + json.dumps(validations["materialized_vs_fused_v4"], sort_keys=True)
+            )
+    if "fused" in outputs and "fused_v4" in outputs:
+        validations["fused_vs_fused_v4"] = error_metrics(
+            outputs["fused_v4"], outputs["fused"], rtol, atol
+        )
 
     element_bytes = torch.empty((), dtype=dtype).element_size()
     core_elements = 3 * config.tokens * config.rank
@@ -939,7 +1118,8 @@ def run_benchmark(
         "validations": validations,
         "claim_boundary": {
             "arm4_implemented_in_repository": False,
-            "arm4_execution_observed": bool(contract.get("arm4_executed")),
+            "arm4_execution_observed": bool(contract.get("arm4_executed"))
+            or bool(v4_contract.get("arm4_executed")),
             "hardware_counter_complete": False,
             "no_store_claim_ready": False,
             "reason": (
@@ -974,6 +1154,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--fused-contract-manifest")
     parser.add_argument("--op-library")
     parser.add_argument("--fused-registration-module")
+    parser.add_argument("--v4-op-library")
     parser.add_argument("--run-label", default="")
     parser.add_argument("--counter-metric", default="")
     parser.add_argument("--counter-pair-id", default="")
@@ -1030,6 +1211,7 @@ def main() -> None:
             manifest_path=args.fused_contract_manifest,
             op_library=args.op_library,
             registration_module=args.fused_registration_module,
+            v4_op_library=args.v4_op_library,
             run_label=args.run_label,
             counter_metric=args.counter_metric,
             counter_pair_id=args.counter_pair_id,

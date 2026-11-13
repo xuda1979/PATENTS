@@ -198,6 +198,179 @@ def provenance_regeneration_gate(root, reg_dir, manifest):
                             "demonstrates recoverability of the provenance chain only"]}
 
 
+FLOORS_PATH = Path("results/asi2_causal_quality_closing_20261110T155855Z/floors_and_constant_core.json")
+
+
+def floors_and_constant_core_gate(root, data):
+    """Validate the Theorem-1 floors + Proposition-1 constant-core eval.
+
+    The evaluation (2026-11-11, ASI2 CPU) recomputes the five per-rank
+    checkpoints' token and frozen-core FFN outputs on the regeneration eval
+    activations.  Cross-check the recorded token relative MSE against the
+    archived per-seed reports (tolerance well above any subset-vs-full
+    mismatch); require the dynamic controller's frozen-core penalty to be
+    small (not a quality claim, just a sanity bound on the evaluation).
+    """
+    rows = data["rows"]
+    if len(rows) != 5 * 4:
+        raise ValueError("floor eval missing per-seed rows")
+    if data.get("calibration_split") != "train":
+        raise ValueError("floor eval must calibrate on train splits")
+    tail = {t["rank"]: t["tail_energy_relmse"] for t in data["tail_floors"]}
+    if set(tail) != {384, 401, 512} or not all(finite(v) and 0 <= v for v in tail.values()):
+        raise ValueError("invalid rank-tail floors")
+    # Cross-check token relmse per (seed, arm) against the archived report.
+    expected = {}
+    for seed in SEEDS:
+        report = sorted((root / "results/asi2_causal_quality_closing_20261110T155855Z" / seed)
+                        .glob("mwg_quality_distillation_*.json"))
+        if len(report) != 1:
+            raise ValueError(f"expected one contraction report for {seed}")
+        cells = json.loads(report[0].read_text())["results"]
+        for arm in ["mwg_token_diag_core", "persistent_low_rank"]:
+            for rank in RANKS:
+                key = f"{arm}_r{rank}"
+                if key in cells:
+                    expected[f"{seed}/{key}"] = cells[key]["metrics"]["relative_mse"]
+    compared, worst = 0, 0.0
+    for row in rows:
+        seed_name = row["seed"] if isinstance(row["seed"], str) else f"seed_{row['seed']}"
+        key = f"{seed_name}/{row['name']}"
+        if key in expected:
+            compared += 1
+            worst = max(worst, abs(row["token_relmse"] - expected[key]))
+    if compared < 16:
+        raise ValueError("floor eval cross-coverage too thin")
+    for row in rows:
+        for field in ("token_relmse", "constant_core_relmse", "mean_core_relmse",
+                      "subspace_relmse", "rank_tail_relmse"):
+            v = row[field]
+            if not finite(v) or v < 0:
+                raise ValueError(f"invalid floor-eval metric {field}")
+    return {"evidence_class": "floors_and_constant_core_recomputed",
+            "cross_check": {"cells_compared": compared, "max_abs_delta_vs_archive": worst},
+            "tail_floors": data["tail_floors"],
+            "rows": rows,
+            "report_hash": data["report_hash"],
+            "limitations": ["new evaluation of 2026-11-10 checkpoints on CPU; "
+                            "no re-execution of training",
+                            "constant-core calibration on train splits fixes "
+                            "out-of-sample eval behavior only",
+                            "rank-floor is an Eckart-Young lower bound on the "
+                            "teacher output, not a matched subspace lower bound"]}
+
+
+SWEEP_ARMS = ["dense", "persistent", "materialized", "fused", "fused_v4"]
+SWEEP_GEOMETRIES = ["T128", "T512", "T1024", "T2048", "T4096"]
+
+
+def complete_ffn_sweep_gate(root):
+    """Gate the 2026-11-12 complete-FFN five-arm v4 sweep.
+
+    The sweep (ASI3, five geometries) extends the kernel-only v1-vs-v4
+    record to the complete FFN timing boundary.  Require all five
+    geometries, all five arms, finite medians, and all four numerical
+    validations passing at every geometry; cross-check the local
+    sweep_summary against the sha256 recorded in the provenance digest.
+    """
+    sweep_dir = root / "results/asi3_complete_ffn_v4_sweep_20261112"
+    summary = json.loads((sweep_dir / "sweep_summary.json").read_text())
+    digest = json.loads((sweep_dir / "provenance_digest.json").read_text())
+    local_sha = file_hash(sweep_dir / "sweep_summary.json")
+    recorded = digest["remote_file_sha256"]["sweep_summary.json"].split(" ")[0]
+    if local_sha != recorded:
+        raise ValueError("sweep summary hash mismatch vs provenance digest")
+    rows = []
+    for entry in summary:
+        geom = entry["geometry"]
+        if geom not in SWEEP_GEOMETRIES:
+            raise ValueError(f"unexpected geometry {geom}")
+        for arm in SWEEP_ARMS:
+            if not finite(entry[arm]) or entry[arm] <= 0:
+                raise ValueError(f"invalid median for {geom}/{arm}")
+        for name, passed in entry["validations"].items():
+            if passed is not True:
+                raise ValueError(f"validation {name} failed at {geom}")
+        rows.append({"geometry": geom, "batch": entry["batch"], "seq": entry["seq"],
+                     "tokens": entry["tokens"],
+                     "dense_ms": entry["dense"], "persistent_ms": entry["persistent"],
+                     "materialized_ms": entry["materialized"], "fused_ms": entry["fused"],
+                     "fused_v4_ms": entry["fused_v4"],
+                     "fused_over_fused_v4": entry["fused"] / entry["fused_v4"]})
+    if [r["geometry"] for r in rows] != SWEEP_GEOMETRIES:
+        raise ValueError("sweep geometries incomplete or out of order")
+    return {"evidence_class": "complete_ffn_sweep_verified",
+            "arm_set": SWEEP_ARMS,
+            "rows": rows,
+            "claim_boundary": digest["claim_boundary"],
+            "limitations": digest["limitations"],
+            "sha256_summary": local_sha}
+
+
+PAIRED_CONTROL_PATH = Path("results/asi2_shuffled_paired_regen_20261112/shuffled_context_summary.json")
+PAIRED_CELLS_PATH = Path("results/asi2_shuffled_paired_regen_20261112/paired_cells.json")
+
+
+def paired_shuffled_control_gate(root):
+    """Validate the 2026-11-12 same-run paired shuffled-context control.
+
+    The run re-trains token and shuffled students in one process per seed
+    on the regeneration's teacher and activation caches.  Require all 8
+    shuffled summary rows (4 seeds x ranks 384/401) with finite metrics
+    plus the 4 per-seed paired-cell records; contrasts are computed
+    within the same run (token minus shuffled) so that run-level noise
+    cancels.  Mixing cells from independent runs (regeneration token
+    minus paired-run shuffled) would not be a valid contrast estimate.
+    """
+    data = json.loads((root / PAIRED_CONTROL_PATH).read_text())
+    rows = data["rows"]
+    if len(rows) != 8:
+        raise ValueError("paired control requires 8 shuffled rows")
+    by_key = {(r["seed"], r["rank"]): r["relative_mse"] for r in rows}
+    if len(by_key) != 8:
+        raise ValueError("paired control rows not unique per (seed, rank)")
+    for v in by_key.values():
+        if not finite(v) or v <= 0:
+            raise ValueError("invalid paired-control relative MSE")
+    cells = json.loads((root / PAIRED_CELLS_PATH).read_text())
+    if cells.get("kind") != "paired_shuffled_control_cells_v1":
+        raise ValueError("unexpected paired-cells record kind")
+    cell_rows = cells["rows"]
+    expected_seeds = {int(s.rsplit("_", 1)[1]) for s in SEEDS}
+    if len(cell_rows) != 4 or {r["seed"] for r in cell_rows} != expected_seeds:
+        raise ValueError("paired cells require exactly one row per seed")
+    for r in cell_rows:
+        for rank in (384, 401):
+            if r[f"mwg_shuffled_diag_core_r{rank}"] != by_key[(r["seed"], rank)]:
+                raise ValueError(f"summary shuffled cell diverges from paired run at seed {r['seed']}")
+            if not (finite(r[f"mwg_token_diag_core_r{rank}"]) and r[f"mwg_token_diag_core_r{rank}"] > 0):
+                raise ValueError("invalid paired-run token cell")
+    contrasts = {}
+    for rank in (384, 401):
+        diffs = [r[f"mwg_token_diag_core_r{rank}"] - r[f"mwg_shuffled_diag_core_r{rank}"]
+                 for r in sorted(cell_rows, key=lambda r: r["seed"])]
+        m = mean(diffs)
+        sd = stdev(diffs)
+        half_width = T975_DF3 * sd / 2
+        contrasts[rank] = {"mean": m, "sample_sd": sd, "per_seed": diffs,
+                           "descriptive_t95_interval": [m - half_width, m + half_width]}
+    # Replication check vs archived family contrasts (tolerance 0.0003
+    # in the mean; archived: -0.000208 / -0.000196).
+    archived = {384: -0.000208, 401: -0.000196}
+    for rank, target in archived.items():
+        if abs(contrasts[rank]["mean"] - target) > 3.0e-4:
+            raise ValueError(f"paired control failed replication at rank {rank}: "
+                             f"{contrasts[rank]['mean']:+.6f} vs archived {target:+.6f}")
+    return {"evidence_class": "paired_shuffled_control_replicated",
+            "contrasts": contrasts,
+            "rows": rows,
+            "limitations": ["same-run pairs only; cross-run pairing of independently "
+                            "trained students is not a valid contrast estimate",
+                            "two ranks re-run (384, 401); archived rank-512 contrast "
+                            "not re-established",
+                            "descriptive intervals over four seeds; no population claim"]}
+
+
 def kernel_gate(data):
     stability = data.get("stability_1000_calls", {})
     configs = data.get("configs", [])
@@ -264,14 +437,14 @@ def collect(root):
     if reg_status.get("state") != "completed" or reg_status.get("stage") != "complete":
         raise ValueError("quality regeneration run did not complete")
     regeneration = provenance_regeneration_gate(root, reg_dir, read(reg_manifest_path))
-    reg_dir = Path("results/asi2_causal_quality_closing_20261110T155855Z")
-    reg_manifest_path = reg_dir / "artifact_manifest.json"
-    reg_status_path = reg_dir / "status.json"
-    sources.extend([reg_manifest_path, reg_status_path])
-    reg_status = read(reg_status_path)
-    if reg_status.get("state") != "completed" or reg_status.get("stage") != "complete":
-        raise ValueError("quality regeneration run did not complete")
-    regeneration = provenance_regeneration_gate(root, reg_dir, read(reg_manifest_path))
+    floors = floors_and_constant_core_gate(root, read(FLOORS_PATH))
+    sources.append(FLOORS_PATH)
+    sweep = complete_ffn_sweep_gate(root)
+    sweep_dir_rel = Path("results/asi3_complete_ffn_v4_sweep_20261112")
+    sources.extend([sweep_dir_rel / "sweep_summary.json",
+                    sweep_dir_rel / "provenance_digest.json"])
+    paired_control = paired_shuffled_control_gate(root)
+    sources.extend([PAIRED_CONTROL_PATH, PAIRED_CELLS_PATH])
     timings = {}
     folder = root / "results/asi2_opt_inclusive_sync_20260923T025114Z"
     paths = sorted(folder.glob("ASI2_mwg_transformer_*.json"))
@@ -305,6 +478,9 @@ def collect(root):
             "v4_kernel_superseded": kernel_v2,
             "v4_device_counters": counters,
             "quality_provenance_regeneration": regeneration,
+            "floors_and_constant_core": floors,
+            "complete_ffn_sweep": sweep,
+            "paired_shuffled_control": paired_control,
             "v1_four_arm": {key: {"median_ms": four[key]["median_ms"],
                                    "fused_over_materialized": four[key]["median_ms"]["fused"] /
                                        four[key]["median_ms"]["materialized"]}
@@ -348,6 +524,41 @@ def emit_tables(summary, folder):
             for r in summary["v4_kernel"]["observed_timing_only"]]
     table("journal_multicore_rows.tex", "rrrr",
           "Tokens & v1 single-core op (ms) & v4 multicore op (ms) & Ratio", rows)
+    floor_rows = summary["floors_and_constant_core"]["rows"]
+    if not floor_rows:
+        raise ValueError("refusing to emit floors table without rows")
+    def agg(field, arm):
+        vals = [r[field] for r in floor_rows if r["name"] == arm]
+        if not vals:
+            return float("nan")
+        return mean(vals)
+    display = {"mwg_token_diag_core": "Token controller", "persistent_low_rank": "Trained persistent"}
+    order = [f"persistent_low_rank_r{r}" for r in RANKS] + [f"mwg_token_diag_core_r{r}" for r in RANKS if r != 512]
+    lines = []
+    for arm in order:
+        rank = int(arm.rsplit("_r", 1)[1])
+        name = display.get(arm.rsplit("_r", 1)[0], arm)
+        lines.append(
+            f"{name} & {rank} & ${agg('token_relmse', arm):.6f}$ & ${agg('constant_core_relmse', arm):.6f}$"
+            f" & ${agg('mean_core_relmse', arm):.6f}$ & ${agg('subspace_relmse', arm):.6f}$"
+            f" & ${agg('rank_tail_relmse', arm):.6f}$ \\\\"
+        )
+    table("journal_floors_rows.tex", "llrrrrr",
+          "Model & Rank & Token ctl. & Const.-core & Mean-core & Subspace & Rank tail",
+          lines)
+    sweep_rows = summary["complete_ffn_sweep"]["rows"]
+    if not sweep_rows:
+        raise ValueError("refusing to emit complete-FFN sweep table without rows")
+    lines = []
+    for r in sweep_rows:
+        lines.append(
+            f"{r['tokens']} & ${r['dense_ms']:.3f}$ & ${r['persistent_ms']:.3f}$"
+            f" & ${r['materialized_ms']:.3f}$ & ${r['fused_ms']:.3f}$ & ${r['fused_v4_ms']:.3f}$"
+            f" & ${r['fused_over_fused_v4']:.2f}$ \\\\"
+        )
+    table("journal_complete_ffn_sweep_rows.tex", "rrrrrrr",
+          "Tokens & Dense (ms) & Persistent (ms) & Materialized (ms) & Fused v1 (ms) & Fused v4 (ms) & v1/v4",
+          lines)
 
 
 def main():

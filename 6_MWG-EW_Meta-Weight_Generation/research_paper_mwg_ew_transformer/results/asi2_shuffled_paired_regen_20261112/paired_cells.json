@@ -1,0 +1,33 @@
+{
+ "kind": "paired_shuffled_control_cells_v1",
+ "rows": [
+  {
+   "mwg_shuffled_diag_core_r384": 0.4477996826171875,
+   "mwg_shuffled_diag_core_r401": 0.43831199407577515,
+   "mwg_token_diag_core_r384": 0.44751009345054626,
+   "mwg_token_diag_core_r401": 0.4379388391971588,
+   "seed": 2026
+  },
+  {
+   "mwg_shuffled_diag_core_r384": 0.44728296995162964,
+   "mwg_shuffled_diag_core_r401": 0.4377759099006653,
+   "mwg_token_diag_core_r384": 0.4470211863517761,
+   "mwg_token_diag_core_r401": 0.4375081956386566,
+   "seed": 2027
+  },
+  {
+   "mwg_shuffled_diag_core_r384": 0.44894513487815857,
+   "mwg_shuffled_diag_core_r401": 0.43931472301483154,
+   "mwg_token_diag_core_r384": 0.4487169682979584,
+   "mwg_token_diag_core_r401": 0.4390496015548706,
+   "seed": 2028
+  },
+  {
+   "mwg_shuffled_diag_core_r384": 0.4485323131084442,
+   "mwg_shuffled_diag_core_r401": 0.43901509046554565,
+   "mwg_token_diag_core_r384": 0.44835561513900757,
+   "mwg_token_diag_core_r401": 0.43876662850379944,
+   "seed": 2029
+  }
+ ]
+}

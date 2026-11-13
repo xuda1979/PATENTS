@@ -1,0 +1,87 @@
+[
+  {
+    "geometry": "T128",
+    "batch": 1,
+    "seq": 128,
+    "tokens": 128,
+    "dense": 0.4596305,
+    "persistent": 0.2899835,
+    "materialized": 0.907886,
+    "fused": 0.914166,
+    "fused_v4": 0.997807,
+    "validations": {
+      "dense_vs_persistent_factorization": true,
+      "materialized_vs_fused": true,
+      "materialized_vs_fused_v4": true,
+      "fused_vs_fused_v4": true
+    }
+  },
+  {
+    "geometry": "T512",
+    "batch": 16,
+    "seq": 32,
+    "tokens": 512,
+    "dense": 1.013777,
+    "persistent": 0.286258,
+    "materialized": 0.9360360000000001,
+    "fused": 1.0534530000000002,
+    "fused_v4": 1.041933,
+    "validations": {
+      "dense_vs_persistent_factorization": true,
+      "materialized_vs_fused": true,
+      "materialized_vs_fused_v4": true,
+      "fused_vs_fused_v4": true
+    }
+  },
+  {
+    "geometry": "T1024",
+    "batch": 16,
+    "seq": 64,
+    "tokens": 1024,
+    "dense": 1.6844955,
+    "persistent": 0.2601285,
+    "materialized": 0.848596,
+    "fused": 1.150369,
+    "fused_v4": 1.105378,
+    "validations": {
+      "dense_vs_persistent_factorization": true,
+      "materialized_vs_fused": true,
+      "materialized_vs_fused_v4": true,
+      "fused_vs_fused_v4": true
+    }
+  },
+  {
+    "geometry": "T2048",
+    "batch": 16,
+    "seq": 128,
+    "tokens": 2048,
+    "dense": 3.31697,
+    "persistent": 0.437551,
+    "materialized": 0.949502,
+    "fused": 1.5956345,
+    "fused_v4": 1.2098200000000001,
+    "validations": {
+      "dense_vs_persistent_factorization": true,
+      "materialized_vs_fused": true,
+      "materialized_vs_fused_v4": true,
+      "fused_vs_fused_v4": true
+    }
+  },
+  {
+    "geometry": "T4096",
+    "batch": 16,
+    "seq": 256,
+    "tokens": 4096,
+    "dense": 6.126904,
+    "persistent": 0.8789155,
+    "materialized": 1.414067,
+    "fused": 2.680473,
+    "fused_v4": 1.8258869999999998,
+    "validations": {
+      "dense_vs_persistent_factorization": true,
+      "materialized_vs_fused": true,
+      "materialized_vs_fused_v4": true,
+      "fused_vs_fused_v4": true
+    }
+  }
+]

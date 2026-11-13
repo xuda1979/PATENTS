@@ -1,0 +1,100 @@
+{
+  "kind": "asi3_complete_ffn_v4_sweep_provenance_v1",
+  "run_date": "2026-11-12",
+  "host": "ASI3 (Ascend 910B2 x8), NPU 0, CANN 8.5.0, torch 2.9.0 + torch_npu, python 3.11.14",
+  "remote_base": "/root/work/filestorage/mwg-ew-transformer-research/results/asi3_complete_ffn_v4_sweep_20261112",
+  "harness": "experiments/mwg_four_arm_lifetime_benchmark.py (five-arm extension, working-tree version committed alongside this evidence)",
+  "sweep_log": "asi3_complete_ffn_v4_sweep_20261112.log (retained on ASI3; first invocation failed pre-timing on T-divisibility input validation at T=128, corrected by batch/seq flattening to token-major layout and re-run clean)",
+  "geometry": {
+    "d": 4096,
+    "m": 14336,
+    "rank": 128,
+    "controller_hidden": 128,
+    "dtype": "fp16",
+    "amplitude": 0.05,
+    "seed": 1234,
+    "token_grid": {
+      "T128": {"batch": 1, "seq": 128},
+      "T512": {"batch": 2, "seq": 256},
+      "T1024": {"batch": 4, "seq": 256},
+      "T2048": {"batch": 8, "seq": 256},
+      "T4096": {"batch": 16, "seq": 256}
+    }
+  },
+  "arms": ["dense", "persistent", "materialized", "fused", "fused_v4"],
+  "timing_protocol": {
+    "warmup": 30,
+    "iters": 200,
+    "repeats": 5,
+    "timer": "host_perf_counter_ns_with_device_synchronize",
+    "reported_statistic": "median over 5 repeats of per-repeat median over 200 iters",
+    "inference_only": true
+  },
+  "arm_semantics": {
+    "dense": "durable dense weights (exact product of shared factors; control for representation/execution, not an independent full-rank checkpoint)",
+    "persistent": "durable low-rank factors, no generated core",
+    "materialized": "generated core as ordinary global framework tensor",
+    "fused": "compiled no-store contract (v1 single-core AscendC, ub_local_tensor core residency)",
+    "fused_v4": "compiled no-store contract (v4 multicore, mwg::ephemeral_core_apply_v4)"
+  },
+  "backend_contracts": {
+    "fused": {
+      "manifest_sha256": "a98b86d84fb9b4d9b908e558c43f573677503078ce9ea12fe7cb5112fca5faa1",
+      "op_library": "/root/work/mwg_torch_ext/build/libcustom_ops.so",
+      "binary_sha256": "ed7c7999c92341dae148c2703c00dedeacfba66403fe177d44af2b33ff0b7de7",
+      "audited_source_sha256": "9a55e8ab6e1f3f6cba4264b6c990a941acea90f424ea73a37a15aaab5e97eff9",
+      "op_qualified_name": "mwg::ephemeral_core_apply",
+      "implementation": "ascendc",
+      "core_residency": "ub_local_tensor",
+      "workspace_bytes": 0,
+      "static_contract_only": true
+    },
+    "fused_v4": {
+      "op_qualified_name": "mwg::ephemeral_core_apply_v4",
+      "op_library": "/root/work/mwg_v4_torch_ext/build/libcustom_ops_v4.so",
+      "op_library_sha256": "cf21a40cbe821d5dd04e12d3a98241f6ba43eac70318006b6b7a4a184534de50",
+      "version": "v4_multicore"
+    }
+  },
+  "per_geometry_output_sha256_fp32_T4096": {
+    "dense": "0437a5b13565100fcb7bb0bc96839ae4ebe224b1227e3b3d41a406fc95ef24b6",
+    "persistent": "67fc1483b25974282d42916d472989291bc60d3871c2de971b9b4c5e645617ec",
+    "materialized": "1bfd0f6745c824aeb79328053eb689c7227e8847f6aff02c8923e92c35b377f8",
+    "fused": "49a43a575366ed49948d101ab089cd63e0cb366940e2be09506efa551c81c6aa",
+    "fused_v4": "49a43a575366ed49948d101ab089cd63e0cb366940e2be09506efa551c81c6aa"
+  },
+  "remote_file_sha256": {
+    "five_arm_T128.json": "7325e1200fae3d1ba79de677c31639264fd52ff17e8f97b57eec5b7126178c60 (240798 bytes)",
+    "five_arm_T512.json": "67d9f1e1d857fcde5e2b029c8d73e99642f6ef3305b33ecfa2faa8e35e12b6a0",
+    "five_arm_T1024.json": "34ee81d0f7cf410093992bdafa5b0294c8d75e01b5b3380cd693951b845483fc",
+    "five_arm_T2048.json": "e8fefd2eb2c7bed1ecb66b5d6804a5174bd79560f470cb8ba9baa76a6c32baac",
+    "five_arm_T4096.json": "7b37537528b1c0d166dd4fb8f9b6ca4c279ead1b58152b0dc4b67136ee6abdd5",
+    "sweep_summary.json": "424228741912972c1ccea6dc87fd9edfba3587e987e190a2b449aa21fc7f8e9b"
+  },
+  "validations_all_geometries": {
+    "dense_vs_persistent_factorization": "passed at all 5 geometries (max_abs <= 0.00390625, rtol=atol=0.005)",
+    "materialized_vs_fused": "passed at all 5 geometries",
+    "materialized_vs_fused_v4": "passed at all 5 geometries",
+    "fused_vs_fused_v4": "passed at all 5 geometries (T4096 max_abs = 0.0, exact fp16 match)",
+    "note": "per-geometry per-validation max_abs/mean_abs/max_rel recorded in remote five_arm_*.json"
+  },
+  "claim_boundary": {
+    "arm4_implemented_in_repository": false,
+    "arm4_execution_observed": true,
+    "hardware_counter_complete": false,
+    "no_store_claim_ready": false,
+    "reason": "A validated compiled-op execution is necessary but not sufficient. Parsed arm-3/arm-4 HBM and L2 counters are still required."
+  },
+  "local_files": {
+    "sweep_summary.json": "fetched 2026-11-12 via gzip+base64 terminal transfer; local md5 3a010fd3a24bc0ebcd5aee9473debac6 = remote md5 3a010fd3a24bc0ebcd5aee9473debac6; local sha256 424228741912972c1ccea6dc87fd9edfba3587e987e190a2b449aa21fc7f8e9b = remote sha256 424228741912972c1ccea6dc87fd9edfba3587e987e190a2b449aa21fc7f8e9b",
+    "README.md": "this directory's provenance and claim-boundary record",
+    "provenance_digest.json": "this file"
+  },
+  "limitations": [
+    "Synthetic factor-generated weights (amplitude 0.05, seed 1234); not a trained model",
+    "Inference-only timing; no optimizer state or gradient flow",
+    "Host-wall timing with device synchronize; no device-side cycle counter",
+    "Raw five_arm_*.json records retained on ASI3 only; sha256 digests recorded above",
+    "Hardware counters for fused_v4 complete-FFN are not yet parsed (kernel-level counters exist from 2026-11-10 record)"
+  ]
+}

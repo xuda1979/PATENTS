@@ -420,6 +420,458 @@
       "canonical family remains the citable record; regeneration demonstrates recoverability of the provenance chain only"
     ]
   },
+  "floors_and_constant_core": {
+    "evidence_class": "floors_and_constant_core_recomputed",
+    "cross_check": {
+      "cells_compared": 20,
+      "max_abs_delta_vs_archive": 0.0009807944297790527
+    },
+    "tail_floors": [
+      {
+        "rank": 384,
+        "tail_energy_relmse": 0.29563507437705994
+      },
+      {
+        "rank": 401,
+        "tail_energy_relmse": 0.2848970293998718
+      },
+      {
+        "rank": 512,
+        "tail_energy_relmse": 0.22327978909015656
+      }
+    ],
+    "rows": [
+      {
+        "constant_core_relmse": 0.4456879794597626,
+        "mean_core_relmse": 0.44534844160079956,
+        "model_digest": "003c40607d6922c2f7441dd672d34730393e61fc9519d9266d4565f532e1a22f",
+        "name": "mwg_token_diag_core_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2026,
+        "subspace_relmse": 0.32426726818084717,
+        "token_minus_constant_core": 0.0006863176822662354,
+        "token_relmse": 0.4463742971420288
+      },
+      {
+        "constant_core_relmse": 0.4359494745731354,
+        "mean_core_relmse": 0.4356352984905243,
+        "model_digest": "2fee481fbe176d0917cb9ab8a10b8e90f3b89de6cd3fde3a4305347726d50103",
+        "name": "mwg_token_diag_core_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2026,
+        "subspace_relmse": 0.31357306241989136,
+        "token_minus_constant_core": 0.0006941258907318115,
+        "token_relmse": 0.4366436004638672
+      },
+      {
+        "constant_core_relmse": 0.4460062086582184,
+        "mean_core_relmse": 0.4460062086582184,
+        "model_digest": "b0915f70ed9f8e0c1e348ff47f58eb76127174e4d58dd0542a01f265d134ebff",
+        "name": "persistent_low_rank_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2026,
+        "subspace_relmse": 0.32427123188972473,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.4460062086582184
+      },
+      {
+        "constant_core_relmse": 0.4363510310649872,
+        "mean_core_relmse": 0.4363510310649872,
+        "model_digest": "e857023e89fb323d9c0b435cbb0ce1b086ebe41dd02977261cfc6671c9cf2241",
+        "name": "persistent_low_rank_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2026,
+        "subspace_relmse": 0.3135759234428406,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.4363510310649872
+      },
+      {
+        "constant_core_relmse": 0.37593698501586914,
+        "mean_core_relmse": 0.37593698501586914,
+        "model_digest": "686ac9dba4a767e734141bb91b44cbb9d47107e98eb6d2a4f285d467454a7bab",
+        "name": "persistent_low_rank_r512",
+        "rank": 512,
+        "rank_tail_relmse": 0.22327978909015656,
+        "seed": 2026,
+        "subspace_relmse": 0.25096219778060913,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.37593698501586914
+      },
+      {
+        "constant_core_relmse": 0.44570085406303406,
+        "mean_core_relmse": 0.44536101818084717,
+        "model_digest": "54cddc048749dfecb947edc0f434ce60834d4a5a6bf0aa4a88b29fed706f9ea4",
+        "name": "mwg_token_diag_core_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2027,
+        "subspace_relmse": 0.3242906928062439,
+        "token_minus_constant_core": 0.0006123185157775879,
+        "token_relmse": 0.44631317257881165
+      },
+      {
+        "constant_core_relmse": 0.43595901131629944,
+        "mean_core_relmse": 0.4356246888637543,
+        "model_digest": "3b989f872302c93fede0869cf250eb4a83770965ac71724b4e43cad29a745e82",
+        "name": "mwg_token_diag_core_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2027,
+        "subspace_relmse": 0.3135770857334137,
+        "token_minus_constant_core": 0.0006416440010070801,
+        "token_relmse": 0.4366006553173065
+      },
+      {
+        "constant_core_relmse": 0.4459800720214844,
+        "mean_core_relmse": 0.4459800720214844,
+        "model_digest": "84795060db6f0923e334727bbe47a5e0d23acdfc0591f3bf869ad897fec48a26",
+        "name": "persistent_low_rank_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2027,
+        "subspace_relmse": 0.3242940604686737,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.4459800720214844
+      },
+      {
+        "constant_core_relmse": 0.43623629212379456,
+        "mean_core_relmse": 0.43623629212379456,
+        "model_digest": "eac2168d6d44d7b66a7dd7237b56fc6a1c60b5c4000c422a4b027a8ed7841015",
+        "name": "persistent_low_rank_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2027,
+        "subspace_relmse": 0.31358057260513306,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.43623629212379456
+      },
+      {
+        "constant_core_relmse": 0.3757811486721039,
+        "mean_core_relmse": 0.3757811486721039,
+        "model_digest": "a6f2a3d4bcd55ac112a57c17a6d7de2a8d0edceb29fa51f13fee2ba228ea2913",
+        "name": "persistent_low_rank_r512",
+        "rank": 512,
+        "rank_tail_relmse": 0.22327978909015656,
+        "seed": 2027,
+        "subspace_relmse": 0.25094670057296753,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.3757811486721039
+      },
+      {
+        "constant_core_relmse": 0.44574135541915894,
+        "mean_core_relmse": 0.44541025161743164,
+        "model_digest": "bd94d979bcc3bf8cd1e878440a19ab0becc3a63874fec1552ba49dbd4a8f7cab",
+        "name": "mwg_token_diag_core_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2028,
+        "subspace_relmse": 0.32423287630081177,
+        "token_minus_constant_core": 0.0006806552410125732,
+        "token_relmse": 0.4464220106601715
+      },
+      {
+        "constant_core_relmse": 0.4360183775424957,
+        "mean_core_relmse": 0.4356714189052582,
+        "model_digest": "85fd469c7dca8a0ad742b2266a1aba7d7f8ed0520e222614012cff62a1ea829e",
+        "name": "mwg_token_diag_core_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2028,
+        "subspace_relmse": 0.31351709365844727,
+        "token_minus_constant_core": 0.0006493926048278809,
+        "token_relmse": 0.4366677701473236
+      },
+      {
+        "constant_core_relmse": 0.44597917795181274,
+        "mean_core_relmse": 0.44597917795181274,
+        "model_digest": "c643c4a75f3e0628e1bc7b0ac817089828d92bdf1da1b7a129b8daa86f2a7e8d",
+        "name": "persistent_low_rank_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2028,
+        "subspace_relmse": 0.3242376446723938,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.44597917795181274
+      },
+      {
+        "constant_core_relmse": 0.4362805187702179,
+        "mean_core_relmse": 0.4362805187702179,
+        "model_digest": "65c6dc34f2181c350620dff69b17073f02b1fb2357a83acb323288928301e0be",
+        "name": "persistent_low_rank_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2028,
+        "subspace_relmse": 0.31351983547210693,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.4362805187702179
+      },
+      {
+        "constant_core_relmse": 0.37579047679901123,
+        "mean_core_relmse": 0.37579047679901123,
+        "model_digest": "35e73e3a9f8be93ee3170f600706852f90433ef507ac6f632f8445e0098d9ca1",
+        "name": "persistent_low_rank_r512",
+        "rank": 512,
+        "rank_tail_relmse": 0.22327978909015656,
+        "seed": 2028,
+        "subspace_relmse": 0.2509036064147949,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.37579047679901123
+      },
+      {
+        "constant_core_relmse": 0.4458846151828766,
+        "mean_core_relmse": 0.4455569386482239,
+        "model_digest": "cf64019d1252f68d0cd2e55a7beaa1f370ea35986e7375be4de0e8eaff07018f",
+        "name": "mwg_token_diag_core_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2029,
+        "subspace_relmse": 0.3243482708930969,
+        "token_minus_constant_core": 0.0006961524486541748,
+        "token_relmse": 0.44658076763153076
+      },
+      {
+        "constant_core_relmse": 0.43616119027137756,
+        "mean_core_relmse": 0.43583378195762634,
+        "model_digest": "c9c6df8a4cca3c4135c880a6a5145dfb4b40cbf17e92512ea2f8c788efa9861e",
+        "name": "mwg_token_diag_core_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2029,
+        "subspace_relmse": 0.31363558769226074,
+        "token_minus_constant_core": 0.0006862878799438477,
+        "token_relmse": 0.4368474781513214
+      },
+      {
+        "constant_core_relmse": 0.44617384672164917,
+        "mean_core_relmse": 0.44617384672164917,
+        "model_digest": "f7d2b6fe85a323e1045fb020a577e9595c13ec42c478f4bbd9d61619c4cc8630",
+        "name": "persistent_low_rank_r384",
+        "rank": 384,
+        "rank_tail_relmse": 0.29563507437705994,
+        "seed": 2029,
+        "subspace_relmse": 0.3243527114391327,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.44617384672164917
+      },
+      {
+        "constant_core_relmse": 0.4364610016345978,
+        "mean_core_relmse": 0.4364610016345978,
+        "model_digest": "1eaa4f9f216733be9c1d2d9caa91fbd5045894190f45547a7bcb6bf72a61e555",
+        "name": "persistent_low_rank_r401",
+        "rank": 401,
+        "rank_tail_relmse": 0.2848970293998718,
+        "seed": 2029,
+        "subspace_relmse": 0.3136392831802368,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.4364610016345978
+      },
+      {
+        "constant_core_relmse": 0.37600937485694885,
+        "mean_core_relmse": 0.37600937485694885,
+        "model_digest": "57b6d0c23a9fa8901a1344c69153978d7cc6290584b1f8211b0dabe77bd00930",
+        "name": "persistent_low_rank_r512",
+        "rank": 512,
+        "rank_tail_relmse": 0.22327978909015656,
+        "seed": 2029,
+        "subspace_relmse": 0.25099316239356995,
+        "token_minus_constant_core": null,
+        "token_relmse": 0.37600937485694885
+      }
+    ],
+    "report_hash": "8bcab6175fce3bf5b44e9a5fb648bd5872e5cbfa282f596067e892f2858e0c95",
+    "limitations": [
+      "new evaluation of 2026-11-10 checkpoints on CPU; no re-execution of training",
+      "constant-core calibration on train splits fixes out-of-sample eval behavior only",
+      "rank-floor is an Eckart-Young lower bound on the teacher output, not a matched subspace lower bound"
+    ]
+  },
+  "complete_ffn_sweep": {
+    "evidence_class": "complete_ffn_sweep_verified",
+    "arm_set": [
+      "dense",
+      "persistent",
+      "materialized",
+      "fused",
+      "fused_v4"
+    ],
+    "rows": [
+      {
+        "geometry": "T128",
+        "batch": 1,
+        "seq": 128,
+        "tokens": 128,
+        "dense_ms": 0.4596305,
+        "persistent_ms": 0.2899835,
+        "materialized_ms": 0.907886,
+        "fused_ms": 0.914166,
+        "fused_v4_ms": 0.997807,
+        "fused_over_fused_v4": 0.9161751721525305
+      },
+      {
+        "geometry": "T512",
+        "batch": 16,
+        "seq": 32,
+        "tokens": 512,
+        "dense_ms": 1.013777,
+        "persistent_ms": 0.286258,
+        "materialized_ms": 0.9360360000000001,
+        "fused_ms": 1.0534530000000002,
+        "fused_v4_ms": 1.041933,
+        "fused_over_fused_v4": 1.0110563731065243
+      },
+      {
+        "geometry": "T1024",
+        "batch": 16,
+        "seq": 64,
+        "tokens": 1024,
+        "dense_ms": 1.6844955,
+        "persistent_ms": 0.2601285,
+        "materialized_ms": 0.848596,
+        "fused_ms": 1.150369,
+        "fused_v4_ms": 1.105378,
+        "fused_over_fused_v4": 1.0407019137344873
+      },
+      {
+        "geometry": "T2048",
+        "batch": 16,
+        "seq": 128,
+        "tokens": 2048,
+        "dense_ms": 3.31697,
+        "persistent_ms": 0.437551,
+        "materialized_ms": 0.949502,
+        "fused_ms": 1.5956345,
+        "fused_v4_ms": 1.2098200000000001,
+        "fused_over_fused_v4": 1.3189023987039394
+      },
+      {
+        "geometry": "T4096",
+        "batch": 16,
+        "seq": 256,
+        "tokens": 4096,
+        "dense_ms": 6.126904,
+        "persistent_ms": 0.8789155,
+        "materialized_ms": 1.414067,
+        "fused_ms": 2.680473,
+        "fused_v4_ms": 1.8258869999999998,
+        "fused_over_fused_v4": 1.4680388216795455
+      }
+    ],
+    "claim_boundary": {
+      "arm4_implemented_in_repository": false,
+      "arm4_execution_observed": true,
+      "hardware_counter_complete": false,
+      "no_store_claim_ready": false,
+      "reason": "A validated compiled-op execution is necessary but not sufficient. Parsed arm-3/arm-4 HBM and L2 counters are still required."
+    },
+    "limitations": [
+      "Synthetic factor-generated weights (amplitude 0.05, seed 1234); not a trained model",
+      "Inference-only timing; no optimizer state or gradient flow",
+      "Host-wall timing with device synchronize; no device-side cycle counter",
+      "Raw five_arm_*.json records retained on ASI3 only; sha256 digests recorded above",
+      "Hardware counters for fused_v4 complete-FFN are not yet parsed (kernel-level counters exist from 2026-11-10 record)"
+    ],
+    "sha256_summary": "424228741912972c1ccea6dc87fd9edfba3587e987e190a2b449aa21fc7f8e9b"
+  },
+  "paired_shuffled_control": {
+    "evidence_class": "paired_shuffled_control_replicated",
+    "contrasts": {
+      "384": {
+        "mean": -0.00023905932903289795,
+        "sample_sd": 4.857038919917901e-05,
+        "per_seed": [
+          -0.00028958916664123535,
+          -0.0002617835998535156,
+          -0.0002281665802001953,
+          -0.0001766979694366455
+        ],
+        "descriptive_t95_interval": [
+          -0.0003163456568594709,
+          -0.000161773001206325
+        ]
+      },
+      "401": {
+        "mean": -0.00028861314058303833,
+        "sample_sd": 5.700305493507587e-05,
+        "per_seed": [
+          -0.000373154878616333,
+          -0.000267714262008667,
+          -0.0002651214599609375,
+          -0.0002484619617462158
+        ],
+        "descriptive_t95_interval": [
+          -0.0003793177213670624,
+          -0.00019790855979901428
+        ]
+      }
+    },
+    "rows": [
+      {
+        "name": "mwg_shuffled_diag_core_r384",
+        "rank": 384,
+        "relative_mse": 0.4477996826171875,
+        "seed": 2026,
+        "token_relative_mse_p95": 0.6717908382415771
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r401",
+        "rank": 401,
+        "relative_mse": 0.43831199407577515,
+        "seed": 2026,
+        "token_relative_mse_p95": 0.6602674126625061
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r384",
+        "rank": 384,
+        "relative_mse": 0.44728296995162964,
+        "seed": 2027,
+        "token_relative_mse_p95": 0.6732754111289978
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r401",
+        "rank": 401,
+        "relative_mse": 0.4377759099006653,
+        "seed": 2027,
+        "token_relative_mse_p95": 0.6616460680961609
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r384",
+        "rank": 384,
+        "relative_mse": 0.44894513487815857,
+        "seed": 2028,
+        "token_relative_mse_p95": 0.6716365218162537
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r401",
+        "rank": 401,
+        "relative_mse": 0.43931472301483154,
+        "seed": 2028,
+        "token_relative_mse_p95": 0.6603513360023499
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r384",
+        "rank": 384,
+        "relative_mse": 0.4485323131084442,
+        "seed": 2029,
+        "token_relative_mse_p95": 0.6714719533920288
+      },
+      {
+        "name": "mwg_shuffled_diag_core_r401",
+        "rank": 401,
+        "relative_mse": 0.43901509046554565,
+        "seed": 2029,
+        "token_relative_mse_p95": 0.6588943600654602
+      }
+    ],
+    "limitations": [
+      "same-run pairs only; cross-run pairing of independently trained students is not a valid contrast estimate",
+      "two ranks re-run (384, 401); archived rank-512 contrast not re-established",
+      "descriptive intervals over four seeds; no population claim"
+    ]
+  },
   "v1_four_arm": {
     "probe_geometry": {
       "median_ms": {
@@ -537,12 +989,24 @@
       "sha256": "413f51e5a07520903c4cbe9e860e63f40d6cc33503ef209f53e57d44fda5954d"
     },
     {
-      "path": "results/asi2_causal_quality_closing_20261110T155855Z/artifact_manifest.json",
-      "sha256": "df72ba026c295c6c31adad96c3a07ed9ee0a0dced348568d9d1cbdb99870ec53"
+      "path": "results/asi2_causal_quality_closing_20261110T155855Z/floors_and_constant_core.json",
+      "sha256": "4d94345640d2702b4826815826c7b5b16e8344764b869292eb863d94ff21dda7"
     },
     {
-      "path": "results/asi2_causal_quality_closing_20261110T155855Z/status.json",
-      "sha256": "413f51e5a07520903c4cbe9e860e63f40d6cc33503ef209f53e57d44fda5954d"
+      "path": "results/asi3_complete_ffn_v4_sweep_20261112/sweep_summary.json",
+      "sha256": "424228741912972c1ccea6dc87fd9edfba3587e987e190a2b449aa21fc7f8e9b"
+    },
+    {
+      "path": "results/asi3_complete_ffn_v4_sweep_20261112/provenance_digest.json",
+      "sha256": "6d64df1506b04e53d0c98f285500014a4cf0dc3ed9b083c3cd2e3f502b469169"
+    },
+    {
+      "path": "results/asi2_shuffled_paired_regen_20261112/shuffled_context_summary.json",
+      "sha256": "0262325a52aa90602fb8b481540afb1bb433d7a31e92ce0db218e94b3113d110"
+    },
+    {
+      "path": "results/asi2_shuffled_paired_regen_20261112/paired_cells.json",
+      "sha256": "f3a90e9c0a7a3a3e059cee5d394aa27ae4878956537a86d10e3895c5f11d5aed"
     },
     {
       "path": "results/asi2_opt_inclusive_sync_20260923T025114Z/ASI2_mwg_transformer_20260923T025131Z.json",

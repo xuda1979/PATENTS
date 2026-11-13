@@ -1,6 +1,6 @@
 # MWG-EW Transformer research
 
-The current manuscript is **Auditing Conditional Low-Rank Layers: An Evidence Protocol Applied to Ephemeral FFN Cores, with Negative Results on Dynamic Capacity Allocation**, revised November 11, 2026. It presents the audit methodology for conditional low-rank layers as the primary contribution, with the negative dynamic-versus-static findings as the centerpiece results.
+The current manuscript is **Auditing Conditional Low-Rank Layers: An Evidence Protocol Applied to Ephemeral FFN Cores, with Negative Results on Dynamic Capacity Allocation**, revised November 12, 2026. It presents the audit methodology for conditional low-rank layers as the primary contribution, with the negative dynamic-versus-static findings as the centerpiece results.
 
 Sole author: **Da Xu**, China Mobile Research Institute, xudayj@chinamobile.com.
 
@@ -16,7 +16,7 @@ Sole author: **Da Xu**, China Mobile Research Institute, xudayj@chinamobile.com.
 
 ## What the revision establishes
 
-The paper derives a fixed-output-subspace error floor, a frozen-projection constant-core baseline, and a matched-schedule descriptor-transfer bound. The accounting code now separates scratch cardinality from global transfers. Archived quality and timing values are recomputed without claiming that hashes establish execution provenance. The v4 kernel's original repeated-call failure is retained as a superseded record; the hardened v3 re-run (2026-11-08) passes 1000/1000 calls and is the current verdict, and parsed HBM/L2 device counters (2026-11-10) corroborate the multicore speedup's traffic attribution. No matched trained-model quality–latency run exists for v4.
+The paper derives a fixed-output-subspace error floor, a frozen-projection constant-core baseline, and a matched-schedule descriptor-transfer bound. The accounting code now separates scratch cardinality from global transfers. Archived quality and timing values are recomputed without claiming that hashes establish execution provenance. The v4 kernel's original repeated-call failure is retained as a superseded record; the hardened v3 re-run (2026-11-08) passes 1000/1000 calls and is the current verdict, and parsed HBM/L2 device counters (2026-11-10) corroborate the multicore speedup's traffic attribution. A same-run complete-FFN five-arm sweep (2026-11-12) extends the validated v4 comparison to the full-FFN boundary: v4 beats the v1 fused arm from T=1024 upward but remains slower than the materialized arm at every geometry. No matched trained-model quality–latency run exists for v4.
 
 New CPU checks exercise the actual `LowRankFFN(token_diag_core)` implementation. Checkpointing retained 13× fewer unique nonparameter storage bytes in nine small synthetic cases, with exact output and gradient agreement. This is software evidence, not peak-memory, accelerator-speed, or trained-model-quality evidence.
 
@@ -52,6 +52,6 @@ Original canonical quality run reports, trained checkpoints, and complete data m
 
 ## Remaining research
 
-The critical requirement is a quality–latency comparison from the same causal trained model and runtime, including persistent/constant-core/quantized controls, resolved v4 stability, same-run materialized-versus-fused measurements, and independently verified held-out model quality. See the review and submission guide for precise acceptance gates.
+The critical requirement is a quality–latency comparison from the same causal trained model and runtime, including persistent/constant-core/quantized controls and independently verified held-out model quality. The v4 stability gate is closed (2026-11-08 hardened re-run), and same-run five-arm complete-FFN measurements now exist (2026-11-12 sweep), but they use synthetic factor-generated weights, not a trained model. See the review and submission guide for precise acceptance gates.
 
 Remote recovery is currently blocked in this session: the shell wrapper delegates to an absent Mac-local script, and neither rclone nor its relay configuration is available. Runtime guidance also conflicts: the parent `CLAUDE.md` and operations skill say ASI2, while `TOOLS.md` says ASI3. Restore the approved access path and resolve the target environment before launching new training. This revision launched no remote jobs.

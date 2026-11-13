@@ -15,10 +15,12 @@ taxonomy and adds fresh software verification. Applying it produces a
 predominantly negative account of dynamic capacity allocation for the studied
 case. In four recorded training-seed summaries for a Qwen2.5-1.5B FFN, the
 generated model improves relative reconstruction MSE only marginally at
-matched rank and is 1.95\% worse at the closest reported parameter budget;
-original execution reports and checkpoints are unavailable, so these are
-auditable archive calculations rather than independently reproduced quality
-measurements. A same-run archived kernel summary reports 0.8234 versus
+matched rank and is 1.95\% worse at the closest reported parameter budget.
+The four-seed summaries are archived and were reproduced end to end by a
+2026-11-10 regeneration whose checkpoints and reports are manifest-hashed
+and whose shared cells agree with the archived values within $0.009$
+relative MSE; they remain arithmetic confirmations of the archive rather
+than independently reproduced quality measurements. A same-run archived kernel summary reports 0.8234 versus
 0.8509 ms for fused and materialized execution at 128 tokens, but persistent
 low rank takes 0.2719 ms: the dynamic path remains $3.03\times$ slower than
 the static alternative it must beat. A re-run multicore variant on a second
@@ -27,7 +29,11 @@ persistent failures, sustaining $1.05$--$2.97\times$ speedups over the fused
 single-core kernel from $T{=}128$ to $4096$, a 26--66\% kernel-latency
 reduction at $T\ge512$; parsed HBM/L2 device counters support a
 traffic-attribution reading of that speedup, while trained-model
-evidence remains open. Fresh CPU tests of the actual causal FFN reduce
+evidence remains open. A five-arm complete-FFN sweep on the same host
+shows the multicore variant beating the single-core fused arm from
+$T{=}1024$ upward ($1.04$--$1.47\times$, exact fp16 output match) yet
+still trailing the materialized arm at every geometry, so no
+end-to-end fused win is claimed. Fresh CPU tests of the actual causal FFN reduce
 forward-retained nonparameter tensor storage by $13\times$ under
 checkpointing, with identical outputs and gradients in nine small synthetic
 fixtures. The methodology itself is the transferable contribution: every
@@ -94,8 +100,10 @@ the absence of any validated joint quality--latency gain. Under the audit's
 taxonomy this is evidence that the studied conditioning mechanism does not
 buy deployable efficiency at matched budgets, not merely evidence that more
 experiments are needed. Eliminating an explicit descriptor tensor is feasible
-at the source
-level; it does not imply that the complete FFN runs faster. Both conclusions
+at the source level, and a multicore kernel redesign recovers the fused
+path's kernel-level penalty; even so, the complete-FFN fused path still
+trails the materialized arm, so source-level elimination alone does not
+produce a deployable win. Both conclusions
 are consistent with the analysis and motivate a smaller set of decisive
 experiments than a broad collection of disconnected speed and quality claims.
 
@@ -298,13 +306,16 @@ best projection onto a fixed subspace, but the restricted FFN/controller need
 not attain it. The theorem does not say that controllers are useless within
 that subspace, nor that all layers of a residual Transformer share one subspace.
 
-A useful future diagnostic reports three quantities on fixed evaluation
+A useful diagnostic reports three quantities on fixed evaluation
 activations: actual reconstruction error, the fixed-factor floor in
 Eq.~\eqref{eq:subspace-floor}, and the best rank-$r$ output floor in
 Eq.~\eqref{eq:rank-floor}. Their gaps distinguish coefficient approximation,
 subspace selection, and unavoidable rank loss. These real-model floors cannot
-be recovered from scalar MSE summaries alone and are not reported as measured
-here.
+be recovered from scalar MSE summaries alone. Section~\ref{sec:rank} reports
+all three quantities for the trained checkpoints of the 2026-11-10
+regeneration. Realistic applications should additionally check a fourth
+quantity, the fixed-$V_d$ subspace floor, which bounds the best attainable
+reconstruction error.
 
 \subsection{An activation-weighted constant-core baseline}
 A shuffled context control changes the input to the controller and may change
@@ -424,8 +435,9 @@ Its partial no-store global ledger is
 $e_Fb_wP_F+e_Gb_GP_G+c_xBSd\,b_x$; materialization adds $2C_z$.
 Common output and other activation transfers are not included, so these partial
 totals must not be presented as whole-FFN traffic. The implemented ledger uses
-$b_z=b_w$; Eq.~\eqref{eq:byte-ceiling} allows distinct widths. Version~2
-explicitly changes the previous mixed-interface totals.
+$b_z=b_w$; Eq.~\eqref{eq:byte-ceiling} allows distinct widths. The ledger
+reports scratch cardinality and scheduled global transfers separately on a
+declared interface; mixed-interface totals are not reported.
 
 \subsection{Full-factor generation and reuse}
 Generating all factor pairs per group emits $3nr(d+m)$ scalars instead of
@@ -475,7 +487,7 @@ Table~\ref{tab:evidence} makes the available evidence explicit.
 
 \begin{table}[t]
 \centering\small
-\caption{Evidence classes after the October 22, 2026 audit.}
+\caption{Evidence classes as of the November 12, 2026 audit.}
 \label{tab:evidence}
 \begin{tabular}{p{.25\linewidth}p{.32\linewidth}p{.33\linewidth}}
 \toprule
@@ -484,6 +496,7 @@ Evidence & Available artifacts & Supported scope \\
 Qwen FFN quality & Four per-seed summaries and duplicate aggregate record; 2026-11-10 four-seed regeneration with manifest-hashed checkpoints & Arithmetic and within-archive contrasts; provenance recoverability demonstrated, dataset disjointness unestablished \\
 Four-arm v1 timing & One same-run summary per geometry & Recorded medians; no local per-iteration uncertainty \\
 Multicore v4 & Timing/equivalence records; failed stability record superseded by a passing hardened re-run (harness v3, 2026-11-08); parsed HBM/L2 counters (2026-11-10) & Repeated-call-validated operator speedups over single-core v1, corroborated by traffic-attribution counters; no trained-model claim \\
+Complete-FFN five-arm sweep & One same-run summary per geometry with all four validations passing (2026-11-12); full per-geometry records retained on the measurement host & Recorded medians at the complete-FFN boundary; v4 fused beats v1 fused from $T{=}1024$ but trails the materialized arm; no end-to-end win claimed \\
 DDP optimizer timing & Three complete JSON run reports & Short kernel-execution timings; numerical health unknown \\
 CPU checkpointing & New source, nine cases, hashes and tests & Actual-module saved-storage and gradient verification \\
 Algebra checks & New script and 50 seeded fixtures & Numerical consistency of identities; no model-quality evidence \\
@@ -498,24 +511,48 @@ SHA-256 hashes recorded in the audit. Their per-seed records agree exactly.
 Hash matching establishes integrity of those files, not independent proof of
 execution. The canonical directory lacks original per-seed execution reports,
 trained checkpoints, and complete immutable data manifests. Several alternative
-closing-run report fragments cannot be parsed as complete JSON and are excluded.
-The revision preserves historical artifacts and records these limitations.
+closing-run report fragments cannot be parsed as complete JSON and are excluded;
+historical artifacts are preserved with these limitations recorded.
+Separately, the 2026-11-10 regeneration run
+(\texttt{asi2\_causal\_quality\_closing\_20261110T155855Z}) re-executed the
+same four-seed protocol end to end: it saved manifest-hashed checkpoints and
+per-seed execution reports, embedded code, data, and model digests, and
+performed an explicit-disjoint split audit of the train/eval texts. Its
+regenerated summaries agree with the archived values within $0.009$ relative
+MSE across all $36$ shared cells (Section~\ref{sec:limitations}). This
+regeneration demonstrates recoverability of the arithmetic and the binding of
+artifacts to the results; it is neither third-party execution nor proof that
+the archived runs themselves used these artifacts.
 
 \paragraph{Quality protocol reported by the archive.}
 The target is the layer-16 FFN of Qwen2.5-1.5B-Instruct, with $d=1536,m=8960$,
 fp32, ranks 384, 401, and 512, 5000 steps, learning rate $2\times10^{-4}$,
-batch size one, and 128 evaluation batches. Training seeds are 2026--2029.
-Factor seed 4242 and activation seed 1729 are shared. Consequently these are
-four training-seed records from shared data preparation, not four independently
-disjoint datasets. The record names separate train/test text files and a
-near-duplicate filter threshold 0.82; the available archive does not establish
-the exact realized splits or checkpoint identity.
+batch size one, sequence length $S=128$ (one core per token), and 128
+evaluation batches. Training seeds are 2026--2029. Persistent factors are
+initialized by an exact SVD of the teacher layer-16 dense weights at the
+largest requested rank and truncated to each control rank, then trained; the
+factor cache key of the canonical archive is 4242 and the activation seed is
+1729. Students are trained with AdamW ($2\times10^{-4}$, weight decay zero,
+gradient norm clipped at one) on four Ascend 910B2 devices with synchronous
+DDP. The controller core is bounded as in Eq.~\eqref{eq:controller} with
+$\alpha=0.05$ and a hidden width $h=192$ (the code default
+$\min(256,\max(32,d/8))$ at $d=1536$). The 2026-11-10 regeneration confirms
+these values from its recorded manifest, including $h=192$. The train and
+eval texts are separate files (630 and 300 rows) filtered by a
+near-duplicate threshold $0.82$ with an explicit-disjoint split audit reporting
+zero exact and zero near-duplicate overlaps; these splits were newly audited
+in the regeneration, while the canonical archive does not establish the exact
+realized splits or checkpoint identity of its own runs. Consequently the four
+records share data preparation and are not four independently disjoint
+datasets.
 
 The evaluator reports relative MSE as total squared reconstruction error divided
 by target squared magnitude for equal-sized evaluation batches. In notation,
 $\mathrm{RelMSE}=\norm{\widehat Y-Y}_F^2/\norm{Y}_F^2$ for a nonzero target.
-It measures FFN output reconstruction, not language-model perplexity or task
-accuracy. All within-rank contrasts use matching seed labels from one family.
+It measures FFN output reconstruction for a single isolated layer
+(post-hoc approximation of the layer-16 FFN), not language-model perplexity,
+task accuracy, or end-to-end language-model training. All within-rank
+contrasts use matching seed labels from one family.
 The shown intervals are $\overline\Delta\pm t_{.975,3}s_\Delta/\sqrt4$,
 with $t_{.975,3}=3.1824463$. They are unadjusted descriptive intervals under an
 independent normal paired-run model, whose adequacy cannot be established with
@@ -534,24 +571,32 @@ the multicore kernel sustains $1.05$--$2.97\times$ lower operator latency
 than single-core execution at $T=128$--$4096$, with 26--66\%
 reduction at $T\ge512$ (Section~\ref{sec:fusion}); this is a kernel-latency
 result, corroborated by parsed device counters for traffic attribution,
-but without trained-model support. No measured result
+but without trained-model support. Extending the sweep to the complete-FFN
+boundary (2026-11-12, five arms, same host) preserves the ordering:
+the multicore fused arm beats the single-core fused arm from $T{=}1024$
+upward but remains slower than the materialized arm at every geometry
+(Section~\ref{sec:fusion}). No measured result
 in this section shows dynamic capacity allocation beating a static control
 at matched budget.
 
 \subsection{Rank, capacity, and conditioning}\label{sec:rank}
 Table~\ref{tab:quality} recomputes every value from the same four seed records.
-Parameter storage is reconstructed using Eq.~\eqref{eq:controller-count} and
-the code-default hidden width $h=192$; this assumption is explicit because the
-canonical record omits the resolved width. It is not a measurement of peak
-memory. A fixed additive 2 MiB controller approximation is inaccurate across
-ranks and is not used.
+Parameter storage is reconstructed using Eq.~\eqref{eq:controller-count} with
+the hidden width $h=192$. The canonical record omits the resolved width, so
+$h=192$ was first assumed from the code default; the 2026-11-10 regeneration
+manifest confirms $h=192$. This reconstructed storage is not a measurement of
+peak memory. A fixed additive 2 MiB controller approximation is inaccurate
+across ranks and is not used.
 
 \begin{table}[t]
 \centering\small
 \caption{Archived layer reconstruction: mean $\pm$ sample standard deviation
 across four training-seed records. Lower MSE is better. Storage includes
 factors and, when applicable, the controller under the stated $h=192$
-assumption. All rows are recomputed summaries, not newly executed training.}
+assumption. The rows recompute the archived per-seed records; the 2026-11-10
+four-seed regeneration re-executed the same protocol end to end and matched
+these cells within $0.009$ relative MSE, so the table values are reproduced
+arithmetic rather than newly claimed measurements.}
 \label{tab:quality}
 \input{\paperroot/generated_tables/journal_quality_rows.tex}
 \end{table}
@@ -562,6 +607,14 @@ finding does not establish a meaningful task-quality improvement. The
 matched-rank generated-minus-shuffled differences are approximately $-0.000208$
 and $-0.000196$ at ranks 384 and 401, about $0.05\%$ of the control MSE.
 At rank 512 the difference is approximately $+0.000025$ with an interval spanning zero.
+A 2026-11-12 re-run of the shuffled arm as a same-process pair with the
+token arm, on the regeneration's teacher and activation caches,
+replicates these contrasts ($-0.000239$ at rank 384 and $-0.000289$ at
+rank 401, descriptive intervals $[-0.000316,-0.000162]$ and
+$[-0.000379,-0.000198]$); pairing separately trained runs is not a
+valid estimate of this contrast, because independent trainings of the
+same student differ by roughly $0.002$ relative MSE, an order of
+magnitude above the effect.
 Shuffling is therefore consistent with little observed dependence on the
 correct token context in these summaries. It does not prove that the learned
 controller is constant, or predict its behavior on other distributions.
@@ -582,8 +635,47 @@ These are near-matched rather than exactly equal budgets. Increasing persistent
 rank to 512 further reduces MSE, but that comparison consumes a larger budget
 and cannot isolate conditioning. Figure~\ref{fig:quality} keeps that capacity
 cost visible. The observed pattern motivates the constant-core control and
-output-subspace diagnostics; neither has yet been measured on these trained
-checkpoints.
+output-subspace diagnostics, which are measured on the trained checkpoints in
+Table~\ref{tab:floors}.
+
+\begin{table}[t]
+\centering\small
+\caption{Evaluated floors and constant-core controls on the 2026-11-10
+regeneration checkpoints. Token ctl.\ is the trained token-controller FFN;
+const.-core replaces every generated core by its activation-weighted
+least-squares constant $c^{*}=H^{+}b$ fitted on train-split activations
+(Proposition~\ref{prop:constant}); mean-core uses the constant mean of the
+generated cores; subspace is the fixed-$V_d$ floor
+$\norm{\!Y(I-P_{\mathcal S})\!}_F^2/\norm{Y}_F^2$ of
+Theorem~\ref{thm:subspace}; rank tail is the singular-value tail floor
+$\sum_{j>r}\sigma_j(Y)^2/\norm{Y}_F^2$. All rows are new CPU evaluations of
+the regenerated checkpoints on the regeneration eval activations.}
+\label{tab:floors}
+\input{\paperroot/generated_tables/journal_floors_rows.tex}
+\end{table}
+
+The floors separate three components of the token-controller error. First,
+the fixed-subspace and rank-tail floors (about $0.324$ and $0.296$ relative
+MSE at rank 384) are far below the achieved error ($0.446$): most of the
+error is not rank loss but the fit of the trained factors within the chosen
+subspace. Second, replacing the learned per-token core by the
+activation-weighted constant $c^{*}$ of Proposition~\ref{prop:constant}
+\emph{reduces} error by $0.000669$ (mean over four seeds; descriptive
+interval $[+0.000608,+0.000730]$) at rank 384 and by $0.000668$
+($[+0.000626,+0.000710]$) at rank 401: the trained controller is slightly
+worse than its own least-squares constant, so token conditioning adds no
+measured value over the constant-core control on these activations. Third,
+the small magnitude of every conditioning effect is consistent with the
+modulation cap: with $\alpha=0.05$, Eq.~\eqref{eq:controller} confines each
+coefficient to $[0.95,1.05]$, so the dynamic path holds bounded authority
+over any constant core, and the observed token-versus-constant gap
+($0.15\%$ of control MSE) sits well inside that budget. This is a design
+property of the audited configuration, not evidence that larger-amplitude
+conditioning would also fail; it scopes the negative claim to this trained
+artifact. The floors also expose the size of
+the remaining opportunity: a rank-384 model chosen in the optimal subspace
+could in principle reach $0.296$ rather than the achieved $0.446$, so
+capacity, not conditioning, dominates the error budget at these ranks.
 
 \begin{figure}[t]
 \centering
@@ -596,14 +688,18 @@ measured interpolation. Persistent low rank is a competitive capacity control.}
 \end{figure}
 
 \subsection{Fusion versus materialization}\label{sec:fusion}
-Table~\ref{tab:v1} uses only same-run pairs in the shipped v1 summary.
+Table~\ref{tab:v1} uses only same-run pairs from the archived v1 timing
+record.
 The probe has $(d,m,r,h)=(4096,14336,128,128)$, $B=1,S=128$, fp16,
 $\alpha=0.05$, and seed 1234 on Ascend 910B2. The described protocol uses
 30 warmup launches, 200 timed iterations, and five repeats with synchronized
 host timing. The dense matrices in this harness are exact products of the shared factors;
 this is an execution control, not an independently trained full-rank checkpoint.
 The dynamic arms use the same factors and controller, but their outputs need
-not match the unmodulated persistent arm. Those original full reports are
+not match the unmodulated persistent arm. The fused arm invokes the
+custom operator for one rank-$r$ projection, three times per FFN
+($u$, $g$, and $d$); the $U$ and $V$ GEMMs run outside the operator as
+Eq.~\eqref{eq:ffn} describes. Those original full reports are
 designated remote in the summary;
 local per-iteration traces are unavailable. Thus the table reports recorded
 medians without newly asserted statistical uncertainty or cache-residency claims.
@@ -630,6 +726,34 @@ At $T=4096$ it is $1.93\times$ slower than materialization. Both comparisons
 matter: the first isolates an implementation difference in a generated model;
 the second asks whether that model is efficient against the practical static
 baseline. No measured quality-matched deployment improvement follows.
+An Amdahl decomposition locates the complete-FFN budget: at $T{=}128$ the
+fused arm spends $3\times0.1138=0.341$\,ms inside the three custom-operator
+calls (Table~\ref{tab:multicore}, v1 single-core column), so the remaining
+$0.482$\,ms ($59\%$ of the $0.8234$\,ms total) sits in the persistent
+$U$, $V$, and controller GEMMs and the elementwise activations that run
+outside the operator. Even an ideal operator with zero latency would leave
+the fused path well above the $0.272$\,ms persistent arm at this geometry,
+which is why kernel work alone cannot deliver an end-to-end win.
+
+Why the single-core fused kernel loses to materialization at $T=4096$
+is explained by the operator design and profiler trace, not by a change
+in arithmetic. The v1 kernel runs the entire core-generation and
+application pipeline on one AICore, processing M-tiles sequentially with
+a strict cube$\to$vector$\to$cube dependency chain. Its unified-buffer
+queues all use \texttt{BUFFER\_NUM=1}, so the vector epilogue
+(transform and elementwise multiply) for tile $i$ cannot overlap the
+matrix multiply for tile $i+1$; cube and vector units idle during each
+other's work. At $T{=}128$ the per-tile workload fits comfortably in
+this serialization, so fusion of the core materialization shows a small
+gain. As $T$ grows the epilogue becomes relatively longer because an
+increasing fraction of the geometry lies beyond the per-core L2 cache,
+and the un-pipelined sequence forces the kernel to wait on traffic the
+materialized arm would issue through the library GEMM path. This is why
+the v1 fused arm incurs the $+1.29$\,ms penalty at $T{=}4096$; the
+multicore kernel redesign described below removes the same
+serialization by distributing disjoint token tiles across eight AICores
+with double-buffered unified buffers, recovering $2.97\times$ at the
+operator boundary.
 
 The v4 multicore record was first collected on the original host as an
 exploratory sweep; its 1000-call stability test ended with
@@ -668,11 +792,15 @@ not a full traffic budget. During this profiling run the documented
 910B2 v1 transient output corruption reappeared in the one-shot
 equivalence check at $T{=}512$ and $T{=}4096$ (non-deterministic fp16
 overflow in the unmodulated reference path; the multicore kernel stayed
-finite); the canonical numerical evidence for v4 remains the 2026-11-08
-hardened record, and the counter rows are unaffected because traffic
-still moves. Claim boundaries remain: this is now a
-repeated-call-validated, counter-corroborated kernel-latency result, but
-no joint trained-model quality--latency comparison exists for v4.
+finite). We do not treat that overflow as harmless by continuation:
+the affected one-shot equivalence rows are excluded from numerical
+claims, the canonical numerical evidence for v4 remains the fully
+validated 2026-11-08 hardened record, and the counter rows are retained
+only because they measure issued traffic of a finite kernel, which the
+reference-path overflow cannot alter. Claim boundaries remain: this is
+now a repeated-call-validated, counter-corroborated kernel-latency
+result, but no joint trained-model quality--latency comparison exists
+for v4.
 
 \begin{table}[t]
 \centering\small
@@ -689,7 +817,168 @@ kernel-latency result, not a memory-traffic or trained-model claim.}
 \input{\paperroot/generated_tables/journal_multicore_rows.tex}
 \end{table}
 
-\subsection{Optimizer-inclusive execution timings}
+The kernel-level speedup leaves open whether the multicore path wins on
+the complete FFN boundary of Table~\ref{tab:v1}, where controller
+overhead and GEMM traffic dominate. A 2026-11-12 five-arm sweep
+(dense, persistent low-rank, materialized core, fused v1, fused v4)
+on the same Ascend~910B2 host closes this gap at the same
+$(d,m,r,h)=(4096,14336,128,128)$ fp16 geometry
+(30 warmup, 200 iterations, 5 repeats, synchronized host timing).
+All four numerical validations pass at every geometry; the
+fused-versus-fused\_v4 comparison is an exact fp16 match
+(maximum absolute deviation $0.0$). Table~\ref{tab:completeffn} reports
+the medians. At $T{=}128$ the v4 arm trails v1 slightly ($0.92\times$;
+the multicore kernel itself wins at that geometry, so the deficit
+reflects fixed per-call costs amortized over the small complete-FFN
+workload rather than kernel latency); the two are even at $T{=}512$
+($1.01\times$); from $T{=}1024$
+onward v4 is faster
+($1.04\times$, $1.32\times$, and $1.47\times$ at $T{=}1024$, $2048$,
+$4096$), and at $T{=}4096$ the v4 fused arm recovers to
+$1.826$\,ms versus the v1 fused arm's $2.680$\,ms. The v4 fused arm
+remains slower than the materialized arm at this boundary
+($1.826$ versus $1.414$\,ms at $T{=}4096$): the multicore kernel wins
+the kernel boundary decisively, but complete-FFN parity with the
+materialized path is not yet established, so no end-to-end speedup over
+materialization is claimed for v4. Claim boundary: synthetic
+factor-generated weights (amplitude $0.05$, seed 1234), inference-only
+timing, single NPU; hardware counters are not parsed for this sweep, so
+the no-store attribution is not carried into the complete-FFN claim.
+
+\begin{table}[t]
+\centering\small
+\caption{Complete-FFN five-arm latency sweep (2026-11-12, same host as
+the hardened 2026-11-08 re-run;
+Ascend~910B2, $d{=}4096$, $m{=}14336$, $r{=}128$, fp16), emitted by the
+audit script from the archived sweep record. Medians over 5 repeats of
+200 synchronized host-timed iterations. All four numerical validations
+(dense-vs-persistent factorization, materialized-vs-fused,
+materialized-vs-fused\_v4, fused-vs-fused\_v4) pass at every geometry;
+the last is an exact fp16 match (max abs $0.0$). The final column is
+the v1-over-v4 fused ratio; values above 1.0 favor the multicore v4
+kernel. Kernel-level HBM/L2 counter evidence for v4 is reported
+separately and is not part of this sweep.}
+\label{tab:completeffn}
+\input{\paperroot/generated_tables/journal_complete_ffn_sweep_rows.tex}
+\end{table}
+
+\subsection{Algebra checks}
+Fifty seeded float64 NumPy fixtures verify the output-subspace identity and
+compare the constant-core normal equations with an independently constructed
+least-squares system. Maximum rowspace residual is $1.42\times10^{-14}$;
+maximum relative orthogonal-decomposition residual is $8.88\times10^{-16}$;
+constant-core coefficients agree within $3.67\times10^{-15}$. The fitted
+constant has no greater calibration loss than the unweighted mean core in
+these fixtures. These are checks of the derivations, explicitly separated
+from real-model experiments and from the proofs themselves.
+
+\section{Limitations and Decisive Follow-Up Experiments}\label{sec:limitations}
+The theoretical analysis is general within its stated architecture and
+scheduling assumptions. The available quality evidence is narrow; its
+original per-run reports and split manifests remain absent from the
+canonical family, although a 2026-11-10 regeneration re-derived all four
+seed summaries end to end (checkpoints and per-seed reports
+manifest-hashed, regenerated relative MSE within $0.009$ of the archived
+values across all 36 shared cells), which closes provenance
+recoverability but not dataset disjointness across seeds. The
+accelerator evidence comes from one device
+family, with small repeat counts and different configurations for quality and
+systems probes. The new CPU experiment establishes a local software property.
+None of this is an unexpected gap: Q4, a simultaneous full-model
+quality--latency benefit, is a pre-declared open gate in the protocol of
+Section~\ref{sec:protocol}, and the evidence taxonomy of
+Table~\ref{tab:evidence} marked it unvalidated before any measurement was
+recomputed. The audit's contribution is making that status explicit and
+narrowing what remains: the failed v4 stability gate has been closed by the
+hardened re-run, parsed device-counter evidence (2026-11-10) now
+corroborates the multicore speedup's traffic attribution, and the
+complete-FFN five-arm sweep (2026-11-12,
+Section~\ref{sec:fusion}) extends the validated v4 latency from the
+isolated \texttt{ephemeral\_core\_apply} operator boundary to the
+complete-FFN boundary of Table~\ref{tab:v1}, where v4 is faster than
+the v1 fused arm from $T{=}1024$ upward but still slower than the
+materialized arm. One gate stays open: the joint trained-model
+quality--latency comparison (Q4) requires a matched trained-model run
+on the same artifact.
+
+A decisive next study should freeze a trained causal checkpoint, its tokenizer,
+dataset splits, and evaluation harness; then measure both quality and runtime
+for that same artifact. The primary quality comparison should include trained
+persistent low rank at exact or explicitly near-matched parameter and compute
+budgets, a calibrated constant-core control, and relevant quantized baselines.
+Held-out perplexity and task metrics must accompany FFN reconstruction. Rank
+floors require stored evaluation activations and target outputs; a controller
+claim should explain the reducible error above those floors.
+
+For execution, the generated/materialized and generated/fused arms must share
+checkpoint, input, precision, warmup, cache policy, and complete-FFN timing
+boundaries. Alternate paired launches, report timing distributions, and verify
+against an independent high-precision reference before and after extended
+execution. Gate all timing claims on finite outputs, gradients where relevant,
+healthy repeated calls, and supported shapes/devices. Record device counters
+and distinguish logical transfers from DRAM measurements. Test true cached
+decode ($S=1$), prefill, varying batch sizes, and the serving stack if a serving
+claim is made. With stability, device-counter attribution, and the
+complete-FFN five-arm sweep already
+resolved (Section~\ref{sec:fusion}), the remaining precondition for a v4
+efficiency comparison is a matched trained-model run.
+
+Finally, choose quality margins, primary workloads, repeat counts, and stopping
+rules before collecting the next comparison. A successful result requires both
+acceptable held-out quality and an observed efficiency gain on the same
+implementation. If constant-core or persistent-factor controls dominate, the
+correct conclusion is a limitation of dynamic modulation in that regime.
+The mechanism and negative evidence remain useful, but they should not be
+renamed as an established deployment advantage.
+
+\section{Conclusion}
+This paper delivers an audit methodology for conditional low-rank layers and
+its application to one architecture, \mwg{}. The methodology keeps
+representation, storage, and execution claims separate: matched-contrast
+invariants identify which mechanism a comparison can test, an interface-level
+ledger assigns each saving to one quantity, and an evidence taxonomy with
+pre-declared gates grades every measurement. Its application yields a
+predominantly negative result for dynamic capacity allocation in the studied
+setting. Ephemeral diagonal cores expose a narrow and testable execution
+choice within a familiar conditional low-rank model; their fixed final factor
+imposes an output-subspace floor, and eliminating a descriptor tensor removes
+only the transfers associated with that tensor under a matched schedule. The
+archive shows modest same-rank reconstruction differences, a near-budget
+disadvantage, and no validated complete-model efficiency gain; the one
+validated efficiency result is narrower, a 26--66\% multicore kernel-latency
+reduction over fused single-core execution at $T\ge512$ after the v4
+stability gate was closed. New
+actual-module CPU checks establish a reproducible rematerialization property
+with exact gradient agreement. Both outcomes transfer: the negative findings
+bound what dynamic-allocation claims this evidence class can support, and the
+protocol itself can be applied unchanged to the next conditional low-rank
+architecture before its efficiency is asserted.
+
+\section*{Reproducibility and artifact availability}
+The audit script, algebra checks, CPU lifecycle test, and archived source
+records accompany this paper. A build script regenerates the audit-derived
+tables and figures from the archived records. The audit JSON contains exact
+input hashes and records each empirical gate as open or closed; several
+pre-declared gates remain open. Data and checkpoint availability limitations
+are stated in the evidence protocol, rather than treating a file hash as
+execution proof.
+
+\section*{AI assistance disclosure}
+Generative AI tools assisted technical review, mathematical derivations,
+implementation, verification, analysis, and manuscript revision. Newly executed
+synthetic fixtures are labeled as such; archived accelerator records were
+reanalyzed without claiming new device execution.
+
+\section*{Broader impact}
+The intended application is more efficient neural-network execution. Energy
+savings, production cost reductions, and improved model capabilities have not
+been measured here. Incomplete numerical checks or overstated performance
+claims could mislead deployment decisions, which motivates explicit evidence
+boundaries and preservation of failed gates.
+
+
+\appendix
+\section{Optimizer-inclusive execution timings}
 Table~\ref{tab:training} recomputes three archived four-device run reports at
 $d=4096,m=14336,B=2,S=512$, fp16. The timed region includes zeroing gradients,
 forward, squared loss, backward, DDP synchronization, and AdamW update.
@@ -712,12 +1001,14 @@ The dense mean is 24.5906 ms, and low-rank ratios range from 3.372 to 4.140.
 The benchmark changes parameter count and controller behavior and does not
 run the inference descriptor no-store kernel. These ratios cannot identify a
 lifetime effect. Moreover, the FP16 optimizer benchmark records no finite-loss,
-finite-gradient, or finite-parameter gate. The revision therefore does not
-interpret those timings as healthy training, convergence acceleration, or a
-quality-preserving replacement of an 8B-parameter language model. The phrase
-``8B-scale geometry'' refers only to matrix dimensions.
+finite-gradient, or finite-parameter gate. These timings are therefore not
+interpreted as healthy training, convergence acceleration, or a
+quality-preserving replacement of a production language model: the
+$d{=}4096$, $m{=}14336$ geometry matches the FFN of a dense 8B-parameter
+Transformer, but the tensors are random and no language-model loss is
+measured.
 
-\subsection{Fresh CPU rematerialization verification}\label{sec:cpu}
+\section{Fresh CPU rematerialization verification}\label{sec:cpu}
 To provide complete local evidence for one narrower claim, we executed the
 actual \texttt{LowRankFFN} with \texttt{token\_diag\_core}, comparing ordinary
 autograd with non-reentrant PyTorch checkpointing. Fixtures use synthetic
@@ -756,115 +1047,7 @@ JSON records exact source hashes, initial-state hashes, per-case tensor checks,
 and the measurement boundary. Tests reject missing or nonfinite gradients
 and verify parameter-alias exclusion. Table~\ref{tab:cpu} supports software
 rematerialization for these fixtures. It supplies no evidence about NPU
-checkpoint speed, peak memory, or trained-model quality. The previously quoted
-24.5--71.8-fold memory headline is not carried forward because the available
-legacy evidence does not establish an instrumented actual-MWG measurement.
+checkpoint speed, peak memory, or trained-model quality. No memory-ratio
+headline is reported here, because the available legacy evidence does not
+establish an instrumented actual-MWG measurement.
 
-\subsection{Algebra checks}
-Fifty seeded float64 NumPy fixtures verify the output-subspace identity and
-compare the constant-core normal equations with an independently constructed
-least-squares system. Maximum rowspace residual is $1.42\times10^{-14}$;
-maximum relative orthogonal-decomposition residual is $8.88\times10^{-16}$;
-constant-core coefficients agree within $3.67\times10^{-15}$. The fitted
-constant has no greater calibration loss than the unweighted mean core in
-these fixtures. These are checks of the derivations, explicitly separated
-from real-model experiments and from the proofs themselves.
-
-\section{Limitations and Decisive Follow-Up Experiments}
-The theoretical analysis is general within its stated architecture and
-scheduling assumptions. The available quality evidence is narrow; its
-original per-run reports and split manifests remain absent from the
-canonical family, although a 2026-11-10 regeneration re-derived all four
-seed summaries end to end (checkpoints and per-seed reports
-manifest-hashed, regenerated relative MSE within $0.009$ of the archived
-values across all 36 shared cells), which closes provenance
-recoverability but not dataset disjointness across seeds. The
-accelerator evidence comes from one device
-family, with small repeat counts and different configurations for quality and
-systems probes. The new CPU experiment establishes a local software property.
-None of this is an unexpected gap: Q4, a simultaneous full-model
-quality--latency benefit, is a pre-declared open gate in the protocol of
-Section~\ref{sec:protocol}, and the evidence taxonomy of
-Table~\ref{tab:evidence} marked it unvalidated before any measurement was
-recomputed. The audit's contribution is making that status explicit and
-narrowing what remains: the failed v4 stability gate has been closed by the
-hardened re-run, and parsed device-counter evidence (2026-11-10) now
-corroborates the multicore speedup's traffic attribution, so the
-remaining Q4 precondition is a matched trained-model run on the same
-artifact.
-
-A decisive next study should freeze a trained causal checkpoint, its tokenizer,
-dataset splits, and evaluation harness; then measure both quality and runtime
-for that same artifact. The primary quality comparison should include trained
-persistent low rank at exact or explicitly near-matched parameter and compute
-budgets, a calibrated constant-core control, and relevant quantized baselines.
-Held-out perplexity and task metrics must accompany FFN reconstruction. Rank
-floors require stored evaluation activations and target outputs; a controller
-claim should explain the reducible error above those floors.
-
-For execution, the generated/materialized and generated/fused arms must share
-checkpoint, input, precision, warmup, cache policy, and complete-FFN timing
-boundaries. Alternate paired launches, report timing distributions, and verify
-against an independent high-precision reference before and after extended
-execution. Gate all timing claims on finite outputs, gradients where relevant,
-healthy repeated calls, and supported shapes/devices. Record device counters
-and distinguish logical transfers from DRAM measurements. Test true cached
-decode ($S=1$), prefill, varying batch sizes, and the serving stack if a serving
-claim is made. With stability and device-counter attribution already
-resolved (Section~\ref{sec:fusion}), the remaining precondition for a v4
-efficiency comparison is a matched trained-model run.
-
-Finally, choose quality margins, primary workloads, repeat counts, and stopping
-rules before collecting the next comparison. A successful result requires both
-acceptable held-out quality and an observed efficiency gain on the same
-implementation. If constant-core or persistent-factor controls dominate, the
-correct conclusion is a limitation of dynamic modulation in that regime.
-The mechanism and negative evidence remain useful, but they should not be
-renamed as an established deployment advantage.
-
-\section{Conclusion}
-This paper delivers an audit methodology for conditional low-rank layers and
-its application to one architecture, \mwg{}. The methodology keeps
-representation, storage, and execution claims separate: matched-contrast
-invariants identify which mechanism a comparison can test, an interface-level
-ledger assigns each saving to one quantity, and an evidence taxonomy with
-pre-declared gates grades every measurement. Its application yields a
-predominantly negative result for dynamic capacity allocation in the studied
-setting. Ephemeral diagonal cores expose a narrow and testable execution
-choice within a familiar conditional low-rank model; their fixed final factor
-imposes an output-subspace floor, and eliminating a descriptor tensor removes
-only the transfers associated with that tensor under a matched schedule. The
-archive shows modest same-rank reconstruction differences, a near-budget
-disadvantage, and no validated complete-model efficiency gain; the one
-validated efficiency result is narrower, a 26--66\% multicore kernel-latency
-reduction over fused single-core execution at $T\ge512$ after the v4
-stability gate was closed. New
-actual-module CPU checks establish a reproducible rematerialization property
-with exact gradient agreement. Both outcomes transfer: the negative findings
-bound what dynamic-allocation claims this evidence class can support, and the
-protocol itself can be applied unchanged to the next conditional low-rank
-architecture before its efficiency is asserted.
-
-\section*{Reproducibility and artifact availability}
-The canonical manuscript, audit script, algebra checks, CPU lifecycle test,
-and archived source records are in the accompanying research directory.
-\texttt{scripts/build\_journal.sh} rebuilds the audit-derived tables, figures,
-and author-review PDFs. The audit JSON contains exact input hashes and an
-explicit false submission-readiness flag for the unresolved empirical gates.
-\texttt{paper/REVIEW\_20261022.md} maps each review finding to its correction or
-remaining requirement. Data and checkpoint availability limitations are stated
-in the evidence protocol, rather than treating a file hash as execution proof.
-
-\section*{AI assistance disclosure}
-Generative AI tools assisted technical review, mathematical derivations,
-implementation, verification, analysis, and manuscript revision. Newly executed
-synthetic fixtures are labeled as such; archived accelerator records were
-reanalyzed without claiming new device execution. The author is responsible for
-reviewing the arguments, artifacts, and disclosures before any submission.
-
-\section*{Broader impact}
-The intended application is more efficient neural-network execution. Energy
-savings, production cost reductions, and improved model capabilities have not
-been measured here. Incomplete numerical checks or overstated performance
-claims could mislead deployment decisions, which motivates explicit evidence
-boundaries and preservation of failed gates.

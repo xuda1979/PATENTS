@@ -1,0 +1,62 @@
+{
+ "kind": "shuffled_context_regen_summary_v1",
+ "rows": [
+  {
+   "name": "mwg_shuffled_diag_core_r384",
+   "rank": 384,
+   "relative_mse": 0.4477996826171875,
+   "seed": 2026,
+   "token_relative_mse_p95": 0.6717908382415771
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r401",
+   "rank": 401,
+   "relative_mse": 0.43831199407577515,
+   "seed": 2026,
+   "token_relative_mse_p95": 0.6602674126625061
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r384",
+   "rank": 384,
+   "relative_mse": 0.44728296995162964,
+   "seed": 2027,
+   "token_relative_mse_p95": 0.6732754111289978
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r401",
+   "rank": 401,
+   "relative_mse": 0.4377759099006653,
+   "seed": 2027,
+   "token_relative_mse_p95": 0.6616460680961609
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r384",
+   "rank": 384,
+   "relative_mse": 0.44894513487815857,
+   "seed": 2028,
+   "token_relative_mse_p95": 0.6716365218162537
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r401",
+   "rank": 401,
+   "relative_mse": 0.43931472301483154,
+   "seed": 2028,
+   "token_relative_mse_p95": 0.6603513360023499
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r384",
+   "rank": 384,
+   "relative_mse": 0.4485323131084442,
+   "seed": 2029,
+   "token_relative_mse_p95": 0.6714719533920288
+  },
+  {
+   "name": "mwg_shuffled_diag_core_r401",
+   "rank": 401,
+   "relative_mse": 0.43901509046554565,
+   "seed": 2029,
+   "token_relative_mse_p95": 0.6588943600654602
+  }
+ ],
+ "source_run": "/vllm-workspace/mwg-ew-transformer-research/results/asi2_shuffled_paired_regen_20261112"
+}
