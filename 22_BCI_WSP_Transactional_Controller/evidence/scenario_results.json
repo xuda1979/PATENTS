@@ -1,0 +1,386 @@
+{
+  "kind": "deterministic_sequential_software_examples",
+  "dimensionless": true,
+  "case_count": 15,
+  "passed": 15,
+  "limitations": [
+    "No real hardware or patient data",
+    "No clinical or timing claim",
+    "Sequential specification, not concurrency verification",
+    "Crypto and persistence are implementation requirements, not exercised"
+  ],
+  "cases": [
+    {
+      "case": "valid_update_preserves_spent",
+      "observed": [
+        9,
+        0,
+        1
+      ],
+      "expected": [
+        9,
+        0,
+        1
+      ],
+      "passed": true,
+      "trace": [
+        {
+          "event": "PREPARED",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1,
+          "ticket": 1
+        },
+        {
+          "event": "ACTIVATED",
+          "sequence": 1,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1
+        },
+        {
+          "event": "PACKET_STARTED",
+          "sequence": 1,
+          "epoch": 2,
+          "spent": 8,
+          "reserved": 1
+        },
+        {
+          "event": "PACKET_COMPLETED",
+          "sequence": 1,
+          "epoch": 3,
+          "spent": 9,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "contract_changed_after_receive",
+      "observed": "CONFIG_MISMATCH",
+      "expected": "CONFIG_MISMATCH",
+      "passed": true,
+      "trace": [
+        {
+          "event": "CONFIG_MISMATCH",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "budget_changed_after_prepare",
+      "observed": "STALE_HANDOVER",
+      "expected": "STALE_HANDOVER",
+      "passed": true,
+      "trace": [
+        {
+          "event": "PREPARED",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1,
+          "ticket": 1
+        },
+        {
+          "event": "STALE_HANDOVER",
+          "sequence": 0,
+          "epoch": 3,
+          "spent": 9,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "contract_changed_after_prepare",
+      "observed": "STALE_HANDOVER",
+      "expected": "STALE_HANDOVER",
+      "passed": true,
+      "trace": [
+        {
+          "event": "PREPARED",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1,
+          "ticket": 1
+        },
+        {
+          "event": "STALE_HANDOVER",
+          "sequence": 0,
+          "epoch": 3,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "mid_packet_update",
+      "observed": "PACKET_UNFINISHED",
+      "expected": "PACKET_UNFINISHED",
+      "passed": true,
+      "trace": [
+        {
+          "event": "PACKET_UNFINISHED",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "input_version_mismatch",
+      "observed": "CONFIG_MISMATCH",
+      "expected": "CONFIG_MISMATCH",
+      "passed": true,
+      "trace": [
+        {
+          "event": "CONFIG_MISMATCH",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "deployed_quantized_bytes_changed",
+      "observed": "ACTUAL_BYTES_CHANGED",
+      "expected": "ACTUAL_BYTES_CHANGED",
+      "passed": true,
+      "trace": [
+        {
+          "event": "ACTUAL_BYTES_CHANGED",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "expired_package",
+      "observed": "EXPIRED_PACKAGE",
+      "expected": "EXPIRED_PACKAGE",
+      "passed": true,
+      "trace": [
+        {
+          "event": "EXPIRED_PACKAGE",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "replayed_deployment_sequence",
+      "observed": "REPLAY_SEQUENCE",
+      "expected": "REPLAY_SEQUENCE",
+      "passed": true,
+      "trace": [
+        {
+          "event": "REPLAY_SEQUENCE",
+          "sequence": 1,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "phase_state_incompatible",
+      "observed": "STATE_INCOMPATIBLE",
+      "expected": "STATE_INCOMPATIBLE",
+      "passed": true,
+      "trace": [
+        {
+          "event": "STATE_INCOMPATIBLE",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "spent_8_plus_first_packet_3",
+      "observed": "BUDGET_REJECTED",
+      "expected": "BUDGET_REJECTED",
+      "passed": true,
+      "trace": [
+        {
+          "event": "BUDGET_REJECTED",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "rollback_does_not_refill_budget",
+      "observed": [
+        10,
+        "BUDGET_REJECTED"
+      ],
+      "expected": [
+        10,
+        "BUDGET_REJECTED"
+      ],
+      "passed": true,
+      "trace": [
+        {
+          "event": "PREPARED",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 2,
+          "ticket": 1
+        },
+        {
+          "event": "ACTIVATED",
+          "sequence": 1,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 2
+        },
+        {
+          "event": "PACKET_STARTED",
+          "sequence": 1,
+          "epoch": 2,
+          "spent": 8,
+          "reserved": 2
+        },
+        {
+          "event": "PACKET_COMPLETED",
+          "sequence": 1,
+          "epoch": 3,
+          "spent": 10,
+          "reserved": 0
+        },
+        {
+          "event": "PREPARED",
+          "sequence": 1,
+          "epoch": 4,
+          "spent": 10,
+          "reserved": 0,
+          "ticket": 2
+        },
+        {
+          "event": "ACTIVATED",
+          "sequence": 2,
+          "epoch": 4,
+          "spent": 10,
+          "reserved": 0
+        },
+        {
+          "event": "PACKET_STARTED",
+          "sequence": 2,
+          "epoch": 5,
+          "spent": 10,
+          "reserved": 0
+        },
+        {
+          "event": "PACKET_COMPLETED",
+          "sequence": 2,
+          "epoch": 6,
+          "spent": 10,
+          "reserved": 0
+        },
+        {
+          "event": "BUDGET_REJECTED",
+          "sequence": 2,
+          "epoch": 6,
+          "spent": 10,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "one_shot_output_permit",
+      "observed": "PERMIT_ALREADY_USED",
+      "expected": "PERMIT_ALREADY_USED",
+      "passed": true,
+      "trace": [
+        {
+          "event": "PREPARED",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1,
+          "ticket": 1
+        },
+        {
+          "event": "ACTIVATED",
+          "sequence": 1,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1
+        },
+        {
+          "event": "PACKET_STARTED",
+          "sequence": 1,
+          "epoch": 2,
+          "spent": 8,
+          "reserved": 1
+        },
+        {
+          "event": "PERMIT_ALREADY_USED",
+          "sequence": 1,
+          "epoch": 2,
+          "spent": 8,
+          "reserved": 1
+        }
+      ]
+    },
+    {
+      "case": "state_changed_before_first_packet",
+      "observed": "STALE_OUTPUT_PERMIT",
+      "expected": "STALE_OUTPUT_PERMIT",
+      "passed": true,
+      "trace": [
+        {
+          "event": "PREPARED",
+          "sequence": 0,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1,
+          "ticket": 1
+        },
+        {
+          "event": "ACTIVATED",
+          "sequence": 1,
+          "epoch": 1,
+          "spent": 8,
+          "reserved": 1
+        },
+        {
+          "event": "STALE_OUTPUT_PERMIT",
+          "sequence": 1,
+          "epoch": 3,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    },
+    {
+      "case": "unknown_history_after_restart",
+      "observed": "UNKNOWN_HISTORY",
+      "expected": "UNKNOWN_HISTORY",
+      "passed": true,
+      "trace": [
+        {
+          "event": "UNKNOWN_HISTORY",
+          "sequence": 0,
+          "epoch": 0,
+          "spent": 8,
+          "reserved": 0
+        }
+      ]
+    }
+  ]
+}
