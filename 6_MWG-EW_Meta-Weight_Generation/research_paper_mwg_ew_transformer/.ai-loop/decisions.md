@@ -29,3 +29,31 @@ submission-readiness flag remains false and the readiness check still
 intentionally exits 2. Historical review documents were left untouched. The
 venue implication (systems/benchmarking track such as MLSys or NeurIPS
 D&B, or TMLR) is guidance for the author, not a submission action.
+
+## D-0006 — Q4 verdict and claim boundary (2026-11-14)
+
+The 2026-11-13 matched trained-model run (asi2_q4_matched_quality_latency_20261113T134959Z,
+four seeds) closes the pre-declared Q4 gate with a **negative engineering verdict for the
+reference realization**: the input-dependent block-Givens arm matches persistent-low-rank
+quality (relative MSE 0.4444±0.0008 vs 0.4449±0.0008) and held-out perplexity (2.49±0.07 vs
+2.38±0.07 percent degradation) on the same trained checkpoints, but its measured reference
+(PyTorch) execution is 4.40–4.54× (mean 4.48×) the persistent latency at batch 1, seq 128,
+fp16 on a single Ascend 910B2. Decision:
+
+1. The manuscript reports this as a measured negative result (new Section 7.3), not as an
+   open gap; the abstract, findings, conclusion, and limitations are updated accordingly.
+2. The audit's blocking gap is rewritten from "no verified quality/latency Pareto curve from
+   the same causal model and runtime" to "Q4 answered only for the reference block-Givens
+   realization; the compiled tile-local execution path that could win remains unmeasured."
+3. The tile-local prototype (custom_ops/block_givens_tile_apply/, Ascend-C source +
+   simulator, not compiled) is retained as future work; no serving or speedup claim is made
+   for the block-Givens arm.
+4. submission_ready remains false: the compiled tile-local realization, constant-core and
+   quantized baselines inside the Q4 design, and canonical dataset disjointness across
+   seeds remain open.
+
+Scope of the change: audit gate + two generated tables, manuscript Section 7.3 and
+abstract/findings/conclusion/limitations/disclosure updates, README/SUBMISSION_README/
+REVIEW_20261022 sync, loop records. No archived record was altered; the four retained raw
+per-seed latency records and the 48-row summary are new artifacts, and the audit
+cross-checks summary against raw at every cell.

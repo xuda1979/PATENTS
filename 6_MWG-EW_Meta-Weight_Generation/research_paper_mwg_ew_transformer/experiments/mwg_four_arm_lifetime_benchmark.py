@@ -40,7 +40,8 @@ CONTRACT_SCHEMA_VERSION = 1
 FUSED_OP_QUALIFIED_NAME = "mwg::ephemeral_core_apply"
 V4_OP_QUALIFIED_NAME = "mwg::ephemeral_core_apply_v4"
 DEFAULT_ARMS = ("dense", "persistent", "materialized")
-ALL_ARMS = (*DEFAULT_ARMS, "fused", "fused_v4")
+BLOCK_GIVENS_ARM = "block_givens"
+ALL_ARMS = (*DEFAULT_ARMS, BLOCK_GIVENS_ARM, "fused", "fused_v4")
 
 
 class FusedBackendUnavailable(RuntimeError):
@@ -433,6 +434,128 @@ class MasterWeights:
     controller_b2_up: torch.Tensor
     controller_b2_gate: torch.Tensor
     controller_b2_down: torch.Tensor
+    # Block-Givens students (input-dependent output subspaces) store a
+    # per-token angle generator instead of a rank-space controller.  These
+    # stay None for every non-block_givens student.
+    givens_w1: torch.Tensor | None = None
+    givens_b1: torch.Tensor | None = None
+    givens_w2: torch.Tensor | None = None
+    givens_b2: torch.Tensor | None = None
+
+
+def load_trained_master_weights(
+    checkpoint_path: str | Path,
+    config: BenchmarkConfig,
+) -> MasterWeights:
+    """Load master weights from a saved distillation student checkpoint.
+
+    The Q4 matched quality--latency protocol requires the benchmark to run on
+    the *same trained artifact* whose quality was measured.  This loader maps
+    a saved ``LowRankFFN`` state_dict (schema_version 2 payload from
+    ``mwg_quality_distillation.py``) onto the benchmark's ``MasterWeights``,
+    inferring the dense product from the trained factors where needed.
+
+    The controller weights are taken from the trained generator when present
+    (token_diag_core students store their controller as ``generator.*``);
+    otherwise a fresh seeded controller is generated exactly as
+    :func:`generate_master_weights` does, so arms that need a controller are
+    still runnable on persistent-only checkpoints.
+    """
+    path = Path(checkpoint_path).expanduser().resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"trained checkpoint missing: {path}")
+    try:
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+    except TypeError:  # pragma: no cover - older torch
+        payload = torch.load(path, map_location="cpu")
+    state = payload.get("state_dict") if isinstance(payload, dict) else None
+    if not isinstance(state, dict) or not state:
+        raise ValueError(f"checkpoint has no state_dict: {path}")
+    student = payload.get("student", "?")
+
+    def get(name: str) -> torch.Tensor:
+        if name in state:
+            return state[name].float()
+        raise KeyError(f"checkpoint {path} (student {student}) lacks tensor {name!r}")
+
+    master = MasterWeights(
+        up_u=get("up_u"),
+        up_v=get("up_v"),
+        gate_u=get("gate_u"),
+        gate_v=get("gate_v"),
+        down_u=get("down_u"),
+        down_v=get("down_v"),
+        controller_w1=torch.empty(0),
+        controller_b1=torch.empty(0),
+        controller_w2_up=torch.empty(0),
+        controller_b2_up=torch.empty(0),
+        controller_w2_gate=torch.empty(0),
+        controller_b2_gate=torch.empty(0),
+        controller_w2_down=torch.empty(0),
+        controller_b2_down=torch.empty(0),
+    )
+    is_block_givens = str(student).startswith("mwg_block_givens")
+    if is_block_givens:
+        # block_givens student: the trained generator emits per-token Givens
+        # angles for the output rotations (out_dim = m + d // 2 after
+        # concatenating the three projections' angle heads).  It is NOT a
+        # rank-space controller, so it must not flow through the 3*rank
+        # token_diag_core path below.  Linear weights are stored [out, in];
+        # the benchmark's BlockGivensArm keeps that convention.
+        if "generator.0.weight" not in state:
+            raise KeyError(
+                f"checkpoint {path} (student {student}) lacks the trained "
+                "block-givens angle generator ('generator.0.weight')"
+            )
+        gen_w2 = state["generator.2.weight"].float()
+        expected_angles = config.m + config.d // 2
+        if gen_w2.shape[0] != expected_angles:
+            raise ValueError(
+                f"generator head has {gen_w2.shape[0]} outputs; expected "
+                f"m + d // 2 = {expected_angles} angles for a block_givens "
+                f"student (m={config.m}, d={config.d})"
+            )
+        master.givens_w1 = state["generator.0.weight"].float()
+        master.givens_b1 = state["generator.0.bias"].float()
+        master.givens_w2 = gen_w2
+        master.givens_b2 = state["generator.2.bias"].float()
+        return master
+    if "generator.0.weight" in state:
+        # token_diag_core-style student: the trained generator is the
+        # controller.  The student stores Linear weights as [out, in] with a
+        # stacked 3*rank head; the benchmark expects [in, out] per-head
+        # weights, so transpose and slice.
+        gen_w1 = state["generator.0.weight"].float()
+        gen_b1 = state["generator.0.bias"].float()
+        gen_w2 = state["generator.2.weight"].float()
+        gen_b2 = state["generator.2.bias"].float()
+        if gen_w2.shape[0] != 3 * config.rank:
+            raise ValueError(
+                f"generator head has {gen_w2.shape[0]} outputs; expected "
+                f"3 * rank = {3 * config.rank} for a token_diag_core student; "
+                "pass the block_givens checkpoint's student name via "
+                "--trained-checkpoint with student 'mwg_block_givens_*' for "
+                "the angle-head layout"
+            )
+        master.controller_w1 = gen_w1.t().contiguous()
+        master.controller_b1 = gen_b1
+        master.controller_w2_up = gen_w2[: config.rank].t().contiguous()
+        master.controller_b2_up = gen_b2[: config.rank]
+        master.controller_w2_gate = gen_w2[config.rank : 2 * config.rank].t().contiguous()
+        master.controller_b2_gate = gen_b2[config.rank : 2 * config.rank]
+        master.controller_w2_down = gen_w2[2 * config.rank :].t().contiguous()
+        master.controller_b2_down = gen_b2[2 * config.rank :]
+    else:
+        fresh = generate_master_weights(config)
+        master.controller_w1 = fresh.controller_w1
+        master.controller_b1 = fresh.controller_b1
+        master.controller_w2_up = fresh.controller_w2_up
+        master.controller_b2_up = fresh.controller_b2_up
+        master.controller_w2_gate = fresh.controller_w2_gate
+        master.controller_b2_gate = fresh.controller_b2_gate
+        master.controller_w2_down = fresh.controller_w2_down
+        master.controller_b2_down = fresh.controller_b2_down
+    return master
 
 
 def generate_master_weights(config: BenchmarkConfig) -> MasterWeights:
@@ -529,6 +652,59 @@ class PersistentLowRankArm(BufferModule):
         gate = (x @ self.gate_u) @ self.gate_v
         hidden = torch.nn.functional.silu(gate) * up
         return (hidden @ self.down_u) @ self.down_v
+
+
+class BlockGivensArm(PersistentLowRankArm):
+    """Input-dependent output subspaces via block Givens rotations.
+
+    Mirrors ``LowRankFFN._forward_block_givens`` from the distillation
+    harness on the *same trained checkpoint*: the angle generator emits
+    per-token angles for the up/gate (m // 2 each) and down (d // 2)
+    output rotations, and each projection's output is rotated pair-wise.
+    No core is materialized; the rotations act directly on each
+    projection's output.
+    """
+
+    def __init__(self, master: MasterWeights, dtype: torch.dtype):
+        super().__init__(master, dtype)
+        if master.givens_w1 is None or master.givens_w2 is None:
+            raise ValueError(
+                "BlockGivensArm requires a block_givens checkpoint; the "
+                "trained angle generator (generator.*) is missing"
+            )
+        # The trained generator runs in fp32 (see the distillation
+        # harness); keep its tensors in fp32 for numeric fidelity.
+        self.add("givens_w1", master.givens_w1, torch.float32)
+        self.add("givens_b1", master.givens_b1, torch.float32)
+        self.add("givens_w2", master.givens_w2, torch.float32)
+        self.add("givens_b2", master.givens_b2, torch.float32)
+
+    @staticmethod
+    def _rotate(y: torch.Tensor, angles: torch.Tensor) -> torch.Tensor:
+        cos = torch.cos(angles)
+        sin = torch.sin(angles)
+        even = y[..., 0::2]
+        odd = y[..., 1::2]
+        return torch.stack(
+            [cos * even - sin * odd, sin * even + cos * odd], dim=-1
+        ).flatten(-2)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        descriptor = x.float()
+        hidden_act = torch.nn.functional.silu(
+            descriptor @ self.givens_w1.t() + self.givens_b1
+        )
+        angles = hidden_act @ self.givens_w2.t() + self.givens_b2
+        half_m = self.up_v.shape[1] // 2
+        half_d = self.down_v.shape[1] // 2
+        angle_up = angles[..., 0:half_m]
+        angle_gate = angles[..., half_m : 2 * half_m]
+        angle_down = angles[..., 2 * half_m : 2 * half_m + half_d]
+        up = self._rotate((x @ self.up_u) @ self.up_v, angle_up)
+        gate = self._rotate((x @ self.gate_u) @ self.gate_v, angle_gate)
+        hidden = torch.nn.functional.silu(gate) * up
+        down = (hidden @ self.down_u) @ self.down_v
+        return self._rotate(down, angle_down)
 
 
 class GeneratedCoreBase(PersistentLowRankArm):
@@ -917,6 +1093,8 @@ def make_arm(
         return PersistentLowRankArm(master, dtype)
     if name == "materialized":
         return MaterializedCoreArm(master, dtype, amplitude)
+    if name == BLOCK_GIVENS_ARM:
+        return BlockGivensArm(master, dtype)
     if name == "fused":
         if fused_backend is None:
             raise FusedBackendUnavailable("fused backend was not prepared")
@@ -947,10 +1125,14 @@ def run_benchmark(
     run_label: str = "",
     counter_metric: str = "",
     counter_pair_id: str = "",
+    trained_checkpoint: str | Path | None = None,
 ) -> dict[str, Any]:
     selected_arms = parse_arms(arms)
     dtype = dtype_from_name(config.dtype, device)
-    master = generate_master_weights(config)
+    if trained_checkpoint:
+        master = load_trained_master_weights(trained_checkpoint, config)
+    else:
+        master = generate_master_weights(config)
     x = make_input(config, dtype, device)
     fused_backend = None
     contract: dict[str, Any] = {
@@ -1036,6 +1218,11 @@ def run_benchmark(
         elif arm_name == "materialized":
             result["lifetime"] = "generated_core_ordinary_global_framework_tensor"
             result["representation"] = "persistent_UV_plus_token_local_diagonal_core"
+        elif arm_name == BLOCK_GIVENS_ARM:
+            result["lifetime"] = "durable_low_rank_factors_plus_angle_generator"
+            result["representation"] = (
+                "input_dependent_output_subspace_block_givens_rotations"
+            )
         elif arm_name == "fused_v4":
             result["lifetime"] = "compiled_no_store_contract_multicore"
             result["representation"] = (
@@ -1089,6 +1276,14 @@ def run_benchmark(
         "schema_version": SCHEMA_VERSION,
         "created_at": utc_tag(),
         "run_label": run_label,
+        "trained_checkpoint": (
+            {
+                "path": str(Path(trained_checkpoint).expanduser().resolve()),
+                "sha256": sha256_file(Path(trained_checkpoint).expanduser().resolve()),
+            }
+            if trained_checkpoint
+            else None
+        ),
         "counter_metric": counter_metric,
         "counter_pair_id": counter_pair_id,
         "environment": environment_snapshot(device),
@@ -1155,6 +1350,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--op-library")
     parser.add_argument("--fused-registration-module")
     parser.add_argument("--v4-op-library")
+    parser.add_argument(
+        "--trained-checkpoint",
+        default="",
+        help="Q4 matched run: load master weights from a saved distillation "
+        "student checkpoint (schema_version 2 payload) instead of generating "
+        "random weights; the quality and latency arms then run on the same "
+        "trained artifact.",
+    )
     parser.add_argument("--run-label", default="")
     parser.add_argument("--counter-metric", default="")
     parser.add_argument("--counter-pair-id", default="")
@@ -1215,6 +1418,7 @@ def main() -> None:
             run_label=args.run_label,
             counter_metric=args.counter_metric,
             counter_pair_id=args.counter_pair_id,
+            trained_checkpoint=args.trained_checkpoint or None,
         )
     except FusedBackendUnavailable as exc:
         raise SystemExit(f"FUSED_BACKEND_UNAVAILABLE: {exc}") from exc

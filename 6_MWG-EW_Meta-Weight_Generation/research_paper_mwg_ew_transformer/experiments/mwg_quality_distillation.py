@@ -81,6 +81,15 @@ except Exception:
 HAS_CUDA = torch.cuda.is_available() and not HAS_NPU
 MIB = 1024**2
 
+# Block-Givens output-subspace algebra (input-dependent Q_theta(x)); kept
+# import-light so the distillation harness stays runnable on hosts without
+# the experiments package installed.
+try:
+    from mwg_block_givens import apply_block_givens
+except ImportError:  # pragma: no cover - exercised only off-repo
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from mwg_block_givens import apply_block_givens
+
 
 def now_tag() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -101,6 +110,7 @@ STUDENT_MODES = {
     "mixture",
     "expert_residual",
     "token_expert_residual",
+    "block_givens",
 }
 
 
@@ -942,6 +952,7 @@ class LowRankFFN(nn.Module):
             "mixture",
             "expert_residual",
             "token_expert_residual",
+            "block_givens",
         }:
             raise ValueError(f"unknown generator mode: {generator}")
         self.generator_mode = generator
@@ -979,6 +990,16 @@ class LowRankFFN(nn.Module):
                 out_dim = 3 * self.rank * self.rank
             elif generator in ("token_diag_core", "shuffled_diag_core"):
                 out_dim = 3 * self.rank
+            elif generator == "block_givens":
+                # One Givens angle per output-coordinate pair, per
+                # projection: up and gate rotate m-dim outputs (m // 2
+                # angles each); down rotates the d-dim output (d // 2
+                # angles).  Both dims must be even so pairs never straddle.
+                if self.m % 2 != 0 or self.d % 2 != 0:
+                    raise ValueError(
+                        f"block_givens requires even FFN dims, got m={self.m}, d={self.d}"
+                    )
+                out_dim = 2 * (self.m // 2) + self.d // 2
             else:
                 out_dim = 6 * self.rank + (
                     self.basis_count
@@ -1234,6 +1255,27 @@ class LowRankFFN(nn.Module):
         hidden = torch.nn.functional.silu(gate) * up
         return self._mix_rank(hidden @ self.down_u, mix_down) @ self.down_v
 
+    def _forward_block_givens(self, x: torch.Tensor) -> torch.Tensor:
+        """Input-dependent output subspaces via block Givens rotations.
+
+        The generator emits 3 * (m // 2) angles: one per Givens pair of the
+        m output coordinates, for each of the up/gate/down projections.  The
+        rotation is applied to each projection's output tile-wise; see
+        experiments/mwg_block_givens.py for the algebra and the tile-local
+        execution model.
+        """
+        assert self.generator is not None
+        angles = self.generator(x.float())
+        half_m = self.m // 2
+        half_d = self.d // 2
+        angle_up = angles[..., 0:half_m]
+        angle_gate = angles[..., half_m : 2 * half_m]
+        angle_down = angles[..., 2 * half_m : 2 * half_m + half_d]
+        up = apply_block_givens(x @ self.up_u @ self.up_v, angle_up)
+        gate = apply_block_givens(x @ self.gate_u @ self.gate_v, angle_gate)
+        hidden = torch.nn.functional.silu(gate) * up
+        return apply_block_givens(hidden @ self.down_u @ self.down_v, angle_down)
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self.generator_mode == "token_diag_core":
             return self._forward_token_diag_core(x)
@@ -1241,6 +1283,8 @@ class LowRankFFN(nn.Module):
             return self._forward_shuffled_diag_core(x)
         if self.generator_mode == "token_rank_mixer":
             return self._forward_token_rank_mixer(x)
+        if self.generator_mode == "block_givens":
+            return self._forward_block_givens(x)
         if self.generator_mode == "token_expert_residual":
             return self._forward_token_expert_residual(x)
         up_u, up_v, gate_u, gate_v, down_u, down_v = self._factors(x)
@@ -1995,6 +2039,17 @@ def run(args: argparse.Namespace) -> dict[str, Any] | None:
             rows.append(train_student(f"mwg_token_rank_mixer_r{r}", token_rank_mixer, teacher, args, device, dtype, rank))
             del token_rank_mixer
             barrier()
+        if student_enabled(args, "block_givens", r):
+            block_givens = LowRankFFN(
+                factors_by_rank[r],
+                dtype=dtype,
+                generator="block_givens",
+                generator_hidden=args.generator_hidden,
+                scale_amplitude=args.scale_amplitude,
+            ).to(device)
+            rows.append(train_student(f"mwg_block_givens_r{r}", block_givens, teacher, args, device, dtype, rank))
+            del block_givens
+            barrier()
         if student_enabled(args, "token_residual", r):
             residual = LowRankFFN(
                 factors_by_rank[r],
@@ -2155,11 +2210,16 @@ def validate_args(args: argparse.Namespace) -> None:
             raise ValueError("--evidence-mode requires --save-students")
         if args.checkpoint_every <= 0:
             raise ValueError("--evidence-mode requires positive --checkpoint-every")
-        invalid = sorted(set(args.students) - {"persistent", "token_diag_core", "shuffled_diag_core"})
+        invalid = sorted(
+            set(args.students)
+            - {"persistent", "token_diag_core", "shuffled_diag_core", "block_givens"}
+        )
         if invalid:
             raise ValueError(
-                "--evidence-mode accepts only causal canonical controls "
-                f"(persistent,token_diag_core,shuffled_diag_core); got {','.join(invalid)}"
+                "--evidence-mode accepts only causal canonical controls and "
+                "the Q4 block-Givens student "
+                f"(persistent,token_diag_core,shuffled_diag_core,block_givens); "
+                f"got {','.join(invalid)}"
             )
 
 

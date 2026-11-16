@@ -46,7 +46,9 @@ def tiny_config() -> BenchmarkConfig:
 
 def test_default_arm_list_excludes_fused() -> None:
     assert parse_arms(",".join(DEFAULT_ARMS)) == ("dense", "persistent", "materialized")
-    assert parse_arms("all") == ("dense", "persistent", "materialized", "fused", "fused_v4")
+    assert parse_arms("all") == (
+        "dense", "persistent", "materialized", "block_givens", "fused", "fused_v4",
+    )
     with pytest.raises(ValueError, match="unknown arms"):
         parse_arms("dense,pretend_fused")
 

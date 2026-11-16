@@ -371,6 +371,163 @@ def paired_shuffled_control_gate(root):
                             "descriptive intervals over four seeds; no population claim"]}
 
 
+Q4_RUN_ID = "asi2_q4_matched_quality_latency_20261113T134959Z"
+Q4_DIR = Path("results/asi2_q4_matched_quality_latency_20261113")
+Q4_SUMMARY_PATH = Q4_DIR / f"{Q4_RUN_ID}__q4_summary.json"
+Q4_SEEDS = [2026, 2027, 2028, 2029]
+Q4_QUALITY_ARMS = ["mwg_block_givens_r384", "mwg_token_diag_core_r384",
+                   "persistent_low_rank_r384", "persistent_low_rank_r401",
+                   "static_svd_r384", "static_svd_r401"]
+Q4_LATENCY_ARMS = ["mwg_block_givens_r384", "mwg_token_diag_core_r384",
+                   "persistent_low_rank_r384"]
+Q4_PPL_ARMS = ["mwg_block_givens_r384", "mwg_token_diag_core_r384",
+               "persistent_low_rank_r384"]
+
+
+def matched_quality_latency_gate(root):
+    """Gate the 2026-11-13/14 matched trained-model quality-latency run (Q4).
+
+    Q4 asks whether quality and efficiency hold simultaneously on the *same*
+    trained artifact: each seed trains matched students (four training seeds),
+    then measures held-out relative MSE, patched held-out perplexity, and
+    same-runtime single-layer latency for each arm from the saved checkpoint.
+    The summary aggregates per-seed distillation reports, patch-perplexity
+    reports, and four-arm lifetime benchmark reports into one file; this gate
+    re-derives the aggregates from the retained raw per-seed latency records
+    and cross-checks the summary against them, then computes the paired
+    quality contrasts and latency ratios the manuscript reports.
+
+    The block-Givens latency rows come from a hardened retry (four per-seed
+    records retained here); the original run mis-read the block-Givens angle
+    generator under ``load_trained_master_weights`` and is superseded.
+    """
+    summary = json.loads((root / Q4_SUMMARY_PATH).read_text())
+    if summary.get("run_id") != Q4_RUN_ID:
+        raise ValueError("Q4 summary run_id mismatch")
+    rows = summary["rows"]
+    if len(rows) != 48:
+        raise ValueError("Q4 summary requires 48 rows")
+    quality = {(r["seed"], r["student"]): r["relative_mse"]
+               for r in rows if "relative_mse" in r}
+    if len(quality) != 24:
+        raise ValueError("Q4 summary quality rows incomplete or duplicated")
+    for seed in Q4_SEEDS:
+        for arm in Q4_QUALITY_ARMS:
+            v = quality.get((seed, arm))
+            if not finite(v) or v <= 0:
+                raise ValueError(f"invalid Q4 quality cell: seed {seed} arm {arm}")
+    latency = {(r["seed"], r["student"]): (r["latency_ms"], r["trained_checkpoint_sha256"])
+               for r in rows if "latency_ms" in r}
+    if len(latency) != 12:
+        raise ValueError("Q4 summary latency rows incomplete or duplicated")
+    for seed in Q4_SEEDS:
+        for arm in Q4_LATENCY_ARMS:
+            entry = latency.get((seed, arm))
+            if entry is None:
+                raise ValueError(f"missing Q4 latency row: seed {seed} arm {arm}")
+            timings, ckpt = entry
+            if not (finite(timings.get("dense")) and timings["dense"] > 0
+                    and finite(timings.get("persistent")) and timings["persistent"] > 0):
+                raise ValueError(f"invalid Q4 latency timing: seed {seed} arm {arm}")
+            if not isinstance(ckpt, str) or len(ckpt) != 64:
+                raise ValueError(f"invalid Q4 checkpoint digest: seed {seed} arm {arm}")
+    ppl = {(r["seed"], r["student"]): (r["dense_ppl"], r["patched_ppl"], r["patched_student"])
+           for r in rows if r["student"].startswith("ppl:")}
+    if len(ppl) != 12:
+        raise ValueError("Q4 summary perplexity rows incomplete or duplicated")
+    for seed in Q4_SEEDS:
+        dense_seen = None
+        for arm in Q4_PPL_ARMS:
+            entry = ppl.get((seed, f"ppl:{arm}"))
+            if entry is None:
+                raise ValueError(f"missing Q4 ppl row: seed {seed} arm {arm}")
+            dense_v, patched_v, patched_student = entry
+            if not (finite(dense_v) and dense_v > 0 and finite(patched_v) and patched_v > 0):
+                raise ValueError(f"invalid Q4 ppl cell: seed {seed} arm {arm}")
+            if patched_student != arm:
+                raise ValueError(f"Q4 ppl student mismatch: seed {seed} arm {arm}")
+            if dense_seen is None:
+                dense_seen = dense_v
+            elif abs(dense_v - dense_seen) > 1e-4 * abs(dense_seen):
+                raise ValueError(f"Q4 dense ppl differs across arms at seed {seed}")
+    # Re-derive the four block-Givens latency rows from the retained raw
+    # per-seed records and cross-check the summary.
+    for seed in Q4_SEEDS:
+        raw_path = root / Q4_DIR / f"{Q4_RUN_ID}__seed_{seed}__latency_mwg_block_givens_r384.json"
+        raw = json.loads(raw_path.read_text())
+        if raw["config"]["rank"] != 384:
+            raise ValueError(f"Q4 raw latency rank mismatch at seed {seed}")
+        env = raw["environment"]
+        if env.get("device_type") != "npu":
+            raise ValueError(f"Q4 raw latency not an accelerator record at seed {seed}")
+        arms = raw["arms"]
+        for arm in ("dense", "persistent", "block_givens"):
+            t = arms[arm]["timing"]
+            if t["repeat_count"] != 3 or t["iterations_per_repeat"] != 50:
+                raise ValueError(f"Q4 raw latency timing protocol mismatch at seed {seed}")
+            summary_v = latency[(seed, "mwg_block_givens_r384")][0][arm]
+            if abs(t["median_ms"] - summary_v) > 1e-9:
+                raise ValueError(f"Q4 summary latency diverges from raw record at seed {seed} arm {arm}")
+        if raw["trained_checkpoint"]["sha256"] != latency[(seed, "mwg_block_givens_r384")][1]:
+            raise ValueError(f"Q4 checkpoint digest mismatch at seed {seed}")
+        validation = raw["validations"]["dense_vs_persistent_factorization"]
+        if validation.get("passed") is not True:
+            raise ValueError(f"Q4 raw numerical validation failed at seed {seed}")
+    # Paired quality contrasts (token minus persistent, Givens minus
+    # persistent) within each seed; run-level noise cancels.
+    def arm_values(arm):
+        return [quality[(seed, arm)] for seed in Q4_SEEDS]
+    persistent = arm_values("persistent_low_rank_r384")
+    contrasts = {}
+    for name, arm in (("token_minus_persistent", "mwg_token_diag_core_r384"),
+                      ("givens_minus_persistent", "mwg_block_givens_r384")):
+        deltas = [x - y for x, y in zip(arm_values(arm), persistent)]
+        m, sd = mean(deltas), stdev(deltas)
+        half_width = T975_DF3 * sd / 2
+        contrasts[name] = {"mean": m, "sample_sd": sd, "per_seed": deltas,
+                           "descriptive_t95_interval": [m - half_width, m + half_width]}
+    # Per-seed ppl degradation and latency ratios for the three matched arms.
+    ppl_rows, latency_rows = [], []
+    for arm in Q4_LATENCY_ARMS:
+        ppl_deg = [100.0 * (ppl[(seed, f"ppl:{arm}")][1] / ppl[(seed, f"ppl:{arm}")][0] - 1.0)
+                   for seed in Q4_SEEDS]
+        timings = [latency[(seed, arm)][0] for seed in Q4_SEEDS]
+        row = {"arm": arm,
+               "relative_mse_mean": mean(arm_values(arm)),
+               "relative_mse_sample_sd": stdev(arm_values(arm)),
+               "ppl_relative_degradation_pct_mean": mean(ppl_deg),
+               "ppl_relative_degradation_pct_sample_sd": stdev(ppl_deg),
+               "persistent_over_dense_ms": mean([t["persistent"] / t["dense"] for t in timings]),
+               "third_arm_over_persistent_ms": mean([
+                   t.get("materialized", t.get("block_givens")) / t["persistent"] for t in timings]),
+               "third_arm_name": "materialized" if "materialized" in timings[0] else "block_givens"}
+        ppl_rows.append(row)
+        for seed in Q4_SEEDS:
+            t = latency[(seed, arm)][0]
+            key = "materialized" if "materialized" in t else "block_givens"
+            latency_rows.append({"arm": arm, "seed": seed,
+                                 "dense_ms": t["dense"], "persistent_ms": t["persistent"],
+                                 f"{key}_ms": t[key]})
+    return {"evidence_class": "matched_trained_model_quality_latency",
+            "run_id": Q4_RUN_ID,
+            "quality": {arm: {"mean": mean(arm_values(arm)), "sample_sd": stdev(arm_values(arm))}
+                        for arm in Q4_QUALITY_ARMS},
+            "contrasts": contrasts,
+            "ppl_and_latency_by_arm": ppl_rows,
+            "latency_rows": latency_rows,
+            "verdict": "reference_block_givens_slower_than_persistent",
+            "limitations": ["same trained checkpoint per arm and seed, but the "
+                            "block-Givens rotation is executed as the PyTorch "
+                            "reference path; a compiled tile-local op is not yet "
+                            "measured, so no positive serving claim follows",
+                            "single-layer latency at batch 1, seq 128, fp16 on one "
+                            "Ascend910B2 host; not end-to-end decode",
+                            "patch-perplexity shares the dense teacher across arms; "
+                            "four seeds give descriptive intervals only",
+                            "checkpoints reside on ASI2; local copies are digest-bound "
+                            "through the latency records, not independently verified binaries"]}
+
+
 def kernel_gate(data):
     stability = data.get("stability_1000_calls", {})
     configs = data.get("configs", [])
@@ -445,6 +602,10 @@ def collect(root):
                     sweep_dir_rel / "provenance_digest.json"])
     paired_control = paired_shuffled_control_gate(root)
     sources.extend([PAIRED_CONTROL_PATH, PAIRED_CELLS_PATH])
+    q4 = matched_quality_latency_gate(root)
+    sources.append(Q4_SUMMARY_PATH)
+    sources.extend(Q4_DIR / f"{Q4_RUN_ID}__seed_{seed}__latency_mwg_block_givens_r384.json"
+                   for seed in Q4_SEEDS)
     timings = {}
     folder = root / "results/asi2_opt_inclusive_sync_20260923T025114Z"
     paths = sorted(folder.glob("ASI2_mwg_transformer_*.json"))
@@ -481,6 +642,7 @@ def collect(root):
             "floors_and_constant_core": floors,
             "complete_ffn_sweep": sweep,
             "paired_shuffled_control": paired_control,
+            "matched_quality_latency_q4": q4,
             "v1_four_arm": {key: {"median_ms": four[key]["median_ms"],
                                    "fused_over_materialized": four[key]["median_ms"]["fused"] /
                                        four[key]["median_ms"]["materialized"]}
@@ -493,7 +655,9 @@ def collect(root):
                               "regeneration closes recoverability but not dataset disjointness",
                               "no matched v4 trained-model end-to-end run; device-counter evidence "
                               "covers kernel traffic only",
-                              "no verified quality/latency Pareto curve from same causal model and runtime"]}
+                              "Q4 is answered only for the reference block-Givens realization "
+                              "(PyTorch path), which is slower than persistent; the compiled "
+                              "tile-local execution path that could win remains unmeasured"]}
 
 
 def emit_tables(summary, folder):
@@ -558,6 +722,44 @@ def emit_tables(summary, folder):
         )
     table("journal_complete_ffn_sweep_rows.tex", "rrrrrrr",
           "Tokens & Dense (ms) & Persistent (ms) & Materialized (ms) & Fused v1 (ms) & Fused v4 (ms) & v1/v4",
+          lines)
+    q4_rows = summary["matched_quality_latency_q4"]["latency_rows"]
+    if not q4_rows:
+        raise ValueError("refusing to emit Q4 table without rows")
+    display = {"mwg_block_givens_r384": "Block-Givens",
+               "mwg_token_diag_core_r384": "Token-diag",
+               "persistent_low_rank_r384": "Persistent"}
+    lines = []
+    for r in q4_rows:
+        key = "materialized" if "materialized_ms" in r else "block_givens"
+        lines.append(
+            f"{display[r['arm']]} & {r['seed']} & ${r['dense_ms']:.3f}$ & ${r['persistent_ms']:.3f}$"
+            f" & ${r[key + '_ms']:.3f}$ & ${r[key + '_ms'] / r['persistent_ms']:.2f}$ \\\\"
+        )
+    table("journal_q4_latency_rows.tex", "lrrrrr",
+          "Arm & Seed & Dense (ms) & Pers.\\ (ms) & Variant (ms) & Var./Pers.",
+          lines)
+    q4_q = summary["matched_quality_latency_q4"]["quality"]
+    q4_pa = summary["matched_quality_latency_q4"]["ppl_and_latency_by_arm"]
+    display_q = {"mwg_block_givens_r384": "Block-Givens",
+                 "mwg_token_diag_core_r384": "Token-diag",
+                 "persistent_low_rank_r384": "Persistent",
+                 "persistent_low_rank_r401": "Pers.\\ ($r{=}401$)",
+                 "static_svd_r384": "Static SVD",
+                 "static_svd_r401": "Static SVD ($r{=}401$)"}
+    lines = []
+    for arm in Q4_QUALITY_ARMS:
+        stats = q4_q[arm]
+        match = next((x for x in q4_pa if x["arm"] == arm), None)
+        if match is not None:
+            extra = (f" & ${match['ppl_relative_degradation_pct_mean']:.2f} \\pm"
+                     f" {match['ppl_relative_degradation_pct_sample_sd']:.2f}$"
+                     f" & ${match['third_arm_over_persistent_ms']:.2f}$")
+        else:
+            extra = " & -- & --"
+        lines.append(f"{display_q[arm]} & ${stats['mean']:.4f}$ & ${stats['sample_sd']:.4f}$" + extra + " \\\\")
+    table("journal_q4_quality_rows.tex", "lrrrr",
+          "Arm & Rel.\\ MSE & MSE SD & PPL degr.\\ (\\%) & Var./Pers.",
           lines)
 
 

@@ -114,6 +114,41 @@ class EvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "superseded"):
                 audit.collect(tmp_root)
 
+    def test_q4_gate_passes_on_archive_and_rejects_summary_drift(self):
+        # The Q4 gate must accept the archived matched quality-latency run and
+        # recompute its aggregates from the retained raw per-seed records.
+        result = audit.matched_quality_latency_gate(ROOT)
+        self.assertEqual(result["evidence_class"], "matched_trained_model_quality_latency")
+        self.assertEqual(result["verdict"], "reference_block_givens_slower_than_persistent")
+        self.assertEqual(len(result["latency_rows"]), 12)
+        for row in result["latency_rows"]:
+            self.assertGreater(row["persistent_ms"], 0.0)
+            self.assertGreater(row["dense_ms"], 0.0)
+        # The measured engineering fact the manuscript reports: the PyTorch
+        # reference block-Givens rotation is ~4.5x the persistent latency.
+        givens_rows = [r for r in result["latency_rows"] if r["arm"] == "mwg_block_givens_r384"]
+        for row in givens_rows:
+            self.assertGreater(row["block_givens_ms"] / row["persistent_ms"], 4.0)
+        # Tampering with any summary latency cell must abort the gate.
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            for rel in [str(audit.Q4_SUMMARY_PATH)] + [
+                    str(audit.Q4_DIR / f"{audit.Q4_RUN_ID}__seed_{seed}__latency_mwg_block_givens_r384.json")
+                    for seed in audit.Q4_SEEDS]:
+                dst = tmp_root / rel
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(ROOT / rel, dst)
+            summary_path = tmp_root / audit.Q4_SUMMARY_PATH
+            mutated = json.loads(summary_path.read_text())
+            for row in mutated["rows"]:
+                if "latency_ms" in row and row["student"] == "mwg_block_givens_r384":
+                    row["latency_ms"]["block_givens"] = 0.01
+                    break
+            summary_path.write_text(json.dumps(mutated))
+            with self.assertRaisesRegex(ValueError, "Q4 summary latency diverges"):
+                audit.matched_quality_latency_gate(tmp_root)
+
     def test_failed_gate_removes_stale_multicore_table(self):
         """A stale journal_multicore_rows.tex must not survive a failed gate."""
         import tempfile

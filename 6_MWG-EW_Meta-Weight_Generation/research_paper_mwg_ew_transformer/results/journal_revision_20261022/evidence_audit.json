@@ -872,6 +872,191 @@
       "descriptive intervals over four seeds; no population claim"
     ]
   },
+  "matched_quality_latency_q4": {
+    "evidence_class": "matched_trained_model_quality_latency",
+    "run_id": "asi2_q4_matched_quality_latency_20261113T134959Z",
+    "quality": {
+      "mwg_block_givens_r384": {
+        "mean": 0.4443919062614441,
+        "sample_sd": 0.000752754762501602
+      },
+      "mwg_token_diag_core_r384": {
+        "mean": 0.44516677409410477,
+        "sample_sd": 0.000693361411392966
+      },
+      "persistent_low_rank_r384": {
+        "mean": 0.4448888674378395,
+        "sample_sd": 0.0007641596013679915
+      },
+      "persistent_low_rank_r401": {
+        "mean": 0.43520792573690414,
+        "sample_sd": 0.000729537437282018
+      },
+      "static_svd_r384": {
+        "mean": 0.8383627533912659,
+        "sample_sd": 0.0004635086080694987
+      },
+      "static_svd_r401": {
+        "mean": 0.8276958614587784,
+        "sample_sd": 0.00043522318567042634
+      }
+    },
+    "contrasts": {
+      "token_minus_persistent": {
+        "mean": 0.0002779066562652588,
+        "sample_sd": 0.00010421296444816064,
+        "per_seed": [
+          0.00019341707229614258,
+          0.00019368529319763184,
+          0.0004076361656188965,
+          0.00031688809394836426
+        ],
+        "descriptive_t95_interval": [
+          0.00011208057442987424,
+          0.00044373273810064334
+        ]
+      },
+      "givens_minus_persistent": {
+        "mean": -0.0004969611763954163,
+        "sample_sd": 8.927028319255947e-05,
+        "per_seed": [
+          -0.0005737841129302979,
+          -0.0003719925880432129,
+          -0.0005458295345306396,
+          -0.0004962384700775146
+        ],
+        "descriptive_t95_interval": [
+          -0.0006390101178543366,
+          -0.0003549122349364959
+        ]
+      }
+    },
+    "ppl_and_latency_by_arm": [
+      {
+        "arm": "mwg_block_givens_r384",
+        "relative_mse_mean": 0.4443919062614441,
+        "relative_mse_sample_sd": 0.000752754762501602,
+        "ppl_relative_degradation_pct_mean": 2.493608058524932,
+        "ppl_relative_degradation_pct_sample_sd": 0.06901743045678234,
+        "persistent_over_dense_ms": 1.293372551108992,
+        "third_arm_over_persistent_ms": 4.4847132960340375,
+        "third_arm_name": "block_givens"
+      },
+      {
+        "arm": "mwg_token_diag_core_r384",
+        "relative_mse_mean": 0.44516677409410477,
+        "relative_mse_sample_sd": 0.000693361411392966,
+        "ppl_relative_degradation_pct_mean": 2.3739541587563364,
+        "ppl_relative_degradation_pct_sample_sd": 0.07245001614554344,
+        "persistent_over_dense_ms": 1.303721979749926,
+        "third_arm_over_persistent_ms": 3.0317664144054484,
+        "third_arm_name": "materialized"
+      },
+      {
+        "arm": "persistent_low_rank_r384",
+        "relative_mse_mean": 0.4448888674378395,
+        "relative_mse_sample_sd": 0.0007641596013679915,
+        "ppl_relative_degradation_pct_mean": 2.375326556427587,
+        "ppl_relative_degradation_pct_sample_sd": 0.06596470410664355,
+        "persistent_over_dense_ms": 1.334903775931817,
+        "third_arm_over_persistent_ms": 3.086146729449294,
+        "third_arm_name": "materialized"
+      }
+    ],
+    "latency_rows": [
+      {
+        "arm": "mwg_block_givens_r384",
+        "seed": 2026,
+        "dense_ms": 0.2196705,
+        "persistent_ms": 0.29051099999999996,
+        "block_givens_ms": 1.3016549999999998
+      },
+      {
+        "arm": "mwg_block_givens_r384",
+        "seed": 2027,
+        "dense_ms": 0.227556,
+        "persistent_ms": 0.287291,
+        "block_givens_ms": 1.2973295
+      },
+      {
+        "arm": "mwg_block_givens_r384",
+        "seed": 2028,
+        "dense_ms": 0.2278605,
+        "persistent_ms": 0.29964599999999997,
+        "block_givens_ms": 1.3179545
+      },
+      {
+        "arm": "mwg_block_givens_r384",
+        "seed": 2029,
+        "dense_ms": 0.223966,
+        "persistent_ms": 0.285211,
+        "block_givens_ms": 1.2960495
+      },
+      {
+        "arm": "mwg_token_diag_core_r384",
+        "seed": 2026,
+        "dense_ms": 0.2459905,
+        "persistent_ms": 0.29620599999999997,
+        "materialized_ms": 0.906868
+      },
+      {
+        "arm": "mwg_token_diag_core_r384",
+        "seed": 2027,
+        "dense_ms": 0.229491,
+        "persistent_ms": 0.298626,
+        "materialized_ms": 0.909198
+      },
+      {
+        "arm": "mwg_token_diag_core_r384",
+        "seed": 2028,
+        "dense_ms": 0.244346,
+        "persistent_ms": 0.31806599999999996,
+        "materialized_ms": 0.960899
+      },
+      {
+        "arm": "mwg_token_diag_core_r384",
+        "seed": 2029,
+        "dense_ms": 0.2253105,
+        "persistent_ms": 0.317191,
+        "materialized_ms": 0.9515035000000001
+      },
+      {
+        "arm": "persistent_low_rank_r384",
+        "seed": 2026,
+        "dense_ms": 0.205786,
+        "persistent_ms": 0.272436,
+        "materialized_ms": 0.901644
+      },
+      {
+        "arm": "persistent_low_rank_r384",
+        "seed": 2027,
+        "dense_ms": 0.24524600000000002,
+        "persistent_ms": 0.31305099999999997,
+        "materialized_ms": 0.955699
+      },
+      {
+        "arm": "persistent_low_rank_r384",
+        "seed": 2028,
+        "dense_ms": 0.24624600000000002,
+        "persistent_ms": 0.329132,
+        "materialized_ms": 0.9810190000000001
+      },
+      {
+        "arm": "persistent_low_rank_r384",
+        "seed": 2029,
+        "dense_ms": 0.237336,
+        "persistent_ms": 0.3329015,
+        "materialized_ms": 0.999219
+      }
+    ],
+    "verdict": "reference_block_givens_slower_than_persistent",
+    "limitations": [
+      "same trained checkpoint per arm and seed, but the block-Givens rotation is executed as the PyTorch reference path; a compiled tile-local op is not yet measured, so no positive serving claim follows",
+      "single-layer latency at batch 1, seq 128, fp16 on one Ascend910B2 host; not end-to-end decode",
+      "patch-perplexity shares the dense teacher across arms; four seeds give descriptive intervals only",
+      "checkpoints reside on ASI2; local copies are digest-bound through the latency records, not independently verified binaries"
+    ]
+  },
   "v1_four_arm": {
     "probe_geometry": {
       "median_ms": {
@@ -1009,6 +1194,26 @@
       "sha256": "f3a90e9c0a7a3a3e059cee5d394aa27ae4878956537a86d10e3895c5f11d5aed"
     },
     {
+      "path": "results/asi2_q4_matched_quality_latency_20261113/asi2_q4_matched_quality_latency_20261113T134959Z__q4_summary.json",
+      "sha256": "7a17fab6f49fad1949b8bb455380838919fbbc003337bebb97744ab8290f4077"
+    },
+    {
+      "path": "results/asi2_q4_matched_quality_latency_20261113/asi2_q4_matched_quality_latency_20261113T134959Z__seed_2026__latency_mwg_block_givens_r384.json",
+      "sha256": "cb5bddab3be84fff5459d552338d5fb7dcb82af080fec61e106d79166f669bab"
+    },
+    {
+      "path": "results/asi2_q4_matched_quality_latency_20261113/asi2_q4_matched_quality_latency_20261113T134959Z__seed_2027__latency_mwg_block_givens_r384.json",
+      "sha256": "44602dd51dac5e9dbaf24412a2585a5070c49abf6c1e2735b8b2b1ba1f647f8d"
+    },
+    {
+      "path": "results/asi2_q4_matched_quality_latency_20261113/asi2_q4_matched_quality_latency_20261113T134959Z__seed_2028__latency_mwg_block_givens_r384.json",
+      "sha256": "2ca0df4789331895795712342c212b62b40efb03d8531905b0502f8cbf898ced"
+    },
+    {
+      "path": "results/asi2_q4_matched_quality_latency_20261113/asi2_q4_matched_quality_latency_20261113T134959Z__seed_2029__latency_mwg_block_givens_r384.json",
+      "sha256": "1160ddd04512d2b7bde6395afabe229516b8940ec30fe9bbf68ca174235401d6"
+    },
+    {
       "path": "results/asi2_opt_inclusive_sync_20260923T025114Z/ASI2_mwg_transformer_20260923T025131Z.json",
       "sha256": "ae7a750edb0fdb9ccae3c4b327248f82b41cddda6db6d58f6333331ab8860001"
     },
@@ -1025,6 +1230,6 @@
   "blocking_gaps": [
     "canonical quality record lacks per-run raw reports and split manifests; regeneration closes recoverability but not dataset disjointness",
     "no matched v4 trained-model end-to-end run; device-counter evidence covers kernel traffic only",
-    "no verified quality/latency Pareto curve from same causal model and runtime"
+    "Q4 is answered only for the reference block-Givens realization (PyTorch path), which is slower than persistent; the compiled tile-local execution path that could win remains unmeasured"
   ]
 }

@@ -1,0 +1,329 @@
+{
+  "run_id": "asi2_q4_matched_quality_latency_20261113T134959Z",
+  "rows": [
+    {
+      "seed": 2026,
+      "student": "mwg_block_givens_r384",
+      "relative_mse": 0.4451560974121094
+    },
+    {
+      "seed": 2026,
+      "student": "mwg_token_diag_core_r384",
+      "relative_mse": 0.4459232985973358
+    },
+    {
+      "seed": 2026,
+      "student": "persistent_low_rank_r384",
+      "relative_mse": 0.4457298815250397
+    },
+    {
+      "seed": 2026,
+      "student": "persistent_low_rank_r401",
+      "relative_mse": 0.43597012758255005
+    },
+    {
+      "seed": 2026,
+      "student": "static_svd_r384",
+      "relative_mse": 0.8384636044502258
+    },
+    {
+      "seed": 2026,
+      "student": "static_svd_r401",
+      "relative_mse": 0.8278111219406128
+    },
+    {
+      "seed": 2026,
+      "student": "mwg_token_diag_core_r384",
+      "latency_ms": {
+        "dense": 0.2459905,
+        "persistent": 0.29620599999999997,
+        "materialized": 0.906868
+      },
+      "trained_checkpoint_sha256": "b252568b1e294afd66316d5800a515f433682d3786dee78efeb6ce29123e0f0a"
+    },
+    {
+      "seed": 2026,
+      "student": "persistent_low_rank_r384",
+      "latency_ms": {
+        "dense": 0.205786,
+        "persistent": 0.272436,
+        "materialized": 0.901644
+      },
+      "trained_checkpoint_sha256": "f6f324e21bcdeaf93e9be45c6b7b4db2a26fc8f23bd35c6720531e7a53f6fa97"
+    },
+    {
+      "seed": 2026,
+      "student": "ppl:mwg_block_givens_r384",
+      "dense_ppl": 3.837255577129431,
+      "patched_ppl": 3.9304864092345784,
+      "patched_student": "mwg_block_givens_r384"
+    },
+    {
+      "seed": 2026,
+      "student": "ppl:mwg_token_diag_core_r384",
+      "dense_ppl": 3.837255579360828,
+      "patched_ppl": 3.9290581056384926,
+      "patched_student": "mwg_token_diag_core_r384"
+    },
+    {
+      "seed": 2026,
+      "student": "ppl:persistent_low_rank_r384",
+      "dense_ppl": 3.8372554475909295,
+      "patched_ppl": 3.928209050858006,
+      "patched_student": "persistent_low_rank_r384"
+    },
+    {
+      "seed": 2027,
+      "student": "mwg_block_givens_r384",
+      "relative_mse": 0.4443512260913849
+    },
+    {
+      "seed": 2027,
+      "student": "mwg_token_diag_core_r384",
+      "relative_mse": 0.44491690397262573
+    },
+    {
+      "seed": 2027,
+      "student": "persistent_low_rank_r384",
+      "relative_mse": 0.4447232186794281
+    },
+    {
+      "seed": 2027,
+      "student": "persistent_low_rank_r401",
+      "relative_mse": 0.43509769439697266
+    },
+    {
+      "seed": 2027,
+      "student": "static_svd_r384",
+      "relative_mse": 0.8386816382408142
+    },
+    {
+      "seed": 2027,
+      "student": "static_svd_r401",
+      "relative_mse": 0.8279653787612915
+    },
+    {
+      "seed": 2027,
+      "student": "mwg_token_diag_core_r384",
+      "latency_ms": {
+        "dense": 0.229491,
+        "persistent": 0.298626,
+        "materialized": 0.909198
+      },
+      "trained_checkpoint_sha256": "ee53eb9f37af05c7978cc1d52293bbbc9fea5bbc76a825174cbd1e3c1b921d45"
+    },
+    {
+      "seed": 2027,
+      "student": "persistent_low_rank_r384",
+      "latency_ms": {
+        "dense": 0.24524600000000002,
+        "persistent": 0.31305099999999997,
+        "materialized": 0.955699
+      },
+      "trained_checkpoint_sha256": "ebb7867c491c93bcb1a151d6850aff067156f084e5f40bd245e89143fc45856f"
+    },
+    {
+      "seed": 2027,
+      "student": "ppl:mwg_block_givens_r384",
+      "dense_ppl": 3.83725553849102,
+      "patched_ppl": 3.9314962872137613,
+      "patched_student": "mwg_block_givens_r384"
+    },
+    {
+      "seed": 2027,
+      "student": "ppl:mwg_token_diag_core_r384",
+      "dense_ppl": 3.837255622168431,
+      "patched_ppl": 3.9254021104264316,
+      "patched_student": "mwg_token_diag_core_r384"
+    },
+    {
+      "seed": 2027,
+      "student": "ppl:persistent_low_rank_r384",
+      "dense_ppl": 3.837255525278797,
+      "patched_ppl": 3.925903905096757,
+      "patched_student": "persistent_low_rank_r384"
+    },
+    {
+      "seed": 2028,
+      "student": "mwg_block_givens_r384",
+      "relative_mse": 0.4433772563934326
+    },
+    {
+      "seed": 2028,
+      "student": "mwg_token_diag_core_r384",
+      "relative_mse": 0.44433072209358215
+    },
+    {
+      "seed": 2028,
+      "student": "persistent_low_rank_r384",
+      "relative_mse": 0.44392308592796326
+    },
+    {
+      "seed": 2028,
+      "student": "persistent_low_rank_r401",
+      "relative_mse": 0.4342530369758606
+    },
+    {
+      "seed": 2028,
+      "student": "static_svd_r384",
+      "relative_mse": 0.8386243581771851
+    },
+    {
+      "seed": 2028,
+      "student": "static_svd_r401",
+      "relative_mse": 0.8279553055763245
+    },
+    {
+      "seed": 2028,
+      "student": "mwg_token_diag_core_r384",
+      "latency_ms": {
+        "dense": 0.244346,
+        "persistent": 0.31806599999999996,
+        "materialized": 0.960899
+      },
+      "trained_checkpoint_sha256": "52d37f98a421e9de5c98f260be9a8c3fc404268c621ce0e8723c10973cc2e66a"
+    },
+    {
+      "seed": 2028,
+      "student": "persistent_low_rank_r384",
+      "latency_ms": {
+        "dense": 0.24624600000000002,
+        "persistent": 0.329132,
+        "materialized": 0.9810190000000001
+      },
+      "trained_checkpoint_sha256": "28ea7a29036badc432b5a4979f24169f33e6dd69c96d37fe9476a68ebe6fa819"
+    },
+    {
+      "seed": 2028,
+      "student": "ppl:mwg_block_givens_r384",
+      "dense_ppl": 3.8372555581625516,
+      "patched_ppl": 3.9365224341606155,
+      "patched_student": "mwg_block_givens_r384"
+    },
+    {
+      "seed": 2028,
+      "student": "ppl:mwg_token_diag_core_r384",
+      "dense_ppl": 3.83725567073069,
+      "patched_ppl": 3.9318668110826125,
+      "patched_student": "mwg_token_diag_core_r384"
+    },
+    {
+      "seed": 2028,
+      "student": "ppl:persistent_low_rank_r384",
+      "dense_ppl": 3.8372556362027472,
+      "patched_ppl": 3.9319073190417413,
+      "patched_student": "persistent_low_rank_r384"
+    },
+    {
+      "seed": 2029,
+      "student": "mwg_block_givens_r384",
+      "relative_mse": 0.4446830451488495
+    },
+    {
+      "seed": 2029,
+      "student": "mwg_token_diag_core_r384",
+      "relative_mse": 0.44549617171287537
+    },
+    {
+      "seed": 2029,
+      "student": "persistent_low_rank_r384",
+      "relative_mse": 0.445179283618927
+    },
+    {
+      "seed": 2029,
+      "student": "persistent_low_rank_r401",
+      "relative_mse": 0.4355108439922333
+    },
+    {
+      "seed": 2029,
+      "student": "static_svd_r384",
+      "relative_mse": 0.8376814126968384
+    },
+    {
+      "seed": 2029,
+      "student": "static_svd_r401",
+      "relative_mse": 0.8270516395568848
+    },
+    {
+      "seed": 2029,
+      "student": "mwg_token_diag_core_r384",
+      "latency_ms": {
+        "dense": 0.2253105,
+        "persistent": 0.317191,
+        "materialized": 0.9515035000000001
+      },
+      "trained_checkpoint_sha256": "81b9fa355a732bf8f8b06c40cfd86d005e6527b4aa5f988d739f7353aad57d90"
+    },
+    {
+      "seed": 2029,
+      "student": "persistent_low_rank_r384",
+      "latency_ms": {
+        "dense": 0.237336,
+        "persistent": 0.3329015,
+        "materialized": 0.999219
+      },
+      "trained_checkpoint_sha256": "57dab0a1de574fae4de40e1689f14451e52e8369502302050daad52b56611be9"
+    },
+    {
+      "seed": 2029,
+      "student": "ppl:mwg_block_givens_r384",
+      "dense_ppl": 3.8372555376102047,
+      "patched_ppl": 3.9332615355458955,
+      "patched_student": "mwg_block_givens_r384"
+    },
+    {
+      "seed": 2029,
+      "student": "ppl:mwg_token_diag_core_r384",
+      "dense_ppl": 3.837255427156026,
+      "patched_ppl": 3.9270740255753185,
+      "patched_student": "mwg_token_diag_core_r384"
+    },
+    {
+      "seed": 2029,
+      "student": "ppl:persistent_low_rank_r384",
+      "dense_ppl": 3.837255571081169,
+      "patched_ppl": 3.927591305249823,
+      "patched_student": "persistent_low_rank_r384"
+    },
+    {
+      "seed": 2026,
+      "student": "mwg_block_givens_r384",
+      "latency_ms": {
+        "dense": 0.2196705,
+        "persistent": 0.29051099999999996,
+        "block_givens": 1.3016549999999998
+      },
+      "trained_checkpoint_sha256": "a8407112d9e76af34708b213ecf8c3a5ba1b833a4f252c24b3eba9512a719c55"
+    },
+    {
+      "seed": 2027,
+      "student": "mwg_block_givens_r384",
+      "latency_ms": {
+        "dense": 0.227556,
+        "persistent": 0.287291,
+        "block_givens": 1.2973295
+      },
+      "trained_checkpoint_sha256": "a6a1fefd6b3587fd5e4746025ec77d383348e139985a8c9c74d938671da6064f"
+    },
+    {
+      "seed": 2028,
+      "student": "mwg_block_givens_r384",
+      "latency_ms": {
+        "dense": 0.2278605,
+        "persistent": 0.29964599999999997,
+        "block_givens": 1.3179545
+      },
+      "trained_checkpoint_sha256": "968a5220a489899c7e9c6e18397f4a0301870d20cc1e3575e869b5cb284fc454"
+    },
+    {
+      "seed": 2029,
+      "student": "mwg_block_givens_r384",
+      "latency_ms": {
+        "dense": 0.223966,
+        "persistent": 0.285211,
+        "block_givens": 1.2960495
+      },
+      "trained_checkpoint_sha256": "1036940f346ae10efd06a87062cc4429e9dfd278f8fc53636187b9c198cfbe34"
+    }
+  ]
+}

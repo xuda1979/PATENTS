@@ -29,11 +29,20 @@ persistent failures, sustaining $1.05$--$2.97\times$ speedups over the fused
 single-core kernel from $T{=}128$ to $4096$, a 26--66\% kernel-latency
 reduction at $T\ge512$; parsed HBM/L2 device counters support a
 traffic-attribution reading of that speedup, while trained-model
-evidence remains open. A five-arm complete-FFN sweep on the same host
+evidence for that kernel remains open. A five-arm complete-FFN sweep on the same host
 shows the multicore variant beating the single-core fused arm from
 $T{=}1024$ upward ($1.04$--$1.47\times$, exact fp16 output match) yet
 still trailing the materialized arm at every geometry, so no
-end-to-end fused win is claimed. Fresh CPU tests of the actual causal FFN reduce
+end-to-end fused win is claimed. A final matched trained-model run
+(2026-11-13, four seeds) answers the protocol's joint quality--latency
+question with a negative result: an input-dependent output-subspace
+variant (block Givens rotations) matches persistent-low-rank quality
+(relative MSE $0.4444$ vs.\ $0.4449$; held-out perplexity degradation
+within $0.15$ percentage points) yet its measured reference execution
+is $4.48\times$ the persistent latency on the same checkpoints,
+runtime, and device, so the engineering claim fails for the reference
+realization and remains open only for a compiled tile-local path.
+Fresh CPU tests of the actual causal FFN reduce
 forward-retained nonparameter tensor storage by $13\times$ under
 checkpointing, with identical outputs and gradients in nine small synthetic
 fixtures. The methodology itself is the transferable contribution: every
@@ -487,7 +496,7 @@ Table~\ref{tab:evidence} makes the available evidence explicit.
 
 \begin{table}[t]
 \centering\small
-\caption{Evidence classes as of the November 12, 2026 audit.}
+\caption{Evidence classes as of the November 14, 2026 audit.}
 \label{tab:evidence}
 \begin{tabular}{p{.25\linewidth}p{.32\linewidth}p{.33\linewidth}}
 \toprule
@@ -497,6 +506,7 @@ Qwen FFN quality & Four per-seed summaries and duplicate aggregate record; 2026-
 Four-arm v1 timing & One same-run summary per geometry & Recorded medians; no local per-iteration uncertainty \\
 Multicore v4 & Timing/equivalence records; failed stability record superseded by a passing hardened re-run (harness v3, 2026-11-08); parsed HBM/L2 counters (2026-11-10) & Repeated-call-validated operator speedups over single-core v1, corroborated by traffic-attribution counters; no trained-model claim \\
 Complete-FFN five-arm sweep & One same-run summary per geometry with all four validations passing (2026-11-12); full per-geometry records retained on the measurement host & Recorded medians at the complete-FFN boundary; v4 fused beats v1 fused from $T{=}1024$ but trails the materialized arm; no end-to-end win claimed \\
+Matched trained-model quality--latency (Q4) & One 48-row summary plus four retained raw per-seed latency records (2026-11-13/14); checkpoints digest-bound on the measurement host & Matched quality and perplexity for the block-Givens arm; reference execution $4.48\times$ persistent latency; compiled tile-local path unmeasured \\
 DDP optimizer timing & Three complete JSON run reports & Short kernel-execution timings; numerical health unknown \\
 CPU checkpointing & New source, nine cases, hashes and tests & Actual-module saved-storage and gradient verification \\
 Algebra checks & New script and 50 seeded fixtures & Numerical consistency of identities; no model-quality evidence \\
@@ -575,7 +585,13 @@ but without trained-model support. Extending the sweep to the complete-FFN
 boundary (2026-11-12, five arms, same host) preserves the ordering:
 the multicore fused arm beats the single-core fused arm from $T{=}1024$
 upward but remains slower than the materialized arm at every geometry
-(Section~\ref{sec:fusion}). No measured result
+(Section~\ref{sec:fusion}). The 2026-11-13 matched trained-model run
+closes the protocol's fourth question (Q4) with a negative answer for
+the reference realization: matched quality (relative MSE $0.4444 \pm
+0.0008$ vs.\ persistent $0.4449 \pm 0.0008$; perplexity degradation
+$2.49\% \pm 0.07$ vs.\ $2.38\% \pm 0.07$) but reference-execution
+latency $4.48\times$ persistent
+(Section~\ref{sec:matched-q4}). No measured result
 in this section shows dynamic capacity allocation beating a static control
 at matched budget.
 
@@ -862,6 +878,75 @@ separately and is not part of this sweep.}
 \input{\paperroot/generated_tables/journal_complete_ffn_sweep_rows.tex}
 \end{table}
 
+\subsection{Matched trained-model quality--latency (Q4)}\label{sec:matched-q4}
+The preceding measurements leave open the protocol's fourth question: whether
+quality and efficiency hold simultaneously on the \emph{same} trained
+artifact. The 2026-11-13 run
+(\texttt{asi2\_q4\_matched\_quality\_latency\_20261113T134959Z}) closes this
+gate for one new input-dependent arm. For each of four training seeds
+(2026--2029) it trains matched students against the same layer-16 Qwen2.5-1.5B
+FFN teacher used by the canonical family, saves each checkpoint, then measures
+from the saved artifact: held-out relative MSE, held-out patched perplexity,
+and same-runtime single-layer latency. The new arm, \emph{block Givens},
+implements the input-dependent output subspace proposed as future work: a
+controller emits per-token angles and the up/gate/down outputs are rotated
+pairwise, so the effective output subspace varies with the input rather than
+being fixed by stored factors.
+
+The quality answer is positive and the efficiency answer is negative.
+Table~\ref{tab:q4quality} shows the block-Givens arm matching the persistent
+and token-diag-core arms (relative MSE $0.4444 \pm 0.0008$ vs.\ $0.4449 \pm
+0.0008$ and $0.4452 \pm 0.0007$), with held-out perplexity degradation
+$2.49\% \pm 0.07$ vs.\ $2.38\% \pm 0.07$ and $2.37\% \pm 0.07$: the
+input-dependent subspace recovers the fixed-subspace quality at the same rank.
+Table~\ref{tab:q4latency} shows the latency answer: measured as the PyTorch
+reference rotation on the same checkpoints, runtime, and Ascend~910B2 device,
+the block-Givens path takes $1.296$--$1.318$\,ms against $0.285$--$0.300$\,ms
+for persistent low rank ($4.40$--$4.54\times$; mean $4.48\times$) at batch 1,
+$S{=}128$, fp16. The reference realization therefore fails the engineering
+gate by a wide margin. This is the honest negative control the protocol
+requires: the input-dependent mechanism itself is not slow --- the rotation is
+two elementwise ops per pair --- but its \emph{reference execution model}
+(re-materializing per-token rotation matrices through generic tensor ops)
+is. Whether a compiled tile-local realization (applying the rotation
+in-place on output tiles, with no global intermediate) recovers or beats the
+persistent arm is the remaining open question; the audit retains this run as
+the measured baseline any such realization must beat.
+
+Claim boundary: four training seeds give descriptive intervals only; latency
+is single-layer at batch 1, $S{=}128$, fp16 on one device, not end-to-end
+decode; checkpoints reside on the measurement host and are digest-bound here
+through the latency records; and no compiled tile-local operator was measured,
+so no serving claim is made for the block-Givens arm.
+
+\begin{table}[t]
+\centering\small
+\caption{Matched trained-model quality and perplexity (Q4, 2026-11-13 run),
+emitted by the audit script from the archived 48-row summary: relative MSE
+mean and sample standard deviation over four training seeds, held-out
+perplexity degradation relative to the dense teacher, and the same-checkpoint
+reference-execution latency ratio of Table~\ref{tab:q4latency}
+(``Var./Pers.'': variant over persistent). The variant is the materialized
+core for persistent/token-diag arms and the reference block-Givens rotation
+for the block-Givens arm.}
+\label{tab:q4quality}
+\input{\paperroot/generated_tables/journal_q4_quality_rows.tex}
+\end{table}
+
+\begin{table}[t]
+\centering\small
+\caption{Matched trained-model latency (Q4, 2026-11-13 run), emitted by the
+audit script from the archived summary cross-checked against the four
+retained raw per-seed records. Medians over 3 repeats of 50 synchronized
+iterations (10 warmup), batch 1, $S{=}128$, fp16, single Ascend~910B2,
+per training seed. The variant column is the arm's third measured
+realization: the materialized core for persistent/token-diag arms, the
+reference block-Givens rotation for the block-Givens arm; ``Var./Pers.''
+is variant over persistent latency.}
+\label{tab:q4latency}
+\input{\paperroot/generated_tables/journal_q4_latency_rows.tex}
+\end{table}
+
 \subsection{Algebra checks}
 Fifty seeded float64 NumPy fixtures verify the output-subspace identity and
 compare the constant-core normal equations with an independently constructed
@@ -897,18 +982,27 @@ Section~\ref{sec:fusion}) extends the validated v4 latency from the
 isolated \texttt{ephemeral\_core\_apply} operator boundary to the
 complete-FFN boundary of Table~\ref{tab:v1}, where v4 is faster than
 the v1 fused arm from $T{=}1024$ upward but still slower than the
-materialized arm. One gate stays open: the joint trained-model
-quality--latency comparison (Q4) requires a matched trained-model run
-on the same artifact.
+materialized arm. The joint trained-model quality--latency comparison
+(Q4) is now measured (2026-11-13,
+Section~\ref{sec:matched-q4}) and answers the question negatively for
+the reference realization: the block-Givens arm matches persistent
+quality and perplexity but its reference execution is $4.48\times$ the
+persistent latency, so the remaining open gate narrows to a compiled
+tile-local realization of the same mechanism.
 
 A decisive next study should freeze a trained causal checkpoint, its tokenizer,
 dataset splits, and evaluation harness; then measure both quality and runtime
-for that same artifact. The primary quality comparison should include trained
-persistent low rank at exact or explicitly near-matched parameter and compute
-budgets, a calibrated constant-core control, and relevant quantized baselines.
-Held-out perplexity and task metrics must accompany FFN reconstruction. Rank
-floors require stored evaluation activations and target outputs; a controller
-claim should explain the reducible error above those floors.
+for that same artifact. The 2026-11-13 run
+(Section~\ref{sec:matched-q4}) instantiates exactly this design for one
+input-dependent arm and shows the template is executable end to end: matched
+training, checkpointed students, held-out perplexity, and same-runtime latency
+in one protocol. Extending it requires the remaining controls and realizations:
+trained persistent low rank at exact or explicitly near-matched parameter and
+compute budgets is already included; a calibrated constant-core control and
+relevant quantized baselines are not. Held-out perplexity and task metrics
+must accompany FFN reconstruction. Rank floors require stored evaluation
+activations and target outputs; a controller claim should explain the
+reducible error above those floors.
 
 For execution, the generated/materialized and generated/fused arms must share
 checkpoint, input, precision, warmup, cache policy, and complete-FFN timing
@@ -918,10 +1012,12 @@ execution. Gate all timing claims on finite outputs, gradients where relevant,
 healthy repeated calls, and supported shapes/devices. Record device counters
 and distinguish logical transfers from DRAM measurements. Test true cached
 decode ($S=1$), prefill, varying batch sizes, and the serving stack if a serving
-claim is made. With stability, device-counter attribution, and the
-complete-FFN five-arm sweep already
-resolved (Section~\ref{sec:fusion}), the remaining precondition for a v4
-efficiency comparison is a matched trained-model run.
+claim is made. With stability, device-counter attribution, the
+complete-FFN five-arm sweep (Section~\ref{sec:fusion}), and the matched
+trained-model Q4 run (Section~\ref{sec:matched-q4}) all resolved, the
+remaining preconditions for a positive engineering claim are a compiled
+tile-local realization of the input-dependent rotation and its measured
+comparison against the persistent arm on the same trained checkpoints.
 
 Finally, choose quality margins, primary workloads, repeat counts, and stopping
 rules before collecting the next comparison. A successful result requires both
@@ -947,7 +1043,13 @@ archive shows modest same-rank reconstruction differences, a near-budget
 disadvantage, and no validated complete-model efficiency gain; the one
 validated efficiency result is narrower, a 26--66\% multicore kernel-latency
 reduction over fused single-core execution at $T\ge512$ after the v4
-stability gate was closed. New
+stability gate was closed. The 2026-11-13 matched trained-model run
+completes the audit's fourth pre-declared gate: an input-dependent
+output-subspace variant matches persistent-low-rank quality and perplexity
+on the same checkpoints, yet its reference execution is $4.48\times$ the
+persistent latency, so the engineering claim is measured as false for the
+reference realization and remains unproven for any compiled tile-local
+realization. New
 actual-module CPU checks establish a reproducible rematerialization property
 with exact gradient agreement. Both outcomes transfer: the negative findings
 bound what dynamic-allocation claims this evidence class can support, and the
@@ -965,8 +1067,13 @@ execution proof.
 
 \section*{AI assistance disclosure}
 Generative AI tools assisted technical review, mathematical derivations,
-implementation, verification, analysis, and manuscript revision. Newly executed
-synthetic fixtures are labeled as such; archived accelerator records were
+implementation, verification, analysis, and manuscript revision. Newly
+executed synthetic fixtures are labeled as such. The 2026-11-10--14
+measurement campaign (provenance regeneration, floors evaluation,
+complete-FFN sweep, paired shuffled control, and the matched
+trained-model Q4 run) consisted of new accelerator executions launched
+during this revision on the ASI2/ASI3 hosts; their records are archived
+and audited here. Earlier accelerator records predating 2026-11-10 were
 reanalyzed without claiming new device execution.
 
 \section*{Broader impact}

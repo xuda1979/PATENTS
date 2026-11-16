@@ -7,6 +7,7 @@ desktop.ini
 # ===== AI tool local state =====
 .claude/
 .future/
+.future-code/
 
 # ===== Dependencies / vendored toolchains / virtual envs =====
 node_modules/
