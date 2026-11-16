@@ -57,3 +57,41 @@ abstract/findings/conclusion/limitations/disclosure updates, README/SUBMISSION_R
 REVIEW_20261022 sync, loop records. No archived record was altered; the four retained raw
 per-seed latency records and the 48-row summary are new artifacts, and the audit
 cross-checks summary against raw at every cell.
+
+## D-0007 — reviewer-response revision scope (2026-11-16, EV-0025)
+
+The second-round reviewer verdict was major revision with eight findings. All
+eight are addressed by local source edits only, within the contract's
+constraints (no invented experiments, no remote accelerator spending, no
+promotion of failed gates):
+
+1. Error decomposition: replaced the self-contradictory "three quantities +
+   a fourth" diagnostic with an explicit additive relative-error budget
+   (rank loss / subspace selection / within-subspace fit) and attributed the
+   token-controller row term by term. The floors table and its numbers are
+   unchanged; only the reading is corrected.
+2. Fresh-evidence primacy: the 2026-11 campaign is primary; archived
+   2026-08/09 records are marked corroborating wherever they appear.
+3. Q4 boundaries: quality = held-out MSE + patched perplexity on saved
+   checkpoints (seed-level dataset disjointness unestablished, descriptive
+   intervals); timing = single-layer reference (non-compiled) execution, one
+   device; compiled tile-local path explicitly unmeasured.
+4. Block-Givens spec: full mathematical specification added, verified against
+   the run source and the recorded persistent_state_bytes (32,873,216).
+5. Artifact URL + versioned pre-declaration: github.com/xuda1979/PATENTS,
+   branch loop/d0004-reframing-and-v4-evidence; question-set pre-declaration
+   commit 7d03947 (2026-10-22, merged 2026-10-27 as 7f169bd) predates the Q4
+   runs; pre-registered thresholds quoted from the worker header.
+6. Abstract: shortened; measurement chronology removed; 4.48x and 13x kept.
+7. Appendix B: the 13.0 retained-storage ratio is reported with its exact
+   definition and tied to the abstract's 13x; the no-memory-ratio-headline
+   statement is scoped to the legacy NPU records.
+8. Second architecture: pre-registered (not executed) instantiation on the
+   attention output projection W_O with per-head block-diagonal modulation;
+   same Q1-Q4, same thresholds, per-head floors; explicitly unmeasured.
+
+Two stale statements contradicting the measured Q4 verdict were corrected
+("absence of any validated joint quality-latency gain", "no validated
+complete-model efficiency gain"), and the Q4-limitations tense was fixed
+("was a pre-declared open gate"). No number, table value, gate verdict, or
+archived record was altered. submission_ready remains false.

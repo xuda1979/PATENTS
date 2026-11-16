@@ -1,54 +1,29 @@
 
 \begin{abstract}
-Conditional low-rank architectures promise input-adaptive capacity at low
-storage cost, and efficiency claims for them can conflate representational,
-storage, and execution evidence. We present an audit methodology that keeps
-these effects separate, and we demonstrate it on one such architecture:
-gated Transformer feed-forward networks (FFNs) whose low-rank factors are
-modulated by a generated diagonal core. The methodology pairs matched-contrast
-theory with provenance-checked measurement. Its theory component yields an
-output-subspace error floor that no controller can overcome while the final
-factor remains fixed, an activation-weighted constant-core control, and a
-matched-schedule bound on removable descriptor transfers. Its measurement
-component reanalyzes archived accelerator records under an explicit evidence
-taxonomy and adds fresh software verification. Applying it produces a
-predominantly negative account of dynamic capacity allocation for the studied
-case. In four recorded training-seed summaries for a Qwen2.5-1.5B FFN, the
-generated model improves relative reconstruction MSE only marginally at
-matched rank and is 1.95\% worse at the closest reported parameter budget.
-The four-seed summaries are archived and were reproduced end to end by a
-2026-11-10 regeneration whose checkpoints and reports are manifest-hashed
-and whose shared cells agree with the archived values within $0.009$
-relative MSE; they remain arithmetic confirmations of the archive rather
-than independently reproduced quality measurements. A same-run archived kernel summary reports 0.8234 versus
-0.8509 ms for fused and materialized execution at 128 tokens, but persistent
-low rank takes 0.2719 ms: the dynamic path remains $3.03\times$ slower than
-the static alternative it must beat. A re-run multicore variant on a second
-device passes a hardened 1000-call stability gate with zero transient or
-persistent failures, sustaining $1.05$--$2.97\times$ speedups over the fused
-single-core kernel from $T{=}128$ to $4096$, a 26--66\% kernel-latency
-reduction at $T\ge512$; parsed HBM/L2 device counters support a
-traffic-attribution reading of that speedup, while trained-model
-evidence for that kernel remains open. A five-arm complete-FFN sweep on the same host
-shows the multicore variant beating the single-core fused arm from
-$T{=}1024$ upward ($1.04$--$1.47\times$, exact fp16 output match) yet
-still trailing the materialized arm at every geometry, so no
-end-to-end fused win is claimed. A final matched trained-model run
-(2026-11-13, four seeds) answers the protocol's joint quality--latency
-question with a negative result: an input-dependent output-subspace
-variant (block Givens rotations) matches persistent-low-rank quality
-(relative MSE $0.4444$ vs.\ $0.4449$; held-out perplexity degradation
-within $0.15$ percentage points) yet its measured reference execution
-is $4.48\times$ the persistent latency on the same checkpoints,
-runtime, and device, so the engineering claim fails for the reference
-realization and remains open only for a compiled tile-local path.
-Fresh CPU tests of the actual causal FFN reduce
-forward-retained nonparameter tensor storage by $13\times$ under
-checkpointing, with identical outputs and gradients in nine small synthetic
-fixtures. The methodology itself is the transferable contribution: every
-component is defined for a generic conditional low-rank layer, and the
-retained negative findings identify which dynamic-allocation claims the
-studied evidence can and cannot support.
+Efficiency claims for conditional low-rank architectures can conflate
+representational, storage, and execution evidence. We present an audit
+methodology that keeps these effects separate---matched-contrast theory, an
+interface-level storage ledger, pre-declared gates with provenance-checked
+measurement---and demonstrate it on gated Transformer feed-forward networks
+(FFNs) whose low-rank factors are modulated by a generated diagonal core.
+Applying the audit yields a predominantly negative account of dynamic
+capacity allocation for the studied case. At the closest matched parameter
+budget, the conditioned arm is slightly worse than static persistent low
+rank. The fused dynamic path is slower than the static alternative it must
+beat at every tested geometry, and a multicore kernel redesign, while it
+wins at the kernel level with counter-corroborated traffic attribution,
+does not change that ordering. A matched trained-model run (four seeds)
+closes the joint quality--latency gate: an input-dependent output-subspace
+variant (block Givens rotations) matches persistent-low-rank quality and
+held-out perplexity on the same checkpoints, yet its reference execution is
+$4.48\times$ the persistent latency on the same runtime and device, so the
+engineering claim fails for the reference realization and remains open only
+for a compiled tile-local path. Fresh CPU tests of the actual causal FFN
+reduce forward-retained nonparameter tensor storage by $13\times$ under
+checkpointing, with identical outputs and gradients. The methodology is the
+transferable contribution: every component is defined for a generic
+conditional low-rank layer, and the retained negative findings identify
+which dynamic-allocation claims the studied evidence can and cannot support.
 \end{abstract}
 
 \section{Introduction}
@@ -102,10 +77,13 @@ the measurement of the methodology, not a caveat on an implied benefit.
 
 The most useful empirical conclusion is a negative result about dynamic
 capacity allocation. Generated modulation can approximately match a trained
-same-rank reconstruction baseline in the available summaries, but every
-strongest available comparison favors the static persistent baseline: the
-closest parameter-matched reconstruction, the practical kernel latency, and
-the absence of any validated joint quality--latency gain. Under the audit's
+same-rank reconstruction baseline, but every strongest available comparison
+favors the static persistent baseline: the closest parameter-matched
+reconstruction, the practical kernel latency, and now a measured joint
+quality--latency comparison, in which an input-dependent output-subspace
+variant matches persistent quality and held-out perplexity on the same
+checkpoints yet runs $4.48\times$ slower in its reference execution
+(Section~\ref{sec:matched-q4}). Under the audit's
 taxonomy this is evidence that the studied conditioning mechanism does not
 buy deployable efficiency at matched budgets, not merely evidence that more
 experiments are needed. Eliminating an explicit descriptor tensor is feasible
@@ -315,16 +293,28 @@ best projection onto a fixed subspace, but the restricted FFN/controller need
 not attain it. The theorem does not say that controllers are useless within
 that subspace, nor that all layers of a residual Transformer share one subspace.
 
-A useful diagnostic reports three quantities on fixed evaluation
-activations: actual reconstruction error, the fixed-factor floor in
-Eq.~\eqref{eq:subspace-floor}, and the best rank-$r$ output floor in
-Eq.~\eqref{eq:rank-floor}. Their gaps distinguish coefficient approximation,
-subspace selection, and unavoidable rank loss. These real-model floors cannot
-be recovered from scalar MSE summaries alone. Section~\ref{sec:rank} reports
-all three quantities for the trained checkpoints of the 2026-11-10
-regeneration. Realistic applications should additionally check a fourth
-quantity, the fixed-$V_d$ subspace floor, which bounds the best attainable
-reconstruction error.
+The decomposition in Eq.~\eqref{eq:subspace-floor} also fixes the error
+budget. Writing relative quantities on fixed evaluation activations, the
+trained model's actual error decomposes additively into three named parts:
+\begin{equation}
+ \underbrace{\tfrac{\norm{Y-\widehat Y}_F^2}{\norm{Y}_F^2}}_{\text{actual}}
+ =\underbrace{\tfrac{\sum_{j>r}\sigma_j(Y)^2}{\norm{Y}_F^2}}_{\text{rank loss (any rank-}r\text{ model)}}
+ +\underbrace{\tfrac{\norm{Y(I-P_{\mathcal S})}_F^2-\sum_{j>r}\sigma_j(Y)^2}{\norm{Y}_F^2}}_{\text{subspace selection}}
+ +\underbrace{\tfrac{\norm{YP_{\mathcal S}-\widehat Y}_F^2}{\norm{Y}_F^2}}_{\text{within-subspace fit}}.
+ \label{eq:error-budget}
+\end{equation}
+The first term is the rank-$r$ tail of Eq.~\eqref{eq:rank-floor}, which no
+rank-$r$ model can avoid; the second measures how far the trained subspace
+$\mathcal S$ is from the optimal rank-$r$ subspace; only the third can be
+reduced by better coefficients, so it is the only part a controller could
+in principle improve. A useful diagnostic therefore reports, on the same
+activations, the actual error, the fixed-factor floor of
+Eq.~\eqref{eq:subspace-floor}, and the rank tail of Eq.~\eqref{eq:rank-floor};
+their gaps read off the three terms of Eq.~\eqref{eq:error-budget}. These
+real-model floors cannot be recovered from scalar MSE summaries alone.
+Section~\ref{sec:rank} reports all three quantities for the trained
+checkpoints of the 2026-11-10 regeneration and attributes the error budget
+term by term.
 
 \subsection{An activation-weighted constant-core baseline}
 A shuffled context control changes the input to the controller and may change
@@ -570,30 +560,33 @@ four archived summaries. No preregistered equivalence margin, population
 claim, or multiple-comparison significance claim is made.
 
 \section{Controlled Results}
-Three findings organize this section. First, at the closest matched
-parameter budget the dynamic arm is \emph{worse}: a 1.95\% relative MSE
-penalty against persistent rank 401 (Section~\ref{sec:rank}). Second, the
-fused dynamic path remains slower than the static alternative it must beat:
-$3.03\times$ at the archived probe (Section~\ref{sec:fusion}). Third, the
-only validated efficiency result is narrower than either headline claim:
-after the failed v4 stability gate was resolved by the hardened re-run,
-the multicore kernel sustains $1.05$--$2.97\times$ lower operator latency
-than single-core execution at $T=128$--$4096$, with 26--66\%
-reduction at $T\ge512$ (Section~\ref{sec:fusion}); this is a kernel-latency
-result, corroborated by parsed device counters for traffic attribution,
-but without trained-model support. Extending the sweep to the complete-FFN
-boundary (2026-11-12, five arms, same host) preserves the ordering:
-the multicore fused arm beats the single-core fused arm from $T{=}1024$
-upward but remains slower than the materialized arm at every geometry
-(Section~\ref{sec:fusion}). The 2026-11-13 matched trained-model run
-closes the protocol's fourth question (Q4) with a negative answer for
-the reference realization: matched quality (relative MSE $0.4444 \pm
-0.0008$ vs.\ persistent $0.4449 \pm 0.0008$; perplexity degradation
-$2.49\% \pm 0.07$ vs.\ $2.38\% \pm 0.07$) but reference-execution
-latency $4.48\times$ persistent
-(Section~\ref{sec:matched-q4}). No measured result
-in this section shows dynamic capacity allocation beating a static control
-at matched budget.
+The primary evidence in this section is the fresh 2026-11 measurement
+campaign---the four-seed provenance regeneration, the floors and
+constant-core evaluation, the five-arm complete-FFN sweep, and the matched
+trained-model quality--latency run---each executed end to end with
+manifest-hashed artifacts. The archived 2026-08/09 accelerator records are
+reanalyzed as corroborating evidence under the same taxonomy and are marked
+as such wherever they appear.
+
+Three findings organize the results. First, the matched trained-model run
+closes the protocol's fourth question (Q4) with a negative answer for the
+reference realization: matched quality (relative MSE $0.4444 \pm 0.0008$
+vs.\ persistent $0.4449 \pm 0.0008$; perplexity degradation $2.49\% \pm
+0.07$ vs.\ $2.38\% \pm 0.07$) but reference-execution latency $4.48\times$
+persistent, on the same checkpoints, runtime, and device
+(Section~\ref{sec:matched-q4}). Second, at the closest matched parameter
+budget the dynamic arm is \emph{worse}: a 1.95\% relative MSE penalty
+against persistent rank 401, and the trained token-controller's advantage
+over its activation-fitted constant core is bounded by the modulation
+amplitude (Section~\ref{sec:rank}). Third, the fused
+dynamic path remains slower than the static alternative it must beat: the
+fresh five-arm complete-FFN sweep shows the multicore fused arm beating the
+single-core fused arm from $T{=}1024$ upward yet remaining slower than the
+materialized arm at every geometry, and the archived probe reproduces the
+same ordering ($3.03\times$;
+Sections~\ref{sec:fusion} and~\ref{sec:matched-q4}). No measured result in
+this section shows dynamic capacity allocation beating a static control at
+matched budget.
 
 \subsection{Rank, capacity, and conditioning}\label{sec:rank}
 Table~\ref{tab:quality} recomputes every value from the same four seed records.
@@ -670,28 +663,34 @@ the regenerated checkpoints on the regeneration eval activations.}
 \input{\paperroot/generated_tables/journal_floors_rows.tex}
 \end{table}
 
-The floors separate three components of the token-controller error. First,
-the fixed-subspace and rank-tail floors (about $0.324$ and $0.296$ relative
-MSE at rank 384) are far below the achieved error ($0.446$): most of the
-error is not rank loss but the fit of the trained factors within the chosen
-subspace. Second, replacing the learned per-token core by the
+The floors attribute the token-controller error budget term by term under
+Eq.~\eqref{eq:error-budget} (rank-384 row of Table~\ref{tab:floors}; relative
+quantities on the regeneration eval activations). The rank-loss term, shared
+by every rank-384 model, is $0.296$. The subspace-selection term---how far
+the trained fixed factor sits from the optimal rank-384 subspace---is
+$0.324-0.296\approx0.029$. The within-subspace fit term is
+$0.446-0.324\approx0.122$ and dominates the controllable error: most of the
+error is neither rank loss nor subspace selection but the fit of the trained
+coefficients inside the chosen subspace, which better training could in
+principle reduce and a controller cannot extend beyond the subspace.
+Replacing the learned per-token core by the
 activation-weighted constant $c^{*}$ of Proposition~\ref{prop:constant}
 \emph{reduces} error by $0.000669$ (mean over four seeds; descriptive
 interval $[+0.000608,+0.000730]$) at rank 384 and by $0.000668$
 ($[+0.000626,+0.000710]$) at rank 401: the trained controller is slightly
 worse than its own least-squares constant, so token conditioning adds no
-measured value over the constant-core control on these activations. Third,
-the small magnitude of every conditioning effect is consistent with the
+measured value over the constant-core control on these activations. The
+small magnitude of every conditioning effect is consistent with the
 modulation cap: with $\alpha=0.05$, Eq.~\eqref{eq:controller} confines each
 coefficient to $[0.95,1.05]$, so the dynamic path holds bounded authority
 over any constant core, and the observed token-versus-constant gap
 ($0.15\%$ of control MSE) sits well inside that budget. This is a design
 property of the audited configuration, not evidence that larger-amplitude
 conditioning would also fail; it scopes the negative claim to this trained
-artifact. The floors also expose the size of
-the remaining opportunity: a rank-384 model chosen in the optimal subspace
-could in principle reach $0.296$ rather than the achieved $0.446$, so
-capacity, not conditioning, dominates the error budget at these ranks.
+artifact. Finally, the floors expose the size of the remaining opportunity:
+a rank-384 model chosen in the optimal subspace could in principle reach
+$0.296$ rather than the achieved $0.446$, so capacity and within-subspace
+fit, not conditioning, dominate the error budget at these ranks.
 
 \begin{figure}[t]
 \centering
@@ -893,6 +892,39 @@ controller emits per-token angles and the up/gate/down outputs are rotated
 pairwise, so the effective output subspace varies with the input rather than
 being fixed by stored factors.
 
+Concretely, for the layer-16 teacher geometry $(d,m,r)=(1536,8960,384)$ the
+block-Givens student is specified as follows. An angle head
+$g_\phi\colon\R^{d}\to\R^{2(m/2)+d/2}=\R^{9728}$, a two-layer fp32 MLP with
+hidden width $h_g=192$ ($d\,h_g+h_g+h_g\,9728+9728$ parameters), maps each
+token's residual state to raw outputs; the trained student applies them
+linearly (no squashing; the separate \texttt{mwg\_block\_givens} module
+provides an optional $\text{amplitude}\cdot\tanh$ bound for ablation). The
+output splits into per-pair angles
+$(\theta^{\rm up},\theta^{\rm gate},\theta^{\rm down})$ with $m/2=4480$,
+$4480$, and $d/2=768$ components. Each projection's output row $y$ is then
+rotated pair-wise: for pair $k$ of the up (respectively gate, down) output,
+\begin{equation}
+ \begin{bmatrix}y_{2k}\\ y_{2k+1}\end{bmatrix}
+ \;\longmapsto\;
+ R(\theta_k)\begin{bmatrix}y_{2k}\\ y_{2k+1}\end{bmatrix},
+ \quad R(\theta_k)=\begin{bmatrix}\cos\theta_k & -\sin\theta_k\\
+ \sin\theta_k & \cos\theta_k\end{bmatrix},
+ \label{eq:block-givens}
+\end{equation}
+so the effective output map of each projection is the block-diagonal
+orthogonal matrix $Q_\theta(x)$ with $2\times2$ blocks acting on adjacent
+coordinate pairs: up and gate outputs are rotated before the SiLU product,
+the down output after it. Because $Q_\theta(x)$ acts outside the fixed
+row space of $V$, the rotated output need not lie in the span of the stored
+factors---this is the input-dependent output subspace. The persistent state
+is $3(d r+r m)=12{,}091{,}392$ fp16 factor elements plus $2{,}172{,}608$
+fp32 angle-head elements ($32{,}873{,}216$ bytes, matching the recorded
+\texttt{persistent\_state\_bytes}); no core tensor is materialized. The
+reference execution constructs the rotations through generic fp32 tensor
+ops; a tile-local execution model (tile width 128, one rotation chunk per
+tile, pairs never straddling tiles) is specified in the prototype
+\texttt{block\_givens\_tile\_apply} but was not compiled or measured.
+
 The quality answer is positive and the efficiency answer is negative.
 Table~\ref{tab:q4quality} shows the block-Givens arm matching the persistent
 and token-diag-core arms (relative MSE $0.4444 \pm 0.0008$ vs.\ $0.4449 \pm
@@ -913,11 +945,20 @@ in-place on output tiles, with no global intermediate) recovers or beats the
 persistent arm is the remaining open question; the audit retains this run as
 the measured baseline any such realization must beat.
 
-Claim boundary: four training seeds give descriptive intervals only; latency
-is single-layer at batch 1, $S{=}128$, fp16 on one device, not end-to-end
-decode; checkpoints reside on the measurement host and are digest-bound here
-through the latency records; and no compiled tile-local operator was measured,
-so no serving claim is made for the block-Givens arm.
+Claim boundary. The \emph{quality boundary} is held-out relative MSE plus
+held-out patched perplexity of the saved layer-16 checkpoints, measured on
+the regeneration split's dev texts; it is not task accuracy or end-to-end
+language-model quality. The four training seeds reuse one activation and
+evaluation split, so seed-level dataset disjointness remains unestablished
+and the intervals are descriptive only. The \emph{timing boundary} is
+single-layer latency of the saved checkpoints at batch 1, $S{=}128$, fp16 on
+one Ascend~910B2 host, not end-to-end decode; and the measured block-Givens
+path is the \emph{reference realization}---per-token rotation through
+generic fp32 tensor ops, not a compiled operator. The compiled tile-local
+realization (\texttt{block\_givens\_tile\_apply}, tile width 128) is
+prototyped but uncompiled and unmeasured, so no serving claim is made for
+the block-Givens arm; checkpoints reside on the measurement host and are
+digest-bound here through the latency records.
 
 \begin{table}[t]
 \centering\small
@@ -970,7 +1011,7 @@ accelerator evidence comes from one device
 family, with small repeat counts and different configurations for quality and
 systems probes. The new CPU experiment establishes a local software property.
 None of this is an unexpected gap: Q4, a simultaneous full-model
-quality--latency benefit, is a pre-declared open gate in the protocol of
+quality--latency benefit, was a pre-declared open gate in the protocol of
 Section~\ref{sec:protocol}, and the evidence taxonomy of
 Table~\ref{tab:evidence} marked it unvalidated before any measurement was
 recomputed. The audit's contribution is making that status explicit and
@@ -1027,6 +1068,27 @@ correct conclusion is a limitation of dynamic modulation in that regime.
 The mechanism and negative evidence remain useful, but they should not be
 renamed as an established deployment advantage.
 
+\paragraph{Pre-registered instantiation on a second architecture.}
+The audit has been demonstrated on one layer type (a causal gated FFN). To
+separate the methodology from the instance, we pre-register here its
+instantiation on a second conditional low-rank layer before any measurement:
+the causal self-attention output projection
+$W_O\in\R^{d_{\rm model}\times d_{\rm model}}$ of the same Qwen2.5-1.5B
+checkpoint, conditioned by the same hidden-state controller family but with
+per-head block-diagonal modulation (one diagonal scale per attention head and
+rank block, $r$ per head). The audit transfers unchanged: Q1 becomes
+per-head-conditioned versus persistent low-rank reconstruction at matched
+per-head budget; Q2 becomes the fused attention-epilogue operator versus
+materialized $W_O$; Q3 is the same software checkpointing identity; Q4 is the
+matched trained-model quality--latency comparison with the same
+pre-registered thresholds (no less than 20\% end-to-end latency improvement,
+no more than 1\% relative perplexity degradation versus the strongest static
+baseline). The subspace obstruction of Theorem~\ref{thm:subspace} applies per
+head; the floors of Eq.~\eqref{eq:error-budget} are computed per head and
+aggregated. No measurement of this instantiation exists yet; reporting it
+here before execution is part of the protocol, and a negative or failed gate
+will be retained as a first-class result.
+
 \section{Conclusion}
 This paper delivers an audit methodology for conditional low-rank layers and
 its application to one architecture, \mwg{}. The methodology keeps
@@ -1040,8 +1102,8 @@ choice within a familiar conditional low-rank model; their fixed final factor
 imposes an output-subspace floor, and eliminating a descriptor tensor removes
 only the transfers associated with that tensor under a matched schedule. The
 archive shows modest same-rank reconstruction differences, a near-budget
-disadvantage, and no validated complete-model efficiency gain; the one
-validated efficiency result is narrower, a 26--66\% multicore kernel-latency
+disadvantage, and a measured negative complete-model efficiency verdict; the
+one validated efficiency result is narrower, a 26--66\% multicore kernel-latency
 reduction over fused single-core execution at $T\ge512$ after the v4
 stability gate was closed. The 2026-11-13 matched trained-model run
 completes the audit's fourth pre-declared gate: an input-dependent
@@ -1057,13 +1119,32 @@ protocol itself can be applied unchanged to the next conditional low-rank
 architecture before its efficiency is asserted.
 
 \section*{Reproducibility and artifact availability}
-The audit script, algebra checks, CPU lifecycle test, and archived source
-records accompany this paper. A build script regenerates the audit-derived
-tables and figures from the archived records. The audit JSON contains exact
-input hashes and records each empirical gate as open or closed; several
-pre-declared gates remain open. Data and checkpoint availability limitations
-are stated in the evidence protocol, rather than treating a file hash as
-execution proof.
+All artifacts are versioned in the public repository
+\url{https://github.com/xuda1979/PATENTS} (branch
+\texttt{loop/d0004-reframing-and-v4-evidence}; this manuscript's evidence
+state is commit \texttt{46ab069}). The audit script
+(\texttt{scripts/audit\_journal\_evidence.py}), algebra checks, CPU
+lifecycle test, run harnesses, and archived records accompany this paper;
+\texttt{scripts/build\_journal.sh} regenerates every audit-derived table and
+figure from the archived records. The audit JSON
+(\texttt{results/journal\_revision\_20261022/evidence\_audit.json}) contains
+exact input hashes and records each empirical gate as open or closed;
+several pre-declared gates remain open.
+
+The pre-declaration of the question set is itself versioned and predates the
+measurements that closed it: the four questions Q1--Q4, the gate structure,
+and the evidence taxonomy were committed and made public on 2026-10-22
+(commit \texttt{7d03947}, merged to \texttt{main} as \texttt{7f169bd} on
+2026-10-27), before the Q4 training runs (2026-11-13,
+\texttt{asi2\_q4\_matched\_quality\_latency\_20261113T134959Z}) and their
+integration (\texttt{46ab069}, 2026-11-16). The Q4 worker script carries the
+pre-registered acceptance thresholds (at least 20\% lower end-to-end latency
+with no more than 1\% relative perplexity degradation versus the strongest
+matched static baseline; a failed target is recorded, never promoted) in its
+header, and the four retained raw per-seed latency records plus the 48-row
+summary are archived under \texttt{results/} with SHA-256 digests recorded in
+the audit. Data and checkpoint availability limitations are stated in the
+evidence protocol, rather than treating a file hash as execution proof.
 
 \section*{AI assistance disclosure}
 Generative AI tools assisted technical review, mathematical derivations,
@@ -1153,8 +1234,14 @@ Python 3.12.14 and PyTorch 2.14.1+cpu were used with one CPU thread. The raw
 JSON records exact source hashes, initial-state hashes, per-case tensor checks,
 and the measurement boundary. Tests reject missing or nonfinite gradients
 and verify parameter-alias exclusion. Table~\ref{tab:cpu} supports software
-rematerialization for these fixtures. It supplies no evidence about NPU
-checkpoint speed, peak memory, or trained-model quality. No memory-ratio
-headline is reported here, because the available legacy evidence does not
-establish an instrumented actual-MWG measurement.
+rematerialization for these fixtures: checkpointing reduces
+forward-retained nonparameter tensor storage by a factor of exactly $13.0$
+in all nine cases (eager 53{,}248--212{,}992 bytes versus 4{,}096--16{,}384
+bytes), which is the $13\times$ figure quoted in the abstract. This is a
+retained-storage ratio for the declared saved-tensor region of these
+synthetic fixtures; it supplies no evidence about NPU checkpoint speed,
+allocator peak memory, total training memory, or trained-model quality, and
+it must not be read as a device memory saving. No memory-ratio headline is
+claimed for the legacy NPU records of Appendix~A, because that evidence does
+not establish an instrumented actual-MWG measurement.
 
