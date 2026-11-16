@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="604.8pt" height="259.2pt" viewBox="0 0 604.8 259.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-16T17:48:12.026054</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 259.2
+L 604.8 259.2
+L 604.8 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 14.99904 81.82944
+L 272.4624 81.82944
+L 272.4624 24.00192
+L 14.99904 24.00192
+L 14.99904 81.82944
+z
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 332.3376 81.82944
+L 589.80096 81.82944
+L 589.80096 24.00192
+L 332.3376 24.00192
+L 332.3376 81.82944
+z
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 128.76192 172.34208
+L 476.03808 172.34208
+L 476.03808 114.51456
+L 128.76192 114.51456
+L 128.76192 172.34208
+z
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 148.570181 82.604475
+Q 185.644371 98.172425 221.687721 113.307511
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 218.482637 109.575563
+L 221.687721 113.307511
+L 216.779113 113.63241
+z
+" clip-path="url(#p74b83f4053)" style="stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 456.229819 82.604475
+Q 419.155629 98.172425 383.112279 113.307511
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 388.020887 113.63241
+L 383.112279 113.307511
+L 386.317363 109.575563
+z
+" clip-path="url(#p74b83f4053)" style="stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 128.76192 252.79776
+L 476.03808 252.79776
+L 476.03808 202.51296
+L 128.76192 202.51296
+L 128.76192 252.79776
+z
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 302.4 174.341932
+Q 302.4 187.428461 302.4 199.396956
+" clip-path="url(#p74b83f4053)" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 304.6 194.996956
+L 302.4 199.396956
+L 300.2 194.996956
+z
+" clip-path="url(#p74b83f4053)" style="stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(127.23072 49.766242)">候选区</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(72.23072 62.18043)">校验最终字节及输入约束绑定</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(428.06928 49.843414)">当前监督状态</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(389.581311 62.125602)">账本  纪元  相位  完整包边界</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(280.4 140.265648)">交接凭据</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(219.9 152.508648)">绑定候选、纪元、首包及预留预算</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(197.9 224.72386)">边界复核通过：原子发布并一次性使用凭据</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(219.9 236.96686)">变化或超期：撤销凭据并重新检查</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p74b83f4053">
+   <rect x="3.024" y="3.888" width="598.752" height="251.424"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,56 @@
+{
+  "template_base": "6_MWG-EW_Meta-Weight_Generation",
+  "template_titles": "literal equality with the existing 6* forms",
+  "date": "2026-11-16",
+  "documents": [
+    {
+      "file": "基于智能体权重编程的脑机闭环控制系统及方法-交底书V2.0.docx",
+      "sha256": "e1e96c4d04ea002d244cbcec8966fdb5d5d70d9f23835ef428bdaab5db1759cb",
+      "pages": 8,
+      "page_limit": 10,
+      "chapters": [
+        "一、发明名称",
+        "二、技术领域",
+        "三、现有技术的技术方案",
+        "四、现有技术的缺点及本申请要解决的技术问题",
+        "五、本申请的技术方案的详细阐述",
+        "六、本申请的关键点和欲保护点",
+        "七、与第三条中最接近的现有技术相比，本申请有何技术优点",
+        "八、其他有助于理解本申请的技术资料",
+        "九、本申请的侵权证据可获得性"
+      ],
+      "template_source": "6_MWG-EW_Meta-Weight_Generation/一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-交底书.tex",
+      "template_source_sha256": "4b2bf66d9ce05fed44d743301b0efa615e7a678788c481a5327ebe0e63ae3704",
+      "editable_equations": 2,
+      "font_and_spacing": "12pt 仿宋; 24pt disclosure / 18pt search",
+      "author_affiliation_and_contact": "checked"
+    },
+    {
+      "file": "基于智能体权重编程的脑机闭环控制系统及方法-检索报告V2.0.docx",
+      "sha256": "9ed9ecceb14e0d8a905583e09fb738d6de545894ae1d3a68ba37ed036182e155",
+      "pages": 5,
+      "page_limit": null,
+      "chapters": [
+        "一、使用的中文与外文检索关键词",
+        "二、相关专利文献",
+        "三、分析评述",
+        "四、检索结论"
+      ],
+      "template_source": "6_MWG-EW_Meta-Weight_Generation/一种面向存储带宽受限神经网络执行的临时权重描述子生成、消费与生命周期控制系统及方法-检索报告.tex",
+      "template_source_sha256": "f5364de670d2fcfc4a7d59889e08c896bb3651ada3eabf4a3228080146dcaa66",
+      "editable_equations": 0,
+      "font_and_spacing": "12pt 仿宋; 24pt disclosure / 18pt search",
+      "author_affiliation_and_contact": "checked"
+    }
+  ],
+  "sequential_software_scenarios": {
+    "passed": 15,
+    "total": 15
+  },
+  "visual_review": "Every page image inspected; no overlap, clipped figures, missing glyphs or title border",
+  "limitations": [
+    "CN121338203A original published text not verified",
+    "No clinical, hardware timing, concurrency, crypto or persistence certification"
+  ],
+  "content_sha256": "43c067cb7c0b536162a537788686e17e0a55a960037f4941f412f41b9aaed524"
+}
