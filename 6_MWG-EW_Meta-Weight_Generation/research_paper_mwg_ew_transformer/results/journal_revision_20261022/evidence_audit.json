@@ -1057,6 +1057,220 @@
       "checkpoints reside on ASI2; local copies are digest-bound through the latency records, not independently verified binaries"
     ]
   },
+  "second_architecture_wo": {
+    "evidence_class": "cpu_synthetic_fixture_second_architecture_audit",
+    "rows": [
+      {
+        "seed": 2026,
+        "persistent_rel_mse": 0.2873696810215873,
+        "conditioned_rel_mse": 0.28736890729086956,
+        "persistent_compensated_rel_mse": 0.0007335879708887754,
+        "persistent_compensated_rank": 14,
+        "static_svd_rel_mse": 0.20573689081733743,
+        "persistent_parameter_count": 512,
+        "conditioned_parameter_count": 1872,
+        "persistent_compensated_parameter_count": 1792
+      },
+      {
+        "seed": 2027,
+        "persistent_rel_mse": 0.2877147714299545,
+        "conditioned_rel_mse": 0.28771483396378017,
+        "persistent_compensated_rel_mse": 0.001003030866189438,
+        "persistent_compensated_rank": 14,
+        "static_svd_rel_mse": 0.1949393282930972,
+        "persistent_parameter_count": 512,
+        "conditioned_parameter_count": 1872,
+        "persistent_compensated_parameter_count": 1792
+      },
+      {
+        "seed": 2028,
+        "persistent_rel_mse": 0.29965148789438,
+        "conditioned_rel_mse": 0.2996514298769917,
+        "persistent_compensated_rel_mse": 0.000597326716607963,
+        "persistent_compensated_rank": 14,
+        "static_svd_rel_mse": 0.21122746290491656,
+        "persistent_parameter_count": 512,
+        "conditioned_parameter_count": 1872,
+        "persistent_compensated_parameter_count": 1792
+      }
+    ],
+    "constant_core_rows": [
+      {
+        "seed": 2026,
+        "conditioned_rel_mse": 0.2873685594600928,
+        "constant_core_rel_mse": 0.28739532980437266,
+        "constant_minus_conditioned": 2.6770344279836156e-05,
+        "per_head": [
+          {
+            "c_star": [
+              0.9587997422462505,
+              1.029672139631863,
+              1.0117410782899594,
+              0.9466363561939869
+            ],
+            "constant_core_rel_mse": 0.2813182016919736
+          },
+          {
+            "c_star": [
+              0.9158113881366826,
+              0.9799724194045584,
+              1.0162276416744551,
+              0.8411308545196559
+            ],
+            "constant_core_rel_mse": 0.3041796779281226
+          },
+          {
+            "c_star": [
+              0.9366054141055055,
+              0.9705149506680738,
+              1.0267828167688937,
+              0.9867038016923774
+            ],
+            "constant_core_rel_mse": 0.32735475014823506
+          },
+          {
+            "c_star": [
+              1.0005733784017206,
+              0.955834167748657,
+              0.9827292173718114,
+              0.9782761645076029
+            ],
+            "constant_core_rel_mse": 0.2504743762928649
+          }
+        ]
+      },
+      {
+        "seed": 2027,
+        "conditioned_rel_mse": 0.2877146639315631,
+        "constant_core_rel_mse": 0.28802159219659323,
+        "constant_minus_conditioned": 0.0003069282650301486,
+        "per_head": [
+          {
+            "c_star": [
+              0.9979937199873191,
+              1.0084173000851056,
+              0.9174310375897309,
+              1.1140956266307087
+            ],
+            "constant_core_rel_mse": 0.2586469201738486
+          },
+          {
+            "c_star": [
+              0.9529651409923854,
+              0.9279939570904719,
+              0.9193575031089062,
+              0.9747667245710482
+            ],
+            "constant_core_rel_mse": 0.28550082124673143
+          },
+          {
+            "c_star": [
+              0.9364501257914624,
+              0.9277605598593752,
+              0.9736140474934203,
+              0.9581851468169019
+            ],
+            "constant_core_rel_mse": 0.32199089139295917
+          },
+          {
+            "c_star": [
+              0.9434811575302857,
+              0.9666481860818399,
+              0.9136199383080416,
+              0.9072089710959832
+            ],
+            "constant_core_rel_mse": 0.2962337512623466
+          }
+        ]
+      },
+      {
+        "seed": 2028,
+        "conditioned_rel_mse": 0.29965078371257425,
+        "constant_core_rel_mse": 0.2997732785591359,
+        "constant_minus_conditioned": 0.00012249484656162712,
+        "per_head": [
+          {
+            "c_star": [
+              0.9736215313174956,
+              0.9765578383508651,
+              0.9366346686581555,
+              0.9376193030875722
+            ],
+            "constant_core_rel_mse": 0.28711246891329667
+          },
+          {
+            "c_star": [
+              1.032959963545163,
+              1.001141140828206,
+              1.0471263836061349,
+              0.9798196175032017
+            ],
+            "constant_core_rel_mse": 0.3321035343785528
+          },
+          {
+            "c_star": [
+              0.9473306354993319,
+              1.0270123867485565,
+              1.0176506780048051,
+              0.9577151609467114
+            ],
+            "constant_core_rel_mse": 0.30049856467926
+          },
+          {
+            "c_star": [
+              0.9836713427613655,
+              0.9894893145003767,
+              0.9748747300050401,
+              0.9161129247777973
+            ],
+            "constant_core_rel_mse": 0.27715758395084933
+          }
+        ]
+      }
+    ],
+    "q3_rows": [
+      {
+        "seed": 2026,
+        "eager_loss": 0.38532815138768794,
+        "checkpoint_loss": 0.38532815138768794,
+        "max_output_abs_delta": 0.0,
+        "max_gradient_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "seed": 2027,
+        "eager_loss": 0.3944008146583865,
+        "checkpoint_loss": 0.3944008146583865,
+        "max_output_abs_delta": 0.0,
+        "max_gradient_abs_delta": 0.0,
+        "passed": true
+      },
+      {
+        "seed": 2028,
+        "eager_loss": 0.35827195248549093,
+        "checkpoint_loss": 0.35827195248549093,
+        "max_output_abs_delta": 0.0,
+        "max_gradient_abs_delta": 0.0,
+        "passed": true
+      }
+    ],
+    "status": "PASS",
+    "source_script_sha256": "ead566745551d888c2b1e35680598fb16b63cc0f61c94267ae8fd83b9772e555",
+    "claim_boundary": {
+      "evidence_class": "CPU synthetic fixture; no accelerator, no trained model, no dataset, no serving claim",
+      "not_measured": [
+        "accelerator latency",
+        "HBM traffic",
+        "trained-model quality",
+        "perplexity"
+      ]
+    },
+    "limitations": [
+      "synthetic random fixtures; no dataset, checkpoint, or trained language model is involved",
+      "no accelerator latency, HBM traffic, or serving claim; the pre-registered Q2 and Q4 on W_O remain unmeasured",
+      "CPU float64 identity checks do not establish NPU checkpointing behavior"
+    ]
+  },
   "v1_four_arm": {
     "probe_geometry": {
       "median_ms": {
@@ -1214,6 +1428,10 @@
       "sha256": "1160ddd04512d2b7bde6395afabe229516b8940ec30fe9bbf68ca174235401d6"
     },
     {
+      "path": "results/second_architecture_wo_cpu_20261116/second_architecture_wo_audit.json",
+      "sha256": "719d6b814f2ee058df5aeba3bfd219d764fa7ba5c4793cc07f4c166f6bdfd544"
+    },
+    {
       "path": "results/asi2_opt_inclusive_sync_20260923T025114Z/ASI2_mwg_transformer_20260923T025131Z.json",
       "sha256": "ae7a750edb0fdb9ccae3c4b327248f82b41cddda6db6d58f6333331ab8860001"
     },
@@ -1230,6 +1448,7 @@
   "blocking_gaps": [
     "canonical quality record lacks per-run raw reports and split manifests; regeneration closes recoverability but not dataset disjointness",
     "no matched v4 trained-model end-to-end run; device-counter evidence covers kernel traffic only",
-    "Q4 is answered only for the reference block-Givens realization (PyTorch path), which is slower than persistent; the compiled tile-local execution path that could win remains unmeasured"
+    "Q4 is answered only for the reference block-Givens realization (PyTorch path), which is slower than persistent; the compiled tile-local execution path that could win remains unmeasured",
+    "second-architecture (attention W_O) audit is executed only at the CPU synthetic-fixture evidence class; its pre-registered Q2 and Q4 remain unmeasured"
   ]
 }

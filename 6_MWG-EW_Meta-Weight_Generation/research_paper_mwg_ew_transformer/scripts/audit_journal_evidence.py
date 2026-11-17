@@ -384,6 +384,98 @@ Q4_PPL_ARMS = ["mwg_block_givens_r384", "mwg_token_diag_core_r384",
                "persistent_low_rank_r384"]
 
 
+SECOND_ARCH_PATH = Path("results/second_architecture_wo_cpu_20261116/"
+                        "second_architecture_wo_audit.json")
+SECOND_ARCH_SEEDS = [2026, 2027, 2028]
+
+
+def second_architecture_wo_gate(root):
+    """Gate the CPU second-architecture (attention W_O) audit demonstration.
+
+    The demonstration executes the pre-registered W_O instantiation of the
+    audit on synthetic CPU fixtures: training-matched Q1 contrast (same-rank
+    persistent vs conditioned vs capacity-compensated persistent vs static
+    SVD), per-head additive error budgets with checked additivity, the
+    Proposition-1 constant-core control on the same trained artifact, and
+    the Q3 non-reentrant checkpointing identity.  The evidence class is CPU
+    synthetic fixtures only: no accelerator, trained model, dataset, or
+    serving claim.  A failed Q3 identity or a non-additive budget must fail
+    the gate rather than be silently retained.
+    """
+    data = json.loads((root / SECOND_ARCH_PATH).read_text())
+    if data.get("schema") != "mwg-second-architecture-wo-audit-v2":
+        raise ValueError("unexpected second-architecture schema")
+    if data.get("evidence_kind") != "cpu_synthetic_fixture_audit_demonstration":
+        raise ValueError("second-architecture evidence kind mismatch")
+    if not data.get("pre_registered_in"):
+        raise ValueError("second-architecture record lacks its pre-registration source")
+    q1 = data.get("q1_matched_contrast", [])
+    if [r.get("seed") for r in q1] != SECOND_ARCH_SEEDS:
+        raise ValueError("second-architecture Q1 seed coverage mismatch")
+    rows = []
+    for r in q1:
+        for field in ("persistent_rel_mse", "conditioned_rel_mse",
+                      "persistent_compensated_rel_mse", "static_svd_rel_mse"):
+            if not finite(r.get(field)) or r[field] <= 0:
+                raise ValueError(f"invalid second-architecture Q1 value {field}")
+        # Capacity-compensated arm must not exceed the conditioned budget.
+        if r["persistent_compensated_parameter_count"] > r["conditioned_parameter_count"]:
+            raise ValueError("capacity-compensated arm exceeds the conditioned budget")
+        if r["persistent_compensated_rank"] <= r["persistent_rank"]:
+            raise ValueError("capacity compensation did not increase the persistent rank")
+        # Training-matched arms must agree to far better than the static gap:
+        # the contrast isolates conditioning, not training exposure.
+        if abs(r["conditioned_minus_persistent"]) > 1e-4:
+            raise ValueError("training-matched Q1 contrast is not tight")
+        # Error budgets must decompose additively for every arm and head.
+        for key in ("head_error_budgets_conditioned", "head_error_budgets_persistent",
+                    "head_error_budgets_persistent_compensated"):
+            for b in r[key]:
+                total = (b["rank_loss_rel"] + b["subspace_selection_rel"]
+                         + b["within_subspace_fit_rel"])
+                if abs(b["actual_rel"] - total) > 1e-9 or not finite(b["actual_rel"]):
+                    raise ValueError("second-architecture error budget is not additive")
+        rows.append({"seed": r["seed"],
+                     "persistent_rel_mse": r["persistent_rel_mse"],
+                     "conditioned_rel_mse": r["conditioned_rel_mse"],
+                     "persistent_compensated_rel_mse": r["persistent_compensated_rel_mse"],
+                     "persistent_compensated_rank": r["persistent_compensated_rank"],
+                     "static_svd_rel_mse": r["static_svd_rel_mse"],
+                     "persistent_parameter_count": r["persistent_parameter_count"],
+                     "conditioned_parameter_count": r["conditioned_parameter_count"],
+                     "persistent_compensated_parameter_count": r["persistent_compensated_parameter_count"]})
+    cc = data.get("constant_core_control", [])
+    if [r.get("seed") for r in cc] != SECOND_ARCH_SEEDS:
+        raise ValueError("second-architecture constant-core seed coverage mismatch")
+    for r in cc:
+        for field in ("conditioned_rel_mse", "constant_core_rel_mse"):
+            if not finite(r.get(field)) or r[field] <= 0:
+                raise ValueError("invalid second-architecture constant-core value")
+        if r["constant_minus_conditioned"] < -1e-9:
+            raise ValueError("constant core beats the learned scales on calibration data")
+    q3 = data.get("q3_checkpointing_identity", [])
+    if [r.get("seed") for r in q3] != SECOND_ARCH_SEEDS:
+        raise ValueError("second-architecture Q3 seed coverage mismatch")
+    for r in q3:
+        if r.get("passed") is not True:
+            raise ValueError(f"second-architecture Q3 identity failed at seed {r['seed']}")
+        if r.get("max_output_abs_delta") != 0.0 or r.get("max_gradient_abs_delta") != 0.0:
+            raise ValueError("second-architecture Q3 identity is not exact")
+    return {"evidence_class": "cpu_synthetic_fixture_second_architecture_audit",
+            "rows": rows,
+            "constant_core_rows": cc,
+            "q3_rows": q3,
+            "status": data["status"],
+            "source_script_sha256": data.get("source_script_sha256"),
+            "claim_boundary": data["claim_boundary"],
+            "limitations": ["synthetic random fixtures; no dataset, checkpoint, or "
+                            "trained language model is involved",
+                            "no accelerator latency, HBM traffic, or serving claim; "
+                            "the pre-registered Q2 and Q4 on W_O remain unmeasured",
+                            "CPU float64 identity checks do not establish NPU "
+                            "checkpointing behavior"]}
+
+
 def matched_quality_latency_gate(root):
     """Gate the 2026-11-13/14 matched trained-model quality-latency run (Q4).
 
@@ -606,6 +698,8 @@ def collect(root):
     sources.append(Q4_SUMMARY_PATH)
     sources.extend(Q4_DIR / f"{Q4_RUN_ID}__seed_{seed}__latency_mwg_block_givens_r384.json"
                    for seed in Q4_SEEDS)
+    second_arch = second_architecture_wo_gate(root)
+    sources.append(SECOND_ARCH_PATH)
     timings = {}
     folder = root / "results/asi2_opt_inclusive_sync_20260923T025114Z"
     paths = sorted(folder.glob("ASI2_mwg_transformer_*.json"))
@@ -643,6 +737,7 @@ def collect(root):
             "complete_ffn_sweep": sweep,
             "paired_shuffled_control": paired_control,
             "matched_quality_latency_q4": q4,
+            "second_architecture_wo": second_arch,
             "v1_four_arm": {key: {"median_ms": four[key]["median_ms"],
                                    "fused_over_materialized": four[key]["median_ms"]["fused"] /
                                        four[key]["median_ms"]["materialized"]}
@@ -657,7 +752,10 @@ def collect(root):
                               "covers kernel traffic only",
                               "Q4 is answered only for the reference block-Givens realization "
                               "(PyTorch path), which is slower than persistent; the compiled "
-                              "tile-local execution path that could win remains unmeasured"]}
+                              "tile-local execution path that could win remains unmeasured",
+                              "second-architecture (attention W_O) audit is executed only at the "
+                              "CPU synthetic-fixture evidence class; its pre-registered Q2 and Q4 "
+                              "remain unmeasured"]}
 
 
 def emit_tables(summary, folder):
@@ -760,6 +858,19 @@ def emit_tables(summary, folder):
         lines.append(f"{display_q[arm]} & ${stats['mean']:.4f}$ & ${stats['sample_sd']:.4f}$" + extra + " \\\\")
     table("journal_q4_quality_rows.tex", "lrrrr",
           "Arm & Rel.\\ MSE & MSE SD & PPL degr.\\ (\\%) & Var./Pers.",
+          lines)
+    second_rows = summary["second_architecture_wo"]["rows"]
+    if not second_rows:
+        raise ValueError("refusing to emit second-architecture table without rows")
+    lines = []
+    for r in second_rows:
+        lines.append(
+            f"{r['seed']} & ${r['persistent_rel_mse']:.4f}$ & ${r['conditioned_rel_mse']:.4f}$"
+            f" & ${r['persistent_compensated_rel_mse']:.4f}$ (${r['persistent_compensated_rank']}$/head)"
+            f" & ${r['static_svd_rel_mse']:.4f}$ & ${r['conditioned_rel_mse'] - r['persistent_rel_mse']:+.5f}$ \\\\"
+        )
+    table("journal_second_arch_rows.tex", "rrrrrr",
+          "Seed & Pers.\\ $r{=}4$ & Cond.\\ $r{=}4$ & Pers.\\ comp.\\ (rank/head) & Static SVD & Cond.$-$Pers.",
           lines)
 
 

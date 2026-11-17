@@ -95,3 +95,27 @@ Two stale statements contradicting the measured Q4 verdict were corrected
 complete-model efficiency gain"), and the Q4-limitations tense was fixed
 ("was a pre-declared open gate"). No number, table value, gate verdict, or
 archived record was altered. submission_ready remains false.
+## D-0007 — Second-architecture execution at the CPU evidence class (2026-11-17)
+
+The pre-registered W_O instantiation (D-0006 item 8, EV-0025) is executed at
+its first available evidence class: CPU synthetic fixtures, same class as
+Appendix B. Decision and scope:
+
+1. The demonstration is reported as a measured result (new Section 7.4 and
+   Table 11), not as a pre-registration-only item; the limitations paragraph,
+   abstract, contributions, taxonomy, findings lead-in, conclusion, and
+   reproducibility sections are updated. No prior number, gate verdict, or
+   archived record is altered.
+2. Two latent defects in the drafted script were fixed before integration:
+   in-place fixture mutation through nn.Parameter storage sharing, and an
+   untrained-persistent-arm contrast (training-exposure confound). The
+   error-budget function now computes the actual-error attribution of
+   Eq. (error-budget) with verified additivity and a checked theorem premise.
+   Both defects are regression-tested (11 new tests, 115/115 total).
+3. The audit gate (second_architecture_wo_gate, schema v2) enforces
+   seed coverage, budget bounds on the compensated arm, contrast tightness,
+   budget additivity, constant-core non-dominance, and exact Q3 identity;
+   blocking_gaps now names the remaining W_O accelerator questions.
+4. Claim boundary: CPU synthetic fixtures only. The pre-registered Q2 and Q4
+   on W_O remain open with unmodified thresholds; no accelerator, trained
+   model, dataset, or serving claim is made. submission_ready remains false.

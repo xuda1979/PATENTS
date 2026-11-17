@@ -22,8 +22,11 @@ for a compiled tile-local path. Fresh CPU tests of the actual causal FFN
 reduce forward-retained nonparameter tensor storage by $13\times$ under
 checkpointing, with identical outputs and gradients. The methodology is the
 transferable contribution: every component is defined for a generic
-conditional low-rank layer, and the retained negative findings identify
-which dynamic-allocation claims the studied evidence can and cannot support.
+conditional low-rank layer, and its pre-registered instantiation on a second
+architecture (the attention output projection) reproduces the same negative
+finding at the CPU synthetic-fixture evidence class. The retained negative
+findings identify which dynamic-allocation claims the studied evidence can
+and cannot support.
 \end{abstract}
 
 \section{Introduction}
@@ -50,8 +53,10 @@ and output activations retain their own lifetimes; the contract concerns only
 the named descriptor and a declared implementation boundary.
 
 This paper contributes an audit methodology for conditional low-rank layers,
-demonstrated end-to-end on \mwg{}. It has four components, each defined for a
-generic modulated projection so that it transfers beyond this architecture:
+demonstrated end-to-end on \mwg{} and, at the CPU synthetic-fixture evidence
+class, on a pre-registered second architecture. It has four components, each
+defined for a generic modulated projection so that it transfers beyond this
+architecture:
 \begin{enumerate}
 \item \textbf{Matched-contrast theory} separates changing rank from changing
 conditional coefficients: an output-subspace obstruction and an optimal
@@ -500,6 +505,7 @@ Matched trained-model quality--latency (Q4) & One 48-row summary plus four retai
 DDP optimizer timing & Three complete JSON run reports & Short kernel-execution timings; numerical health unknown \\
 CPU checkpointing & New source, nine cases, hashes and tests & Actual-module saved-storage and gradient verification \\
 Algebra checks & New script and 50 seeded fixtures & Numerical consistency of identities; no model-quality evidence \\
+Second-architecture audit (attention $W_O$) & New source (2026-11-16), executed report, script hash & Pre-registered CPU synthetic-fixture transfer of Q1, budgets, constant core, and Q3; Q2/Q4 on $W_O$ open \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -562,11 +568,12 @@ claim, or multiple-comparison significance claim is made.
 \section{Controlled Results}
 The primary evidence in this section is the fresh 2026-11 measurement
 campaign---the four-seed provenance regeneration, the floors and
-constant-core evaluation, the five-arm complete-FFN sweep, and the matched
-trained-model quality--latency run---each executed end to end with
-manifest-hashed artifacts. The archived 2026-08/09 accelerator records are
-reanalyzed as corroborating evidence under the same taxonomy and are marked
-as such wherever they appear.
+constant-core evaluation, the five-arm complete-FFN sweep, the matched
+trained-model quality--latency run, and the second-architecture CPU
+demonstration---each executed end to end with manifest-hashed artifacts. The
+archived 2026-08/09 accelerator records are reanalyzed as corroborating
+evidence under the same taxonomy and are marked as such wherever they
+appear.
 
 Three findings organize the results. First, the matched trained-model run
 closes the protocol's fourth question (Q4) with a negative answer for the
@@ -988,6 +995,66 @@ is variant over persistent latency.}
 \input{\paperroot/generated_tables/journal_q4_latency_rows.tex}
 \end{table}
 
+\subsection{Second-architecture demonstration: attention output
+projection}\label{sec:second-arch}
+The audit machinery is defined for a generic modulated projection, so it
+should transfer to another conditional low-rank layer without redefining any
+gate. The pre-registered second architecture (Limitations,
+Section~\ref{sec:limitations}) is the causal self-attention output
+projection $W_O$ with per-head block-diagonal modulation. We executed its
+first available evidence class---CPU synthetic fixtures, the same class as
+Appendix~B---with the question set, controls, floors, and gates carried over
+unchanged. Three seeds are used; all numbers below are recomputed by the
+audit from the archived report.
+
+\paragraph{Training-matched contrast (Q1).}
+Every trainable arm uses the same fixture, optimizer, and step count, so the
+contrast isolates conditioning rather than training exposure or capacity
+(Table~\ref{tab:secondarch}). At matched rank, the conditioned arm matches
+trained persistent low rank to $|{\Delta}|<10^{-5}$ relative MSE in all
+three seeds, while the capacity-compensated persistent arm---the largest
+per-head rank whose parameter count fits the conditioned budget (rank 14
+per head versus the conditioned arm's controller)---reaches substantially
+lower error in every seed ($0.0006$--$0.0010$ versus $0.287$--$0.300$).
+Capacity, not conditioning, dominates the error budget at these dimensions,
+reproducing the FFN finding of Section~\ref{sec:rank} in a second layer
+type.
+
+\paragraph{Error budgets and constant core.}
+Per-head error budgets decompose additively under
+Eq.~\eqref{eq:error-budget}, with the additivity identity verified rather
+than assumed; rank loss dominates all three terms, and subspace selection
+and within-subspace fit are at numerical-noise scale for the fixture's
+factors. The constant-core control of Proposition~\ref{prop:constant},
+fitted on the same trained artifact's activations, loses at most
+$2.3\times10^{-4}$ relative MSE against the learned per-token scales across
+seeds and heads: the learned dynamic component of the trained artifact is
+replaceable by a constant to within that margin on this evidence class.
+
+\paragraph{Checkpointing identity (Q3).}
+Non-reentrant \texttt{torch.utils.checkpoint} on the same per-head module
+reproduces eager outputs, losses, and gradients exactly (maximum absolute
+output and gradient deltas $0.0$ in all three seeds).
+
+\paragraph{Claim boundary.}
+This is a CPU synthetic-fixture demonstration: no accelerator latency, HBM
+traffic, trained model, dataset, or serving claim. The pre-registered Q2
+(fused attention-epilogue operator) and Q4 (matched trained-model
+quality--latency on $W_O$) remain open and retain their pre-declared
+thresholds; a failed or negative outcome there will be reported as a
+first-class result, as this one is.
+
+\begin{table}[t]
+\centering\small
+\caption{Pre-registered second-architecture audit on CPU synthetic fixtures
+($d_{\rm model}{=}64$, 4 heads, head dim 16, $r{=}4$ per head, three seeds).
+All trainable arms share one optimizer schedule; the compensated persistent
+arm spends the conditioned arm's parameter budget on rank. The audit script
+recomputes these rows from the archived report.}
+\label{tab:secondarch}
+\input{\paperroot/generated_tables/journal_second_arch_rows.tex}
+\end{table}
+
 \subsection{Algebra checks}
 Fifty seeded float64 NumPy fixtures verify the output-subspace identity and
 compare the constant-core normal equations with an independently constructed
@@ -1029,7 +1096,11 @@ Section~\ref{sec:matched-q4}) and answers the question negatively for
 the reference realization: the block-Givens arm matches persistent
 quality and perplexity but its reference execution is $4.48\times$ the
 persistent latency, so the remaining open gate narrows to a compiled
-tile-local realization of the same mechanism.
+tile-local realization of the same mechanism. The second architecture's
+first executed evidence class (2026-11-16,
+Section~\ref{sec:second-arch}) reproduces the central negative finding
+on the attention output projection at the CPU synthetic-fixture level;
+its accelerator questions stay open with pre-declared thresholds.
 
 A decisive next study should freeze a trained causal checkpoint, its tokenizer,
 dataset splits, and evaluation harness; then measure both quality and runtime
@@ -1069,8 +1140,8 @@ The mechanism and negative evidence remain useful, but they should not be
 renamed as an established deployment advantage.
 
 \paragraph{Pre-registered instantiation on a second architecture.}
-The audit has been demonstrated on one layer type (a causal gated FFN). To
-separate the methodology from the instance, we pre-register here its
+The audit was first demonstrated on one layer type (a causal gated FFN). To
+separate the methodology from the instance, we pre-registered its
 instantiation on a second conditional low-rank layer before any measurement:
 the causal self-attention output projection
 $W_O\in\R^{d_{\rm model}\times d_{\rm model}}$ of the same Qwen2.5-1.5B
@@ -1085,9 +1156,15 @@ pre-registered thresholds (no less than 20\% end-to-end latency improvement,
 no more than 1\% relative perplexity degradation versus the strongest static
 baseline). The subspace obstruction of Theorem~\ref{thm:subspace} applies per
 head; the floors of Eq.~\eqref{eq:error-budget} are computed per head and
-aggregated. No measurement of this instantiation exists yet; reporting it
-here before execution is part of the protocol, and a negative or failed gate
-will be retained as a first-class result.
+aggregated. Reporting this design before execution is part of the protocol,
+and a negative or failed gate will be retained as a first-class result. Its
+first available evidence class has since been executed as a CPU
+synthetic-fixture demonstration (Section~\ref{sec:second-arch}): the
+training-matched Q1 contrast, per-head error budgets, the constant-core
+control, and the Q3 identity all transfer unchanged, with the same negative
+finding---capacity dominates, conditioning does not. The pre-registered
+accelerator questions (Q2, Q4 on $W_O$) remain open with their thresholds
+unmodified.
 
 \section{Conclusion}
 This paper delivers an audit methodology for conditional low-rank layers and
@@ -1113,7 +1190,12 @@ persistent latency, so the engineering claim is measured as false for the
 reference realization and remains unproven for any compiled tile-local
 realization. New
 actual-module CPU checks establish a reproducible rematerialization property
-with exact gradient agreement. Both outcomes transfer: the negative findings
+with exact gradient agreement. The methodology also transfers as designed:
+its pre-registered instantiation on a second architecture (the attention
+output projection) was executed at the CPU synthetic-fixture evidence class
+and reproduced the central negative finding---capacity, not conditioning,
+dominates the error budget---with the question set, controls, floors, and
+gates carried over unchanged. Both outcomes transfer: the negative findings
 bound what dynamic-allocation claims this evidence class can support, and the
 protocol itself can be applied unchanged to the next conditional low-rank
 architecture before its efficiency is asserted.
@@ -1143,7 +1225,12 @@ with no more than 1\% relative perplexity degradation versus the strongest
 matched static baseline; a failed target is recorded, never promoted) in its
 header, and the four retained raw per-seed latency records plus the 48-row
 summary are archived under \texttt{results/} with SHA-256 digests recorded in
-the audit. Data and checkpoint availability limitations are stated in the
+the audit. The second-architecture demonstration follows the same pattern:
+its pre-registration appears in the limitations of the archived manuscript
+state, the executed report
+(\texttt{results/second\_architecture\_wo\_cpu\_20261116}) is recomputed by
+the audit gate, and its script records its own SHA-256 for provenance. Data
+and checkpoint availability limitations are stated in the
 evidence protocol, rather than treating a file hash as execution proof.
 
 \section*{AI assistance disclosure}
