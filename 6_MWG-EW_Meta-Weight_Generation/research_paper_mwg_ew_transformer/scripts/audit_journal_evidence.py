@@ -453,6 +453,18 @@ def second_architecture_wo_gate(root):
                 raise ValueError("invalid second-architecture constant-core value")
         if r["constant_minus_conditioned"] < -1e-9:
             raise ValueError("constant core beats the learned scales on calibration data")
+    # Manuscript pin: journal_content.tex quotes the worst-seed constant-core
+    # margin as a rounded 3.1e-4 ("loses at most $3.1\times10^{-4}$").  The
+    # archived values must not drift from the quoted bound in either
+    # direction: a larger value makes the quoted "at most" false, a smaller
+    # one means the manuscript overstates the margin and must be re-worded.
+    worst_cc = max(r["constant_minus_conditioned"] for r in cc)
+    if not (3.0e-4 <= worst_cc <= 3.2e-4):
+        raise ValueError(
+            f"archived worst-seed constant-core margin {worst_cc:.4e} no longer "
+            f"matches the manuscript's quoted bound of 3.1e-4; update the "
+            f"manuscript (journal_content.tex, second-architecture section) "
+            f"and this pin together")
     q3 = data.get("q3_checkpointing_identity", [])
     if [r.get("seed") for r in q3] != SECOND_ARCH_SEEDS:
         raise ValueError("second-architecture Q3 seed coverage mismatch")

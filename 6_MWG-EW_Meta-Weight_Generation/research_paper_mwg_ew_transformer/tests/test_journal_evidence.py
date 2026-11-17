@@ -149,6 +149,31 @@ class EvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Q4 summary latency diverges"):
                 audit.matched_quality_latency_gate(tmp_root)
 
+    def test_second_arch_pin_rejects_manuscript_drift(self):
+        # The manuscript quotes the worst-seed constant-core margin as 3.1e-4.
+        # The gate must reject an archive whose worst margin drifts from that
+        # bound in either direction, so the JSON and the paper cannot diverge.
+        import shutil
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            dst = tmp_root / audit.SECOND_ARCH_PATH
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(ROOT / audit.SECOND_ARCH_PATH, dst)
+            base = json.loads(dst.read_text())
+            for mutated_value, why in [(5e-4, "quoted-at-most-becomes-false"),
+                                       (1e-5, "manuscript-overstates-margin")]:
+                mutated = copy.deepcopy(base)
+                row = mutated["constant_core_control"][1]  # the worst seed (3.07e-4)
+                row["constant_minus_conditioned"] = mutated_value
+                row["constant_core_rel_mse"] = row["conditioned_rel_mse"] + mutated_value
+                dst.write_text(json.dumps(mutated))
+                with self.assertRaisesRegex(ValueError, "manuscript"):
+                    audit.second_architecture_wo_gate(tmp_root)
+            dst.write_text(json.dumps(base))
+            result = audit.second_architecture_wo_gate(tmp_root)
+            self.assertEqual(result["status"], "PASS")
+
     def test_failed_gate_removes_stale_multicore_table(self):
         """A stale journal_multicore_rows.tex must not survive a failed gate."""
         import tempfile
