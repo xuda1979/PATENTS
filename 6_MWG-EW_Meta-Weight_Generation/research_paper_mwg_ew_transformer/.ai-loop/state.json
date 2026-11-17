@@ -3,12 +3,12 @@
     "T-0007"
   ],
   "current_experiment_id": null,
-  "last_event_id": "EV-0027",
+  "last_event_id": "EV-0028",
   "mode": "standard",
   "objective": "Review and improve MWG-EW paper toward a top-journal submission with sole author Da Xu; preserve evidence limits",
   "phase": "second-architecture W_O audit executed at the CPU evidence class (EV-0027); compiled tile-local realization, constant-core/quantized baselines, dataset disjointness, and W_O accelerator questions remain",
   "project_id": "P-20261022-879e79",
   "risk_tier": "R2",
   "schema_version": 1,
-  "updated_at": "2026-11-17T09:32:10.803968+00:00"
+  "updated_at": "2026-11-17T09:40:00.000000+00:00"
 }
