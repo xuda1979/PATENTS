@@ -497,7 +497,7 @@ Table~\ref{tab:evidence} makes the available evidence explicit.
 \toprule
 Evidence & Available artifacts & Supported scope \\
 \midrule
-Qwen FFN quality & Four per-seed summaries and duplicate aggregate record; 2026-11-10 four-seed regeneration with manifest-hashed checkpoints & Arithmetic and within-archive contrasts; provenance recoverability demonstrated, dataset disjointness unestablished \\
+Qwen FFN quality & Four per-seed summaries and duplicate aggregate record; 2026-11-10 four-seed regeneration with manifest-hashed checkpoints; archived-artifact split audit (byte-exact re-derivation, hash-verified per-seed split identity) & Arithmetic and within-archive contrasts; provenance recoverability demonstrated; frozen train/dev/test split proven deterministic and disjoint under the recorded metric, shared by all four seeds by design \\
 Four-arm v1 timing & One same-run summary per geometry & Recorded medians; no local per-iteration uncertainty \\
 Multicore v4 & Timing/equivalence records; failed stability record superseded by a passing hardened re-run (harness v3, 2026-11-08); parsed HBM/L2 counters (2026-11-10) & Repeated-call-validated operator speedups over single-core v1, corroborated by traffic-attribution counters; no trained-model claim \\
 Complete-FFN five-arm sweep & One same-run summary per geometry with all four validations passing (2026-11-12); full per-geometry records retained on the measurement host & Recorded medians at the complete-FFN boundary; v4 fused beats v1 fused from $T{=}1024$ but trails the materialized arm; no end-to-end win claimed \\
@@ -548,9 +548,18 @@ eval texts are separate files (630 and 300 rows) filtered by a
 near-duplicate threshold $0.82$ with an explicit-disjoint split audit reporting
 zero exact and zero near-duplicate overlaps; these splits were newly audited
 in the regeneration, while the canonical archive does not establish the exact
-realized splits or checkpoint identity of its own runs. Consequently the four
-records share data preparation and are not four independently disjoint
-datasets.
+realized splits or checkpoint identity of its own runs. An archived-artifact
+audit (\texttt{experiments/audit\_dataset\_disjointness.py}) closes this
+further: the frozen train/dev/test split re-derives byte-exactly from the
+recorded deterministic parameters (seed 20260823, fractions $0.5/0.25/0.25$,
+threshold $0.82$), the three splits are disjoint under the recorded
+duplication metric (zero exact and zero near-duplicate cross-split pairs,
+re-measured), and all four regeneration seeds trained on the identical
+frozen \texttt{train.txt} and evaluated on the identical frozen
+\texttt{dev.txt} (hash-verified per seed). The four records therefore share
+one frozen, disjoint, pre-registered split by design --- the seeds vary
+training randomness, not data --- and per-seed independent datasets are
+not claimed.
 
 The evaluator reports relative MSE as total squared reconstruction error divided
 by target squared magnitude for equal-sized evaluation batches. In notation,
@@ -956,8 +965,10 @@ Claim boundary. The \emph{quality boundary} is held-out relative MSE plus
 held-out patched perplexity of the saved layer-16 checkpoints, measured on
 the regeneration split's dev texts; it is not task accuracy or end-to-end
 language-model quality. The four training seeds reuse one activation and
-evaluation split, so seed-level dataset disjointness remains unestablished
-and the intervals are descriptive only. The \emph{timing boundary} is
+evaluation split by design: the archived-artifact split audit proves that
+split deterministic and disjoint under the recorded metric and shared
+byte-identically by all seeds, but the seeds are not independent datasets,
+and the intervals remain descriptive only. The \emph{timing boundary} is
 single-layer latency of the saved checkpoints at batch 1, $S{=}128$, fp16 on
 one Ascend~910B2 host, not end-to-end decode; and the measured block-Givens
 path is the \emph{reference realization}---per-token rotation through
@@ -1073,7 +1084,10 @@ canonical family, although a 2026-11-10 regeneration re-derived all four
 seed summaries end to end (checkpoints and per-seed reports
 manifest-hashed, regenerated relative MSE within $0.009$ of the archived
 values across all 36 shared cells), which closes provenance
-recoverability but not dataset disjointness across seeds. The
+recoverability; the accompanying archived-artifact split audit proves the
+frozen split deterministic, disjoint under the recorded metric, and shared
+identically by all four seeds --- per-seed independent datasets are not the
+design and are not claimed. The
 accelerator evidence comes from one device
 family, with small repeat counts and different configurations for quality and
 systems probes. The new CPU experiment establishes a local software property.

@@ -169,7 +169,7 @@
     },
     "limitations": [
       "original per-seed run reports and checkpoints absent from canonical family",
-      "shared activation/factor seeds; disjoint datasets across seeds not established",
+      "shared activation/factor seeds; the four seeds share one frozen, disjoint split by design (proven by the archived-artifact split audit); per-seed independent datasets not established and not claimed",
       "intervals descriptive under an unverified independent normal paired-run model",
       "storage reconstructed using code-default controller width h=192; not measured"
     ]
@@ -1271,6 +1271,83 @@
       "CPU float64 identity checks do not establish NPU checkpointing behavior"
     ]
   },
+  "dataset_disjointness": {
+    "evidence_class": "archived_artifact_split_provenance",
+    "report": {
+      "schema": "mwg-quality-split-disjointness-audit-v1",
+      "status": "PASS",
+      "manifest_sha256": "f24008c13f8f4abf44541c783211a3932985c3eb9133b84894c02b74a8d0a665",
+      "source_manifest_sha256": "ed0563b672892dcbeacd81bfcd6aa9918d09bbda1d52c4eb3ea708ceeaf181b1",
+      "derivation": {
+        "deterministic": true,
+        "byte_exact_rederivation": true,
+        "seed": 20260823,
+        "fractions": {
+          "train": 0.5,
+          "dev": 0.25,
+          "test": 0.25
+        },
+        "near_duplicate_threshold": 0.82,
+        "input_records": 1234,
+        "records_removed": 1
+      },
+      "split_hashes": {
+        "train": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+        "dev": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+        "test": "8e2acce8615c34c742b59f8840c63d3cf1ac841d1308d502ba31a0c114147b4e"
+      },
+      "cross_split_overlap": {
+        "train_vs_dev": {
+          "exact_line_overlap": 0,
+          "near_duplicate_pairs_at_0.82": 0,
+          "shared_token_4gram_count_descriptive": 490
+        },
+        "train_vs_test": {
+          "exact_line_overlap": 0,
+          "near_duplicate_pairs_at_0.82": 0,
+          "shared_token_4gram_count_descriptive": 531
+        },
+        "dev_vs_test": {
+          "exact_line_overlap": 0,
+          "near_duplicate_pairs_at_0.82": 0,
+          "shared_token_4gram_count_descriptive": 257
+        }
+      },
+      "regeneration_per_seed": {
+        "2026": {
+          "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+          "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+          "torch_seed": 2026
+        },
+        "2027": {
+          "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+          "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+          "torch_seed": 2027
+        },
+        "2028": {
+          "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+          "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+          "torch_seed": 2028
+        },
+        "2029": {
+          "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+          "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+          "torch_seed": 2029
+        }
+      },
+      "established": [
+        "split derivation is deterministic: byte-exact re-derivation from the archived source manifest and recorded parameters",
+        "the train/dev/test split is disjoint by construction (each record hash-assigned to exactly one split; duplicate components removed before assignment) and by independent exact-line and 4-gram measurement (zero exact overlap)",
+        "all four regeneration seeds trained on the identical frozen train.txt and evaluated on the identical frozen dev.txt (hash-verified per seed)"
+      ],
+      "design_note": "The four seeds intentionally share one frozen, pre-registered, disjoint split and vary torch training randomness, not data. Seed-level dataset disjointness is not the design property; the shared frozen split's three-way disjointness is, and it is proven here. Claims must not be upgraded to per-seed independent datasets.",
+      "claim_boundary": "provenance and split-integrity proof from archived artifacts only; no new model training, quality measurement, or device evidence is produced or implied"
+    },
+    "limitations": [
+      "provenance proof only; no new measurement, training, or device evidence",
+      "the four seeds share one frozen split by design; per-seed independent datasets are not claimed"
+    ]
+  },
   "v1_four_arm": {
     "probe_geometry": {
       "median_ms": {
@@ -1446,7 +1523,7 @@
   ],
   "submission_ready": false,
   "blocking_gaps": [
-    "canonical quality record lacks per-run raw reports and split manifests; regeneration closes recoverability but not dataset disjointness",
+    "canonical quality record lacks per-run raw reports and split manifests; regeneration closes recoverability and the archived-artifact split audit proves the frozen split deterministic, disjoint under the recorded metric, and shared identically by all four seeds; per-seed independent datasets are not claimed",
     "no matched v4 trained-model end-to-end run; device-counter evidence covers kernel traffic only",
     "Q4 is answered only for the reference block-Givens realization (PyTorch path), which is slower than persistent; the compiled tile-local execution path that could win remains unmeasured",
     "second-architecture (attention W_O) audit is executed only at the CPU synthetic-fixture evidence class; its pre-registered Q2 and Q4 remain unmeasured"

@@ -1,0 +1,70 @@
+{
+  "schema": "mwg-quality-split-disjointness-audit-v1",
+  "status": "PASS",
+  "manifest_sha256": "f24008c13f8f4abf44541c783211a3932985c3eb9133b84894c02b74a8d0a665",
+  "source_manifest_sha256": "ed0563b672892dcbeacd81bfcd6aa9918d09bbda1d52c4eb3ea708ceeaf181b1",
+  "derivation": {
+    "deterministic": true,
+    "byte_exact_rederivation": true,
+    "seed": 20260823,
+    "fractions": {
+      "train": 0.5,
+      "dev": 0.25,
+      "test": 0.25
+    },
+    "near_duplicate_threshold": 0.82,
+    "input_records": 1234,
+    "records_removed": 1
+  },
+  "split_hashes": {
+    "train": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+    "dev": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+    "test": "8e2acce8615c34c742b59f8840c63d3cf1ac841d1308d502ba31a0c114147b4e"
+  },
+  "cross_split_overlap": {
+    "train_vs_dev": {
+      "exact_line_overlap": 0,
+      "near_duplicate_pairs_at_0.82": 0,
+      "shared_token_4gram_count_descriptive": 490
+    },
+    "train_vs_test": {
+      "exact_line_overlap": 0,
+      "near_duplicate_pairs_at_0.82": 0,
+      "shared_token_4gram_count_descriptive": 531
+    },
+    "dev_vs_test": {
+      "exact_line_overlap": 0,
+      "near_duplicate_pairs_at_0.82": 0,
+      "shared_token_4gram_count_descriptive": 257
+    }
+  },
+  "regeneration_per_seed": {
+    "2026": {
+      "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+      "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+      "torch_seed": 2026
+    },
+    "2027": {
+      "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+      "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+      "torch_seed": 2027
+    },
+    "2028": {
+      "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+      "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+      "torch_seed": 2028
+    },
+    "2029": {
+      "recorded_train_sha256": "832e3e3cda7c6b26c911096cb5097c31715439b0fc05f7b8c68efc87d9f65494",
+      "recorded_eval_sha256": "e67987ccb60cf5562c27af6ee226dca0edde1656c0cdd35d096b7c6361911995",
+      "torch_seed": 2029
+    }
+  },
+  "established": [
+    "split derivation is deterministic: byte-exact re-derivation from the archived source manifest and recorded parameters",
+    "the train/dev/test split is disjoint by construction (each record hash-assigned to exactly one split; duplicate components removed before assignment) and by independent exact-line and 4-gram measurement (zero exact overlap)",
+    "all four regeneration seeds trained on the identical frozen train.txt and evaluated on the identical frozen dev.txt (hash-verified per seed)"
+  ],
+  "design_note": "The four seeds intentionally share one frozen, pre-registered, disjoint split and vary torch training randomness, not data. Seed-level dataset disjointness is not the design property; the shared frozen split's three-way disjointness is, and it is proven here. Claims must not be upgraded to per-seed independent datasets.",
+  "claim_boundary": "provenance and split-integrity proof from archived artifacts only; no new model training, quality measurement, or device evidence is produced or implied"
+}

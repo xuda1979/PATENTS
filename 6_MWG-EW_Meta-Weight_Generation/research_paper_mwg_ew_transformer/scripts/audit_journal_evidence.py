@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import math
+import sys
 from pathlib import Path
 from statistics import mean, stdev
 
@@ -84,7 +85,9 @@ def quality_summary(per_seed, record):
             "run_id": record["run_id"], "rows": rows, "contrasts": contrasts,
             "near_budget_contrast": near,
             "limitations": ["original per-seed run reports and checkpoints absent from canonical family",
-                            "shared activation/factor seeds; disjoint datasets across seeds not established",
+                            "shared activation/factor seeds; the four seeds share one frozen, "
+                            "disjoint split by design (proven by the archived-artifact split audit); "
+                            "per-seed independent datasets not established and not claimed",
                             "intervals descriptive under an unverified independent normal paired-run model",
                             "storage reconstructed using code-default controller width h=192; not measured"]}
 
@@ -488,6 +491,44 @@ def second_architecture_wo_gate(root):
                             "checkpointing behavior"]}
 
 
+def dataset_disjointness_gate(root):
+    """Gate the archived-artifact quality-split provenance audit.
+
+    Re-runs experiments/audit_dataset_disjointness.py, which proves from the
+    archives alone that (a) the frozen train/dev/test split re-derives
+    byte-exactly from the recorded deterministic parameters (seed 20260823,
+    fractions 0.5/0.25/0.25, near-duplicate threshold 0.82), (b) the three
+    splits are disjoint under the recorded duplication metric (0 exact, 0
+    near-duplicate cross-split pairs), and (c) all four regeneration seeds
+    trained on the identical frozen split by hash (the seeds vary training
+    randomness, not data -- per-seed independent datasets are explicitly not
+    the design and must not be claimed).
+    """
+    import subprocess
+    script = root / "experiments/audit_dataset_disjointness.py"
+    result = subprocess.run(
+        [sys.executable, str(script)],
+        capture_output=True, text=True, cwd=root, check=False)
+    if result.returncode != 0:
+        raise ValueError(f"dataset disjointness audit failed:\n{result.stderr}")
+    report_path = (root / "results/journal_revision_20261022"
+                   / "dataset_disjointness_audit.json")
+    report = json.loads(report_path.read_text())
+    if report.get("status") != "PASS":
+        raise ValueError("dataset disjointness audit did not pass")
+    for pair, metrics in report["cross_split_overlap"].items():
+        if metrics["exact_line_overlap"] != 0:
+            raise ValueError(f"exact cross-split overlap in {pair}")
+        if metrics["near_duplicate_pairs_at_0.82"] != 0:
+            raise ValueError(f"near-duplicate cross-split overlap in {pair}")
+    return {"evidence_class": "archived_artifact_split_provenance",
+            "report": report,
+            "limitations": ["provenance proof only; no new measurement, "
+                            "training, or device evidence",
+                            "the four seeds share one frozen split by design; "
+                            "per-seed independent datasets are not claimed"]}
+
+
 def matched_quality_latency_gate(root):
     """Gate the 2026-11-13/14 matched trained-model quality-latency run (Q4).
 
@@ -711,6 +752,7 @@ def collect(root):
     sources.extend(Q4_DIR / f"{Q4_RUN_ID}__seed_{seed}__latency_mwg_block_givens_r384.json"
                    for seed in Q4_SEEDS)
     second_arch = second_architecture_wo_gate(root)
+    dataset_disjoint = dataset_disjointness_gate(root)
     sources.append(SECOND_ARCH_PATH)
     timings = {}
     folder = root / "results/asi2_opt_inclusive_sync_20260923T025114Z"
@@ -750,6 +792,7 @@ def collect(root):
             "paired_shuffled_control": paired_control,
             "matched_quality_latency_q4": q4,
             "second_architecture_wo": second_arch,
+            "dataset_disjointness": dataset_disjoint,
             "v1_four_arm": {key: {"median_ms": four[key]["median_ms"],
                                    "fused_over_materialized": four[key]["median_ms"]["fused"] /
                                        four[key]["median_ms"]["materialized"]}
@@ -759,7 +802,10 @@ def collect(root):
             "provenance": [{"path": str(p), "sha256": file_hash(root / p)} for p in sources],
             "submission_ready": False,
             "blocking_gaps": ["canonical quality record lacks per-run raw reports and split manifests; "
-                              "regeneration closes recoverability but not dataset disjointness",
+                              "regeneration closes recoverability and the archived-artifact split "
+                              "audit proves the frozen split deterministic, disjoint under the "
+                              "recorded metric, and shared identically by all four seeds; "
+                              "per-seed independent datasets are not claimed",
                               "no matched v4 trained-model end-to-end run; device-counter evidence "
                               "covers kernel traffic only",
                               "Q4 is answered only for the reference block-Givens realization "
