@@ -128,13 +128,16 @@ def _device_torch():
 
 
 def benchmark(seed: int, out_path: Path, op_name: str) -> None:
-    torch = _device_torch()
-    # The trained checkpoints live on the measurement host under the Q4 run
-    # tree; the arm geometry follows the closing run (d=1536, m=8960, r=384).
-    ckpt_dir = Path("/vllm-workspace/mwg-ew-transformer-research/results/"
-                    "asi2_q4_matched_quality_latency_20261113")
-    sys.path.insert(0, str(ROOT / "experiments"))
-    from mwg_transformer_ASI3_benchmark import load_trained_master_weights  # type: ignore
+    _device_torch()
+    # Benchmark mode is implemented on the NPU host against the Q4 checkpoint
+    # tree (the trained checkpoints live under
+    # /vllm-workspace/mwg-ew-transformer-research/results/
+    # asi2_q4_matched_quality_latency_20261113, geometry d=1536, m=8960,
+    # r=384).  The host implementation loads the checkpoint, runs the
+    # compiled op and the persistent arm through the Q4 timing loop (warmup
+    # + 100 timed iterations, median, batch 1, S=128, fp16), and writes
+    # seed_<s>_benchmark.json with both arms' medians.  This local copy
+    # refuses to fabricate timings.
     raise SystemExit(
         "benchmark mode is device-only: implemented on the NPU host against "
         "the Q4 checkpoint tree; this local copy refuses to fabricate timings")
