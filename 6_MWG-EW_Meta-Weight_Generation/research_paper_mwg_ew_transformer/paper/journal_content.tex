@@ -975,8 +975,18 @@ path is the \emph{reference realization}---per-token rotation through
 generic fp32 tensor ops, not a compiled operator. The compiled tile-local
 realization (\texttt{block\_givens\_tile\_apply}, tile width 128) is
 prototyped but uncompiled and unmeasured, so no serving claim is made for
-the block-Givens arm; checkpoints reside on the measurement host and are
-digest-bound here through the latency records.
+the block-Givens arm; its algorithm correctness is, however, closed on CPU:
+a kernel-faithful numeric model (fp16 loads, fp32 accumulate, fp32 rotation,
+fp16 store, partial-tile handling; 10 tests) matches the reference
+block-Givens path within fp16 rounding, and a compile-and-benchmark harness
+carries the pre-declared acceptance gate ($\ge$20\% lower latency than
+persistent, correctness-verified before timing) so device time is a single
+command; checkpoints reside on the measurement host and are
+digest-bound here through the latency records. The extended-Q4 controls the
+review flagged (a fitted constant-core arm and an int8-quantized persistent
+baseline on the same checkpoints) are pre-registered with exact protocol and
+descriptive-only thresholds before execution
+(\texttt{results/extended\_q4\_pre\_registration\_20261117.json}).
 
 \begin{table}[t]
 \centering\small

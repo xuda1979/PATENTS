@@ -1,0 +1,57 @@
+{
+  "schema": "mwg-extended-q4-pre-registration-v1",
+  "status": "PRE-REGISTERED-NOT-EXECUTED",
+  "registered_at": "2026-11-17T10:00:00Z",
+  "registered_by": "loop/T-0007 (EV-0031)",
+  "title": "Extended Q4: constant-core and int8-quantized persistent controls on the trained Q4 checkpoints",
+  "motivation": "The November 2026 review flagged two missing controls in the Q4 design: (a) a fitted constant-core arm, separating 'conditioning helps' from 'any modulation of the frozen factors helps', and (b) an int8-quantized persistent baseline, testing whether quantization alone recovers the storage/latency point the conditional arms target. This document versions the exact protocol and thresholds BEFORE execution; it is evidence-class pre-registration, not a prediction.",
+  "source_run": {
+    "run_id": "asi2_q4_matched_quality_latency_20261113T134959Z",
+    "checkpoints": "the four trained seeds (2026-2029) of the 2026-11-13 matched run, retained on the measurement host",
+    "shared_protocol": "all arms reuse the frozen closing protocol: layer 16 FFN of Qwen2.5-1.5B-Instruct, d=1536, m=8960, fp32 training, 5000 steps, lr 2e-4, batch 1, S=128, ranks 384/401, seeds 2026-2029, frozen train/dev/test split (sha256 in data/quality/manifest.json)"
+  },
+  "arms": {
+    "constant_core_r384": {
+      "definition": "Fit per-output-column constant scales c* on the trained token_diag_core_r384 checkpoint's calibration activations (the Proposition-1 constant, same least-squares fit as the CPU audits), then evaluate the scaled persistent factors. No new training: this is a post-hoc control on the trained artifact.",
+      "parameter_count": "matches persistent_r384 plus |m| scalar scales = 1536x384 + 384x8960 + 8960",
+      "purpose": "separates 'learned conditioning signal' from 'any static rescaling of the frozen factors'"
+    },
+    "persistent_r384_int8": {
+      "definition": "The trained persistent_low_rank_r384 checkpoint with both factors quantized to int8 per-output-channel (per-column of V, per-column of U) with fp32 scales computed from calibration activations; dequantize-on-read or int8-compute+fp32-accumulate per the host's fastest correct path; the unquantized persistent_r384 arm is the reference.",
+      "storage": "factors at 1 byte/element + fp32 per-channel scales (documenting the storage point the conditional arms compete with)",
+      "purpose": "tests whether quantization alone reaches the conditional arms' quality at lower storage, bounding the conditional arms' advantage to the fp16-vs-int8 gap"
+    }
+  },
+  "protocol": {
+    "quality": {
+      "metric": "relative MSE on the frozen dev split (and held-out test split for the final report), identical batches and batches-count as the Q4 run (128 eval batches), fp32 evaluation of the dequantized/scaled outputs",
+      "seeds": [2026, 2027, 2028, 2029],
+      "controls_compared": ["persistent_low_rank_r384 (reference)", "mwg_token_diag_core_r384 (learned conditioning)", "constant_core_r384 (fitted constant)", "persistent_r384_int8 (quantized)"],
+      "calibration": "constant scales and int8 ranges fit on the same calibration batches for all arms; no test data touched for fitting"
+    },
+    "latency": {
+      "metric": "median single-layer latency ms at batch 1, S=128, fp16 compute (int8 arm at int8 where the path supports it, fp16 otherwise, recorded per-seed which path ran), same timing loop as the Q4 benchmark (warmup + 100 timed iterations, median)",
+      "seeds": [2026, 2027, 2028, 2029],
+      "boundary": "single-layer, batch 1, one Ascend 910B2 device; not end-to-end decode"
+    }
+  },
+  "pre_registered_thresholds": {
+    "quality_non_inferiority": {
+      "statement": "the constant-core arm and the int8 arm are each reported against persistent_r384 with the per-seed paired difference and its sign",
+      "decision_rule": "DESCRIPTIVE ONLY: no superiority or non-inferiority claim is promoted from these four seeds; intervals are descriptive per the paper's standing policy"
+    },
+    "latency_gate": {
+      "int8_arm": "recorded; no gate (the int8 arm is a control, not a proposal)",
+      "constant_core_arm": "recorded; no gate (post-hoc control)",
+      "note": "the >=20% latency gate remains attached only to the compiled tile-local realization (TILE_GATE in experiments/verify_tile_apply_benchmark.py)"
+    },
+    "failure_policy": "a failed or negative outcome is recorded as a first-class result, never promoted; a missing checkpoint or a failed fit aborts that arm with the failure recorded"
+  },
+  "acceptance_of_execution": {
+    "gate_script": "the executed report must be validated by scripts/audit_journal_evidence.py extended with extended_q4_gate (schema mwg-extended-q4-executed-v1): per-seed rows for both arms, sha256 of the source checkpoints, calibration-batch hashes, and the fitted scale/range tensors' sha256 must all be present",
+    "report_path": "results/extended_q4_executed_<ts>/report.json",
+    "submission_effect": "none by itself: submission_ready is decided by the audit's gate list, not by this run's outcome"
+  },
+  "claim_boundary": "pre-registration only; no measurement has been executed; device access (ASI2) required; thresholds versioned here cannot be relaxed post hoc - any deviation must be recorded as a protocol amendment in a new versioned document, with the original retained",
+  "immutable_note": "this file, once committed, is the pre-execution record; it must not be edited after execution begins (amendments append new files)"
+}
