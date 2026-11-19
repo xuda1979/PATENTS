@@ -1,0 +1,139 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{setspace}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{15pt}
+\setstretch{1.5}
+
+% 去掉页眉中的“现有技术检索报告”
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+% 封面/头部信息区
+\noindent
+% Header removed per user request
+
+\vspace{1em}
+
+\begin{center}
+    {\Huge\heiti 中国移动专利申请} \\[0.5em]
+    {\Huge\heiti 检索报告} \\[1em]
+\end{center}
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|p{3cm}|p{12cm}|}
+        \hline
+        \textbf{发明名称} & \textcolor{blue}{一种无线接入网多时间尺度数据协同处理与资源控制方法及装置} \\
+        \hline
+        \textbf{申报单位} & \textcolor{blue}{中国移动研究院} \\
+        \hline
+        \textbf{检索人} & \textcolor{blue}{许达、邵泽才、吴佳骏；中国移动研究院} \\
+        \hline
+        \textbf{检索日期} & \colorbox{yellow}{2026-10-22} \\
+        \hline
+        \textbf{关联项目} & （待填写） \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+
+\noindent\fbox{\parbox{0.97\textwidth}{
+\textbf{检索范围和边界：}
+
+本次对Google Patents公开专利页面、3GPP/ETSI公开规范及公开学术索引进行关键词和引证线索检索，并阅读下列相关公开文本的摘要、权利要求及相关说明书段落。未取得CNIPA、WIPO、EPO、USPTO数据库的穷尽命中集及完整审查档案；未进行法律状态或自由实施检索。公开日、优先权日以各公开页面记载为准，正式申请前应由代理人复核。
+}}
+
+\vspace{1em}
+
+% 正文部分 - 严格按照模板结构
+
+% 二、使用的中文与外文检索关键词
+\section*{一、使用的中文与外文检索关键词}
+
+\textbf{中文检索式：}
+无线接入网 AND（多时间尺度 OR 多速率 OR 异步测量）AND（数据时效 OR 测量年龄 OR 时间戳）；预测控制 AND 上下文缓存 AND 失效；无线资源控制 AND 迟到测量 AND 执行期限；AI/ML RAN AND 激活 AND 监测。
+
+\textbf{英文检索式：}
+radio access network AND multi-timescale data coordination; wireless measurement age AND context validity AND control; RAN predictive control AND stale data AND execution deadline; AI/ML RAN AND activation AND monitoring; multi-rate observations AND model context expiry.
+
+% 三、相关专利文献
+\section*{二、相关专利文献}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|p{2.5cm}|p{7.5cm}|p{4.5cm}|}
+\hline
+\textbf{编号} & \textbf{文献信息 (标题/公开号/公开日/评述)} & \textbf{公开链接} \\
+\hline
+文献1 & \textbf{CN114867030A《双时间尺度智能无线接入网切片方法》}，公开日2022-08-05。\newline 涉及无线接入网的双时间尺度切片控制，提示“无线网络+双时间尺度”本身已有直接公开。需进一步比对其数据时间有效性、生成依赖绑定、命令执行期限及实际动作反馈是否具备本申请的组合。 & \footnotesize\url{https://patents.google.com/patent/CN114867030A/zh} \\
+\hline
+文献2 & \textbf{CN119653392A《一种基于多时间尺度的RAN切片分层无线资源管理方法》}，公开日2025-03-18。\newline 公开大时间尺度的切片调整与底层无线资源优化控制组合，使用高层控制模型和强化学习，并由基站执行资源调度。该文献是RAN分层多时间尺度资源控制的重要对比对象；本申请应以逐源事件时间/到达时间筛选、上下文依赖截止时刻及执行端期限复核进行差异化，而不能将分层快慢控制本身作为区别。 & \footnotesize\url{https://patents.google.com/patent/CN119653392A/zh} \\
+\hline
+文献3 & \textbf{CN120223471A《一种基于多时间尺度注意力机制的云边协同工业无线信道预测方法》}，公开日2025-06-27。\newline 公开云端/边缘预测模型、按场景分配信道预测任务及多时间尺度注意力机制；对本申请中的多时标无线预测和边缘协同形成直接相关背景。需比较其是否披露观测依赖时间绑定及上下文过期后的命令执行门控。 & \footnotesize\url{https://patents.google.com/patent/CN120223471A/zh} \\
+\hline
+文献4 & \textbf{CN122262508A《无线数据的补全与预测方法、装置、设备、介质及产品》}，公开日2026-06-23。\newline 公开以微观更新量和节点级宏观更新量融合，对无线数据作补全和未来时间步预测。其题名及文本与无线数据多尺度协同处理直接相关，需重点比较其数据时间/缺失处理、模型上下文生命周期与资源动作控制链。 & \footnotesize\url{https://patents.google.com/patent/CN122262508A/zh} \\
+\hline
+文献5 & \textbf{US20240098575A1 Methods and devices for determination of an update timescale for radio resource management algorithms}，公开日2024-03-21。\newline 涉及无线资源管理算法更新时标，提示按算法/资源管理任务选择更新尺度已有公开。需比较本申请按源观测时间与上下文依赖分别计算复用截止时刻的机制。 & \footnotesize\url{https://patents.google.com/patent/US20240098575A1/en} \\
+\hline
+文献6 & \textbf{US20240095591A1 Processing different timescale data utilizing a model}，公开日2024-03-21。\newline 涉及由模型处理不同时间尺度的数据，构成多时间尺度模型处理的相关背景。需核对其是否涉及RAN控制、事件时间筛选及依赖失效后的命令执行门控。 & \footnotesize\url{https://patents.google.com/patent/US20240095591A1/en} \\
+\hline
+文献7 & \textbf{WO2022147786A1 Method and apparatus for determining prediction for status of wireless network}，公开日2022-07-14。\newline 涉及无线网络状态预测及预测时间相关机制，对预测时域和无线网络状态预测构成相关公开。应结合其权利要求及同族进一步比对上下文的依赖年龄、配置版本和候选动作期限。 & \footnotesize\url{https://patents.google.com/patent/WO2022147786A1/en} \\
+\hline
+文献8 & \textbf{US20240155377A1 Validity indication as a function of confidence level}，公开日2024-05-09。\newline 涉及按置信度指示预测/信息有效性，提示有效性标记及失效判断已有公开。应区分其置信度有效性与本申请由必要源时间、最大依赖年龄和配置版本导出的上下文截止时刻。 & \footnotesize\url{https://patents.google.com/patent/US20240155377A1/en} \\
+\hline
+文献9 & \textbf{WO2024178349A1 Prediction timescale determination and adjustment}，公开日2024-08-29。\newline 涉及预测时间尺度确定与调整，对预测时域管理相关。其公开与“预测终点需在支持时域内”的限定相关；是否披露RAN多源观测依赖及执行时刻联动，须结合全文审查。 & \footnotesize\url{https://patents.google.com/patent/WO2024178349A1/en} \\
+\hline
+非专利资料1 & \textbf{3GPP TS 28.105 V18.4.0（ETSI TS 128 105）}，涉及AI/ML管理、性能监测、能力及激活/去激活等内容。\newline 该5G规范用于生命周期适配背景，不直接等同本申请的数据依赖年龄算法。 & \footnotesize\url{https://www.etsi.org/deliver/etsi_ts/128100_128199/128105/18.04.00_60/ts_128105v180400p.pdf} \\
+\hline
+非专利资料2 & \textbf{3GPP TR 38.914（2026年6月获批的首项6G RAN研究成果）及后续Rel-20/Rel-21 6G研究}。\newline 可据其场景、能力、测试与符合性框架设计标准化候选提案；该研究文件不是已完成的6G规范。 & \footnotesize\url{https://www.3gpp.org/news-events/3gpp-news/6g-38914} \\
+\hline
+\end{longtable}
+
+% 四、分析评述
+\section*{三、分析评述}
+
+\textbf{对比特征1（多时间尺度无线数据及RAN资源控制）：}
+文献1、2直接涉及双/多时间尺度RAN切片和高层/底层控制；文献3涉及云边多时间尺度无线信道预测；文献4涉及无线数据微观/宏观更新量融合；文献5涉及无线资源算法更新时标。宽泛的“在无线网络融合快慢数据”或“多时间尺度RAN资源控制”难以作为单独区别点。
+
+\textbf{对比特征2（依赖时间约束的上下文复用）：}
+文献1至5分别涉及多时间尺度切片、云边信道预测、无线数据多尺度补全预测或算法更新时标；文献6至9涉及不同时间尺度数据、无线状态预测、有效性指示或预测时间尺度。当前核读范围内未确认单篇文献明确披露“固定上下文生成时的必要观测依赖时间及版本，并在每个快步按最大依赖年龄计算截止时刻；后续新测量只更新当前状态而不延长旧上下文寿命”的完整关系。该判断限于上述文献及核读段落，不代表全面检索结论。
+
+\textbf{对比特征3（预测到执行的时域联动）：}
+无线预测与预测时标已有文献。值得进一步检索的是候选动作的预测终点、命令预计生效时刻和执行期限同时受同一上下文有效边界约束，并由执行端拒绝迟到控制。
+
+\textbf{对比特征4（反馈与回退）：}
+AI/ML监测、激活和一般预测有效性已有公开。本申请可进一步限定反馈只针对已执行动作及时间对齐观测计算残差；回执未知不记零误差；依赖失效立即停用并进入本地控制。是否具备创造性需结合最接近文献、全文权利要求及组合动机论证。
+
+\textbf{初步可专利性判断：}
+现有检索支持将申请重点放在“观测事件时间筛选—生成依赖期限—快状态更新但不续期—候选执行时刻校验—实际执行反馈与回退”的组合技术关系。对于单篇新颖性，当前未在所列核读文献中确认全部组合特征；对于创造性，文献1至9及AI/ML生命周期规范可能形成组合评价压力，不能据此确认授权前景。应核查申请日、自公开时间、最早优先权及同族权利要求。
+
+% 五、检索结论
+\section*{四、检索结论}
+
+本报告为截至2026-10-22的初步公开资料检索，不构成官方数据库穷尽检索、权利稳定性意见或自由实施结论。
+
+多时间尺度RAN控制、不同时间尺度模型处理、预测时标及有效性管理均已有相关公开。建议收窄并强调：上下文对生成时必要观测时间及配置版本的不可变绑定；按依赖年龄计算失效边界；快状态可更新但不得延长旧上下文期限；预测时域、预计执行时间和命令期限共同受该边界约束；失效时停止预测并回退；以实际执行及对齐观测作反馈。
+
+\textbf{公开披露风险：}本仓库的GitHub公开记录显示，首版交底书与检索报告已于2026-10-16提交（commit b7847d8）；项目源码也有更早的公开仓库提交记录。提交时间只能证明版本记录，不能单独证明公众实际可访问的具体时刻。由于有效申请日尚未提供，应立即核对公开范围、可访问时间及相应申请日，并请知识产权部门评估自公开对新颖性和可申请范围的影响。记录：\url{https://github.com/xuda1979/-6G-MR-NWM/commit/b7847d8}
+
+正式申请前建议以CNIPA、WIPO PATENTSCOPE、Espacenet及USPTO官方系统按分类号和同族扩展检索，逐项核对独立权利要求，并由申请人确认有效申请日、公开证据、发明人排序及职务发明手续。
+
+\end{document}
